@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-intranet-news-details-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiIntranetNewsDetails/AgiIntranetNewsDetailsWebPart.js",
+          "manifest": "./src/webparts/agiIntranetNewsDetails/AgiIntranetNewsDetailsWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiIntranetNewsDetailsWebPartStrings": "lib/webparts/agiIntranetNewsDetails/loc/{locale}.js"
+  }
+}
