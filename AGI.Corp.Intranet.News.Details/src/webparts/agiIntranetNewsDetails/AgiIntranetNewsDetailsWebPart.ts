@@ -6,7 +6,7 @@ import {
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-
+import { SPComponentLoader } from '@microsoft/sp-loader';
 import * as strings from 'AgiIntranetNewsDetailsWebPartStrings';
 import AgiIntranetNewsDetails from './components/AgiIntranetNewsDetails';
 import { IAgiIntranetNewsDetailsProps } from './components/IAgiIntranetNewsDetailsProps';
@@ -17,11 +17,26 @@ export interface IAgiIntranetNewsDetailsWebPartProps {
 
 export default class AgiIntranetNewsDetailsWebPart extends BaseClientSideWebPart<IAgiIntranetNewsDetailsWebPartProps> {
 
+  protected onInit(): Promise<void> {
+
+    const randomNumber = Math.floor(Math.random()*90000) + 10000;
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/news.css?${randomNumber}`);
+
+    SPComponentLoader.loadCss(`https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css`);
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap.min.css`);
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap-icons.min.css`);
+    SPComponentLoader.loadScript(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap.bundle.min.js`);
+
+    return Promise.resolve();
+  }
+
   public render(): void {
     const element: React.ReactElement<IAgiIntranetNewsDetailsProps> = React.createElement(
       AgiIntranetNewsDetails,
       {
-        description: this.properties.description
+        description: this.properties.description,
+        siteUrl: this.context.pageContext.web.absoluteUrl,
+        context: this.context
       }
     );
 
