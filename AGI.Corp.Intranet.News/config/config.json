@@ -1,0 +1,19 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-corp-intranet-news-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiCorpIntranetNews/AgiCorpIntranetNewsWebPart.js",
+          "manifest": "./src/webparts/agiCorpIntranetNews/AgiCorpIntranetNewsWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiCorpIntranetNewsWebPartStrings": "lib/webparts/agiCorpIntranetNews/loc/{locale}.js",
+    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
+  }
+}

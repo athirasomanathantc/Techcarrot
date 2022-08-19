@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.14.0",
+    "libraryName": "agi-corp-intranet-blogs",
+    "libraryId": "eeee426b-6fe3-4b25-b10f-09c9754ad6e3",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "AGICorpIntranetBlogs",
+    "solutionShortDescription": "AGICorpIntranetBlogs description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

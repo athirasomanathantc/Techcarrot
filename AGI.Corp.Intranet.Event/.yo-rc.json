@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.14.0",
+    "libraryName": "agi-intranet-events",
+    "libraryId": "d9f11599-35f0-4b3c-a3d4-28cf97ac6114",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "AgiIntranetEvents",
+    "solutionShortDescription": "AgiIntranetEvents description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

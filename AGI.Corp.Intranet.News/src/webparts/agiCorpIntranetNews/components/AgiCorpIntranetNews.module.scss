@@ -1,0 +1,13 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+.maincontent{
+  width:100%;
+  margin:auto;
+  min-height: 730px;
+}
+.maincontent .contentwrapper{
+  width: 100%;
+  margin: auto;
+  padding: 22px 0.937rem;
+  min-height: calc(100vh - 161px);
+}

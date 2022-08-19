@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "agi-intranet-events-client-side-solution",
+    "id": "d9f11599-35f0-4b3c-a3d4-28cf97ac6114",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.14.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "AgiIntranetEvents description"
+      },
+      "longDescription": {
+        "default": "AgiIntranetEvents description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "agi-intranet-events Feature",
+        "description": "The feature that activates elements of the agi-intranet-events solution.",
+        "id": "7a77e644-b5b4-4e1a-9096-f7857f67f5b9",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/agi-intranet-events.sppkg"
+  }
+}

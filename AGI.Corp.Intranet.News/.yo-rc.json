@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.14.0",
+    "libraryName": "agi-corp-intranet-news",
+    "libraryId": "0fd38b88-511b-4862-94cd-dca361163b59",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "AgiCorpIntranetNews",
+    "solutionShortDescription": "AgiCorpIntranetNews description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

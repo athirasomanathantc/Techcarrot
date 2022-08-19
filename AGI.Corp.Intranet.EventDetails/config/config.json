@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-corp-intranet-events-details-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiCorpIntranetEventsDetails/AgiCorpIntranetEventsDetailsWebPart.js",
+          "manifest": "./src/webparts/agiCorpIntranetEventsDetails/AgiCorpIntranetEventsDetailsWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiCorpIntranetEventsDetailsWebPartStrings": "lib/webparts/agiCorpIntranetEventsDetails/loc/{locale}.js"
+  }
+}

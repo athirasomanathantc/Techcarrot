@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "agi-corp-intranet-blogs-client-side-solution",
+    "id": "eeee426b-6fe3-4b25-b10f-09c9754ad6e3",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.14.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "AGICorpIntranetBlogs description"
+      },
+      "longDescription": {
+        "default": "AGICorpIntranetBlogs description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "agi-corp-intranet-blogs Feature",
+        "description": "The feature that activates elements of the agi-corp-intranet-blogs solution.",
+        "id": "5f7ca689-1d8e-4c40-8a89-263e4aa8b30c",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/agi-corp-intranet-blogs.sppkg"
+  }
+}
