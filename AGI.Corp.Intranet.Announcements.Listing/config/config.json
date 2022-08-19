@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-intranet-announcements-listing-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiIntranetAnnouncementsListing/AgiIntranetAnnouncementsListingWebPart.js",
+          "manifest": "./src/webparts/agiIntranetAnnouncementsListing/AgiIntranetAnnouncementsListingWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiIntranetAnnouncementsListingWebPartStrings": "lib/webparts/agiIntranetAnnouncementsListing/loc/{locale}.js"
+  }
+}
