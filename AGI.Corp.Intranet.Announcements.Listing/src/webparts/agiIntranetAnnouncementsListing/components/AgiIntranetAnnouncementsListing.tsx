@@ -2,10 +2,11 @@ import * as React from 'react';
 import styles from './AgiIntranetAnnouncementsListing.module.scss';
 import { IAgiIntranetAnnouncementsListingProps } from './IAgiIntranetAnnouncementsListingProps';
 import { escape } from '@microsoft/sp-lodash-subset';
+import { sp } from "@pnp/sp/presets/all";
 
 export default class AgiIntranetAnnouncementsListing extends React.Component<IAgiIntranetAnnouncementsListingProps, {}> {
   constructor(props:IAgiIntranetAnnouncementsListingProps) {
-    super(props);
+    super(props);    
   }
   public render(): React.ReactElement<IAgiIntranetAnnouncementsListingProps> {    
     const {
