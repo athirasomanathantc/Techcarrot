@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.2",
+    "libraryName": "agi-corp-intranet-announcements-details",
+    "libraryId": "f421c036-4e73-4e8f-840a-862ed9e79f47",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "AGI.Corp.Intranet.Announcements.Details",
+    "solutionShortDescription": "AGI.Corp.Intranet.Announcements.Details description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
