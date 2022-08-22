@@ -2,8 +2,31 @@ import * as React from 'react';
 import styles from './AgiIntranetAnnouncementsDetails.module.scss';
 import { IAgiIntranetAnnouncementsDetailsProps } from './IAgiIntranetAnnouncementsDetailsProps';
 import { escape } from '@microsoft/sp-lodash-subset';
+import { SPService } from '../services/SPService';
+import { sp } from "@pnp/sp/presets/all";
 
 export default class AgiIntranetAnnouncementsDetails extends React.Component<IAgiIntranetAnnouncementsDetailsProps, {}> {
+  private _spServices: SPService;
+  constructor(props: IAgiIntranetAnnouncementsDetailsProps) {
+    super(props);
+    this._spServices = new SPService(this.props.context);
+    sp.setup({
+      spfxContext: this.props.context
+    })
+    this.state = {
+      AnnouncementData: null,
+      exceptionOccured: false     
+    }
+  }
+
+  private getQueryStringValue(param: string): string {
+    const params = new URLSearchParams(window.location.search);
+    let value = params.get(param) || '';
+    return value;
+  }
+  public async componentDidMount() {
+    const announcementId = this.getQueryStringValue('announcementID');
+  }
   public render(): React.ReactElement<IAgiIntranetAnnouncementsDetailsProps> {
     const {
       description,
