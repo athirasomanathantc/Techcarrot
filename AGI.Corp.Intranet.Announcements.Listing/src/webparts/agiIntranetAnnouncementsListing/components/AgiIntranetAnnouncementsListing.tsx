@@ -141,8 +141,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
                                 <span><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.svg`} alt="" /></i> {announcement.Business ? announcement.Business.Title : ""}</span>
                               </div>
                               <p className="card-text">{announcement.Description}</p>
-                              <a href={`${this.props.siteUrl}/SitePages/Announcements/Events/Event Details.aspx?announcementID=${announcement.ID}`} className="btn news-read-more  align-self-start">Read more</a>
-                              <a href="#" className="btn news-read-more mt-auto align-self-start">View Full Article</a>
+                              <a href={`${this.props.siteUrl}/SitePages/News/Announcements/Announcement Details.aspx?announcementID=${announcement.ID}`} className="btn news-read-more  align-self-start">Read more</a>                              
                             </div>
                           </div>
                         </div>
