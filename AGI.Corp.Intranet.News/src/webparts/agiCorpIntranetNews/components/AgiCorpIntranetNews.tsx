@@ -15,7 +15,7 @@ import { sp } from "@pnp/sp/presets/all";
 import { Pagination } from '@pnp/spfx-controls-react/lib/pagination';
 import Paging from './Paging/Paging';
 
-const pageSize: number = 12;
+//const pageSize: number = 12;
 
 export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntranetNewsProps, IAgiCorpIntranetNewsState> {
 
@@ -27,7 +27,8 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
         filterValues: [],
         pageData: [],
         totalPages: 0,
-        currentPage: 1
+        currentPage: 1,
+        pageSize:0
       }
   }
 
@@ -78,12 +79,12 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
       .then((response) => {
         const items: INewsData[] = response.value;
         console.log('Data',items);
-        const pageCount: number = Math.ceil(items.length / pageSize);
+        const pageCount: number = Math.ceil(items.length / this.state.pageSize);
 
         this.setState({
           newsData: items,
           filterData: items,
-          pageData: items.slice(0, pageSize),
+          pageData: items.slice(0, this.state.pageSize),
           totalPages: pageCount
         });
       })
@@ -114,6 +115,17 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
     .catch((error) => {
       console.log('Error:', error);
     })
+    if (window.innerWidth<=767){
+      this.setState({
+        pageSize:6
+      });
+
+    }else{
+      this.setState({
+        pageSize:12
+      });
+
+    }
     // const select= this.getQueryStringValue('tab');
     //     console.log('current tab', select);
     //     //const selectedTab = select || this.state.selectedTab;
@@ -127,14 +139,14 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
 
   private paging() {
 
-    const pageCount: number = Math.ceil(this.state.filterData.length / pageSize);
-    const totalPages = (this.state.filterData.length / pageSize) - 1;
+    const pageCount: number = Math.ceil(this.state.filterData.length / this.state.pageSize);
+    const totalPages = (this.state.filterData.length / this.state.pageSize) - 1;
     //console.log('totalPages', pageCount);l
     // this.setState({
     //   images
     // });
     this.setState({
-      pageData: this.state.filterData.slice(0, pageSize),
+      pageData: this.state.filterData.slice(0, this.state.pageSize),
       totalPages: pageCount
     });
 
@@ -148,8 +160,8 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
   }
   private _getPage(page: number) {
     // round a number up to the next largest integer.
-    const skipItems: number = pageSize * (page - 1);
-    const takeItems: number = skipItems + pageSize;
+    const skipItems: number = this.state.pageSize * (page - 1);
+    const takeItems: number = skipItems + this.state.pageSize;
 
     console.log('page', page);
     const roundupPage = Math.ceil(page);
@@ -247,7 +259,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                 /> */}
                 <Paging currentPage={this.state.currentPage}
                 totalItems={this.state.filterData.length}
-                itemsCountPerPage={pageSize}
+                itemsCountPerPage={this.state.pageSize}
                 onPageUpdate={(page) => this._getPage(page)} 
                 />
                 

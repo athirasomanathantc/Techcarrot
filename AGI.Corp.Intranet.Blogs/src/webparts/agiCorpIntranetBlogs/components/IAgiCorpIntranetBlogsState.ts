@@ -9,5 +9,6 @@ export interface IAgiCorpIntranetBlogsState {
   currentPage: number;
   totalPages: number;
   pageData:IBlogData[];
+  pageSize:number;
   
 }
