@@ -16,14 +16,15 @@ export class SPService {
      * @param dateColumn date field
      * @returns 
      */
-    private getFormattedItems(items: any, dateColumn: string) {
+    private getFormattedItems(items: any, dateColumn: string, type: string) {
         items = items.map((item: any) => {
             return {
                 Id: item.Id,
                 Title: item.Title,
                 Date: this._common.getFormattedDate(item[dateColumn]),
                 Time: this._common.getFormattedTime(item[dateColumn]),
-                DateTime: new Date(item[dateColumn])
+                DateTime: new Date(item[dateColumn]),
+                Type: type
             };
         }, this)
         return items;
@@ -36,7 +37,7 @@ export class SPService {
                 .select("Id,Title,PublishedDate")
                 .filter(this._common.dateRangeFilter)
                 .top(this.top)().then((items: INotification[]) => {
-                    resolve(this.getFormattedItems(items, 'PublishedDate'))
+                    resolve(this.getFormattedItems(items, 'PublishedDate', 'News'))
                 }).catch((exception) => {
                     reject(exception)
                 });
@@ -46,7 +47,7 @@ export class SPService {
                 .select("Id,Title,StartDate")
                 .filter(this._common.dateRangeFilter)
                 .top(this.top)().then((items: INotification[]) => {
-                    resolve(this.getFormattedItems(items, 'StartDate'))
+                    resolve(this.getFormattedItems(items, 'StartDate', 'Events'))
                 }).catch((exception) => {
                     reject(exception)
                 });
@@ -56,7 +57,7 @@ export class SPService {
                 .select("Id,Title,PublishedDate")
                 .filter(this._common.dateRangeFilter)
                 .top(this.top)().then((items: INotification[]) => {
-                    resolve(this.getFormattedItems(items, 'PublishedDate'))
+                    resolve(this.getFormattedItems(items, 'PublishedDate', 'Announcements'))
                 }).catch((exception) => {
                     reject(exception)
                 });
@@ -66,7 +67,7 @@ export class SPService {
                 .select("Id,Title,PublishedDate")
                 .filter(this._common.dateRangeFilter)
                 .top(this.top)().then((items: INotification[]) => {
-                    resolve(this.getFormattedItems(items, 'PublishedDate'))
+                    resolve(this.getFormattedItems(items, 'PublishedDate', 'Blogs'))
                 }).catch((exception) => {
                     reject(exception)
                 });

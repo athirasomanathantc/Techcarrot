@@ -17,7 +17,8 @@ export default class Notification extends React.Component<INotificationProps, IN
 
         this.state = {
             notifications: [],
-            exception: null
+            exception: null,
+            rowCount: 8
         }
     }
 
@@ -37,8 +38,30 @@ export default class Notification extends React.Component<INotificationProps, IN
         }
     }
 
-    private onClick(e: React.MouseEvent<HTMLElement>, notification: INotification) {
-        window.location.href = `${this.props.context.pageContext.web.absoluteUrl}/SitePages/News/News%20Detail.aspx?newsID=${notification.Id}`;
+    private viewDetails(e: React.MouseEvent<HTMLElement>, notification: INotification) {
+        let detailPath;
+        switch (notification.Type) {
+            case 'News':
+                detailPath = 'News%20Detail.aspx?newsID=';
+                break;
+            case 'Events':
+                detailPath = 'Events/Event%20Details.aspx?eventID=';
+                break;
+            case 'Announcements':
+                detailPath = 'Announcements/Announcement%20Details.aspx?announcementID=';
+                break;
+            case 'Blogs':
+                detailPath = 'Blogs/Blog%20Details.aspx?blogID=';
+                break;
+            default: break;
+        }
+        window.location.href = `${this.props.context.pageContext.web.absoluteUrl}/SitePages/News/${detailPath}${notification.Id}`;
+    }
+
+    private viewMore() {
+        this.setState({
+            rowCount: this.state.rowCount + 10
+        })
     }
 
     public render(): React.ReactElement<INotificationProps> {
@@ -62,10 +85,10 @@ export default class Notification extends React.Component<INotificationProps, IN
                                         <div className="row mt-3">
                                             <div className="notification-list-content">
                                                 {
-                                                    this.state.notifications.slice(0, 8).map((notification: INotification) => {
+                                                    this.state.notifications.slice(0, this.state.rowCount).map((notification: INotification) => {
                                                         return (
                                                             <div className="notification-list-item" onClick={(e) => {
-                                                                this.onClick(e, notification)
+                                                                this.viewDetails(e, notification)
                                                             }}>
                                                                 <p className="notification-date">
                                                                     <span><i><img src={`${assetsPath}icons/date.svg`} /></i>{notification.Date}</span>
@@ -80,7 +103,7 @@ export default class Notification extends React.Component<INotificationProps, IN
                                                 }
                                             </div>
                                             <div className="text-left load-more-content mt-3">
-                                                <a href="#" className="load-more" id="load-more">View more</a>
+                                                <a href="#" className="load-more" id="load-more" onClick={() => this.viewMore()}>View more</a>
                                             </div>
                                         </div>
                                     </div>
