@@ -1,5 +1,5 @@
 import { IAnnouncementData } from "../models/IAnnouncementData";
 export interface IAgiIntranetAnnouncementsDetailsStates {
-    AnnouncementData: IAnnouncementData;
+    announcementData: IAnnouncementData;
     exceptionOccured: boolean;   
 }

@@ -1,5 +1,5 @@
 import { WebPartContext } from "@microsoft/sp-webpart-base";
-import { sp } from "@pnp/sp";
+import { sp } from '@pnp/sp/presets/all';
 import { IAnnouncementData } from "../models/IAnnouncementData";
 
 export class SPService {

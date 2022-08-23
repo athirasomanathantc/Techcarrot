@@ -1,11 +1,15 @@
 import * as React from 'react';
 import styles from './AgiIntranetAnnouncementsDetails.module.scss';
 import { IAgiIntranetAnnouncementsDetailsProps } from './IAgiIntranetAnnouncementsDetailsProps';
+import { IAgiIntranetAnnouncementsDetailsStates } from './IAgiIntranetAnnouncementsDetailsStates';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { SPService } from '../services/SPService';
 import { sp } from "@pnp/sp/presets/all";
+import { IAnnouncementData } from '../models/IAnnouncementData';
+import * as moment from 'moment';
 
-export default class AgiIntranetAnnouncementsDetails extends React.Component<IAgiIntranetAnnouncementsDetailsProps, {}> {
+
+export default class AgiIntranetAnnouncementsDetails extends React.Component<IAgiIntranetAnnouncementsDetailsProps, IAgiIntranetAnnouncementsDetailsStates> {
   private _spServices: SPService;
   constructor(props: IAgiIntranetAnnouncementsDetailsProps) {
     super(props);
@@ -14,53 +18,91 @@ export default class AgiIntranetAnnouncementsDetails extends React.Component<IAg
       spfxContext: this.props.context
     })
     this.state = {
-      AnnouncementData: null,
-      exceptionOccured: false     
+      announcementData: null,
+      exceptionOccured: false
     }
   }
 
   private getQueryStringValue(param: string): string {
-    const params = new URLSearchParams(window.location.search);
-    let value = params.get(param) || '';
-    return value;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      let value = params.get(param) || '';
+      return value;
+    }
+    catch (exception) {
+      this.setState({
+        exceptionOccured: true
+      });
+    }
   }
-  public async componentDidMount() {
-    const announcementId = this.getQueryStringValue('announcementID');
-  }
-  public render(): React.ReactElement<IAgiIntranetAnnouncementsDetailsProps> {
-    const {
-      description,
-      isDarkTheme,
-      environmentMessage,
-      hasTeamsContext,
-      userDisplayName
-    } = this.props;
 
+  public async componentDidMount() {
+    try {
+      let announcementId = this.getQueryStringValue('announcementID');
+      if (!announcementId)
+        return;
+      const announcements: IAnnouncementData = await this._spServices.getAnnouncementById(parseInt(announcementId));
+      this.setState({
+        announcementData: announcements
+      });
+    }
+    catch (exception) {
+      this.setState({
+        exceptionOccured: true
+      });
+    }
+  }
+
+  private getImageUrl(announcementImage: string): string {
+    try {
+      if (!announcementImage) {
+        return;
+      }
+      const imageObj: any = JSON.parse(announcementImage);
+      return imageObj.serverUrl + imageObj.serverRelativeUrl;
+    }
+    catch (exception) {
+      this.setState({
+        exceptionOccured: true
+      });
+    }
+  }
+
+  public render(): React.ReactElement<IAgiIntranetAnnouncementsDetailsProps> {
+    const announcementData = this.state.announcementData;
+    const imageUrl = announcementData ? this.getImageUrl(announcementData.AnnouncementImage): "";
+    if (this.state.exceptionOccured) {
+      throw new Error('Something went wrong');
+    }
     return (
-      <section className={`${styles.agiIntranetAnnouncementsDetails} ${hasTeamsContext ? styles.teams : ''}`}>
-        <div className={styles.welcome}>
-          <img alt="" src={isDarkTheme ? require('../assets/welcome-dark.png') : require('../assets/welcome-light.png')} className={styles.welcomeImage} />
-          <h2>Well done, {escape(userDisplayName)}!</h2>
-          <div>{environmentMessage}</div>
-          <div>Web part property value: <strong>{escape(description)}</strong></div>
-        </div>
-        <div>
-          <h3>Welcome to SharePoint Framework!</h3>
-          <p>
-            The SharePoint Framework (SPFx) is a extensibility model for Microsoft Viva, Microsoft Teams and SharePoint. It&#39;s the easiest way to extend Microsoft 365 with automatic Single Sign On, automatic hosting and industry standard tooling.
-          </p>
-          <h4>Learn more about SPFx development:</h4>
-          <ul className={styles.links}>
-            <li><a href="https://aka.ms/spfx" target="_blank" rel="noreferrer">SharePoint Framework Overview</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-graph" target="_blank" rel="noreferrer">Use Microsoft Graph in your solution</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-teams" target="_blank" rel="noreferrer">Build for Microsoft Teams using SharePoint Framework</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-viva" target="_blank" rel="noreferrer">Build for Microsoft Viva Connections using SharePoint Framework</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-store" target="_blank" rel="noreferrer">Publish SharePoint Framework applications to the marketplace</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-api" target="_blank" rel="noreferrer">SharePoint Framework API reference</a></li>
-            <li><a href="https://aka.ms/m365pnp" target="_blank" rel="noreferrer">Microsoft 365 Developer Community</a></li>
-          </ul>
-        </div>
-      </section>
+      <>
+        {announcementData &&
+          <article className="news-detail-wrapper announcement-details">
+            <header className="news-detail-header">
+              <p><i><img src={`${this.props.siteUrl}/Assets/icons/Date.png`} /></i>{moment(announcementData.PublishedDate).format('MMM DD, YYYY')}</p>
+              <h1>{announcementData.Title}</h1>
+            </header>
+            <section className="news-detail-content">
+              <div className="row">
+
+                <div className="col-md-12">
+                  <ul>
+                    <li><img src={`${this.props.siteUrl}/Assets/icons/icon-location.png`} />{announcementData.Location}</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+            <section className="news-detail-img">
+              <img src={imageUrl} className="d-block w-100" alt="..." />
+            </section>
+            <section className="news-detail-text">
+              <div dangerouslySetInnerHTML={{ __html: announcementData.Summary }}>
+              </div>
+            </section>
+          </article>
+        }
+      </>
+
     );
   }
 }
