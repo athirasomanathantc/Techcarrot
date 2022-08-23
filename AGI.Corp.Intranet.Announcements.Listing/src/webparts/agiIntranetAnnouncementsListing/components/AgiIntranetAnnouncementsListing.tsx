@@ -8,7 +8,8 @@ import { IAgiIntranetEventsStates } from './IAgiIntranetAnnouncementsListingStat
 import { IAnnouncementData } from '../models/IAnnouncementData';
 import Paging from './Paging/Paging';
 import * as moment from 'moment';
-const itemsPerPage: number = 8;
+import { IBusinessData } from '../models/IBusinessData';
+const itemsPerPage: number = 12;
 
 export default class AgiIntranetAnnouncementsListing extends React.Component<IAgiIntranetAnnouncementsListingProps, IAgiIntranetEventsStates> {
   private _spServices: SPService;
@@ -20,17 +21,23 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
     })
     this.state = {
       totalAnnouncementData: [],
+      filteredAnnouncementData:[],
       exceptionOccured: false,
       currentPage: 1,
       totalPage: 0,
       currentPageAnnouncementData: [],
+      filterValues: [],
+      businessData: []
     }
   }
   async componentDidMount(): Promise<void> {
     try {
       const announcements: IAnnouncementData[] = await this._spServices.getAnnouncements();
+      const business: IBusinessData[] = await this._spServices.getBussiness();
       this.setState({
-        totalAnnouncementData: announcements
+        totalAnnouncementData: announcements,
+        filteredAnnouncementData:announcements,
+        businessData: business
       });
       this.getFirstPageAnnouncements();
     }
@@ -62,9 +69,9 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
 
   private getFirstPageAnnouncements() {
     try {
-      const totalPage: number = Math.ceil(this.state.totalAnnouncementData.length / itemsPerPage);
+      const totalPage: number = Math.ceil(this.state.filteredAnnouncementData.length / itemsPerPage);
       this.setState({
-        currentPageAnnouncementData: this.state.totalAnnouncementData.slice(0, itemsPerPage),
+        currentPageAnnouncementData: this.state.filteredAnnouncementData.slice(0, itemsPerPage),
         totalPage,
         currentPage: 1
       })
@@ -84,7 +91,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
 
       //console.log('page', page);
       const roundupPage = Math.ceil(selectedPageNumber);
-      const currentPageAnnouncementData = this.state.totalAnnouncementData.slice(skipItems, takeItems)
+      const currentPageAnnouncementData = this.state.filteredAnnouncementData.slice(skipItems, takeItems)
       this.setState({
         currentPageAnnouncementData,
         currentPage: selectedPageNumber
@@ -99,6 +106,29 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
     }
   }
 
+  private filterAnnouncementByBusiness(e: any) {
+    const value = parseInt(e.target.value);
+    if (value == 0) {
+      const result: IAnnouncementData[] = this.state.totalAnnouncementData;
+      this.setState({
+        filteredAnnouncementData: result
+      }, () => {
+        this.getFirstPageAnnouncements();
+      });
+
+    } else {
+      const result = this.state.totalAnnouncementData.filter((obj) => {
+        return obj.Business.ID == value;
+      })
+      this.setState({
+        filteredAnnouncementData: result
+      }, () => {
+        this.getFirstPageAnnouncements();
+      });
+    }
+  }
+
+
   public render(): React.ReactElement<IAgiIntranetAnnouncementsListingProps> {
 
     const {
@@ -112,15 +142,28 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       throw new Error('Something went wrong');
     }
     return (
-      <div className="main-content">
+      <div className="main-content" id='announcementContent'>
         <div className="content-wrapper">
           <div className="container">
             <div className="main-header-section">
-              <div className="row ">
-                <div className="col-12">
+              <div className={'row'} >
+                <div className={'col-12 col-md-6 heading-section'} >
                   <h3>Announcements</h3>
                 </div>
-
+                <div className={'col-12 col-md-6 filter-section text-end'}>
+                  <div className={'form-select custom-select '}>
+                    <select onChange={(e) => this.filterAnnouncementByBusiness(e)}>
+                      <option value="0">Filter By</option>
+                      {
+                        this.state.businessData.map((business) => {
+                          return (
+                            <option value={business.ID}>{business.Title}</option>
+                          )
+                        })
+                      }
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
             <article className="row gx-5 mb-5">
@@ -138,10 +181,10 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
                               </div>
                               <div className="news-details">
                                 <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date.svg`} alt="" /></i> {moment(announcement.PublishedDate).format('DD MMM YYYY')}</span>
-                                <span><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.svg`} alt="" /></i> {announcement.Business ? announcement.Business.Title : ""}</span>
+                                <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {announcement.Business ? announcement.Business.Title : ""}</span>
                               </div>
                               <p className="card-text">{announcement.Description}</p>
-                              <a href={`${this.props.siteUrl}/SitePages/News/Announcements/Announcement Details.aspx?announcementID=${announcement.ID}`} className="btn news-read-more  align-self-start">Read more</a>                              
+                              <a href={`${this.props.siteUrl}/SitePages/News/Announcements/Announcement Details.aspx?announcementID=${announcement.ID}`} className="btn news-read-more  align-self-start">Read more</a>
                             </div>
                           </div>
                         </div>
@@ -155,7 +198,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
               <div className="d-flex justify-content-end">
                 <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
                   <Paging currentPage={this.state.currentPage}
-                    totalItems={this.state.totalAnnouncementData.length}
+                    totalItems={this.state.filteredAnnouncementData.length}
                     itemsCountPerPage={itemsPerPage}
                     onPageUpdate={(selectedPageNumber) => this._getSelectedPageAnnouncements(selectedPageNumber)}
                   />
