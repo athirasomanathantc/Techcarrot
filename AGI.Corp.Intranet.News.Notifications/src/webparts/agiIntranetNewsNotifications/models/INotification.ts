@@ -4,4 +4,5 @@ export interface INotification {
     PublishedDate: string;
     Date: string;
     Time: string;
+    Type: string;
 }
