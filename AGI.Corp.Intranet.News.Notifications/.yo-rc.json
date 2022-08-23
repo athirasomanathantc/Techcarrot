@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.2",
+    "libraryName": "agi-corp-intranet-news-notifications",
+    "libraryId": "f0031dfb-1b3e-4187-93be-43dada746527",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "AGI.Corp.Intranet.News.Notifications",
+    "solutionShortDescription": "AGI.Corp.Intranet.News.Notifications description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

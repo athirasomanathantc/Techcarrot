@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "agi-corp-intranet-news-notifications-client-side-solution",
+    "id": "f0031dfb-1b3e-4187-93be-43dada746527",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.15.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "AGI.Corp.Intranet.News.Notifications description"
+      },
+      "longDescription": {
+        "default": "AGI.Corp.Intranet.News.Notifications description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "agi-corp-intranet-news-notifications Feature",
+        "description": "The feature that activates elements of the agi-corp-intranet-news-notifications solution.",
+        "id": "7cc21109-a003-4b88-a9d6-abc93a1dd4dc",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/agi-corp-intranet-news-notifications.sppkg"
+  }
+}
