@@ -1,5 +1,5 @@
 {
-  "name": "agi-corp-intranet-news-details",
+  "name": "agi-corp-intranet-blog-details",
   "version": "0.0.1",
   "private": true,
   "main": "lib/index.js",
