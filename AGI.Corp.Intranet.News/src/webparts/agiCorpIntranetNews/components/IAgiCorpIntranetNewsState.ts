@@ -9,5 +9,6 @@ export interface IAgiCorpIntranetNewsState {
   currentPage: number;
   totalPages: number;
   pageData:INewsData[];
+  pageSize:number;
   
 }

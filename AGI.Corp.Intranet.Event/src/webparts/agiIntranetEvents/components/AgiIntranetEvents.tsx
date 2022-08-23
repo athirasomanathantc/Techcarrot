@@ -14,7 +14,7 @@ import * as moment from 'moment';
 import { Pagination } from '@pnp/spfx-controls-react/lib/pagination';
 import Paging from './Paging/Paging';
 import { EVENTS, TABS } from '../common/constants';
-const pageSize: number = 12;
+//const pageSize: number = 12;
 
 
 export default class AgiIntranetEvents extends React.Component<IAgiIntranetEventsProps, IAgiIntranetEventsStates> {
@@ -32,7 +32,8 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
       upcomingEvents: [],
       pastEvents: [],
       selectedTabValues: [],
-      selectedFilter: 0
+      selectedFilter: 0,
+      pageSize:0
     }
   }
 
@@ -64,6 +65,30 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
       .catch((error) => {
         console.log('Error:', error);
       })
+      //console.log('screen width',window.innerWidth);
+      if (window.innerWidth<=767){
+        this.setState({
+          pageSize:6
+        });
+
+      }else{
+        this.setState({
+          pageSize:12
+        });
+
+      }
+
+      /*if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+        //document.write("mobile");
+        this.setState({
+          pageSize:6
+        });
+      }else{
+        //document.write("not mobile");
+        this.setState({
+          pageSize:12
+        });
+      }*/
     // const select= this.getQueryStringValue('tab');
     //     console.log('current tab', select);
     //     //const selectedTab = select || this.state.selectedTab;
@@ -271,14 +296,14 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
   }
 
   private paging() {
-    const pageCount: number = Math.ceil(this.state.filterData.length / pageSize);
-    const totalPages = (this.state.filterData.length / pageSize) - 1;
+    const pageCount: number = Math.ceil(this.state.filterData.length / this.state.pageSize);
+    const totalPages = (this.state.filterData.length / this.state.pageSize) - 1;
     //console.log('totalPages', pageCount);
     // this.setState({
     //   images
     // });
     this.setState({
-      pageData: this.state.filterData.slice(0, pageSize),
+      pageData: this.state.filterData.slice(0, this.state.pageSize),
       totalPage: pageCount,
       currentPage: 1
     }, () => {
@@ -289,8 +314,8 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
   }
   private _getPage(page: number) {
     // round a number up to the next largest integer.
-    const skipItems: number = pageSize * (page - 1);
-    const takeItems: number = skipItems + pageSize;
+    const skipItems: number = this.state.pageSize * (page - 1);
+    const takeItems: number = skipItems + this.state.pageSize;
 
     //console.log('page', page);
     const roundupPage = Math.ceil(page);
@@ -349,7 +374,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
                       }
                     </ul>
                   </div>
-                  <div className={'col-12  col-md-6 d-block d-md-none'}>
+                  <div className={'col-12  col-md-6 d-block d-md-none mobileTab'}>
                     <select onChange={(e) => this.handleTab(e)} className={'nav nav-tabs'} id="myTab" role="tablist" >
                       {
                         tabs.map((tab, i) => {
@@ -454,7 +479,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
               /> */}
               <Paging currentPage={this.state.currentPage}
                 totalItems={this.state.filterData.length}
-                itemsCountPerPage={pageSize}
+                itemsCountPerPage={this.state.pageSize}
                 onPageUpdate={(page) => this._getPage(page)}
               />
             </div>

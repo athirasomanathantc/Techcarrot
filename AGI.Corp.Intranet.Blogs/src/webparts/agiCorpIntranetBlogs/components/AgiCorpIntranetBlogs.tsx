@@ -11,7 +11,7 @@ import{
   SPHttpClient,
   SPHttpClientResponse
 } from '@microsoft/sp-http'
-const pageSize: number = 12;
+//const pageSize: number = 12;
 export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntranetBlogsProps, IAgiCorpIntranetBlogsState> {
   constructor(props) {
     super(props);
@@ -25,6 +25,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
       pageData: [],
       totalPages: 0,
       currentPage: 1,
+      pageSize:0
 
 
     }
@@ -55,6 +56,17 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
     .catch((error) => {
       console.log('Error:', error);
     })
+    if (window.innerWidth<=767){
+      this.setState({
+        pageSize:6
+      });
+
+    }else{
+      this.setState({
+        pageSize:12
+      });
+
+    }
     // const select= this.getQueryStringValue('tab');
     //     console.log('current tab', select);
     //     //const selectedTab = select || this.state.selectedTab;
@@ -68,14 +80,14 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
 
   private paging() {
 
-    const pageCount: number = Math.ceil(this.state.filterData.length / pageSize);
-    const totalPages = (this.state.filterData.length / pageSize) - 1;
+    const pageCount: number = Math.ceil(this.state.filterData.length / this.state.pageSize);
+    const totalPages = (this.state.filterData.length / this.state.pageSize) - 1;
     //console.log('totalPages', pageCount);l
     // this.setState({
     //   images
     // });
     this.setState({
-      pageData: this.state.filterData.slice(0, pageSize),
+      pageData: this.state.filterData.slice(0, this.state.pageSize),
       totalPages: pageCount
     });
 
@@ -113,11 +125,11 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   private async getblog(): Promise<void> {
     const listName = "Blogs";
     sp.web.lists.getByTitle(listName).items.select('ID,Title,Category,PublishedDate,Summary,BlogThumbnail,BlogImage,Editor/ID,Editor/Title,Business/ID,Business/Title').expand('Editor,Business').get().then((resp: IBlogData[]) => {
-      const pageCount: number = Math.ceil(resp.length / pageSize);
+      const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
       this.setState({
         blogData: resp,
         filterData:resp,
-        pageData: resp.slice(0, pageSize),
+        pageData: resp.slice(0, this.state.pageSize),
         totalPages: pageCount
 
       }, () => {
@@ -130,8 +142,8 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   }
   private _getPage(page: number) {
     // round a number up to the next largest integer.
-    const skipItems: number = pageSize * (page - 1);
-    const takeItems: number = skipItems + pageSize;
+    const skipItems: number = this.state.pageSize * (page - 1);
+    const takeItems: number = skipItems + this.state.pageSize;
 
     console.log('page', page);
     const roundupPage = Math.ceil(page);
@@ -204,11 +216,11 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                         
                           < div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
                             <div className={'card news-card'}>
-                            <a href={`${this.props.siteUrl}/SitePages/Blog Detail.aspx?newsID=${item.ID}`} className={'btn news-read-more  align-self-start'} data-interception="off">
+                            <a href={`${this.props.siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'btn news-read-more  align-self-start'} data-interception="off">
                               <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Card Image" />
                               </a>
                               <div className={'card-body d-flex flex-column'}>
-                                <a href={`${this.props.siteUrl}/SitePages/Blog Detail.aspx?newsID=${item.ID}`} className={'btn news-read-more  align-self-start'} data-interception="off">
+                                <a href={`${this.props.siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'btn news-read-more  align-self-start'} data-interception="off">
                                   <div className={'mb-3 card-content-header'}>
                                     <h5 className={'card-title'}>{item.Title}</h5>
                                   </div>
@@ -249,7 +261,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                 /> */}
                 <Paging currentPage={this.state.currentPage}
                 totalItems={this.state.filterData.length}
-                itemsCountPerPage={pageSize}
+                itemsCountPerPage={this.state.pageSize}
                 onPageUpdate={(page) => this._getPage(page)} 
                 />
                 

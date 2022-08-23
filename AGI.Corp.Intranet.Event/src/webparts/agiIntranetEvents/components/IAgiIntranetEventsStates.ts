@@ -3,6 +3,7 @@ export interface IAgiIntranetEventsStates {
   eventsData:IEventData[];
   currentPage:number;
   totalPage:number;
+  pageSize:number;
   pageData:IEventData[];
   filterValues:{
     ID:number;
