@@ -70,36 +70,43 @@ export default class AgiIntranetAnnouncementsDetails extends React.Component<IAg
 
   public render(): React.ReactElement<IAgiIntranetAnnouncementsDetailsProps> {
     const announcementData = this.state.announcementData;
-    const imageUrl = announcementData ? this.getImageUrl(announcementData.AnnouncementImage): "";
+    const imageUrl = announcementData ? this.getImageUrl(announcementData.AnnouncementImage) : "";
     if (this.state.exceptionOccured) {
       throw new Error('Something went wrong');
     }
     return (
       <>
         {announcementData &&
-          <article className="news-detail-wrapper announcement-details">
-            <header className="news-detail-header">
-              <p><i><img src={`${this.props.siteUrl}/Assets/icons/Date.png`} /></i>{moment(announcementData.PublishedDate).format('MMM DD, YYYY')}</p>
-              <h1>{announcementData.Title}</h1>
-            </header>
-            <section className="news-detail-content">
-              <div className="row">
+          <div className={'main-content'}>
+            <div className={'content-wrapper'}>
+              <div className={'container'}>
+                <article className="news-detail-wrapper announcement-details">
+                  <header className="news-detail-header">
+                    <p><img src={`${this.props.siteUrl}/Assets/icons/Date.png`} />{moment(announcementData.PublishedDate).format('MMM DD, YYYY')}</p>
+                    <h1>{announcementData.Title}</h1>
+                  </header>
+                  <section className="news-detail-content">
+                    <div className="row">
 
-                <div className="col-md-12">
-                  <ul>
-                    <li><img src={`${this.props.siteUrl}/Assets/icons/icon-location.png`} />{announcementData.Location}</li>
-                  </ul>
-                </div>
+                      <div className="col-md-12">
+                        <ul className="justify-content-start ps-0">
+                          <li className="ps-0"><img src={`${this.props.siteUrl}/Assets/icons/icon-location.png`} />{announcementData.Location}</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </section>
+                  <section className="news-detail-img">
+                    <img src={imageUrl} className="d-block w-100" alt="..." />
+                  </section>
+                  <section className="news-detail-text">
+                    <div dangerouslySetInnerHTML={{ __html: announcementData.Summary }}>
+                    </div>
+                  </section>
+                </article>
               </div>
-            </section>
-            <section className="news-detail-img">
-              <img src={imageUrl} className="d-block w-100" alt="..." />
-            </section>
-            <section className="news-detail-text">
-              <div dangerouslySetInnerHTML={{ __html: announcementData.Summary }}>
-              </div>
-            </section>
-          </article>
+            </div>
+          </div>
+
         }
       </>
 

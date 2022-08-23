@@ -11,6 +11,7 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'AgiIntranetAnnouncementsDetailsWebPartStrings';
 import AgiIntranetAnnouncementsDetails from './components/AgiIntranetAnnouncementsDetails';
 import { IAgiIntranetAnnouncementsDetailsProps } from './components/IAgiIntranetAnnouncementsDetailsProps';
+import { SPComponentLoader } from '@microsoft/sp-loader';
 
 export interface IAgiIntranetAnnouncementsDetailsWebPartProps {
   description: string;
@@ -31,7 +32,7 @@ export default class AgiIntranetAnnouncementsDetailsWebPart extends BaseClientSi
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
         userDisplayName: this.context.pageContext.user.displayName,
         context: this.context,
-        siteUrl:this.context.pageContext.web.absoluteUrl
+        siteUrl: this.context.pageContext.web.absoluteUrl
       }
     );
 
@@ -39,17 +40,9 @@ export default class AgiIntranetAnnouncementsDetailsWebPart extends BaseClientSi
   }
 
   protected onInit(): Promise<void> {
-    this._environmentMessage = this._getEnvironmentMessage();
-
-    return super.onInit();
-  }
-
-  private _getEnvironmentMessage(): string {
-    if (!!this.context.sdks.microsoftTeams) { // running in Teams
-      return this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentTeams : strings.AppTeamsTabEnvironment;
-    }
-
-    return this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentSharePoint : strings.AppSharePointEnvironment;
+    const randomNumber = Math.floor(Math.random() * 90000) + 10000;
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/Announcements.css?${randomNumber}`);    
+    return Promise.resolve();
   }
 
   protected onThemeChanged(currentTheme: IReadonlyTheme | undefined): void {
