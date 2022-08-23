@@ -1,9 +1,9 @@
+import { IBlogItem } from "../models/IBlogItem";
 import { ICommentItem } from "../models/ICommentItem";
-import { INewsItem } from "../models/INewsItem";
 
-export interface IAgiIntranetNewsDetailsState {
-    newsId: number;
-    news: INewsItem;
+export interface IAgiIntranetBlogDetailsState {
+    blogId: number;
+    blog: IBlogItem;
     comment: string;
     reply: string;
     allComments: ICommentItem[];

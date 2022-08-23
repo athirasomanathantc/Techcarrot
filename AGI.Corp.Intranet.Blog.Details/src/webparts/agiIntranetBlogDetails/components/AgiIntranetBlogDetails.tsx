@@ -1,26 +1,25 @@
 import * as React from 'react';
-import styles from './AgiIntranetNewsDetails.module.scss';
-import { IAgiIntranetNewsDetailsProps } from './IAgiIntranetNewsDetailsProps';
-import { IAgiIntranetNewsDetailsState } from './IAgiIntranetNewsDetailsState';
+import styles from './AgiIntranetBlogDetails.module.scss';
+import { IAgiIntranetBlogDetailsProps } from './IAgiIntranetBlogDetailsProps';
+import { IAgiIntranetBlogDetailsState } from './IAgiIntranetBlogDetailsState';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { sp } from '@pnp/sp/presets/all';
 import * as moment from 'moment';
-import { LIST_COMMENTS, LIST_NEWS, NEWS_NULL_ITEM, ViewsJSON_NULL } from '../common/constants';
+import { BLOG_NULL_ITEM, LIST_BLOG, LIST_COMMENTS } from '../common/constants';
+import { IBlogItem } from '../models/IBlogItem';
 import { ICommentItem } from '../models/ICommentItem';
-import { INewsItem } from '../models/INewsItem';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
-
-export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranetNewsDetailsProps, IAgiIntranetNewsDetailsState> {
-
-  constructor(props: IAgiIntranetNewsDetailsProps) {
+export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranetBlogDetailsProps, IAgiIntranetBlogDetailsState> {
+  
+  constructor(props: IAgiIntranetBlogDetailsProps) {
     super(props);
     sp.setup({
       spfxContext: this.props.context
     });
     this.state = {
-      newsId: null,
-      news: NEWS_NULL_ITEM,
+      blogId: null,
+      blog: BLOG_NULL_ITEM,
       comment: '',
       reply: '',
       allComments: [],
@@ -44,24 +43,22 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       userId
     });
 
-    const newsID = this.getQueryStringValue('newsID');
+    const blogID = this.getQueryStringValue('blogID');
 
-    await this.getNewsItem(newsID);
-    //await this.updateViews(newsID);
-
+    await this.getBlogItem(blogID);
   }
 
-  private async getNewsItem(newsID: string): Promise<void> {
-    const listName = 'News';
+  private async getBlogItem(blogID: string): Promise<void> {
+    const listName = 'Blogs';
     const userId = this.props.context.pageContext.legacyPageContext.userId;
-    if (!newsID)
+    if (!blogID)
       return;
-    const id = parseInt(newsID);
+    const id = parseInt(blogID);
     this.setState({
-      newsId: id
+      blogId: id
     });
 
-    await sp.web.lists.getByTitle(listName).items.getById(id).get().then((item: INewsItem) => {
+    await sp.web.lists.getByTitle(listName).items.getById(id).get().then((item: IBlogItem) => {
       let viewJSON = '';
       if (item.ViewsJSON) {
         viewJSON = item.ViewsJSON;
@@ -84,9 +81,9 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
         }
         return obj;
       });
-      this.updateViews(parseInt(newsID), JSON.stringify(updatedViews));
+      this.updateViews(parseInt(blogID), JSON.stringify(updatedViews));
       this.setState({
-        news: item,
+        blog: item,
         viewsCount: viewsCount
       });
     });
@@ -95,27 +92,27 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
 
   }
 
-  private async reloadNewsItem(newsID: string): Promise<void> {
-    const listName = 'News';
-    if (!newsID)
+  private async reloadBlogItem(blogID: string): Promise<void> {
+    const listName = LIST_BLOG;
+    if (!blogID)
       return;
-    const id = parseInt(newsID);
+    const id = parseInt(blogID);
     this.setState({
-      newsId: id
+      blogId: id
     });
 
-    await sp.web.lists.getByTitle(listName).items.getById(id).get().then((item: INewsItem) => {
+    await sp.web.lists.getByTitle(listName).items.getById(id).get().then((item: IBlogItem) => {
       this.setState({
-        news: item,
+        blog: item,
       });
     });
 
   }
 
-  private async getComments(newsId: number): Promise<void> {
+  private async getComments(blogId: number): Promise<void> {
     //get comments
     const select = 'ID,Title,Comment,CommentAuthor/Title,CommentAuthor/Id,ParentCommentID,Created,CommentLikedBy';
-    await sp.web.lists.getByTitle(LIST_COMMENTS).items.filter(`Title eq '${newsId}'`)
+    await sp.web.lists.getByTitle(LIST_COMMENTS).items.filter(`Title eq '${blogId}'`)
       .select(select)
       //.orderBy('Created', false)
       .expand('CommentAuthor')
@@ -138,12 +135,12 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       })
   }
 
-  private async updateViews(newsID: number, viewsJSON: string): Promise<void> {
-    const listName = LIST_NEWS;
+  private async updateViews(blogID: number, viewsJSON: string): Promise<void> {
+    const listName = LIST_BLOG;
     const body = {
       ViewsJSON: viewsJSON
     };
-    sp.web.lists.getByTitle(listName).items.getById(newsID).update(body).then((data) => {
+    sp.web.lists.getByTitle(listName).items.getById(blogID).update(body).then((data) => {
       console.log('news views updated successfully');
     }).catch((error) => {
       console.log('error in updating news views', error);
@@ -172,8 +169,8 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
 
   private addComment() {
     const comment = this.state.comment;
-    const newsId = this.state.newsId;
-    if (!newsId) {
+    const blogId = this.state.blogId;
+    if (!blogId) {
       return;
     }
 
@@ -181,7 +178,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     const userName = this.props.context.pageContext.legacyPageContext.userDisplayName;
     const userId = this.props.context.pageContext.legacyPageContext.userId;
     const body = {
-      Title: newsId.toString(),
+      Title: blogId.toString(),
       Comment: comment,
       CommentAuthorId: userId
     };
@@ -191,7 +188,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       this.setState({
         comment: ''
       });
-      this.getComments(newsId);
+      this.getComments(blogId);
     }).catch((error) => {
       console.log('error in adding comments', error);
     })
@@ -215,7 +212,6 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
   }
 
   private replyToComment(e: any) {
-    //const newsId = this.state.newsId;
     const id = e.target.attributes["data-id"].value;
     const replySectionId = `replySection${id}`;
     document.getElementById(replySectionId).style.display = 'flex';
@@ -224,12 +220,12 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
   private addReply(e: any) {
     const id = e.target.attributes["data-id"].value;
     const replySectionId = `replySection${id}`;
-    const newsId = this.state.newsId;
+    const blogId = this.state.blogId;
     const reply = this.state.reply;
     const userId = this.props.context.pageContext.legacyPageContext.userId;
     //add reply comment to the comments list
     const body = {
-      Title: newsId.toString(),
+      Title: blogId.toString(),
       Comment: reply,
       ParentCommentID: id,
       CommentAuthorId: userId
@@ -237,7 +233,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
 
     sp.web.lists.getByTitle(LIST_COMMENTS).items.add(body).then((data) => {
       console.log('reply added..');
-      this.getComments(newsId);
+      this.getComments(blogId);
       this.setState({
         reply: ''
       });
@@ -249,22 +245,22 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
 
   private likePost(e: any) {
     const id = e.target.attributes["data-id"].value;
-    const newsItem = this.state.news;
-    let likedByArray = newsItem.NewsLikedBy ? newsItem.NewsLikedBy.split(';') : [];
+    const newsItem = this.state.blog;
+    let likedByArray = newsItem.BlogLikedBy ? newsItem.BlogLikedBy.split(';') : [];
     likedByArray.push(this.state.userId.toString());
     const likedBy = likedByArray.join(';').trim();
     const body = {
       NewsLikedBy: likedBy
     };
     console.log(body);
-    this.updateNewsItem(body, id);
+    this.updateBlogItem(body, id);
 
   }
 
   private unlikePost(e: any) {
     const id = e.target.attributes["data-id"].value;
-    const newsItem = this.state.news;
-    let likedByArray = newsItem.NewsLikedBy ? newsItem.NewsLikedBy.split(';') : [];
+    const newsItem = this.state.blog;
+    let likedByArray = newsItem.BlogLikedBy ? newsItem.BlogLikedBy.split(';') : [];
     const userId = this.state.userId.toString();
     likedByArray = likedByArray.filter((elem) => elem != userId);
     const likedBy = likedByArray.join(';').trim();
@@ -272,7 +268,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       NewsLikedBy: likedBy
     };
     console.log(body);
-    this.updateNewsItem(body, id);
+    this.updateBlogItem(body, id);
   }
 
   private likeComment(e: any) {
@@ -285,7 +281,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       CommentLikedBy: likedBy
     };
     console.log(body);
-    this.updateNewsCommentItem(body, id);
+    this.updateBlogCommentItem(body, id);
 
   }
 
@@ -300,25 +296,25 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       CommentLikedBy: likedBy
     };
     console.log(body);
-    this.updateNewsCommentItem(body, id);
+    this.updateBlogCommentItem(body, id);
   }
 
-  private async updateNewsItem(body: any, itemId: number): Promise<void> {
-    const listName = LIST_NEWS;
+  private async updateBlogItem(body: any, itemId: number): Promise<void> {
+    const listName = LIST_BLOG;
     sp.web.lists.getByTitle(listName).items.getById(itemId).update(body).then((data) => {
       console.log('news item udpated successfully');
-      this.reloadNewsItem(this.state.newsId.toString());
+      this.reloadBlogItem(this.state.blogId.toString());
     }).catch((error) => {
-      console.log('error in updating news item');
+      console.log('error in updating blog item');
       console.log(error);
     })
   }
 
-  private async updateNewsCommentItem(body: any, itemId: number): Promise<void> {
+  private async updateBlogCommentItem(body: any, itemId: number): Promise<void> {
     const listName = LIST_COMMENTS;
     sp.web.lists.getByTitle(listName).items.getById(itemId).update(body).then((data) => {
       console.log('comment item udpated successfully');
-      this.getComments(this.state.newsId);
+      this.getComments(this.state.blogId);
     }).catch((error) => {
       console.log('error in updating comment item');
       console.log(error);
@@ -339,11 +335,11 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     return imageObj.serverUrl + imageObj.serverRelativeUrl;
   }
 
-  private renderNewsDetail(): JSX.Element {
-    const news = this.state.news;
+  private renderBlogDetail(): JSX.Element {
+    const blog = this.state.blog;
     const userId = this.state.userId;
-    const imageUrl = this.getImageUrl(news.NewsImage);
-    const isLikedByCurrentUser = news.NewsLikedBy && news.NewsLikedBy.split(';').includes(userId.toString());
+    const imageUrl = this.getImageUrl(blog.BlogImage);
+    const isLikedByCurrentUser = blog.BlogLikedBy && blog.BlogLikedBy.split(';').includes(userId.toString());
     const commentsCount = this.state.commentsCount;
     //const newsSource = this.state.attachmentUrl;
     return (
@@ -353,16 +349,16 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
             <p>
               <i><img src={`${this.props.siteUrl}/Assets/icons/Date.svg`} /></i>
               {
-                news.PublishedDate && moment(news.PublishedDate).format('MMMM DD, YYYY')
+                blog.PublishedDate && moment(blog.PublishedDate).format('MMMM DD, YYYY')
               }
             </p>
-            <h1>{news.Title}</h1>
+            <h1>{blog.Title}</h1>
           </header>
           <section className="news-detail-content">
             <div className="row">
               <div className="col-md-12">
                 <ul className="justify-content-start ps-0">
-                  <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.png`} /></i> {news.Category}</li>
+                  <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.png`} /></i> {blog.Business ? blog.Business.Title : ''}</li>
                 </ul>
               </div>
               {/* <div className="col-md-6">
@@ -400,7 +396,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
             </div>
           </section>
           <section className="news-detail-text" >
-            <div dangerouslySetInnerHTML={{ __html: news.Summary }}>
+            <div dangerouslySetInnerHTML={{ __html: blog.Summary }}>
             </div>
           </section>
           <footer className="news-detail-footer">
@@ -410,13 +406,13 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
                   {
                     isLikedByCurrentUser ?
                       <a className="nav-link" href="javascript:void(0)" onClick={(e) => this.unlikePost(e)}
-                        data-id={news.ID}>
-                        <i><img src={`${this.props.siteUrl}/Assets/icons/icon-unlike.svg`} alt="" data-id={news.ID} /></i> Unlike
+                        data-id={blog.ID}>
+                        <i><img src={`${this.props.siteUrl}/Assets/icons/icon-unlike.svg`} alt="" data-id={blog.ID} /></i> Unlike
                       </a>
                       :
                       <a className="nav-link" href="javascript:void(0)" onClick={(e) => this.likePost(e)}
-                        data-id={news.ID}>
-                        <i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" data-id={news.ID} /></i> Like
+                        data-id={blog.ID}>
+                        <i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" data-id={blog.ID} /></i> Like
                       </a>
                   }
                   {/* <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" /></i>
@@ -623,20 +619,21 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     )
   }
 
-  public render(): React.ReactElement<IAgiIntranetNewsDetailsProps> {
-    const newsID = this.getQueryStringValue('newsID');
+
+  public render(): React.ReactElement<IAgiIntranetBlogDetailsProps> {
+    const blogID = this.getQueryStringValue('blogID');
     return (
-      <div className={styles.agiIntranetNewsDetails}>
+      <div className={ styles.agiIntranetBlogDetails }>
         <div className="main-content">
           <div className="content-wrapper">
             <div className="container">
               {
-                newsID ?
+                blogID ?
 
-                  this.renderNewsDetail()
+                  this.renderBlogDetail()
                   :
                   <div>
-                    Invalid news ID.
+                    Invalid blog ID.
                   </div>
               }
 
