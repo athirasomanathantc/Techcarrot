@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-intranet-news-notifications-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiIntranetNewsNotifications/AgiIntranetNewsNotificationsWebPart.js",
+          "manifest": "./src/webparts/agiIntranetNewsNotifications/AgiIntranetNewsNotificationsWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiIntranetNewsNotificationsWebPartStrings": "lib/webparts/agiIntranetNewsNotifications/loc/{locale}.js"
+  }
+}
