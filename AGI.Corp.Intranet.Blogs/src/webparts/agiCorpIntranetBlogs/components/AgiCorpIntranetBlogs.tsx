@@ -88,7 +88,8 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
     // });
     this.setState({
       pageData: this.state.filterData.slice(0, this.state.pageSize),
-      totalPages: pageCount
+      totalPages: pageCount,
+      currentPage: 1
     });
 
   }
