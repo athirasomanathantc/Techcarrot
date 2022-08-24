@@ -14,5 +14,4 @@ export interface IAgiIntranetNewsDetailsState {
     showReplySection: boolean;
     userPicture: string;
     userId: number;
-   
 }

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "agi-corp-intranet-announcements-details-client-side-solution",
+    "id": "f421c036-4e73-4e8f-840a-862ed9e79f47",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.15.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "AGI.Corp.Intranet.Announcements.Details description"
+      },
+      "longDescription": {
+        "default": "AGI.Corp.Intranet.Announcements.Details description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "agi-corp-intranet-announcements-details Feature",
+        "description": "The feature that activates elements of the agi-corp-intranet-announcements-details solution.",
+        "id": "b697d0a2-4b54-4a3e-b495-c1ec95855f53",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/agi-corp-intranet-announcements-details.sppkg"
+  }
+}

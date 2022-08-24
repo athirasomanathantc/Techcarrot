@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="utf-8"?>
+<entry xml:base="https://athingz.sharepoint.com/_api/"
+    xmlns="http://www.w3.org/2005/Atom"
+    xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:georss="http://www.georss.org/georss"
+    xmlns:gml="http://www.opengis.net/gml">
+    <id>https://athingz.sharepoint.com/_api/SP.UserProfiles.PeopleManager/GetPropertiesFor(accountName=@v)</id>
+    <category term="SP.UserProfiles.PersonProperties" scheme="http://schemas.microsoft.com/ado/2007/08/dataservices/scheme" />
+    <link rel="edit" href="SP.UserProfiles.PeopleManager/GetPropertiesFor(accountName=@v)" />
+    <title />
+    <updated>2022-08-21T09:36:57Z</updated>
+    <author>
+        <name />
+    </author>
+    <content type="application/xml">
+        <m:properties>
+            <d:AccountName>i:0#.f|membership|juan@athingz.com</d:AccountName>
+            <d:DirectReports m:type="Collection(Edm.String)" />
+            <d:DisplayName>Juan Pablo</d:DisplayName>
+            <d:Email>juan@athingz.com</d:Email>
+            <d:ExtendedManagers m:type="Collection(Edm.String)" />
+            <d:ExtendedReports m:type="Collection(Edm.String)">
+                <d:element>i:0#.f|membership|juan@athingz.com</d:element>
+            </d:ExtendedReports>
+            <d:IsFollowed m:type="Edm.Boolean">false</d:IsFollowed>
+            <d:LatestPost m:null="true" />
+            <d:Peers m:type="Collection(Edm.String)" />
+            <d:PersonalSiteHostUrl>https://athingz-my.sharepoint.com:443/</d:PersonalSiteHostUrl>
+            <d:PersonalUrl>https://athingz-my.sharepoint.com/personal/juan_athingz_com/</d:PersonalUrl>
+            <d:PictureUrl m:null="true" />
+            <d:Title m:null="true" />
+            <d:UserProfileProperties>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>UserProfile_GUID</d:Key>
+                    <d:Value>cdcada7a-e009-4737-b8d9-2d103a6216ea</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SID</d:Key>
+                    <d:Value>i:0h.f|membership|10032001228221ff@live.com</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>ADGuid</d:Key>
+                    <d:Value>System.Byte[]</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>AccountName</d:Key>
+                    <d:Value>i:0#.f|membership|juan@athingz.com</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>FirstName</d:Key>
+                    <d:Value>Juan Pablo</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PhoneticFirstName</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>LastName</d:Key>
+                    <d:Value>Rodriguez</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PhoneticLastName</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>PreferredName</d:Key>
+                    <d:Value>Juan Pablo</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PhoneticDisplayName</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>WorkPhone</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>Department</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>Title</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-Department</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>Manager</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>AboutMe</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>PersonalSpace</d:Key>
+                    <d:Value>/personal/juan_athingz_com/</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>PictureURL</d:Key>
+                    <d:Value>https://athingz-my.sharepoint.com:443/User%20Photos/Profile%20Pictures/juan_athingz_com_MThumb.jpg</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>UserName</d:Key>
+                    <d:Value>juan@athingz.com</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>QuickLinks</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>WebSite</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>PublicSiteRedirect</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-JobTitle</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-Dotted-line</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-Peers</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-Responsibility</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-SipAddress</d:Key>
+                    <d:Value>juan@athingz.com</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-MySiteUpgrade</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-ProxyAddresses</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-HireDate</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-DisplayOrder</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-ClaimID</d:Key>
+                    <d:Value>juan@athingz.com</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-ClaimProviderID</d:Key>
+                    <d:Value>membership</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-ResourceSID</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-ResourceAccountName</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-MasterAccountName</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-UserPrincipalName</d:Key>
+                    <d:Value>juan@athingz.com</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-O15FirstRunExperience</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PersonalSiteInstantiationState</d:Key>
+                    <d:Value>2</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-DistinguishedName</d:Key>
+                    <d:Value>CN=a9a9a386-232c-41ad-b239-268399d0dbbe,OU=2d2809dc-3888-4d4b-804a-7294a84085d4,OU=Tenants,OU=MSOnline,DC=SPODS192174,DC=msft,DC=net</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-SourceObjectDN</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-ClaimProviderType</d:Key>
+                    <d:Value>Forms</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-SavedAccountName</d:Key>
+                    <d:Value>i:0#.f|membership|juan@athingz.com</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-SavedSID</d:Key>
+                    <d:Value>System.Byte[]</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-ObjectExists</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PersonalSiteCapabilities</d:Key>
+                    <d:Value>4</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PersonalSiteFirstCreationTime</d:Key>
+                    <d:Value>3/14/2021 8:33:07 PM</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PersonalSiteLastCreationTime</d:Key>
+                    <d:Value>3/14/2021 8:33:07 PM</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PersonalSiteNumberOfRetries</d:Key>
+                    <d:Value>1</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PersonalSiteFirstCreationError</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-FeedIdentifier</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>WorkEmail</d:Key>
+                    <d:Value>juan@athingz.com</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>CellPhone</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>Fax</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>HomePhone</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>Office</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-Location</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>Assistant</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PastProjects</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-Skills</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-School</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-Birthday</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-StatusNotes</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-Interests</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-HashTags</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-EmailOptin</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PrivacyPeople</d:Key>
+                    <d:Value>True</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PrivacyActivity</d:Key>
+                    <d:Value>4095</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PictureTimestamp</d:Key>
+                    <d:Value>63757380381</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PicturePlaceholderState</d:Key>
+                    <d:Value>1</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PictureExchangeSyncState</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-TimeZone</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>OfficeGraphEnabled</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-UserType</d:Key>
+                    <d:Value>0</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-HideFromAddressLists</d:Key>
+                    <d:Value>False</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-RecipientTypeDetails</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>DelveFlags</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>VideoUserPopup</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>msOnline-ObjectId</d:Key>
+                    <d:Value>a9a9a386-232c-41ad-b239-268399d0dbbe</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-PointPublishingUrl</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-TenantInstanceId</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-SharePointHomeExperienceState</d:Key>
+                    <d:Value>17303552</d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>SPS-MultiGeoFlags</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+                <d:element m:type="SP.KeyValue">
+                    <d:Key>PreferredDataLocation</d:Key>
+                    <d:Value></d:Value>
+                    <d:ValueType>Edm.String</d:ValueType>
+                </d:element>
+            </d:UserProfileProperties>
+            <d:UserUrl>https://athingz-my.sharepoint.com:443/Person.aspx?accountname=i%3A0%23%2Ef%7Cmembership%7Cjuan%40athingz%2Ecom</d:UserUrl>
+        </m:properties>
+    </content>
+</entry>

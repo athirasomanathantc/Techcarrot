@@ -303,7 +303,6 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     this.updateNewsCommentItem(body, id);
   }
 
-
   private async updateNewsItem(body: any, itemId: number): Promise<void> {
     const listName = LIST_NEWS;
     sp.web.lists.getByTitle(listName).items.getById(itemId).update(body).then((data) => {
@@ -314,7 +313,6 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       console.log(error);
     })
   }
-
 
   private async updateNewsCommentItem(body: any, itemId: number): Promise<void> {
     const listName = LIST_COMMENTS;

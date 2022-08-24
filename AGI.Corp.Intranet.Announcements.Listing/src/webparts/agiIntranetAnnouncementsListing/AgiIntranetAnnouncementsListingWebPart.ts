@@ -7,7 +7,6 @@ import {
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
-
 import * as strings from 'AgiIntranetAnnouncementsListingWebPartStrings';
 import AgiIntranetAnnouncementsListing from './components/AgiIntranetAnnouncementsListing';
 import { IAgiIntranetAnnouncementsListingProps } from './components/IAgiIntranetAnnouncementsListingProps';
@@ -41,9 +40,7 @@ export default class AgiIntranetAnnouncementsListingWebPart extends BaseClientSi
   protected onInit(): Promise<void> {
     this._environmentMessage = this._getEnvironmentMessage();
     const randomNumber = Math.floor(Math.random()*90000) + 10000;
-
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/Events.css?${randomNumber}`);
-   
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/Announcements.css?${randomNumber}`);   
     return super.onInit();
   }
 
