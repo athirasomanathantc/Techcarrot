@@ -92,7 +92,7 @@ export default class Notification extends React.Component<INotificationProps, IN
                                                             }}>
                                                                 <p className="notification-date">
                                                                     <span><i><img src={`${assetsPath}icons/date.svg`} /></i>{notification.Date}</span>
-                                                                    <span><i><img src={`${assetsPath}icons/date.svg`} /></i>{notification.Time}</span>
+                                                                    <span><i><img src={`${assetsPath}icons/time.svg`} /></i>{notification.Time}</span>
                                                                 </p>
                                                                 <p className="mb-2 text-break text-wrap">
                                                                     {notification.Title}
