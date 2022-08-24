@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.14.0",
+    "libraryName": "agi-corp-intranet-offers",
+    "libraryId": "75142734-059b-4b33-8e44-05aadd937084",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "AGICorpIntranetOffers",
+    "solutionShortDescription": "AGICorpIntranetOffers description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
