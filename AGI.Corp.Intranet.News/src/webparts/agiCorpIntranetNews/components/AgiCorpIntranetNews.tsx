@@ -147,7 +147,8 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
     // });
     this.setState({
       pageData: this.state.filterData.slice(0, this.state.pageSize),
-      totalPages: pageCount
+      totalPages: pageCount,
+      currentPage: 1
     });
 
   }
