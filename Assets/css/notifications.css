@@ -17,13 +17,20 @@
     font-weight: 600;
 }
 
-.notification-list-wrapper .notification-list-item {
+.notification-list-wrapper .notification-list-item.unread {
     background: #F9F9F9;
     border: 1px solid #E9E9E9;
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
-    cursor: pointer;
+}
+
+.notification-list-wrapper .notification-list-item {
+    background: #fff;
+    border: 1px solid #E9E9E9;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
 }
 
 .notification-list-wrapper .notification-list-item i {

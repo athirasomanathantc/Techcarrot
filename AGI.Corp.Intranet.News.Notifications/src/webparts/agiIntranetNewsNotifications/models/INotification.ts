@@ -5,4 +5,5 @@ export interface INotification {
     Date: string;
     Time: string;
     Type: string;
+    IsRead: boolean;
 }

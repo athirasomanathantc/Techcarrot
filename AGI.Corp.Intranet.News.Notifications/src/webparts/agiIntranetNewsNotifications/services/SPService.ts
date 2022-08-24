@@ -1,3 +1,4 @@
+import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { sp } from "@pnp/sp";
 import { INotification } from "../models/INotification";
 import Common from "./Common";
@@ -6,7 +7,7 @@ export class SPService {
     private _common: Common;
     private top = 5000;
 
-    constructor() {
+    constructor(private _context: WebPartContext) {
         this._common = new Common();
     }
 
@@ -17,14 +18,19 @@ export class SPService {
      * @returns 
      */
     private getFormattedItems(items: any, dateColumn: string, type: string) {
+        let userId = this._context.pageContext.legacyPageContext.userId || 0;
         items = items.map((item: any) => {
+            let readBy = item.ReadBy;
+            const userIds = readBy ? readBy.split(';') : [];
+            const isRead = userIds.includes(userId.toString());
             return {
                 Id: item.Id,
                 Title: item.Title,
                 Date: this._common.getFormattedDate(item[dateColumn]),
                 Time: this._common.getFormattedTime(item[dateColumn]),
                 DateTime: new Date(item[dateColumn]),
-                Type: type
+                Type: type,
+                IsRead: isRead
             };
         }, this)
         return items;
@@ -34,7 +40,7 @@ export class SPService {
         let items: any = [];
         const getNews = new Promise((resolve, reject) => {
             sp.web.lists.getByTitle('News').items
-                .select("Id,Title,PublishedDate")
+                .select("Id,Title,PublishedDate,ReadBy")
                 .filter(this._common.dateRangeFilter)
                 .top(this.top)().then((items: INotification[]) => {
                     resolve(this.getFormattedItems(items, 'PublishedDate', 'News'))
@@ -44,7 +50,7 @@ export class SPService {
         });
         const getEvents = new Promise((resolve, reject) => {
             sp.web.lists.getByTitle('EventDetails').items
-                .select("Id,Title,StartDate")
+                .select("Id,Title,StartDate,ReadBy")
                 .filter(this._common.dateRangeFilter)
                 .top(this.top)().then((items: INotification[]) => {
                     resolve(this.getFormattedItems(items, 'StartDate', 'Events'))
@@ -54,7 +60,7 @@ export class SPService {
         });
         const getAnnouncements = new Promise((resolve, reject) => {
             sp.web.lists.getByTitle('Announcements').items
-                .select("Id,Title,PublishedDate")
+                .select("Id,Title,PublishedDate,ReadBy")
                 .filter(this._common.dateRangeFilter)
                 .top(this.top)().then((items: INotification[]) => {
                     resolve(this.getFormattedItems(items, 'PublishedDate', 'Announcements'))
@@ -64,7 +70,7 @@ export class SPService {
         });
         const getBlogs = new Promise((resolve, reject) => {
             sp.web.lists.getByTitle('Blogs').items
-                .select("Id,Title,PublishedDate")
+                .select("Id,Title,PublishedDate,ReadBy")
                 .filter(this._common.dateRangeFilter)
                 .top(this.top)().then((items: INotification[]) => {
                     resolve(this.getFormattedItems(items, 'PublishedDate', 'Blogs'))

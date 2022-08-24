@@ -9,7 +9,7 @@ export default class Notification extends React.Component<INotificationProps, IN
     private _spServices: SPService;
     constructor(props: INotificationProps) {
         super(props);
-        this._spServices = new SPService();
+        this._spServices = new SPService(this.props.context);
 
         sp.setup({
             spfxContext: this.props.context
@@ -87,7 +87,7 @@ export default class Notification extends React.Component<INotificationProps, IN
                                                 {
                                                     this.state.notifications.slice(0, this.state.rowCount).map((notification: INotification) => {
                                                         return (
-                                                            <div className="notification-list-item" onClick={(e) => {
+                                                            <div className={`notification-list-item ${notification.IsRead ? '' : 'unread'}`} onClick={(e) => {
                                                                 this.viewDetails(e, notification)
                                                             }}>
                                                                 <p className="notification-date">
