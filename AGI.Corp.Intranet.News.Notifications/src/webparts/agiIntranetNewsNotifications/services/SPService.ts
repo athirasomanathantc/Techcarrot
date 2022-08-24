@@ -1,11 +1,12 @@
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { sp } from "@pnp/sp";
+import * as moment from "moment";
+import { LIST_ANNOUNCEMENTS, LIST_BLOGS, LIST_EVENTS, LIST_ITEMS_TOP, LIST_NEWS } from "../common/Constants";
 import { INotification } from "../models/INotification";
 import Common from "./Common";
 
 export class SPService {
     private _common: Common;
-    private top = 5000;
 
     constructor(private _context: WebPartContext) {
         this._common = new Common();
@@ -26,8 +27,8 @@ export class SPService {
             return {
                 Id: item.Id,
                 Title: item.Title,
-                Date: this._common.getFormattedDate(item[dateColumn]),
-                Time: this._common.getFormattedTime(item[dateColumn]),
+                Date: moment(item[dateColumn]).format("MMMM D, YYYY"),
+                Time: moment(item[dateColumn]).format("hh:mm A"),
                 DateTime: new Date(item[dateColumn]),
                 Type: type,
                 IsRead: isRead
@@ -39,40 +40,40 @@ export class SPService {
     public async getNotifications(): Promise<any> {
         let items: any = [];
         const getNews = new Promise((resolve, reject) => {
-            sp.web.lists.getByTitle('News').items
+            sp.web.lists.getByTitle(LIST_NEWS).items
                 .select("Id,Title,PublishedDate,ReadBy")
                 .filter(this._common.dateRangeFilter)
-                .top(this.top)().then((items: INotification[]) => {
+                .top(LIST_ITEMS_TOP)().then((items: INotification[]) => {
                     resolve(this.getFormattedItems(items, 'PublishedDate', 'News'))
                 }).catch((exception) => {
                     reject(exception)
                 });
         });
         const getEvents = new Promise((resolve, reject) => {
-            sp.web.lists.getByTitle('EventDetails').items
+            sp.web.lists.getByTitle(LIST_EVENTS).items
                 .select("Id,Title,StartDate,ReadBy")
                 .filter(this._common.dateRangeFilter)
-                .top(this.top)().then((items: INotification[]) => {
+                .top(LIST_ITEMS_TOP)().then((items: INotification[]) => {
                     resolve(this.getFormattedItems(items, 'StartDate', 'Events'))
                 }).catch((exception) => {
                     reject(exception)
                 });
         });
         const getAnnouncements = new Promise((resolve, reject) => {
-            sp.web.lists.getByTitle('Announcements').items
+            sp.web.lists.getByTitle(LIST_ANNOUNCEMENTS).items
                 .select("Id,Title,PublishedDate,ReadBy")
                 .filter(this._common.dateRangeFilter)
-                .top(this.top)().then((items: INotification[]) => {
+                .top(LIST_ITEMS_TOP)().then((items: INotification[]) => {
                     resolve(this.getFormattedItems(items, 'PublishedDate', 'Announcements'))
                 }).catch((exception) => {
                     reject(exception)
                 });
         });
         const getBlogs = new Promise((resolve, reject) => {
-            sp.web.lists.getByTitle('Blogs').items
+            sp.web.lists.getByTitle(LIST_BLOGS).items
                 .select("Id,Title,PublishedDate,ReadBy")
                 .filter(this._common.dateRangeFilter)
-                .top(this.top)().then((items: INotification[]) => {
+                .top(LIST_ITEMS_TOP)().then((items: INotification[]) => {
                     resolve(this.getFormattedItems(items, 'PublishedDate', 'Blogs'))
                 }).catch((exception) => {
                     reject(exception)
