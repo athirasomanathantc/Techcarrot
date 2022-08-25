@@ -42,10 +42,6 @@ export default class AgiIntranetNewsNotificationsWebPart extends BaseClientSideW
     this._environmentMessage = this._getEnvironmentMessage();
     const randomNumber = Math.floor(Math.random() * 90000) + 10000;
     SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/notifications.css?${randomNumber}`);
-    SPComponentLoader.loadCss(`https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css`);
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap.min.css`);
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap-icons.min.css`);
-    SPComponentLoader.loadScript(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap.bundle.min.js`);
     // return Promise.resolve();
     return super.onInit();
   }
