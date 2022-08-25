@@ -1,6 +1,6 @@
 
 export interface IAgiIntranetNewsNotificationsProps {
-  description: string;
+  lists: string[];
   isDarkTheme: boolean;
   environmentMessage: string;
   hasTeamsContext: boolean;

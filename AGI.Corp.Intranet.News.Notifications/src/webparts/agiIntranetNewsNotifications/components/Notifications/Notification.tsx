@@ -27,7 +27,7 @@ export default class Notification extends React.Component<INotificationProps, IN
     private _spServices: SPService;
     constructor(props: INotificationProps) {
         super(props);
-        this._spServices = new SPService(this.props.context);
+        this._spServices = new SPService(this.props);
 
         sp.setup({
             spfxContext: this.props.context
@@ -85,7 +85,7 @@ export default class Notification extends React.Component<INotificationProps, IN
             case 'News':
                 detailPath = 'News%20Detail.aspx?newsID=';
                 break;
-            case 'Events':
+            case 'EventDetails':
                 detailPath = 'Events/Event%20Details.aspx?eventID=';
                 break;
             case 'Announcements':
