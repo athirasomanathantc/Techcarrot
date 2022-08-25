@@ -1,7 +1,7 @@
 import { IFolderItem } from "../models/IFolderItem";
 import { IImageItem } from "../models/IImageItem";
 
-export interface IAgiIntranetGalleryListingState {
+export interface IAgiCorpIntranetGalleryListingState {
     folders: IFolderItem[];
     files: IImageItem[];
     videoItems : IImageItem[];

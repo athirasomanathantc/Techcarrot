@@ -1,9 +1,9 @@
 import * as React from 'react';
-import styles from './AgiIntranetGalleryListing.module.scss';
-import { IAgiIntranetGalleryListingProps } from './IAgiIntranetGalleryListingProps';
+import styles from './AgiCorpIntranetGalleryListing.module.scss';
+import { IAgiCorpIntranetGalleryListingProps } from './IAgiCorpIntranetGalleryListingProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { sp } from '@pnp/sp/presets/all';
-import { IAgiIntranetGalleryListingState } from './IAgiIntranetGalleryListingState';
+import { IAgiCorpIntranetGalleryListingState } from './IAgiCorpIntranetGalleryListingState';
 import { LIBRARY_PHOTO_GALLERY, LIBRARY_VIDEO_GALLERY, NULL_SELECTED_ITEM, PATH_PHOTO_GALLERY, PROP_DEFAULT_ORDERBY } from '../common/constants';
 import {
   SPHttpClient,
@@ -13,12 +13,12 @@ import {
 import { IFolderItem } from '../models/IFolderItem';
 import { IImageItem } from '../models/IImageItem';
 import { Icon } from 'office-ui-fabric-react';
-import { Pagination } from '@pnp/spfx-controls-react/lib/pagination';
-import Paging from './Paging/Paging';
+//import { Pagination } from '@pnp/spfx-controls-react/lib/pagination';
+//import Paging from './Paging/Paging';
 
-export default class AgiIntranetGalleryListing extends React.Component<IAgiIntranetGalleryListingProps, IAgiIntranetGalleryListingState> {
+export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiCorpIntranetGalleryListingProps, IAgiCorpIntranetGalleryListingState> {
 
-  constructor(props: IAgiIntranetGalleryListingProps) {
+  constructor(props: IAgiCorpIntranetGalleryListingProps) {
     super(props);
     sp.setup({
       spfxContext: this.props.context
@@ -164,10 +164,10 @@ export default class AgiIntranetGalleryListing extends React.Component<IAgiIntra
   }
 
 
-  public render(): React.ReactElement<IAgiIntranetGalleryListingProps> {
+  public render(): React.ReactElement<IAgiCorpIntranetGalleryListingProps> {
     const libraryPath = this.props.libraryPath;
     return (
-      <div className={styles.agiIntranetGalleryListing}>
+      <div className={styles.agiCorpIntranetGalleryListing}>
         {this.props.libraryName && this.props.libraryPath ?
 
           <div className="main-content" style={{ display: this.state.selectedImageFolder ? 'none' : 'block' }}>
