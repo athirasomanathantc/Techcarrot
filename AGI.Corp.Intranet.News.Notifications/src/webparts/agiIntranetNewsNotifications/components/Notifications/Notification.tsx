@@ -119,6 +119,11 @@ export default class Notification extends React.Component<INotificationProps, IN
                                         </div>
                                         <div className="row mt-3">
                                             <div className="notification-list-content">
+                                                {this.state.notifications.length === 0 &&
+                                                    <div className='notification-list-item'>
+                                                        <p className='mb-2 text-break text-wrap'>No items found</p>
+                                                    </div>
+                                                }
                                                 {
                                                     this.state.notifications.slice(0, this.state.rowCount).map((notification: INotification) => {
                                                         return (
