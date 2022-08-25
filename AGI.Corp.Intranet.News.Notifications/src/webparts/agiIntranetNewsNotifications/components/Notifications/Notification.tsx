@@ -136,9 +136,9 @@ export default class Notification extends React.Component<INotificationProps, IN
                                                     }
                                                 </div>
                                             </div>
-                                            <div className="text-left load-more-content mt-3">
+                                            {(this.state.rowCount < this.state.notifications.length) && <div className="text-left load-more-content mt-3">
                                                 <a href="#" className="load-more" id="load-more" onClick={() => this.viewMore()}>View more</a>
-                                            </div>
+                                            </div>}
                                         </div>
                                     </div>
                                 </div>

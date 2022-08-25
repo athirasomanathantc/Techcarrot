@@ -41,40 +41,40 @@ export class SPService {
         let items: any = [];
         const getNews = new Promise((resolve, reject) => {
             sp.web.lists.getByTitle(LIST_NEWS).items
-                .select("Id,Title,PublishedDate,ReadBy")
+                .select("Id,Title,Created,ReadBy")
                 .filter(this._common.dateRangeFilter)
                 .top(LIST_ITEMS_TOP)().then((items: INotification[]) => {
-                    resolve(this.getFormattedItems(items, 'PublishedDate', 'News'))
+                    resolve(this.getFormattedItems(items, 'Created', 'News'))
                 }).catch((exception) => {
                     reject(exception)
                 });
         });
         const getEvents = new Promise((resolve, reject) => {
             sp.web.lists.getByTitle(LIST_EVENTS).items
-                .select("Id,Title,StartDate,ReadBy")
+                .select("Id,Title,Created,ReadBy")
                 .filter(this._common.dateRangeFilter)
                 .top(LIST_ITEMS_TOP)().then((items: INotification[]) => {
-                    resolve(this.getFormattedItems(items, 'StartDate', 'Events'))
+                    resolve(this.getFormattedItems(items, 'Created', 'Events'))
                 }).catch((exception) => {
                     reject(exception)
                 });
         });
         const getAnnouncements = new Promise((resolve, reject) => {
             sp.web.lists.getByTitle(LIST_ANNOUNCEMENTS).items
-                .select("Id,Title,PublishedDate,ReadBy")
+                .select("Id,Title,Created,ReadBy")
                 .filter(this._common.dateRangeFilter)
                 .top(LIST_ITEMS_TOP)().then((items: INotification[]) => {
-                    resolve(this.getFormattedItems(items, 'PublishedDate', 'Announcements'))
+                    resolve(this.getFormattedItems(items, 'Created', 'Announcements'))
                 }).catch((exception) => {
                     reject(exception)
                 });
         });
         const getBlogs = new Promise((resolve, reject) => {
             sp.web.lists.getByTitle(LIST_BLOGS).items
-                .select("Id,Title,PublishedDate,ReadBy")
+                .select("Id,Title,Created,ReadBy")
                 .filter(this._common.dateRangeFilter)
                 .top(LIST_ITEMS_TOP)().then((items: INotification[]) => {
-                    resolve(this.getFormattedItems(items, 'PublishedDate', 'Blogs'))
+                    resolve(this.getFormattedItems(items, 'Created', 'Blogs'))
                 }).catch((exception) => {
                     reject(exception)
                 });
