@@ -7,14 +7,14 @@ import {
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
-import * as strings from 'AgiIntranetGalleryListingWebPartStrings';
-import AgiIntranetGalleryListing from './components/AgiIntranetGalleryListing';
-import { IAgiIntranetGalleryListingProps } from './components/IAgiIntranetGalleryListingProps';
+import * as strings from 'AgiCorpIntranetGalleryListingWebPartStrings';
+import AgiCorpIntranetGalleryListing from './components/AgiCorpIntranetGalleryListing';
+import { IAgiCorpIntranetGalleryListingProps } from './components/IAgiCorpIntranetGalleryListingProps';
 
-import { IAgiIntranetGalleryListingState } from './components/IAgiIntranetGalleryListingState';
+import { IAgiCorpIntranetGalleryListingState } from './components/IAgiCorpIntranetGalleryListingState';
 import { PROP_DEFAULT_ORDERBY } from './common/constants';
 
-export interface IAgiIntranetGalleryListingWebPartProps {
+export interface IAgiCorpIntranetGalleryListingWebPartProps {
   description: string;
   libraryName: string;
   libraryPath: string;
@@ -23,7 +23,7 @@ export interface IAgiIntranetGalleryListingWebPartProps {
 
 import { SPComponentLoader } from '@microsoft/sp-loader';
 
-export default class AgiIntranetGalleryListingWebPart extends BaseClientSideWebPart<IAgiIntranetGalleryListingWebPartProps> {
+export default class AgiCorpIntranetGalleryListingWebPart extends BaseClientSideWebPart<IAgiCorpIntranetGalleryListingWebPartProps> {
 
   private _isDarkTheme: boolean = false;
   private _environmentMessage: string = '';
@@ -33,8 +33,8 @@ export default class AgiIntranetGalleryListingWebPart extends BaseClientSideWebP
     return Promise.resolve();
   }
   public render(): void {
-    const element: React.ReactElement<IAgiIntranetGalleryListingProps> = React.createElement(
-      AgiIntranetGalleryListing,
+    const element: React.ReactElement<IAgiCorpIntranetGalleryListingProps> = React.createElement(
+      AgiCorpIntranetGalleryListing,
       {
         description: this.properties.description,
         isDarkTheme: this._isDarkTheme,
