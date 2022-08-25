@@ -4,6 +4,24 @@ import { INotificationState } from './INotificationState';
 import { sp } from "@pnp/sp/presets/all";
 import { INotification } from '../../models/INotification';
 import SPService from '../../services/SPService';
+import { NOTIFICATION_COUNTER, NOTIFICATION_INITIAL } from '../../common/Constants';
+
+const NotificationItem = (props: any) => {
+    const { notification, assetsPath, viewDetails } = props;
+    return <>
+        <div className={`notification-list-item ${notification.IsRead ? '' : 'unread'}`} onClick={(e) => {
+            viewDetails(e, notification)
+        }}>
+            <p className="notification-date">
+                <span><i><img src={`${assetsPath}icons/date.svg`} /></i>{notification.Date}</span>
+                <span><i><img src={`${assetsPath}icons/time.svg`} /></i>{notification.Time}</span>
+            </p>
+            <p className="mb-2 text-break text-wrap">
+                {notification.Title}
+            </p>
+        </div>
+    </>;
+}
 
 export default class Notification extends React.Component<INotificationProps, INotificationState> {
     private _spServices: SPService;
@@ -18,7 +36,9 @@ export default class Notification extends React.Component<INotificationProps, IN
         this.state = {
             notifications: [],
             exception: null,
-            rowCount: 8
+            rowCount: NOTIFICATION_INITIAL,
+            showMore: false,
+            viewMoreClicked: false
         }
     }
 
@@ -36,6 +56,27 @@ export default class Notification extends React.Component<INotificationProps, IN
                 exception: exception
             })
         }
+    }
+
+    componentDidUpdate(prevProps: Readonly<INotificationProps>, prevState: Readonly<INotificationState>, snapshot?: any): void {
+        if (this.state.viewMoreClicked !== prevState.viewMoreClicked) {
+            this.setState({
+                viewMoreClicked: false
+            })
+            setTimeout(() => {
+                this.setState({
+                    rowCount: (this.state.rowCount + (NOTIFICATION_COUNTER / 2)),
+                    showMore: false,
+                })
+            }, 1000);
+        }
+    }
+
+    private viewMore() {
+        this.setState({
+            showMore: true,
+            viewMoreClicked: true
+        })
     }
 
     private viewDetails(e: React.MouseEvent<HTMLElement>, notification: INotification) {
@@ -56,12 +97,6 @@ export default class Notification extends React.Component<INotificationProps, IN
             default: break;
         }
         window.location.href = `${this.props.context.pageContext.web.absoluteUrl}/SitePages/News/${detailPath}${notification.Id}`;
-    }
-
-    private viewMore() {
-        this.setState({
-            rowCount: this.state.rowCount + 10
-        })
     }
 
     public render(): React.ReactElement<INotificationProps> {
@@ -87,20 +122,19 @@ export default class Notification extends React.Component<INotificationProps, IN
                                                 {
                                                     this.state.notifications.slice(0, this.state.rowCount).map((notification: INotification) => {
                                                         return (
-                                                            <div className={`notification-list-item ${notification.IsRead ? '' : 'unread'}`} onClick={(e) => {
-                                                                this.viewDetails(e, notification)
-                                                            }}>
-                                                                <p className="notification-date">
-                                                                    <span><i><img src={`${assetsPath}icons/date.svg`} /></i>{notification.Date}</span>
-                                                                    <span><i><img src={`${assetsPath}icons/time.svg`} /></i>{notification.Time}</span>
-                                                                </p>
-                                                                <p className="mb-2 text-break text-wrap">
-                                                                    {notification.Title}
-                                                                </p>
-                                                            </div>
+                                                            <NotificationItem notification={notification} assetsPath={assetsPath} viewDetails={(e: React.MouseEvent<HTMLElement>) => this.viewDetails(e, notification)}></NotificationItem>
                                                         )
                                                     })
                                                 }
+                                                <div className={`notification-list-content-next ${this.state.showMore ? 'show' : ''}`}>
+                                                    {
+                                                        this.state.notifications.slice(this.state.rowCount, this.state.rowCount + NOTIFICATION_COUNTER).map((notification: INotification) => {
+                                                            return (
+                                                                <NotificationItem notification={notification} assetsPath={assetsPath} viewDetails={(e: React.MouseEvent<HTMLElement>) => this.viewDetails(e, notification)}></NotificationItem>
+                                                            )
+                                                        })
+                                                    }
+                                                </div>
                                             </div>
                                             <div className="text-left load-more-content mt-3">
                                                 <a href="#" className="load-more" id="load-more" onClick={() => this.viewMore()}>View more</a>
