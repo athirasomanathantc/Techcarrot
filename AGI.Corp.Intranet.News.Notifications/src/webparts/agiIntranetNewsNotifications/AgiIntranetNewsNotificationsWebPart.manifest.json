@@ -17,12 +17,22 @@
 
   "preconfiguredEntries": [{
     "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Advanced
-    "group": { "default": "Advanced" },
-    "title": { "default": "agiIntranetNewsNotifications" },
-    "description": { "default": "agiIntranetNewsNotifications description" },
+    "group": {
+      "default": "Advanced"
+    },
+    "title": {
+      "default": "agiIntranetNewsNotifications"
+    },
+    "description": {
+      "default": "agiIntranetNewsNotifications description"
+    },
     "officeFabricIconFontName": "Page",
     "properties": {
-      "description": "agiIntranetNewsNotifications"
+      "description": "agiIntranetNewsNotifications",
+      "lists": ["News", "Announcements", "Blogs", "EventDetails"],
+      "top": 5000,
+      "initial": 8,
+      "counter": 3
     }
   }]
 }

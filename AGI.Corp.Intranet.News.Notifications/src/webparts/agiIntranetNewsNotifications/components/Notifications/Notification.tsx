@@ -4,7 +4,6 @@ import { INotificationState } from './INotificationState';
 import { sp } from "@pnp/sp/presets/all";
 import { INotification } from '../../models/INotification';
 import SPService from '../../services/SPService';
-import { NOTIFICATION_COUNTER, NOTIFICATION_INITIAL } from '../../common/Constants';
 
 const NotificationItem = (props: any) => {
     const { notification, assetsPath, viewDetails } = props;
@@ -36,7 +35,7 @@ export default class Notification extends React.Component<INotificationProps, IN
         this.state = {
             notifications: [],
             exception: null,
-            rowCount: NOTIFICATION_INITIAL,
+            rowCount: this.props.initial,
             showMore: false,
             viewMoreClicked: false
         }
@@ -65,7 +64,7 @@ export default class Notification extends React.Component<INotificationProps, IN
             })
             setTimeout(() => {
                 this.setState({
-                    rowCount: (this.state.rowCount + (NOTIFICATION_COUNTER / 2)),
+                    rowCount: (this.state.rowCount + (this.props.counter / 2)),
                     showMore: false,
                 })
             }, 1000);
@@ -133,7 +132,7 @@ export default class Notification extends React.Component<INotificationProps, IN
                                                 }
                                                 <div className={`notification-list-content-next ${this.state.showMore ? 'show' : ''}`}>
                                                     {
-                                                        this.state.notifications.slice(this.state.rowCount, this.state.rowCount + NOTIFICATION_COUNTER).map((notification: INotification) => {
+                                                        this.state.notifications.slice(this.state.rowCount, this.state.rowCount + this.props.counter).map((notification: INotification) => {
                                                             return (
                                                                 <NotificationItem notification={notification} assetsPath={assetsPath} viewDetails={(e: React.MouseEvent<HTMLElement>) => this.viewDetails(e, notification)}></NotificationItem>
                                                             )
