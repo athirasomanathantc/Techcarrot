@@ -14,4 +14,6 @@ export interface IAgiIntranetBlogDetailsState {
     showReplySection: boolean;
     userPicture: string;
     userId: number;
+    currentIndex: number;
+    blogs: IBlogItem[];
 }

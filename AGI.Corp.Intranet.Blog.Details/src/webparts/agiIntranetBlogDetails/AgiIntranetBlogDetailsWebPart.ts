@@ -20,7 +20,7 @@ export default class AgiIntranetBlogDetailsWebPart extends BaseClientSideWebPart
   protected onInit(): Promise<void> {
 
     const randomNumber = Math.floor(Math.random()*90000) + 10000;
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/blog.css?${randomNumber}`);
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/blogs.css?${randomNumber}`);
 
     return Promise.resolve();
   }
