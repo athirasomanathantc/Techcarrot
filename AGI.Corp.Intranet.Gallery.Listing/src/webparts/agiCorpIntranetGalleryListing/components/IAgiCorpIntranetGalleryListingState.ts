@@ -10,6 +10,13 @@ export interface IAgiCorpIntranetGalleryListingState {
     selectedItem: IImageItem;
     showVideo: boolean;
     selectedVideoUrl: string;
+    slides: any;
+    images: any;
+    previewImage: string;
+    preview: boolean;
+    currentIndex: number;
+    currentImageUrl: string;
+    ServerRelativeUrl: string;
     // filterData:IFolderItem[];
     // filterValues:{
     //   ID:number;

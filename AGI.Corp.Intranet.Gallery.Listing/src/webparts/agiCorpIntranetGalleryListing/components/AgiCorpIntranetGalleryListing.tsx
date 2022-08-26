@@ -10,12 +10,20 @@ import {
   SPHttpClientResponse,
   IHttpClientOptions
 } from '@microsoft/sp-http';
+import {
+  Carousel,
+  CarouselButtonsDisplay,
+  CarouselButtonsLocation,
+  CarouselIndicatorShape
+} from "@pnp/spfx-controls-react/lib/Carousel";
 import { IFolderItem } from '../models/IFolderItem';
 import { IImageItem } from '../models/IImageItem';
 import { Icon } from 'office-ui-fabric-react';
+import * as $ from 'jquery';
+//import { Icon } from 'office-ui-fabric-react/lib/components/Icon/Icon';
 //import { Pagination } from '@pnp/spfx-controls-react/lib/pagination';
 //import Paging from './Paging/Paging';
-
+const CAROUSEL_HEIGHT = '240px';
 export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiCorpIntranetGalleryListingProps, IAgiCorpIntranetGalleryListingState> {
 
   constructor(props: IAgiCorpIntranetGalleryListingProps) {
@@ -28,10 +36,17 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
       files: [],
       videoItems: [],
       imageItems: [],
-      selectedImageFolder:'',
+      selectedImageFolder: '',
+      ServerRelativeUrl: '',
       selectedItem: NULL_SELECTED_ITEM,
       selectedVideoUrl: '',
       showVideo: false,
+      slides: [],
+      images: [],
+      preview: false,
+      previewImage: '',
+      currentIndex: -1,
+      currentImageUrl: ''
       // filterData: [],
       // filterValues: [],
       // pageData: [],
@@ -39,7 +54,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
       // currentPage: 1,
       // pageSize:0
     }
-
+    // this.getImages = this.getImages.bind(this);
   }
 
   public async componentDidMount(): Promise<void> {
@@ -61,18 +76,19 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
   //     const result = this.state.imageItems.filter((obj) => {
   //       return obj..ID == value;
   //     })
-      
+
   //     this.setState({
   //       filterData: result
   //     },()=>{
   //       this.paging();
   //     });
-      
-      
+
+
   //   }
   // }
 
   private async getGalleryItems(): Promise<void> {
+    debugger;
     const libraryName = this.props.libraryName;
     const libraryPath = this.props.libraryPath;
     const library = sp.web.lists.getByTitle(libraryName);
@@ -91,6 +107,21 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
           folders.map((folder) => {
             const path = `${this.props.context.pageContext.web.serverRelativeUrl}/${libraryPath}/${folder.Name}`;
             console.log('path', path);
+          //   const _coverPhoto = sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(folder.Name).files.select('FileLeafRef').filter("isCoverPhoto eq 1").get().then((allItems) => {
+          //     const test1 = allItems
+          //   });;
+
+          //  // sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(folder.Name).files.select('Id').filter(`FSObjType ne 1 and isCoverPhoto eq 1`).get().then((allItems) => {
+          //     // const test12 = allItems
+          //     sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(folder.Name).files.select('*, FileRef, FileLeafRef').get().then((allItems) => {             
+          //     for (var i = 0; i < files.length; i++) {
+          //       var _ServerRelativeUrl = files[i].FileRef;
+          //       sp.web.getFileByServerRelativeUrl(_ServerRelativeUrl).getItem().then(item => {
+          //         console.log(item);
+          //       });
+          //     }
+          //   });;
+
             const _files = files.filter((file) => {
               const folderPath = file.FileRef.replace(`/${file.FileLeafRef}`, '');
               return folderPath == path;
@@ -110,6 +141,38 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
 
   }
 
+  private async getGalleryItems1(): Promise<void> {
+    debugger;
+    const select = '*, FileRef, FileLeafRef';
+    let items = await sp.web.lists.getByTitle(this.props.libraryName).items.orderBy('Modified', true).select(select).get();
+    const images = items.map((item) => {
+      return ({ ID: item.ID, ImageUrl: item.FileRef })
+    });
+    const _coverPhoto = items.filter(img => img.CoverPhoto);
+    const coverPhoto = _coverPhoto && _coverPhoto.length > 0 ? _coverPhoto[0] : null;
+    // console.log('coverphoto', coverPhoto);
+    // console.log('items', items);
+    //items.splice(items.findIndex(item => item.CoverPhoto == true), 1);
+    items.unshift(coverPhoto);
+    const slides = items.map((item) => {
+      return (<div style={{ width: '100%' }}  >
+        <a href={'javascript:void(0);'} onClick={(e) => this.previewImage(e)} data-src={item.FileRef} data-id={item.ID} >
+          <img src={item.FileRef} alt={item.Title} style={{ width: '100%' }} data-src={item.FileRef} data-id={item.ID} />
+        </a>
+      </div>
+      );
+    });
+    //console.log('slides');
+    //console.log(slides);
+    this.setState({
+      slides,
+      images
+    },
+      () => {
+        //this.setWidgetHeight(styles.carouselImageContent);
+      })
+  }
+
   private getImageUrl(imageContent: string): string {
     if (!imageContent) {
       return;
@@ -120,12 +183,23 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
   }
 
   private async getImageGalleryItems(subFolderName): Promise<void> {
-    sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(subFolderName).files.get().then((allItems) => {
+    debugger;
+    sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(subFolderName).files.select('*, FileRef, FileLeafRef').get().then((allItems) => {
       this.setState({
         imageItems: allItems,
         selectedImageFolder: subFolderName
       });
     });
+
+    // const select = 'Id, ID, Title, FileRef, Modified, PublishedDate, CoverPhoto';
+    // let items = await sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(subFolderName).files.select(select).get();
+    // const images = items.map((item) => {
+    //   return({ ID: item., ImageUrl: item.FileRef })
+    // });
+    //   this.setState({
+    //     imageItems: items,
+    //     selectedImageFolder: subFolderName
+    //   });
   }
 
   private closeImageFolder() {
@@ -156,16 +230,64 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
   }
 
 
-  private closePreview() {
+  private closePreview(): void {
     this.setState({
       showVideo: false,
-      selectedVideoUrl: ''
+      selectedVideoUrl: '',
+      preview: false
+    });
+  }
+
+  private previewImage(e: any): void {
+    const src = e.target.attributes["data-src"].value;
+    const id = e.target.attributes["data-id"].value;
+    const index = id ? parseInt(id) : -1;
+    this.setState({
+      preview: true,
+      currentImageUrl: src,
+      currentIndex: index
+    })
+  }
+
+  private prevImage() {
+    const index = this.state.currentIndex;
+    const images = this.state.images;
+    const arrayIndex = images.map(e => e.ID).indexOf(index);
+    const prevIndex = arrayIndex == 0 ? (images.length - 1) : arrayIndex - 1;
+    const prevImage = images[prevIndex];
+    this.setState({
+      currentIndex: prevImage.ID,
+      currentImageUrl: prevImage.ImageUrl
+    });
+  }
+
+  private nextImage() {
+    const index = this.state.currentIndex;
+    const images = this.state.images;
+    const arrayIndex = images.map(e => e.ID).indexOf(index);
+    const nextIndex = arrayIndex == (images.length - 1) ? 0 : arrayIndex + 1;
+    const nextImage = images[nextIndex];
+    this.setState({
+      currentIndex: nextImage.ID,
+      currentImageUrl: nextImage.ImageUrl
     });
   }
 
 
+  private getWidgetHeight() {
+    return CAROUSEL_HEIGHT;
+  }
+  private setWidgetHeight(className: string) {
+    $('.' + className).css('height', this.getWidgetHeight());
+    setTimeout(function () {
+      //console.log('widGetHeightOverride'+ $('.'+className).find('img').height());
+      $('.' + className).css('height', $('.' + className).find('img').height());
+    }, 1500);
+  }
+
   public render(): React.ReactElement<IAgiCorpIntranetGalleryListingProps> {
     const libraryPath = this.props.libraryPath;
+    const imageUrl = this.state.currentImageUrl;
     return (
       <div className={styles.agiCorpIntranetGalleryListing}>
         {this.props.libraryName && this.props.libraryPath ?
@@ -228,7 +350,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                             return (
                               <div className="col-md-3">
                                 <div className="gallery-item">
-                                  <a href="javascript:void(0)" onClick={(e)=>this.getImageGalleryItems(folder.Name)}>
+                                  <a href="javascript:void(0)" onClick={(e) => this.getImageGalleryItems(folder.Name)}>
                                     <div className="gallery-item--img">
                                       <img src={`${this.props.siteUrl}/Assets/images/gallery-item-img.png`} alt="" />
                                     </div>
@@ -331,7 +453,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                     <div className="col-md-12">
                       <ul className="nav">
                         <li className="nav-item" role="presentation">
-                          <a href="javascript:void(0)" onClick={(e) =>this.closeImageFolder()} className="nav-link">
+                          <a href="javascript:void(0)" onClick={(e) => this.closeImageFolder()} className="nav-link">
                             <i>
                               <svg xmlns="http://www.w3.org/2000/svg" width="23.916" height="23.916" viewBox="0 0 23.916 23.916">
                                 <g id="Group_8097" data-name="Group 8097" transform="translate(23.916 0) rotate(90)">
@@ -352,9 +474,14 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                 <div className="row">
                   {
                     this.state.imageItems.map((items) => {
+                      debugger;
+                      const test = items.ServerRelativeUrl;
                       return (
-                        <a href="images/gallery-folder-img-large.png" data-toggle="lightbox" data-gallery="image-gallery" className="col-md-3 gallery-item gallery-folder-item" data-caption="<h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><ul><li><i class='icon user-icon'><img src='images/icon-avatar.svg'></i> Debra Teles</li></ul>">
-                          <img src={`${this.props.siteUrl}/Assets/images/gallery-folder-img.png`} alt="" className="gallery-item--img" />
+                        // <a href="images/gallery-folder-img-large.png" data-toggle="lightbox" data-gallery="image-gallery" className="col-md-3 gallery-item gallery-folder-item" data-caption="<h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><ul><li><i class='icon user-icon'><img src='images/icon-avatar.svg'></i> Debra Teles</li></ul>">
+                        //   <img src={`${this.props.siteUrl}/Assets/images/gallery-folder-img.png`} alt="" className="gallery-item--img" />
+                        // </a>
+                        <a href={'javascript:void(0);'} onClick={(e) => this.previewImage(e)} data-src={items.ServerRelativeUrl} data-id={1} data-toggle="lightbox" data-gallery="image-gallery" className="col-md-3 gallery-item gallery-folder-item" data-caption="<h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><ul><li><i class='icon user-icon'><img src='images/icon-avatar.svg'></i> Debra Teles</li></ul>">
+                          <img src={items.ServerRelativeUrl} alt={items.Title} style={{ width: '100%' }} data-src={items.ServerRelativeUrl} data-id={1} className="gallery-item--img" />
                         </a>
                       )
                     })
@@ -379,6 +506,26 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
             </div>
           </div>
         </div>
+
+        <div className="imgOverlay" style={{ display: this.state.preview ? 'block' : 'none' }}>
+          <div className="header">
+            <Icon iconName="Cancel" onClick={() => this.closePreview()} />
+          </div>
+          <div className="imagePreview">
+            <div className='arrowContainer'>
+              <Icon iconName="ChevronLeft" onClick={() => this.prevImage()} />
+            </div>
+            <div className="img-wrapper">
+              <div className="img-container">
+                <img src={imageUrl} />
+              </div>
+            </div>
+            <div className='arrowContainer'>
+              <Icon iconName="ChevronRight" onClick={() => this.nextImage()} />
+            </div>
+          </div>
+        </div>
+
       </div>
     );
   }

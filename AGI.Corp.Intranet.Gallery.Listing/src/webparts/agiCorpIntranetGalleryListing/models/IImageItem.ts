@@ -1,4 +1,5 @@
 export interface IImageItem {
+    ServerRelativeUrl?: string;
     ID?: number;
     Title?: string;
     FileLeafRef?: string;
