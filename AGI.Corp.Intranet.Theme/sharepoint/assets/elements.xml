@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <CustomAction
+        Title="AgiIntranetTheme"
+        Location="ClientSideExtension.ApplicationCustomizer"
+        ClientSideComponentId="1a1e02c7-73fc-4e81-b027-fc8b9b7a892f"
+        ClientSideComponentProperties="{&quot;testMessage&quot;:&quot;Test message&quot;}">
+    </CustomAction>
+</Elements>
