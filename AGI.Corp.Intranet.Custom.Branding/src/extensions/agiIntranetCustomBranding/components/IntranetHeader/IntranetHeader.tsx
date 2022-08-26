@@ -33,7 +33,8 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
       profileName: '',
       profilePicture: '',
       showMobileMenu: false,
-      logoURL: ''
+      logoURL: '',
+      notificationsURL: '',
     }
   }
 
@@ -57,9 +58,11 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
   private async getConfigItems(): Promise<void> {
     sp.web.lists.getByTitle(CONFIG_LIST).items.get().then((items: IConfigItem[]) => {
       const _logoItem = items.filter((item) => item.Title == 'Logo');
+      const _notificationItem: any = items.filter((item) => item.Title == 'Notification')[0];
       const logoURL = _logoItem && _logoItem.length > 0 ? this.getImageUrl(_logoItem[0].Image) : '';
       this.setState({
-        logoURL
+        logoURL,
+        notificationsURL: _notificationItem.Link
       });
     })
   }
@@ -178,6 +181,10 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
     }
   }
 
+  private gotoNotifications() {
+    window.location.href = `${this.props.siteUrl}${this.state.notificationsURL}`;
+  }
+
   private renderHeader(): JSX.Element {
 
     const companyContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_COMPANY);
@@ -215,7 +222,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                 <li style={{ position: "relative" }}>
                   <div id="notificationDropdown" className="notification-dropdown dropdown">
                     <button className="btn btn-ghost dropdown-toggle" type="button" id="dropdownMenuButton1"
-                      data-bs-toggle="dropdown" aria-expanded="false">
+                      data-bs-toggle="dropdown" aria-expanded="false" onClick={() => this.gotoNotifications()}>
                       <img src={`${this.props.siteUrl}/Assets/images/icon-bell.svg`} alt="" height="32" />
                     </button>
                   </div>

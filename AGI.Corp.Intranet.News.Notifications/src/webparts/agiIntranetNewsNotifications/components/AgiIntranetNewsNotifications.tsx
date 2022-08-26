@@ -19,7 +19,7 @@ export default class AgiIntranetNewsNotifications extends React.Component<IAgiIn
     return (
       <div>
         <ErrorBoundary>
-          <Notification context={this.props.context}></Notification>
+          <Notification {...this.props}></Notification>
         </ErrorBoundary>
       </div>
     );

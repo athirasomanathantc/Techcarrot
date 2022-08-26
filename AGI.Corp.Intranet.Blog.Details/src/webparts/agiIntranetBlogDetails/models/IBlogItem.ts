@@ -4,6 +4,7 @@ export interface IBlogItem {
     Summary: string;
     BlogImage: string;
     Business: { ID: number, Title: string },
+    Author: { ID: number, Title: string },
     PublishedDate: Date,
     ViewsJSON: string;
     BlogLikedBy: string;

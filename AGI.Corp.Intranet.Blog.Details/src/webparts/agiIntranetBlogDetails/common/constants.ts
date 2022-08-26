@@ -7,6 +7,7 @@ export const BLOG_NULL_ITEM = {
     Summary: '',
     BlogImage: '',
     Business: {ID: 0, Title: '' },
+    Author: {ID: 0, Title: '' },
     PublishedDate: new Date(),
     ViewsJSON: '',
     BlogLikedBy: ''

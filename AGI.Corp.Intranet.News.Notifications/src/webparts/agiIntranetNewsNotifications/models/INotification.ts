@@ -6,4 +6,7 @@ export interface INotification {
     Time: string;
     Type: string;
     IsRead: boolean;
+    Created: Date;
+    ReadBy: string;
+    DateTime?: number;
 }

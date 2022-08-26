@@ -3,10 +3,11 @@
     "isCreatingSolution": true,
     "environment": "spo",
     "version": "1.11.0",
-    "libraryName": "agi-corp-intranet-blog-details",
-    "libraryId": "b4acde2f-a97c-4d56-9149-b2cb40ac4672",
+    "libraryName": "agi-corp-intranet-theme",
+    "libraryId": "f46779ba-18d4-4b5d-ab5f-d1ce48122c90",
     "packageManager": "npm",
     "isDomainIsolated": false,
-    "componentType": "webpart"
+    "componentType": "extension",
+    "extensionType": "ApplicationCustomizer"
   }
 }
