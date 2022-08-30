@@ -34,10 +34,6 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
     ReactDom.unmountComponentAtNode(this.domElement);
   }
 
-  protected get dataVersion(): Version {
-    return Version.parse('1.0');
-  }
-
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
