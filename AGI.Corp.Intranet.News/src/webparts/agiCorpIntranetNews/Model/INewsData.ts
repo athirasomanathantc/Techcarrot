@@ -1,7 +1,6 @@
 export interface INewsData{
     ID:string;
     Title:string;
-    Category:string;
     PublishedDate:string;
     Description:string;
     Summary:string;

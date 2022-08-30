@@ -71,7 +71,15 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
   }
 
   private async getNewsItems(): Promise<void> {
-    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('News')/items?$select=ID,Title,Category,PublishedDate,Description,NewsThumbnail,NewsImage,Business/ID,Business/Title&$expand=Business`;
+    const list='News';
+    const counturl = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/ItemCount`;
+    const count = await this.props.context.spHttpClient.get(counturl,SPHttpClient.configurations.v1)
+    .then((resp:SPHttpClientResponse)=>{
+      return resp.json();
+    }).then((resp)=>{
+      return resp.value;
+    });
+    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=ID,Title,PublishedDate,Description,NewsThumbnail,NewsImage,Business/ID,Business/Title&$expand=Business&$top=${count}`;
     this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
       .then((response: SPHttpClientResponse) => {
         return response.json();
