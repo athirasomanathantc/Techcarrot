@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-intranet-home-main-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiIntranetHomeMain/AgiIntranetHomeMainWebPart.js",
+          "manifest": "./src/webparts/agiIntranetHomeMain/AgiIntranetHomeMainWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiIntranetHomeMainWebPartStrings": "lib/webparts/agiIntranetHomeMain/loc/{locale}.js"
+  }
+}
