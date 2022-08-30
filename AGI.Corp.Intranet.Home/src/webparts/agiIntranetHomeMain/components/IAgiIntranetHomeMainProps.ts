@@ -1,5 +1,6 @@
 export interface IAgiIntranetHomeMainProps {
   description: string;
   siteUrl: string;
-  context: any
+  context: any;
+  topLatestNews: number;
 }

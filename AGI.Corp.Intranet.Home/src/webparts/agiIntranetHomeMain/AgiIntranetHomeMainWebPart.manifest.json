@@ -21,7 +21,8 @@
     "description": { "default": "agiIntranetHomeMain description" },
     "officeFabricIconFontName": "Page",
     "properties": {
-      "description": "agiIntranetHomeMain"
+      "description": "agiIntranetHomeMain",
+      "topLatestNews": 3
     }
   }]
 }

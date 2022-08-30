@@ -5,13 +5,14 @@ import {
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-
 import * as strings from 'AgiIntranetHomeMainWebPartStrings';
 import AgiIntranetHomeMain from './components/AgiIntranetHomeMain';
 import { IAgiIntranetHomeMainProps } from './components/IAgiIntranetHomeMainProps';
+import { PropertyFieldNumber } from '@pnp/spfx-property-controls/lib/PropertyFieldNumber';
 
 export interface IAgiIntranetHomeMainWebPartProps {
   description: string;
+  topLatestNews: number;
 }
 
 export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IAgiIntranetHomeMainWebPartProps> {
@@ -21,6 +22,7 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
       AgiIntranetHomeMain,
       {
         description: this.properties.description,
+        topLatestNews: this.properties.topLatestNews,
         siteUrl: this.context.pageContext.web.absoluteUrl,
         context: this.context
       }
@@ -46,7 +48,16 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
               groupFields: [
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
-                })
+                }),
+                PropertyFieldNumber("topLatestNews", {
+                  key: "topLatestNews",
+                  label: "topLatestNews",
+                  description: "No of latest news carousel items",
+                  value: this.properties.topLatestNews,
+                  maxValue: 50,
+                  minValue: 1,
+                  disabled: false
+                }),
               ]
             }
           ]
