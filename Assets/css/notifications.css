@@ -31,6 +31,7 @@
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 .notification-list-wrapper .notification-list-item i {
@@ -65,4 +66,20 @@
     font-size: 16px;
     font-weight: 500;
     display: inline-block;
+}
+
+.notification-list-content .notification-list-content-next {
+    height: 0;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s linear 2s, opacity 2s;
+    overflow: hidden;
+}
+
+.notification-list-content .show {
+    height: auto;
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s linear 0s, opacity 2s;
+    overflow: visible;
 }

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-intranet-theme-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/agiIntranetTheme/AgiIntranetThemeApplicationCustomizer.js",
+          "manifest": "./src/extensions/agiIntranetTheme/AgiIntranetThemeApplicationCustomizer.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiIntranetThemeApplicationCustomizerStrings": "lib/extensions/agiIntranetTheme/loc/{locale}.js"
+  }
+}

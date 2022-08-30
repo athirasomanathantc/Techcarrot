@@ -1,0 +1,15 @@
+#CommentsWrapper,
+#spLeftNav,
+#spSiteHeader,
+#SuiteNavWrapper,
+div#sp-appBar,
+div[data-automation-id=pageHeader] {
+    display: none !important;
+}
+
+.intranetHeader {
+    background-color: #89317a;
+}
+
+
+/* #spCommandBar, */

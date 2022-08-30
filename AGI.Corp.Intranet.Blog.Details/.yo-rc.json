@@ -4,7 +4,7 @@
     "environment": "spo",
     "version": "1.11.0",
     "libraryName": "agi-corp-intranet-blog-details",
-    "libraryId": "894BD707-31D7-4EF8-A1A4-08AE6D482E78",
+    "libraryId": "b4acde2f-a97c-4d56-9149-b2cb40ac4672",
     "packageManager": "npm",
     "isDomainIsolated": false,
     "componentType": "webpart"

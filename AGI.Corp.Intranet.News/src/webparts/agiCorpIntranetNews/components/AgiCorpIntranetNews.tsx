@@ -60,8 +60,6 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
       
       
     }
-    
-    
 
   }
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <ClientSideComponentInstance
+        Title="AgiIntranetCustomBranding"
+        Location="ClientSideExtension.ApplicationCustomizer"
+        ComponentId="cb67f38c-0b9a-4563-9692-900f331e4893"
+        Properties="{&quot;testMessage&quot;:&quot;Test message&quot;}">
+    </ClientSideComponentInstance>
+</Elements>
