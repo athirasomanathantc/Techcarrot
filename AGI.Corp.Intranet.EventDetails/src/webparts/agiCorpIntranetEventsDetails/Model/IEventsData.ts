@@ -9,5 +9,6 @@ export interface IEventsData{
     EventThumbnail:string;
     EventImage:string;
     Location:string;
+    ReadBy: string;
 
 }

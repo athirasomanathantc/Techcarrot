@@ -37,11 +37,27 @@ export default class AgiCorpIntranetEventsDetails extends React.Component<IAgiCo
 
       sp.web.lists.getByTitle('EventDetails').items.getById(id).get().then((item) => {
         this.setState({
-          eventsData: item
+          eventsData: item,
+          eventId:id
         }, () => {
           console.log('value', item);
         });
       })
+      const userId: string = this.props.context.pageContext.legacyPageContent.userId;
+      let readBy = this.state.eventsData.ReadBy;
+      const userIDColl = readBy ? readBy.split(';') : [];
+      const isIdExists = userIDColl.includes(userId.toString());
+      if (!isIdExists) {
+        readBy = readBy ? `${readBy};${userId}` : userId;
+        sp.web.lists.getByTitle('EventDatails').items.getById(this.state.eventId).update({
+          ReadBy: readBy
+        }).then((data) => {
+          console.log('item updated...', data);
+        }).catch((error) => {
+          console.log('error in updating list item:', error);
+        })
+
+      }
 
     }
   }
@@ -52,7 +68,7 @@ export default class AgiCorpIntranetEventsDetails extends React.Component<IAgiCo
     const imageObj: any = JSON.parse(imageContent);
     return imageObj.serverUrl + imageObj.serverRelativeUrl;
   }
-  private renderNewsDetail(): JSX.Element {
+  private renderEventDetail(): JSX.Element {
     const event = this.state.eventsData;
     const imageUrl = this.getImageUrl(event.EventImage);
     return (
@@ -151,7 +167,7 @@ export default class AgiCorpIntranetEventsDetails extends React.Component<IAgiCo
             </div> */}
             {
               eventID ?
-                this.renderNewsDetail()
+                this.renderEventDetail()
                 :
                 <div>
                   Invalid event ID.
