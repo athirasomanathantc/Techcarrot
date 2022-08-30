@@ -101,8 +101,16 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
   }
 
   private async getNewsItems(): Promise<void> {
+    const list='EventDetails';
+    const counturl = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/ItemCount`;
+    const count = await this.props.context.spHttpClient.get(counturl,SPHttpClient.configurations.v1)
+    .then((resp:SPHttpClientResponse)=>{
+      return resp.json();
+    }).then((resp)=>{
+      return resp.value;
+    });
 
-    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('EventDetails')/items?$select=ID,Title,Location,Description,StartDate,EndDate,EventThumbnail,Business/ID,Business/Title&$expand=Business`;
+    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=ID,Title,Location,Description,StartDate,EndDate,EventThumbnail,Business/ID,Business/Title&$expand=Business&$top=${count}`;
     this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
       .then((response: SPHttpClientResponse) => {
         return response.json();
