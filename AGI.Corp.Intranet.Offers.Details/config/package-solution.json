@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "agi-corp-intranet-offers-details-client-side-solution",
+    "id": "ad13ce5c-0f0f-47a9-8a6c-ec457ea99f1b",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.14.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "AGICorpIntranetOffersDetails description"
+      },
+      "longDescription": {
+        "default": "AGICorpIntranetOffersDetails description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "agi-corp-intranet-offers-details Feature",
+        "description": "The feature that activates elements of the agi-corp-intranet-offers-details solution.",
+        "id": "c7de263e-5118-460b-9030-01c816586c82",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/agi-corp-intranet-offers-details.sppkg"
+  }
+}
