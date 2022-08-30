@@ -36,6 +36,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   }
   private async fetch() {
     await this.getBusinessItems();
+
     await this.getblog();
 
   }
@@ -124,9 +125,12 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   }
 
   private async getblog(): Promise<void> {
-    const listName = "Blogs";
-    sp.web.lists.getByTitle(listName).items.select('ID,Title,Category,PublishedDate,Summary,BlogThumbnail,BlogImage,Editor/ID,Editor/Title,Business/ID,Business/Title').expand('Editor,Business').get().then((resp: IBlogData[]) => {
+
+     const listName = "Blogs";
+    sp.web.lists.getByTitle(listName).items.select('ID,Title,Category,PublishedDate,Summary,BlogThumbnail,BlogImage,Author/ID,Author/Title,Business/ID,Business/Title')
+    .expand('Author,Business').getAll().then((resp: IBlogData[]) => {
       const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
+      console.log(resp.length);
       this.setState({
         blogData: resp,
         filterData:resp,
@@ -229,7 +233,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                                     <span className={'category'}><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.png`} alt="" /></i> {item.Business.Title}</span>
                                     <span className={'date'}><i><img src={`${this.props.siteUrl}/Assets/icons/Date.svg`} alt="" /></i> {moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
                                   </div>
-                                  <p><i><img src={`${this.props.siteUrl}/Assets/icons/avatar.png`} alt="" /></i> <span>{item.Editor.Title}</span></p>
+                                  <p><i><img src={`${this.props.siteUrl}/Assets/icons/avatar.png`} alt="" /></i> <span>{item.Author.Title}</span></p>
                                 </a>
                               </div>
                             </div>

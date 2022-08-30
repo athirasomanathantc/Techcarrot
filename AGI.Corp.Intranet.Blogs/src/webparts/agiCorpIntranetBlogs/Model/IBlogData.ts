@@ -6,7 +6,7 @@ export interface IBlogData{
     Summary:string;
     BlogThumbnail:string;
     BlogImage:string;
-    Editor:{
+    Author:{
         ID:string,
         Title:string,
     };
