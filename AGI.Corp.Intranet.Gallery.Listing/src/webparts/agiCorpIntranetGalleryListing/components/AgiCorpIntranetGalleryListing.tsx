@@ -46,46 +46,78 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
       preview: false,
       previewImage: '',
       currentIndex: -1,
-      currentImageUrl: ''
-      // filterData: [],
-      // filterValues: [],
-      // pageData: [],
-      // totalPages: 0,
-      // currentPage: 1,
-      // pageSize:0
+      currentImageUrl: '',
+      folderData:[],
+      filterData: [],
+      filterValues: [],
+      pageData: [],
+      totalPages: 0,
+      currentPage: 1,
+      pageSize: 0
     }
     // this.getImages = this.getImages.bind(this);
   }
 
   public async componentDidMount(): Promise<void> {
-    this.getGalleryItems();
-    this.getVideoItems();
+    await this.getBusinessItems();
+    await this.getGalleryItems();
+    await this.getVideoItems();
   }
 
-  // private handleFilter(e: any) {
-  //   const value = parseInt(e.target.value);
-  //   if (value == 0) {
-  //     const result: IFolderItem[] = this.state.imageItems;
-  //     this.setState({
-  //       filterData: result
-  //     },()=>{
-  //       this.paging();
-  //     });
+  private async getBusinessItems(): Promise<void> {
+    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('Business')/items`;
+    this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+      .then((response: SPHttpClientResponse) => {
+        return response.json();
+      })
+      .then((response) => {
+        const items = response.value;
+        console.log('choices', items);
+        this.setState({
+          filterValues: items
+        });
 
-  //   } else {
-  //     const result = this.state.imageItems.filter((obj) => {
-  //       return obj..ID == value;
-  //     })
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
+    if (window.innerWidth <= 767) {
+      this.setState({//debugger;
+        pageSize: 6
+      });
 
-  //     this.setState({
-  //       filterData: result
-  //     },()=>{
-  //       this.paging();
-  //     });
+    } else {
+      this.setState({
+        pageSize: 12
+      });
 
+    }
 
-  //   }
-  // }
+  }
+
+  private handleFilter(e: any) {
+    const value = parseInt(e.target.value);
+    if (value == 0) {
+      const result: IImageItem[] = this.state.folderData;
+      this.setState({
+        filterData: result
+      },()=>{
+       // this.paging();
+      });
+
+    } else {
+      const result = this.state.folderData.filter((obj) => {
+        return obj.Business.ID == value;
+      })
+      
+      this.setState({
+        filterData: result
+      },()=>{
+       // this.paging();
+      });
+       
+    }
+  }
 
   private async getGalleryItems(): Promise<void> {
     debugger;
@@ -107,20 +139,20 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
           folders.map((folder) => {
             const path = `${this.props.context.pageContext.web.serverRelativeUrl}/${libraryPath}/${folder.Name}`;
             console.log('path', path);
-          //   const _coverPhoto = sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(folder.Name).files.select('FileLeafRef').filter("isCoverPhoto eq 1").get().then((allItems) => {
-          //     const test1 = allItems
-          //   });;
+            //   const _coverPhoto = sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(folder.Name).files.select('FileLeafRef').filter("isCoverPhoto eq 1").get().then((allItems) => {
+            //     const test1 = allItems
+            //   });;
 
-          //  // sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(folder.Name).files.select('Id').filter(`FSObjType ne 1 and isCoverPhoto eq 1`).get().then((allItems) => {
-          //     // const test12 = allItems
-          //     sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(folder.Name).files.select('*, FileRef, FileLeafRef').get().then((allItems) => {             
-          //     for (var i = 0; i < files.length; i++) {
-          //       var _ServerRelativeUrl = files[i].FileRef;
-          //       sp.web.getFileByServerRelativeUrl(_ServerRelativeUrl).getItem().then(item => {
-          //         console.log(item);
-          //       });
-          //     }
-          //   });;
+            //  // sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(folder.Name).files.select('Id').filter(`FSObjType ne 1 and isCoverPhoto eq 1`).get().then((allItems) => {
+            //     // const test12 = allItems
+            //     sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(folder.Name).files.select('*, FileRef, FileLeafRef').get().then((allItems) => {             
+            //     for (var i = 0; i < files.length; i++) {
+            //       var _ServerRelativeUrl = files[i].FileRef;
+            //       sp.web.getFileByServerRelativeUrl(_ServerRelativeUrl).getItem().then(item => {
+            //         console.log(item);
+            //       });
+            //     }
+            //   });;
 
             const _files = files.filter((file) => {
               const folderPath = file.FileRef.replace(`/${file.FileLeafRef}`, '');
@@ -331,13 +363,25 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                         </ul>
                       </div>
                       <div className="col-md-6">
-                        <form action="" className="search-bar d-md-flex d-none search-bar mt-3 mt-md-0">
+                        {/* <form action="" className="search-bar d-md-flex d-none search-bar mt-3 mt-md-0">
                           <div className="input-group">
                             <input type="text" className="form-control form-control-lg" placeholder="Search Here" />
                             <button type="submit" className="input-group-text btn-serach"><i className="bi bi-search"><img
                               src="images/icon-search.svg" alt="" /></i></button>
                           </div>
-                        </form>
+                        </form> */}
+                        <select onChange={(e) => this.handleFilter(e)}>
+
+                          <option value="0">Filter By</option>
+                          {
+                            this.state.filterValues.map((business) => {
+                              return (
+                                <option value={business.ID}>{business.Title}</option>
+                              )
+                            })
+                          }
+
+                        </select>
                       </div>
                     </div>
                   </div>

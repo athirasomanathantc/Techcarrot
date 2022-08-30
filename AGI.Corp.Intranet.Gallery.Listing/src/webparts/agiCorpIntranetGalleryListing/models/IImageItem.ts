@@ -8,4 +8,8 @@ export interface IImageItem {
     isCoverPhoto?:string;
     showVideo?: boolean;
     selectedVideoUrl?: string;
+    Business?:{
+        ID:number;
+        Title:string;
+    }
 }

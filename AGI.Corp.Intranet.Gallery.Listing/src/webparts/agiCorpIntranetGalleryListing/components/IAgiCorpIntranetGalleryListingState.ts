@@ -17,13 +17,14 @@ export interface IAgiCorpIntranetGalleryListingState {
     currentIndex: number;
     currentImageUrl: string;
     ServerRelativeUrl: string;
-    // filterData:IFolderItem[];
-    // filterValues:{
-    //   ID:number;
-    //   Title:string;
-    // }[];
-    // currentPage: number;
-    // totalPages: number;
-    // pageData:IFolderItem[];
-    // pageSize:number;
+    folderData: IFolderItem[];
+    filterData:IImageItem[];
+    filterValues:{
+      ID:number;
+      Title:string;
+    }[];
+    currentPage: number;
+    totalPages: number;
+    pageData:IFolderItem[];
+    pageSize:number;
 }
