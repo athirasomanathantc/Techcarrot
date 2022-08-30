@@ -24,7 +24,7 @@ export default class AgiCorpIntranetOffersWebPart extends BaseClientSideWebPart<
   protected onInit(): Promise<void> {
     const randomNumber = Math.floor(Math.random()*90000) + 10000;
 
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/blogs.css?${randomNumber}`);
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/rewards.css?${randomNumber}`);
      SPComponentLoader.loadCss(`https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css`);
    
        SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap.min.css`);

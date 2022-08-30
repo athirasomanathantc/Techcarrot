@@ -30,6 +30,7 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
   }
   private async fetch() {
     await this.getBusinessItems();
+
     await this.getOffer();
 
   }
@@ -120,7 +121,7 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
   private async getOffer(): Promise<void> {
     const listName = "Offers";
     sp.web.lists.getByTitle(listName).items.select('ID,Title,Description,Summary,OfferThumbnail,OfferImage,Business/ID,Business/Title')
-      .expand('Business').get().then((resp: IOfferData[]) => {
+      .expand('Business').getAll().then((resp: IOfferData[]) => {
         const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
         this.setState({
           offerData: resp,
@@ -165,14 +166,14 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
   public render(): React.ReactElement<IAgiCorpIntranetOffersProps> {
 
     return (
-      <div className={'main-content'} id='offerTop'>
+      <div className={'main-content'} id="offerTop">
         <div className={'content-wrapper'}>
           <div className={'container'}>
 
             <div className={'main-header-section'}>
               <div className={'row'} >
                 <div className={'col-12 col-md-6 heading-section'} >
-                  <h3>Offers</h3>
+                  <h3>Rewards</h3>
                 </div>
                 <div className={'col-12 col-md-6 filter-section text-end'}>
                   <div className={'form-select custom-select '}>
@@ -220,8 +221,11 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
                                   <h5 className={'card-title'}>{item.Title}</h5>
                                   </a>
                                 </div>
+                                <a href={`${this.props.siteURL}/SitePages/Reward Details.aspx?rewardID=${item.ID}`}>
 
                                 <p className={'card-text'}>{item.Description}</p>
+                                </a>
+                                
                                 <a href={`${this.props.siteURL}/SitePages/Reward Details.aspx?rewardID=${item.ID}`} className={'btn read-more  align-self-start'}>Read more</a>
                                 {/* <!--<a href='{'} className={'btn read-more mt-auto align-self-start'}>View Full Article</a>--> */}
                               </div>
