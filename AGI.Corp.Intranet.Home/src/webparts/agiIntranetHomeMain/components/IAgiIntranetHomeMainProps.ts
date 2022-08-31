@@ -3,4 +3,5 @@ export interface IAgiIntranetHomeMainProps {
   siteUrl: string;
   context: any;
   topLatestNews: number;
+  topAnnouncements: number;
 }

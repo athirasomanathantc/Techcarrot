@@ -17985,42 +17985,128 @@ function useForceUpdate() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Announcements", function() { return Announcements; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "wd/R");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _services_SPService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/SPService */ "Ivr2");
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 
+
+
+
+var siteUrl = '';
+var imageStyle = {
+    height: '140px',
+    width: '140px'
+};
+var Announcement = function (props) {
+    var imageUrl = JSON.parse(props.AnnouncementThumbnail);
+    imageUrl = (imageUrl === null || imageUrl === void 0 ? void 0 : imageUrl.serverUrl) + (imageUrl === null || imageUrl === void 0 ? void 0 : imageUrl.serverRelativeUrl);
+    return (react__WEBPACK_IMPORTED_MODULE_1__["createElement"](react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null,
+        react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: "col-12 col-md-6 mb-4" },
+            react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: "d-flex " },
+                react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: "icon-announcement text-dark flex-shrink-0 me-3" },
+                    react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("img", { style: imageStyle, src: imageUrl, width: "100%" })),
+                react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: "d-flex flex-column flex-wrap" },
+                    react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("p", { className: "announcement-date" }, moment__WEBPACK_IMPORTED_MODULE_0__(props.PublishedDate).format("MMMM DD, hh.mm A")),
+                    react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("p", { className: "announcement-title" }, props.Title),
+                    react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("p", { className: "mb-2 text-break text-wrap announcement-desc d-none d-sm-block " }, props.Description))))));
+};
+var AnnouncementCarousel = function (props) {
+    return (react__WEBPACK_IMPORTED_MODULE_1__["createElement"](react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null,
+        react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: "carousel-item ".concat(!props.index ? 'active' : '') },
+            react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: "row" }, props.announcementCarouselItem.map(function (announcement, index) { return react__WEBPACK_IMPORTED_MODULE_1__["createElement"](Announcement, __assign({ index: index, key: "key".concat(index) }, announcement)); })))));
+};
 var Announcements = function (props) {
-    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "col-md-12 announcement-section " },
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "card border-radius-0" },
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "card-body" },
-                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { id: "carouselExampleCaptions2", className: "carousel slide", "data-bs-ride": "carousel" },
-                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "d-flex align-items-center justify-content-between flex-wrap mb-4 card-header announcement-header px-0" },
-                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("h4", null, "Announcements"),
-                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "p-0 position-relative " },
-                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { className: "carousel-control-prev", type: "button", "data-bs-target": "#carouselExampleCaptions2", "data-bs-slide": "prev" },
-                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: "carousel-control-prev-icon", "aria-hidden": "true" }),
-                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: "visually-hidden" }, "Previous")),
-                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { className: "carousel-control-next", type: "button", "data-bs-target": "#carouselExampleCaptions2", "data-bs-slide": "next" },
-                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: "carousel-control-next-icon", "aria-hidden": "true" }),
-                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: "visually-hidden" }, "Next")))),
-                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "carousel-inner pt-9" },
-                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "carousel-item active" },
-                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "row" },
-                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "col-12 col-md-6 mb-4" },
-                                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "d-flex " },
-                                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "icon-announcement text-dark flex-shrink-0 me-3" },
-                                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("img", { src: "".concat(props.siteUrl, "/Assets/images/announcement-1.png"), width: "100%" })),
-                                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "d-flex flex-column flex-wrap" },
-                                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", { className: "announcement-date" }, "March 23, 12.30pm"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", { className: "announcement-title" }, "Commemorated on 28th of April, The World Day for Safety and Health at Work"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", { className: "mb-2 text-break text-wrap announcement-desc d-none d-sm-block " }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor")))),
-                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "col-12 col-md-6  mb-4" },
-                                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "d-flex " },
-                                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "icon-announcement text-dark flex-shrink-0 me-3" },
-                                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("img", { src: "".concat(props.siteUrl, "/Assets/images/announcement-2.png"), width: "100%" })),
-                                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "d-flex flex-column flex-wrap" },
-                                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", { className: "announcement-date" }, "March 23, 12.30pm"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", { className: "announcement-title" }, "Commemorated on 28th of April, The World Day for Safety and Health at Work"),
-                                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", { className: "mb-2 text-break text-wrap announcement-desc d-none d-sm-block " }, "Long weekend alert, the likely dates of Islamic festival Eid Al Adha have been revealed\u2026"))))))))))));
+    var _a = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(null), error = _a[0], setError = _a[1];
+    var _b = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]), announcementCarousel = _b[0], setAnnouncementCarousel = _b[1];
+    var _spService = new _services_SPService__WEBPACK_IMPORTED_MODULE_2__["default"](props);
+    siteUrl = props.siteUrl;
+    Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
+        var getLatestNews = function () { return __awaiter(void 0, void 0, void 0, function () {
+            var announcements, announcementCarousel, i;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, _spService.getAnnouncements()];
+                    case 1:
+                        announcements = _a.sent();
+                        announcementCarousel = [];
+                        for (i = 0; i < announcements.length; i += 2) {
+                            announcementCarousel.push([announcements[i], announcements[i + 1]]);
+                        }
+                        setAnnouncementCarousel(announcementCarousel);
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        getLatestNews().catch(function (error) {
+            setError(error);
+        });
+    }, []);
+    if (error) {
+        throw error;
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: "col-md-12 announcement-section " },
+        react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: "card border-radius-0" },
+            react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: "card-body" },
+                react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { id: "carouselExampleCaptions2", className: "carousel slide", "data-bs-ride": "carousel" },
+                    react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: "d-flex align-items-center justify-content-between flex-wrap mb-4 card-header announcement-header px-0" },
+                        react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("h4", null, "Announcements"),
+                        react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: "p-0 position-relative " },
+                            react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("button", { className: "carousel-control-prev", type: "button", "data-bs-target": "#carouselExampleCaptions2", "data-bs-slide": "prev" },
+                                react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("span", { className: "carousel-control-prev-icon", "aria-hidden": "true" }),
+                                react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("span", { className: "visually-hidden" }, "Previous")),
+                            react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("button", { className: "carousel-control-next", type: "button", "data-bs-target": "#carouselExampleCaptions2", "data-bs-slide": "next" },
+                                react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("span", { className: "carousel-control-next-icon", "aria-hidden": "true" }),
+                                react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("span", { className: "visually-hidden" }, "Next")))),
+                    react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: "carousel-inner pt-9" }, announcementCarousel.map(function (announcementCarouselItem, index) { return react__WEBPACK_IMPORTED_MODULE_1__["createElement"](AnnouncementCarousel, { index: index, key: "key".concat(index), announcementCarouselItem: announcementCarouselItem }); })))))));
 };
 
 
@@ -18192,7 +18278,6 @@ var SPService = /** @class */ (function () {
     }
     SPService.prototype.getLatestNews = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var latestNews;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, _pnp_sp__WEBPACK_IMPORTED_MODULE_0__["sp"].web.lists.getByTitle('News').items
@@ -18202,12 +18287,28 @@ var SPService = /** @class */ (function () {
                             .top(this._props.topLatestNews)()
                             .then(function (items) {
                             return items;
-                        }).catch(function (exception) {
+                        })
+                            .catch(function (exception) {
                             throw new Error(exception);
                         })];
-                    case 1:
-                        latestNews = _a.sent();
-                        return [2 /*return*/, latestNews];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    SPService.prototype.getAnnouncements = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, _pnp_sp__WEBPACK_IMPORTED_MODULE_0__["sp"].web.lists.getByTitle('Announcements').items.select("ID,Title,Description,AnnouncementThumbnail,PublishedDate")
+                            .top(this._props.topAnnouncements)()
+                            .then(function (items) {
+                            return items;
+                        })
+                            .catch(function (exception) {
+                            throw new Error(exception);
+                        })];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
@@ -30430,6 +30531,7 @@ var AgiIntranetHomeMainWebPart = /** @class */ (function (_super) {
         var element = react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_components_AgiIntranetHomeMain__WEBPACK_IMPORTED_MODULE_5__["default"], {
             description: this.properties.description,
             topLatestNews: this.properties.topLatestNews,
+            topAnnouncements: this.properties.topAnnouncements,
             siteUrl: this.context.pageContext.web.absoluteUrl,
             context: this.context
         });
@@ -30457,6 +30559,15 @@ var AgiIntranetHomeMainWebPart = /** @class */ (function (_super) {
                                     label: "topLatestNews",
                                     description: "No of latest news carousel items",
                                     value: this.properties.topLatestNews,
+                                    maxValue: 50,
+                                    minValue: 1,
+                                    disabled: false
+                                }),
+                                Object(_pnp_spfx_property_controls_lib_PropertyFieldNumber__WEBPACK_IMPORTED_MODULE_6__["PropertyFieldNumber"])("topAnnouncements", {
+                                    key: "topAnnouncements",
+                                    label: "topAnnouncements",
+                                    description: "No of announcement carousel items",
+                                    value: this.properties.topAnnouncements,
                                     maxValue: 50,
                                     minValue: 1,
                                     disabled: false

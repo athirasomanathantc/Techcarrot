@@ -1,7 +1,78 @@
+import * as moment from "moment";
 import * as React from "react";
+import { useEffect, useState } from "react";
+import { IAnnouncement } from "../../models/IAnnouncement";
+import SPService from "../../services/SPService";
 import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
 
+let siteUrl: string = '';
+
+const imageStyle = {
+    height: '140px',
+    width: '140px'
+}
+
+const Announcement = (props: IAnnouncement) => {
+    let imageUrl = JSON.parse(props.AnnouncementThumbnail);
+    imageUrl = imageUrl?.serverUrl + imageUrl?.serverRelativeUrl;
+    return (<>
+        <div className="col-12 col-md-6 mb-4">
+            <div className="d-flex ">
+                <div
+                    className="icon-announcement text-dark flex-shrink-0 me-3">
+                    <img style={imageStyle} src={imageUrl}
+                        width="100%" />
+                </div>
+                <div className="d-flex flex-column flex-wrap">
+                    <p className="announcement-date">{moment(props.PublishedDate).format("MMMM DD, hh.mm A")}
+                    </p>
+                    <p className="announcement-title">{props.Title}</p>
+                    <p className="mb-2 text-break text-wrap announcement-desc d-none d-sm-block ">
+                        {props.Description}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </>)
+}
+
+const AnnouncementCarousel = (props: any) => {
+    return (<>
+        <div className={`carousel-item ${!props.index ? 'active' : ''}`}>
+            <div className="row">
+                {props.announcementCarouselItem.map((announcement: IAnnouncement, index: number) => <Announcement
+                    index={index}
+                    key={`key${index}`}
+                    {...announcement}></Announcement>)}
+            </div>
+        </div>
+    </>)
+}
+
 export const Announcements = (props: IAgiIntranetHomeMainProps) => {
+    const [error, setError] = useState(null);
+    const [announcementCarousel, setAnnouncementCarousel] = useState([]);
+    const _spService = new SPService(props);
+    siteUrl = props.siteUrl;
+    useEffect(() => {
+        const getLatestNews = async () => {
+            let announcements: IAnnouncement[] = await _spService.getAnnouncements();
+            const announcementCarousel = [];
+            for (var i = 0; i < announcements.length; i += 2) {
+                announcementCarousel.push([announcements[i], announcements[i + 1]])
+            }
+            setAnnouncementCarousel(announcementCarousel);
+        }
+        getLatestNews().catch((error) => {
+            setError(error);
+        })
+    }, [])
+
+    if (error) {
+        throw error;
+    }
+
+
     return (<div className="col-md-12 announcement-section ">
         <div className="card border-radius-0">
 
@@ -32,55 +103,11 @@ export const Announcements = (props: IAgiIntranetHomeMainProps) => {
 
                     </div>
                     <div className="carousel-inner pt-9">
-
-                        <div className="carousel-item active">
-
-                            <div className="row">
-                                <div className="col-12 col-md-6 mb-4">
-                                    <div className="d-flex ">
-                                        <div
-                                            className="icon-announcement text-dark flex-shrink-0 me-3">
-                                            <img src={`${props.siteUrl}/Assets/images/announcement-1.png`}
-                                                width="100%" />
-                                        </div>
-                                        <div className="d-flex flex-column flex-wrap">
-                                            <p className="announcement-date">March 23, 12.30pm
-                                            </p>
-                                            <p className="announcement-title">Commemorated on
-                                                28th of April, The World Day for Safety and
-                                                Health at Work</p>
-                                            <p className="mb-2 text-break text-wrap announcement-desc d-none d-sm-block ">
-                                                Lorem ipsum dolor sit amet, consectetur
-                                                adipiscing elit, sed do eiusmod tempor
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-12 col-md-6  mb-4">
-                                    <div className="d-flex ">
-                                        <div
-                                            className="icon-announcement text-dark flex-shrink-0 me-3">
-                                            <img src={`${props.siteUrl}/Assets/images/announcement-2.png`}
-                                                width="100%" />
-                                        </div>
-                                        <div className="d-flex flex-column flex-wrap">
-                                            <p className="announcement-date">March 23, 12.30pm
-                                            </p>
-                                            <p className="announcement-title">Commemorated on
-                                                28th of April, The World Day for Safety and
-                                                Health at Work</p>
-                                            <p
-                                                className="mb-2 text-break text-wrap announcement-desc d-none d-sm-block ">
-                                                Long weekend alert, the likely dates of
-                                                Islamic festival Eid Al Adha have been
-                                                revealed…
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {announcementCarousel.map((announcementCarouselItem: IAnnouncement[], index: number) => <AnnouncementCarousel
+                            index={index}
+                            key={`key${index}`}
+                            announcementCarouselItem={announcementCarouselItem}
+                        ></AnnouncementCarousel>)}
                     </div>
                 </div>
             </div>

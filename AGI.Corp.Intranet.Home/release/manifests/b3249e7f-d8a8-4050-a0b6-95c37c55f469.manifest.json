@@ -23,7 +23,8 @@
       "officeFabricIconFontName": "Page",
       "properties": {
         "description": "agiIntranetHomeMain",
-        "topLatestNews": 3
+        "topLatestNews": 3,
+        "topAnnouncements": 10
       }
     }
   ],

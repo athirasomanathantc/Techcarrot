@@ -1,5 +1,6 @@
 import { sp } from "@pnp/sp";
 import { IAgiIntranetHomeMainProps } from "../components/IAgiIntranetHomeMainProps";
+import { IAnnouncement } from "../models/IAnnouncement";
 import { ILatestNews } from "../models/ILatestNews";
 
 export class SPService {
@@ -10,17 +11,28 @@ export class SPService {
     }
 
     public async getLatestNews(): Promise<ILatestNews[]> {
-        const latestNews = await sp.web.lists.getByTitle('News').items
+        return await sp.web.lists.getByTitle('News').items
             .select("Id,Title,Created,Business/Title,PublishedDate,NewsImage")
             .expand("Business")
             .orderBy("PublishedDate", false)
             .top(this._props.topLatestNews)()
             .then((items: ILatestNews[]) => {
                 return items
-            }).catch((exception) => {
+            })
+            .catch((exception) => {
                 throw new Error(exception);
             });
-        return latestNews;
+    }
+
+    public async getAnnouncements(): Promise<IAnnouncement[]> {
+        return await sp.web.lists.getByTitle('Announcements').items.select("ID,Title,Description,AnnouncementThumbnail,PublishedDate")
+            .top(this._props.topAnnouncements)()
+            .then((items: IAnnouncement[]) => {
+                return items;
+            })
+            .catch((exception) => {
+                throw new Error(exception);
+            });
     }
 }
 

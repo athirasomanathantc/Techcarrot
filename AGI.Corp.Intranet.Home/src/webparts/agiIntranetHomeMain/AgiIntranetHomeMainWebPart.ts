@@ -13,6 +13,7 @@ import { PropertyFieldNumber } from '@pnp/spfx-property-controls/lib/PropertyFie
 export interface IAgiIntranetHomeMainWebPartProps {
   description: string;
   topLatestNews: number;
+  topAnnouncements: number;
 }
 
 export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IAgiIntranetHomeMainWebPartProps> {
@@ -23,6 +24,7 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
       {
         description: this.properties.description,
         topLatestNews: this.properties.topLatestNews,
+        topAnnouncements: this.properties.topAnnouncements,
         siteUrl: this.context.pageContext.web.absoluteUrl,
         context: this.context
       }
@@ -54,6 +56,15 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
                   label: "topLatestNews",
                   description: "No of latest news carousel items",
                   value: this.properties.topLatestNews,
+                  maxValue: 50,
+                  minValue: 1,
+                  disabled: false
+                }),
+                PropertyFieldNumber("topAnnouncements", {
+                  key: "topAnnouncements",
+                  label: "topAnnouncements",
+                  description: "No of announcement carousel items",
+                  value: this.properties.topAnnouncements,
                   maxValue: 50,
                   minValue: 1,
                   disabled: false
