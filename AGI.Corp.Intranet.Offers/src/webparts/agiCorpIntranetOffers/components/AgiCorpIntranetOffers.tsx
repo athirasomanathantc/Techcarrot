@@ -120,7 +120,7 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
 
   private async getOffer(): Promise<void> {
     const listName = "Offers";
-    sp.web.lists.getByTitle(listName).items.select('ID,Title,Description,Summary,OfferThumbnail,OfferImage,Business/ID,Business/Title')
+    sp.web.lists.getByTitle(listName).items.select('ID,Title,Description,OfferThumbnail,OfferImage,Business/ID,Business/Title')
       .expand('Business').getAll().then((resp: IOfferData[]) => {
         const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
         this.setState({
@@ -236,7 +236,7 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
                       :
                       <div>
                         <p>
-                          NO Events
+                          NO Rewards
                         </p>
                       </div>
                   }
