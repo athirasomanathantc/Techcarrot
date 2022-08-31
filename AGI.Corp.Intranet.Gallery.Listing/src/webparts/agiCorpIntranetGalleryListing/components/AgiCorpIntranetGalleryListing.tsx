@@ -20,6 +20,7 @@ import { IFolderItem } from '../models/IFolderItem';
 import { IImageItem } from '../models/IImageItem';
 import { Icon } from 'office-ui-fabric-react';
 import * as $ from 'jquery';
+import Paging from './Paging/Paging';
 //import { Icon } from 'office-ui-fabric-react/lib/components/Icon/Icon';
 //import { Pagination } from '@pnp/spfx-controls-react/lib/pagination';
 //import Paging from './Paging/Paging';
@@ -53,7 +54,9 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
       pageData: [],
       totalPages: 0,
       currentPage: 1,
-      pageSize: 0
+      pageSize: 0,
+      totalPage:1,
+      pageData1:[]
     }
     // this.getImages = this.getImages.bind(this);
   }
@@ -65,8 +68,9 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
   }
 
   private async getBusinessItems(): Promise<void> {
-    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('Business')/items`;
-    this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+    
+    const url1 = `${this.props.siteUrl}/_api/web/lists/getbytitle('Business')/items`;
+    this.props.context.spHttpClient.get(url1, SPHttpClient.configurations.v1)
       .then((response: SPHttpClientResponse) => {
         return response.json();
       })
@@ -81,6 +85,24 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
       .catch((error) => {
         console.log('Error:', error);
       })
+     /* const v = this.state.filterValues;
+      const url2 = `${this.props.siteUrl}/_api/web/lists/getbytitle('Functions')/items`;
+    this.props.context.spHttpClient.get(url2, SPHttpClient.configurations.v1)
+      .then((response: SPHttpClientResponse) => {
+        return response.json();
+      })
+      .then((response) => {
+        const items = response.value;
+        val=val.concat(items);
+        console.log('choices', items);
+        this.setState({
+          filterValues: items
+        });
+
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })*/
     if (window.innerWidth <= 767) {
       this.setState({//debugger;
         pageSize: 6
@@ -98,7 +120,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
   private handleFilter(e: any) {
     const value = parseInt(e.target.value);
     if (value == 0) {
-      const result: IImageItem[] = this.state.folderData;
+      const result: IFolderItem[] = this.state.folders;
       this.setState({
         filterData: result
       },()=>{
@@ -106,7 +128,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
       });
 
     } else {
-      const result = this.state.folderData.filter((obj) => {
+      const result = this.state.folders.filter((obj) => {
         return obj.Business.ID == value;
       })
       
@@ -163,13 +185,58 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
             _folders.push({ ID: folder.ListItemAllFields.ID, Name: folder.Name, Count: count })
           });
           this.setState({
-            folders: _folders
+            folders: _folders,
+            filterData:_folders
+          },()=>{
+            this.paging();
           });
         })
       })
       .catch((error) => {
         console.log(error);
       });
+
+  }
+  private paging() {
+    const pageCount: number = Math.ceil(this.state.filterData.length / this.state.pageSize);
+    const totalPages = (this.state.filterData.length / this.state.pageSize) - 1;
+    //console.log('totalPages', pageCount);
+    // this.setState({
+    //   images
+    // });
+    this.setState({
+      pageData1: this.state.filterData.slice(0, this.state.pageSize),
+      totalPage: pageCount,
+      currentPage: 1
+    }, () => {
+      //console.log('filterData', this.state.filterData);
+      console.log('pageData', this.state.pageData);
+    });
+
+  }
+
+  private _getPage(page: number) {
+    // round a number up to the next largest integer.
+    const skipItems: number = this.state.pageSize * (page - 1);
+    const takeItems: number = skipItems + this.state.pageSize;
+
+    //console.log('page', page);
+    const roundupPage = Math.ceil(page);
+    // const images = this.state.allImages.slice(roundupPage, (roundupPage * pageSize));
+    const pageData1 = this.state.filterData.slice(skipItems, takeItems)
+    this.setState({
+      pageData1,
+      currentPage: page
+    }, () => {
+      this.scrollToTop();
+
+    });
+  }
+  private scrollToTop(): void {
+
+    var element = document.getElementById("spPageCanvasContent");
+
+    element.scrollIntoView(true);
 
   }
 
@@ -317,7 +384,15 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
     }, 1500);
   }
 
+  private getQueryStringValue(param: string): string {
+    const params = new URLSearchParams(window.location.search);
+    let value = params.get(param) || '';
+    return value;
+  }
+
   public render(): React.ReactElement<IAgiCorpIntranetGalleryListingProps> {
+    const tab= this.getQueryStringValue('tab');
+    console.log('tab',tab);
     const libraryPath = this.props.libraryPath;
     const imageUrl = this.state.currentImageUrl;
     return (
@@ -333,7 +408,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                       <div className="col-md-6">
                         <ul className="nav nav-tabs" id="myTab" role="tablist">
                           <li className="nav-item" role="presentation">
-                            <button className="nav-link active" id="image-gallery-tab" data-bs-toggle="tab" data-bs-target="#image-gallery" type="button" role="tab" aria-controls="image-gallery" aria-selected="true">Image Gallery
+                            <button className={tab == "image" ? `nav-link active` : `nav-link`} id="image-gallery-tab" data-bs-toggle="tab" data-bs-target="#image-gallery" type="button" role="tab" aria-controls="image-gallery" aria-selected="true">Image Gallery
                               <i>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="23.916" height="23.916" viewBox="0 0 23.916 23.916">
                                   <g id="Group_8097" data-name="Group 8097" transform="translate(23.916 0) rotate(90)">
@@ -347,7 +422,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                             </button>
                           </li>
                           <li className="nav-item" role="presentation">
-                            <button className="nav-link" id="video-gallery-tab" data-bs-toggle="tab" data-bs-target="#video-gallery" type="button" role="tab" aria-controls="video-gallery" aria-selected="false">Video Gallery
+                            <button className={tab == "video" ? `nav-link active` : `nav-link`} id="video-gallery-tab" data-bs-toggle="tab" data-bs-target="#video-gallery" type="button" role="tab" aria-controls="video-gallery" aria-selected="false">Video Gallery
                               <i>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="23.916" height="23.916" viewBox="0 0 23.916 23.916">
                                   <g id="Group_8097" data-name="Group 8097" transform="translate(23.916 0) rotate(90)">
@@ -372,7 +447,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                         </form> */}
                         <select onChange={(e) => this.handleFilter(e)}>
 
-                          <option value="0">Filter By</option>
+                          <option value="0">Filter By</option>currentPage
                           {
                             this.state.filterValues.map((business) => {
                               return (
@@ -386,10 +461,10 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                     </div>
                   </div>
                   <div className="tab-content">
-                    <div className="tab-pane fade show active" id="image-gallery" role="tabpanel" aria-labelledby="image-gallery-tab">
+                    <div className={tab == "image" ? `tab-pane fade show active` : `tab-pane fade `} id="image-gallery" role="tabpanel" aria-labelledby="image-gallery-tab">
                       <div className="row">
                         {
-                          this.state.folders.map((folder) => {
+                          this.state.pageData1.map((folder) => {
                             const targetUrl = `${this.props.siteUrl}/SitePages/Photos.aspx?folderName=${folder.Name}&libraryPath=${libraryPath}`
                             return (
                               <div className="col-md-3">
@@ -408,28 +483,22 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                           })
                         }
                       </div>
-                      <div className="row">
-                        <nav className="mt-3" aria-label="Page navigation example">
-                          <ul className="pagination justify-content-center justify-content-md-end align-items-center">
-                            <li className="page-item">
-                              <a className="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                              </a>
-                            </li>
-                            <li className="page-item active"><a className="page-link" href="#">1</a></li>
-                            <li className="page-item"><a className="page-link" href="#">2</a></li>
-                            <li className="page-item"><a className="page-link" href="#">3</a></li>
-                            <li className="page-item"><a className="page-link" href="#">...</a></li>
-                            <li className="page-item">
-                              <a className="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                              </a>
-                            </li>
-                          </ul>
-                        </nav>
-                      </div>
+                      <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
+              {/* <Pagination
+                currentPage={this.state.currentPage}
+                totalPages={this.state.totalPage}
+                onChange={(page) => this._getPage(page)}
+                limiter={5}
+                //hideFirstPageJump={false}
+              /> */}
+              <Paging currentPage={this.state.currentPage}
+                totalItems={this.state.filterData.length}
+                itemsCountPerPage={this.state.pageSize}
+                onPageUpdate={(page) => this._getPage(page)}
+              />
+            </div>
                     </div>
-                    <div className="tab-pane fade" id="video-gallery" role="tabpanel" aria-labelledby="video-gallery-tab">
+                    <div className={tab == "video" ? `tab-pane fade show active` : `tab-pane fade `} id="video-gallery" role="tabpanel" aria-labelledby="video-gallery-tab">
                       <div className="row">
                         {
                           this.state.videoItems.map((item, i) => {
@@ -453,26 +522,23 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                         }
 
                       </div>
-                      <div className="row">
-                        <nav className="mt-3" aria-label="Page navigation example">
-                          <ul className="pagination justify-content-center justify-content-md-end align-items-center">
-                            <li className="page-item">
-                              <a className="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                              </a>
-                            </li>
-                            <li className="page-item active"><a className="page-link" href="#">1</a></li>
-                            <li className="page-item"><a className="page-link" href="#">2</a></li>
-                            <li className="page-item"><a className="page-link" href="#">3</a></li>
-                            <li className="page-item"><a className="page-link" href="#">...</a></li>
-                            <li className="page-item">
-                              <a className="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                              </a>
-                            </li>
-                          </ul>
-                        </nav>
-                      </div>
+
+                      {/* paging */}
+                      <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
+              {/* <Pagination
+                currentPage={this.state.currentPage}
+                totalPages={this.state.totalPage}
+                onChange={(page) => this._getPage(page)}
+                limiter={5}
+                //hideFirstPageJump={false}
+              /> */}
+              <Paging currentPage={this.state.currentPage}
+                totalItems={this.state.filterData.length}
+                itemsCountPerPage={this.state.pageSize}
+                onPageUpdate={(page) => this._getPage(page)}
+              />
+            </div>
+                      
                     </div>
                   </div>
                 </div>
