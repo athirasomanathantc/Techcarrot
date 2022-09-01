@@ -2,6 +2,7 @@ import { sp } from "@pnp/sp";
 import { IAgiIntranetHomeMainProps } from "../components/IAgiIntranetHomeMainProps";
 import { IAnnouncement } from "../models/IAnnouncement";
 import { ILatestNews } from "../models/ILatestNews";
+import { ISnap } from "../models/ISnap";
 
 export class SPService {
     private _props: IAgiIntranetHomeMainProps;
@@ -28,6 +29,18 @@ export class SPService {
         return await sp.web.lists.getByTitle('Announcements').items.select("ID,Title,Description,AnnouncementThumbnail,PublishedDate")
             .top(this._props.topAnnouncements)()
             .then((items: IAnnouncement[]) => {
+                return items;
+            })
+            .catch((exception) => {
+                throw new Error(exception);
+            });
+    }
+
+    public async getSnaps(): Promise<ISnap[]> {
+        return await sp.web.lists.getByTitle('SnapAndShare').items.select("ID,Title,LinkFilename,ImageDescription,Author/Title")
+            .expand('Author')
+            .top(this._props.topAnnouncements)()
+            .then((items: ISnap[]) => {
                 return items;
             })
             .catch((exception) => {
