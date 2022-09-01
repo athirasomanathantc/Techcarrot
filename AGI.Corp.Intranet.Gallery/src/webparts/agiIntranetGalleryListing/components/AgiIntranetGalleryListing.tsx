@@ -162,10 +162,16 @@ export default class AgiIntranetGalleryListing extends React.Component<IAgiIntra
       selectedVideoUrl: ''
     });
   }
+  private getQueryStringValue(param: string):string{
+    const params =new URLSearchParams(window.location.search);
+    let value=params.get(param)|| '';
+    return value;
+  }
 
 
   public render(): React.ReactElement<IAgiIntranetGalleryListingProps> {
     const libraryPath = this.props.libraryPath;
+    const tab=this.getQueryStringValue('tab');
     return (
       <div className={styles.agiIntranetGalleryListing}>
         {this.props.libraryName && this.props.libraryPath ?
@@ -179,7 +185,8 @@ export default class AgiIntranetGalleryListing extends React.Component<IAgiIntra
                       <div className="col-md-6">
                         <ul className="nav nav-tabs" id="myTab" role="tablist">
                           <li className="nav-item" role="presentation">
-                            <button className="nav-link active" id="image-gallery-tab" data-bs-toggle="tab" data-bs-target="#image-gallery" type="button" role="tab" aria-controls="image-gallery" aria-selected="true">Image Gallery
+                            <button className={tab=="image"? 'nav-link active':'nav-link'} id="image-gallery-tab" data-bs-toggle="tab" data-bs-target="#image-gallery" type="button" role="tab" aria-controls="image-gallery" aria-selected="true"><img src={`${this.props.siteUrl}/Assets/icons/icon-location.png`}>
+                            </img>Image Gallery
                               <i>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="23.916" height="23.916" viewBox="0 0 23.916 23.916">
                                   <g id="Group_8097" data-name="Group 8097" transform="translate(23.916 0) rotate(90)">
@@ -193,7 +200,7 @@ export default class AgiIntranetGalleryListing extends React.Component<IAgiIntra
                             </button>
                           </li>
                           <li className="nav-item" role="presentation">
-                            <button className="nav-link" id="video-gallery-tab" data-bs-toggle="tab" data-bs-target="#video-gallery" type="button" role="tab" aria-controls="video-gallery" aria-selected="false">Video Gallery
+                            <button className={tab=="video"? 'nav-link active':'nav-link'} id="video-gallery-tab" data-bs-toggle="tab" data-bs-target="#video-gallery" type="button" role="tab" aria-controls="video-gallery" aria-selected="false">Video Gallery
                               <i>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="23.916" height="23.916" viewBox="0 0 23.916 23.916">
                                   <g id="Group_8097" data-name="Group 8097" transform="translate(23.916 0) rotate(90)">

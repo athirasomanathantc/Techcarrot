@@ -34,7 +34,7 @@
     "scriptResources": {
       "agi-corp-intranet-gallery-listing-web-part": {
         "type": "path",
-        "path": "agi-corp-intranet-gallery-listing-web-part.js"
+        "path": "agi-corp-intranet-gallery-listing-web-part_1ab31f4567234a7b8c5f.js"
       },
       "@microsoft/sp-property-pane": {
         "type": "component",
@@ -68,7 +68,7 @@
       },
       "AgiCorpIntranetGalleryListingWebPartStrings": {
         "type": "path",
-        "path": "AgiCorpIntranetGalleryListingWebPartStrings_en-us.js"
+        "path": "AgiCorpIntranetGalleryListingWebPartStrings_en-us_ea417eef73f2143e91987949ddd36842.js"
       },
       "@microsoft/sp-http": {
         "type": "component",
