@@ -224,6 +224,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                 <section className={'col-lg-12'}>
                   <div className={'row'}>
                     {
+                      this.state.pageData.length > 0 ?
 
                       this.state.pageData.map((item) => {
                         let imageJSON = { serverRelativeUrl: "" };
@@ -244,19 +245,26 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                                   <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date.png`} alt="" /></i>{moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
                                 </div>
                                 <p className={'card-text'}>{item.Description}</p>
-                                <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}`} className={'btn news-read-more  align-self-start'} data-interception="off">Read more</a>
+                                <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">Read more</a>
                               </div>
                             </div>
                           </div>
                         )
                       })
+                      :
+                      <div>
+                        <p>
+                          NO NEWS
+                        </p>
+                      </div>
                     }
+                    
+
                   </div>
 
                 </section>
 
               </article>
-              
               <div className={'pagination-wrapper'} style={{ display: this.state.totalPages > 0 ? 'block' : 'none' }} >
               {/* <Pagination
                   currentPage={this.state.currentPage}

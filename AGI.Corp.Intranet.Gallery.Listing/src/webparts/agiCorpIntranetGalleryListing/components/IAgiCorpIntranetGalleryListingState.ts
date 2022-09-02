@@ -1,3 +1,4 @@
+import { IFolder } from "@pnp/sp/folders";
 import { IFolderItem } from "../models/IFolderItem";
 import { IImageItem } from "../models/IImageItem";
 
@@ -18,7 +19,7 @@ export interface IAgiCorpIntranetGalleryListingState {
     currentImageUrl: string;
     ServerRelativeUrl: string;
     folderData: IFolderItem[];
-    filterData:IImageItem[];
+    filterData:IFolderItem[];
     filterValues:{
       ID:number;
       Title:string;
@@ -27,4 +28,6 @@ export interface IAgiCorpIntranetGalleryListingState {
     totalPages: number;
     pageData:IFolderItem[];
     pageSize:number;
+    pageData1:IFolderItem[];
+    totalPage:number;
 }

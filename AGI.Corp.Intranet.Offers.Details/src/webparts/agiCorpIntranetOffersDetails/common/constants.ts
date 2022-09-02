@@ -3,9 +3,19 @@ export const  Offer_NULL_ITEM = {
     ID:0,
     Title:"",
     Description:"",
-    Summary:"",
     OfferThumbnail:"",
     OfferImage:"",
-    ReadBy:""
+
+    Content1:"",
+    Content2:"",
+    MiddleImage:"",
+    ReadBy:"",
+    Business:{
+        ID:0,
+        Title:""
+    }
+   
+   
+
     
 }

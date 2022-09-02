@@ -9,7 +9,7 @@ export interface IAgiCorpIntranetGalleryListingProps {
   hasTeamsContext: boolean;
   userDisplayName: string;
   siteUrl: string;
-  context: WebPartContext;
+  context: any;
   orderBy: string;
   libraryName: string;
   libraryPath: string;

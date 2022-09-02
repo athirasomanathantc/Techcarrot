@@ -38,7 +38,7 @@ export default class AgiCorpIntranetEventsDetails extends React.Component<IAgiCo
       sp.web.lists.getByTitle('EventDetails').items.getById(id).get().then((item) => {
         this.setState({
           eventsData: item,
-          eventId:id
+          eventId: id
         }, () => {
           console.log('value', item);
         });
@@ -87,11 +87,16 @@ export default class AgiCorpIntranetEventsDetails extends React.Component<IAgiCo
                     <p className={'notification-month'}>{moment(event.StartDate).format('MMM')}</p>
                   </div>
 
-                  <div className={'divider'} style={{ display: event.EndDate == null ? "none" : "display" }}></div>
-                  <div className={'event-date'} style={{ display: event.EndDate == null ? "none" : "display" }}>
-                    <p className={'notification-date'}>{moment(event.EndDate).format('DD')}</p>
-                    <p className={'notification-month'}>{moment(event.EndDate).format('MMM')}</p>
-                  </div>
+                  {
+                    event.EndDate &&
+                    <>
+                      <div className={'divider'} style={{ display: event.StartDate == event.EndDate ? "none" : "display" }}></div>
+                      <div className={'event-date'} style={{ display: event.StartDate == event.EndDate ? "none" : "display" }}>
+                        <p className={'notification-date'}>{moment(event.EndDate).format('DD')}</p>
+                        <p className={'notification-month'}>{moment(event.EndDate).format('MMM')}</p>
+                      </div>
+                    </>
+                  }
                 </div>
 
               </div>
@@ -154,7 +159,7 @@ export default class AgiCorpIntranetEventsDetails extends React.Component<IAgiCo
       <div className={'main-content'}>
         <div className={'content-wrapper'}>
           <div className={'container'}>
-          {/* <div className={'row'}>
+            {/* <div className={'row'}>
           <div className={'mb-4 mt-4 d-flex justify-content-end'}>
               <button className={'btn btn-primary btn-lg btn-back '}>
                 <a href={`${this.props.siteUrl}/SitePages/Events.aspx?tab=${category}`}>
@@ -173,7 +178,7 @@ export default class AgiCorpIntranetEventsDetails extends React.Component<IAgiCo
                   Invalid event ID.
                 </div>
             }
-            
+
 
 
           </div>

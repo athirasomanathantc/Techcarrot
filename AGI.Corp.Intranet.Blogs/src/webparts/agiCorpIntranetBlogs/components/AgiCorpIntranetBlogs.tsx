@@ -127,7 +127,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   private async getblog(): Promise<void> {
 
      const listName = "Blogs";
-    sp.web.lists.getByTitle(listName).items.select('ID,Title,Category,PublishedDate,Summary,BlogThumbnail,BlogImage,Author/ID,Author/Title,Business/ID,Business/Title')
+    sp.web.lists.getByTitle(listName).items.select('ID,Title,Category,PublishedDate,BlogThumbnail,BlogImage,Author/ID,Author/Title,Business/ID,Business/Title')
     .expand('Author,Business').getAll().then((resp: IBlogData[]) => {
       const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
       console.log(resp.length);
@@ -221,11 +221,11 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                         
                           < div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
                             <div className={'card news-card'}>
-                            <a href={`${this.props.siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'btn news-read-more  align-self-start'} data-interception="off">
+                            <a href={`${this.props.siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">
                               <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Card Image" />
                               </a>
                               <div className={'card-body d-flex flex-column'}>
-                                <a href={`${this.props.siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'btn news-read-more  align-self-start'} data-interception="off">
+                                <a href={`${this.props.siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">
                                   <div className={'mb-3 card-content-header'}>
                                     <h5 className={'card-title'}>{item.Title}</h5>
                                   </div>

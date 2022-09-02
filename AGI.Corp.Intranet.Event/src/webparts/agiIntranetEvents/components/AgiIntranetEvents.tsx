@@ -438,8 +438,8 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
                                   {
                                     item.EndDate &&
                                     <>
-                                      <div className={'divider'} ></div>
-                                      <div className={'event-date'} >
+                                      <div className={'divider'} style={{ display: item.StartDate == item.EndDate ? "none" : "display" }}></div>
+                                      <div className={'event-date'} style={{ display: item.StartDate == item.EndDate ? "none" : "display" }} >
                                         <p className={'notification-date'} >
                                           {moment(item.EndDate).format('DD')}
                                         </p>
@@ -460,7 +460,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
                                 </div>
                                 <p className={'card-text'}>{item.Description}</p>
                                 <a href={`${this.props.siteUrl}/SitePages/News/Events/Event Details.aspx?eventID=${item.ID}&tab=${this.state.selectedTab}`}
-                                  className={'btn news-read-more  align-self-start'} data-interception="off">Read more</a>
+                                  className={'news-read-more  align-self-start'} data-interception="off">Read more</a>
                               </div>
                             </div>
                           </div>
