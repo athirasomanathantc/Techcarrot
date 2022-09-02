@@ -225,15 +225,17 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                               <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Card Image" />
                               </a>
                               <div className={'card-body d-flex flex-column'}>
+                              <div className={'category'}>
+                              <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {item.Business.Title}</span>
+                              </div>
                                 <a href={`${this.props.siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">
-                                  <div className={'mb-3 card-content-header'}>
+                                  <div className={'mb-2 mt-2 card-content-header'}>
                                     <h5 className={'card-title'}>{item.Title}</h5>
                                   </div>
-                                  <div className={'blog-details'}>
-                                    <span className={'category'}><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.png`} alt="" /></i> {item.Business.Title}</span>
-                                    <span className={'date'}><i><img src={`${this.props.siteUrl}/Assets/icons/Date.svg`} alt="" /></i> {moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
+                                  <div className={'date'}>
+                                    <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i> {moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
                                   </div>
-                                  <p><i><img src={`${this.props.siteUrl}/Assets/icons/avatar.png`} alt="" /></i> <span>{item.Author.Title}</span></p>
+                                  <p className={'card-text mt-2'}><i><img src={`${this.props.siteUrl}/Assets/icons/avatar.png`} alt="" /></i> <span>{item.Author.Title}</span></p>
                                 </a>
                               </div>
                             </div>

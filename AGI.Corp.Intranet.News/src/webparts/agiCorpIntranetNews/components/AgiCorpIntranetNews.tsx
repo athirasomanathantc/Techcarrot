@@ -237,14 +237,17 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                             <div className='card news-card'>
                               <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Image" />
                               <div className="card-body d-flex flex-column">
-                                <div className={'mb-3 card-content-header'}>
+                              <div className={'category'}>
+                              <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i>{item.Business.Title}</span>
+                                </div>
+
+                                <div className={'mb-2 mt-2 card-content-header'}>
                                   <h5 className="card-title">{item.Title}</h5>
                                 </div>
-                                <div className={'news-details'}>
-                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i>{item.Business.Title}</span>
-                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date.png`} alt="" /></i>{moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
+                                <div className={'date'}>
+                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i>{moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
                                 </div>
-                                <p className={'card-text'}>{item.Description}</p>
+                                <p className={'card-text mt-2'}>{item.Description}</p>
                                 <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">Read more</a>
                               </div>
                             </div>
@@ -252,10 +255,10 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                         )
                       })
                       :
-                      <div>
-                        <p>
+                      <div className={'invalidTxt'}>
+                        
                           NO NEWS
-                        </p>
+                        
                       </div>
                     }
                     

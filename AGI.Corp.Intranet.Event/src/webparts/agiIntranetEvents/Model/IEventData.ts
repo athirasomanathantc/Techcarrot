@@ -5,7 +5,8 @@ export interface IEventData{
     EndDate:string;
     Description:string;
     EventThumbnail:string;
-    Location:string;
+    Country:string,
+    City:string;
     Business:{
         ID:number;
         Title:String;
