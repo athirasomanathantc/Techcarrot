@@ -85,21 +85,24 @@ export const SnapShare = (props: IAgiIntranetHomeMainProps) => {
                                 <div className="d-flex align-items-center justify-content-between flex-wrap card-header snap-share-header px-0">
 
                                     <h4>Snap Share</h4>
-                                    <div className="p-0 position-relative">
-                                        <button className="carousel-control-prev" type="button"
-                                            data-bs-target="#carouselExampleCaptions3"
-                                            data-bs-slide="prev">
-                                            <span className="carousel-control-prev-icon"
-                                                aria-hidden="true"></span>
-                                            <span className="visually-hidden">Previous</span>
-                                        </button>
-                                        <button className="carousel-control-next" type="button"
-                                            data-bs-target="#carouselExampleCaptions3"
-                                            data-bs-slide="next">
-                                            <span className="carousel-control-next-icon"
-                                                aria-hidden="true"></span>
-                                            <span className="visually-hidden">Next</span>
-                                        </button>
+                                    <div className="d-flex align-items-center">
+                                        <a href="./Snap and Share.aspx" className="viewall-link">View All</a>
+                                        <div className="p-0 ms-3 position-relative">
+                                            <button className="carousel-control-prev" type="button"
+                                                data-bs-target="#carouselExampleCaptions3"
+                                                data-bs-slide="prev">
+                                                <span className="carousel-control-prev-icon"
+                                                    aria-hidden="true"></span>
+                                                <span className="visually-hidden">Previous</span>
+                                            </button>
+                                            <button className="carousel-control-next" type="button"
+                                                data-bs-target="#carouselExampleCaptions3"
+                                                data-bs-slide="next">
+                                                <span className="carousel-control-next-icon"
+                                                    aria-hidden="true"></span>
+                                                <span className="visually-hidden">Next</span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="carousel-inner pt-9 mt-3">

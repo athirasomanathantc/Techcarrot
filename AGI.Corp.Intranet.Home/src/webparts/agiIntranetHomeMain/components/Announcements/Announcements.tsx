@@ -82,23 +82,25 @@ export const Announcements = (props: IAgiIntranetHomeMainProps) => {
                     <div className="d-flex align-items-center justify-content-between flex-wrap mb-4 card-header announcement-header px-0">
 
                         <h4>Announcements</h4>
+                        <div className="d-flex align-items-center">
+                            <a href="./News/Announcements.aspx" className="viewall-link">View All</a>
+                            <div className="p-0 ms-3 position-relative ">
+                                <button className="carousel-control-prev" style={{ borderRadius: '60px' }} type="button"
+                                    data-bs-target="#carouselExampleCaptions2"
+                                    data-bs-slide="prev">
+                                    <span className="carousel-control-prev-icon"
+                                        aria-hidden="true"></span>
+                                    <span className="visually-hidden">Previous</span>
+                                </button>
+                                <button className="carousel-control-next" style={{ borderRadius: '60px' }} type="button"
+                                    data-bs-target="#carouselExampleCaptions2"
+                                    data-bs-slide="next">
+                                    <span className="carousel-control-next-icon"
+                                        aria-hidden="true"></span>
+                                    <span className="visually-hidden">Next</span>
+                                </button>
 
-                        <div className="p-0 position-relative ">
-                            <button className="carousel-control-prev" type="button"
-                                data-bs-target="#carouselExampleCaptions2"
-                                data-bs-slide="prev">
-                                <span className="carousel-control-prev-icon"
-                                    aria-hidden="true"></span>
-                                <span className="visually-hidden">Previous</span>
-                            </button>
-                            <button className="carousel-control-next" type="button"
-                                data-bs-target="#carouselExampleCaptions2"
-                                data-bs-slide="next">
-                                <span className="carousel-control-next-icon"
-                                    aria-hidden="true"></span>
-                                <span className="visually-hidden">Next</span>
-                            </button>
-
+                            </div>
                         </div>
 
                     </div>
