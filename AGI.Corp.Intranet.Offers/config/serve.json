@@ -2,5 +2,5 @@
   "$schema": "https://developer.microsoft.com/json-schemas/core-build/serve.schema.json",
   "port": 4321,
   "https": true,
-  "initialPage": "https://aginvestment.sharepoint.com/sites/AGIIntranetDev/_layouts/workbench.aspx"
+  "initialPage": "https://aginvestment.sharepoint.com/sites/AGIIntranetDev/SitePages/Rewards.aspx?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js"
 }

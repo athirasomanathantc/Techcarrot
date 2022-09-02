@@ -60,8 +60,6 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
       
       
     }
-    
-    
 
   }
 
@@ -71,7 +69,15 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
   }
 
   private async getNewsItems(): Promise<void> {
-    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('News')/items?$select=ID,Title,Category,PublishedDate,Description,NewsThumbnail,NewsImage,Business/ID,Business/Title&$expand=Business`;
+    const list='News';
+    const counturl = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/ItemCount`;
+    const count = await this.props.context.spHttpClient.get(counturl,SPHttpClient.configurations.v1)
+    .then((resp:SPHttpClientResponse)=>{
+      return resp.json();
+    }).then((resp)=>{
+      return resp.value;
+    });
+    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=ID,Title,PublishedDate,Description,NewsThumbnail,NewsImage,Business/ID,Business/Title&$expand=Business&$top=${count}`;
     this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
       .then((response: SPHttpClientResponse) => {
         return response.json();
@@ -218,6 +224,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                 <section className={'col-lg-12'}>
                   <div className={'row'}>
                     {
+                      this.state.pageData.length > 0 ?
 
                       this.state.pageData.map((item) => {
                         let imageJSON = { serverRelativeUrl: "" };
@@ -238,13 +245,21 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                                   <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date.png`} alt="" /></i>{moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
                                 </div>
                                 <p className={'card-text'}>{item.Description}</p>
-                                <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}`} className={'btn news-read-more  align-self-start'} data-interception="off">Read more</a>
+                                <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">Read more</a>
                               </div>
                             </div>
                           </div>
                         )
                       })
+                      :
+                      <div>
+                        <p>
+                          NO NEWS
+                        </p>
+                      </div>
                     }
+                    
+
                   </div>
 
                 </section>

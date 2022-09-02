@@ -9,5 +9,6 @@ export const  EVENT_NULL_ITEM = {
     Summary:"",
     EventThumbnail:"",
     EventImage:"",
-    Location:""
+    Location:"",
+    ReadBy:""
 }

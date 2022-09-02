@@ -1,4 +1,5 @@
 export interface IImageItem {
+    ServerRelativeUrl?: string;
     ID?: number;
     Title?: string;
     FileLeafRef?: string;
@@ -7,4 +8,8 @@ export interface IImageItem {
     isCoverPhoto?:string;
     showVideo?: boolean;
     selectedVideoUrl?: string;
+    Business?:{
+        ID:number;
+        Title:string;
+    }
 }

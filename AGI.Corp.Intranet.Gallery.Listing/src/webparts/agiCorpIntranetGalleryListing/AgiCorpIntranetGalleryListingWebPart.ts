@@ -10,7 +10,7 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import * as strings from 'AgiCorpIntranetGalleryListingWebPartStrings';
 import AgiCorpIntranetGalleryListing from './components/AgiCorpIntranetGalleryListing';
 import { IAgiCorpIntranetGalleryListingProps } from './components/IAgiCorpIntranetGalleryListingProps';
-
+import { setup as pnpSetup } from "@pnp/common";
 import { IAgiCorpIntranetGalleryListingState } from './components/IAgiCorpIntranetGalleryListingState';
 import { PROP_DEFAULT_ORDERBY } from './common/constants';
 
@@ -29,8 +29,13 @@ export default class AgiCorpIntranetGalleryListingWebPart extends BaseClientSide
   private _environmentMessage: string = '';
 
   protected onInit(): Promise<void> {
-    const randomNumber = Math.floor(Math.random() * 90000) + 10000;
-    return Promise.resolve();
+    const randomNumber = Math.floor(Math.random()*90000) + 10000;
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/gallery.css?${randomNumber}`);
+    return super.onInit().then(() => {
+      pnpSetup({
+        spfxContext: this.context
+      });
+    });
   }
   public render(): void {
     const element: React.ReactElement<IAgiCorpIntranetGalleryListingProps> = React.createElement(
@@ -43,9 +48,12 @@ export default class AgiCorpIntranetGalleryListingWebPart extends BaseClientSide
         userDisplayName: this.context.pageContext.user.displayName,
         siteUrl: this.context.pageContext.web.absoluteUrl,
         context: this.context,
+      //  listName: this.properties.listName,
+        spHttpClient: this.context.spHttpClient,
         libraryName: this.properties.libraryName,
         libraryPath: this.properties.libraryPath,
-        orderBy: this.properties.orderBy
+        orderBy: this.properties.orderBy,
+      //  isAuto:this.properties.isAuto
       }
     );
 
