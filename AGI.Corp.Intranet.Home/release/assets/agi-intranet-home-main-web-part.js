@@ -22414,8 +22414,8 @@ var Snap = function (props) {
 };
 var SnapCarousel = function (props) {
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "carousel-item active" },
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "snap-share-wrapper-item" }, props.snapCarouselItem.map(function (snap) { return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](Snap, __assign({}, snap)); })))));
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "carousel-item ".concat(!props.index ? 'active' : '') },
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "snap-share-wrapper-item" }, props.snapCarouselItem.map(function (snap, index) { return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](Snap, __assign({ index: index, key: "key".concat(index) }, snap)); })))));
 };
 var SnapShare = function (props) {
     var _a = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null), error = _a[0], setError = _a[1];
@@ -22434,8 +22434,8 @@ var SnapShare = function (props) {
                         snapsColl = [];
                         for (i = 0; i < snaps.length; i += 6) {
                             snapsColl = [];
-                            for (j = i; j < 6; j++) {
-                                if (snaps[j]) {
+                            for (j = 0; j < 6; j++) {
+                                if (snaps[i + j]) {
                                     snapsColl.push(snaps[j]);
                                 }
                             }
@@ -22468,9 +22468,7 @@ var SnapShare = function (props) {
                             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { className: "carousel-control-next", type: "button", "data-bs-target": "#carouselExampleCaptions3", "data-bs-slide": "next" },
                                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: "carousel-control-next-icon", "aria-hidden": "true" }),
                                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: "visually-hidden" }, "Next")))),
-                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "carousel-inner pt-9 mt-3" },
-                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "carousel-item active" },
-                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "snap-share-wrapper-item" }, snapCarousel.map(function (snapCarouselItem, index) { return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](Snap, __assign({ index: index, key: "key".concat(index) }, snapCarouselItem)); })))))))));
+                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "carousel-inner pt-9 mt-3" }, snapCarousel.map(function (snapCarouselItem, index) { return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](SnapCarousel, { index: index, key: "key".concat(index), snapCarouselItem: snapCarouselItem }); })))))));
 };
 
 

@@ -20,9 +20,12 @@ const Snap = (props: ISnap) => {
 
 const SnapCarousel = (props: any) => {
     return (<>
-        <div className="carousel-item active">
+        <div className={`carousel-item ${!props.index ? 'active' : ''}`}>
             <div className="snap-share-wrapper-item">
-                {props.snapCarouselItem.map((snap: ISnap) => <Snap {...snap}></Snap>)}
+                {props.snapCarouselItem.map((snap: ISnap, index: number) => <Snap
+                    index={index}
+                    key={`key${index}`}
+                    {...snap}></Snap>)}
             </div>
         </div>
     </>)
@@ -41,8 +44,8 @@ export const SnapShare = (props: IAgiIntranetHomeMainProps) => {
             let snapsColl = [];
             for (let i = 0; i < snaps.length; i += 6) {
                 snapsColl = [];
-                for (let j = i; j < 6; j++) {
-                    if (snaps[j]) {
+                for (let j = 0; j < 6; j++) {
+                    if (snaps[i + j]) {
                         snapsColl.push(snaps[j]);
                     }
                 }
@@ -88,14 +91,11 @@ export const SnapShare = (props: IAgiIntranetHomeMainProps) => {
                         </div>
                     </div>
                     <div className="carousel-inner pt-9 mt-3">
-                        <div className="carousel-item active">
-                            <div className="snap-share-wrapper-item">
-                                {snapCarousel.map((snapCarouselItem: ISnap, index: number) => <Snap
-                                    index={index}
-                                    key={`key${index}`}
-                                    {...snapCarouselItem}></Snap>)}
-                            </div>
-                        </div>
+                        {snapCarousel.map((snapCarouselItem: ISnap, index: number) => <SnapCarousel
+                            index={index}
+                            key={`key${index}`}
+                            snapCarouselItem={snapCarouselItem}
+                        ></SnapCarousel>)}
                     </div>
                 </div>
             </div>
