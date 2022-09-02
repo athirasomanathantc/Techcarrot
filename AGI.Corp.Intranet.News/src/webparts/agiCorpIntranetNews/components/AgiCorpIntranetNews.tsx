@@ -250,7 +250,6 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                 </section>
 
               </article>
-              
               <div className={'pagination-wrapper'} style={{ display: this.state.totalPages > 0 ? 'block' : 'none' }} >
               {/* <Pagination
                   currentPage={this.state.currentPage}
