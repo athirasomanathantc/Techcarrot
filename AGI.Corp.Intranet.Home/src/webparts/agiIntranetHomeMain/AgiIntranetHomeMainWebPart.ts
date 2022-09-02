@@ -9,6 +9,7 @@ import * as strings from 'AgiIntranetHomeMainWebPartStrings';
 import AgiIntranetHomeMain from './components/AgiIntranetHomeMain';
 import { IAgiIntranetHomeMainProps } from './components/IAgiIntranetHomeMainProps';
 import { PropertyFieldNumber } from '@pnp/spfx-property-controls/lib/PropertyFieldNumber';
+import { SPComponentLoader } from '@microsoft/sp-loader';
 
 export interface IAgiIntranetHomeMainWebPartProps {
   description: string;
@@ -17,6 +18,12 @@ export interface IAgiIntranetHomeMainWebPartProps {
 }
 
 export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IAgiIntranetHomeMainWebPartProps> {
+
+  protected onInit(): Promise<void> {
+    const randomNumber = Math.floor(Math.random() * 90000) + 10000;
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/snapandshare.css?${randomNumber}`);
+    return Promise.resolve();
+  }
 
   public render(): void {
     const element: React.ReactElement<IAgiIntranetHomeMainProps> = React.createElement(

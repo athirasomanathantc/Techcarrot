@@ -37,8 +37,8 @@ export class SPService {
     }
 
     public async getSnaps(): Promise<ISnap[]> {
-        return await sp.web.lists.getByTitle('SnapAndShare').items.select("ID,Title,LinkFilename,ImageDescription,Author/Title")
-            .expand('Author')
+        return await sp.web.lists.getByTitle('SnapAndShare').items.select("ID,Title,File,ImageDescription,Author/Title")
+            .expand('Author,File')
             .top(this._props.topAnnouncements)()
             .then((items: ISnap[]) => {
                 return items;
