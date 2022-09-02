@@ -1,8 +1,8 @@
 export interface IFolderItem {
-    ID: number;
-    Name: string;
+    ID?: number;
+    Name?: string;
     Count?: number;
-    ListItemAllFields?: any;
+    BusinessId?: number;
     Business?:{
         ID:number;
         Title:string;

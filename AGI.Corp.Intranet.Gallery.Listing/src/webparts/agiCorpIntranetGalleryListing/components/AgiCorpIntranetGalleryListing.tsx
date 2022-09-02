@@ -20,10 +20,11 @@ import { IFolderItem } from '../models/IFolderItem';
 import { IImageItem } from '../models/IImageItem';
 import { Icon } from 'office-ui-fabric-react';
 import * as $ from 'jquery';
-import Paging from './Paging/Paging';
+import { resultItem } from 'office-ui-fabric-react/lib/components/FloatingPicker/PeoplePicker/PeoplePicker.scss';
 //import { Icon } from 'office-ui-fabric-react/lib/components/Icon/Icon';
 //import { Pagination } from '@pnp/spfx-controls-react/lib/pagination';
 //import Paging from './Paging/Paging';
+import Paging from './Paging/Paging';
 const CAROUSEL_HEIGHT = '240px';
 export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiCorpIntranetGalleryListingProps, IAgiCorpIntranetGalleryListingState> {
 
@@ -55,8 +56,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
       totalPages: 0,
       currentPage: 1,
       pageSize: 0,
-      totalPage: 1,
-      pageData1: []
+      totalPage: 1
     }
     // this.getImages = this.getImages.bind(this);
   }
@@ -120,19 +120,18 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
   private handleFilter(e: any) {
     const value = parseInt(e.target.value);
     if (value == 0) {
-      const result: IFolderItem[] = this.state.folders;
+      const result: IImageItem[] = this.state.folders;
       this.setState({
         filterData: result
       }, () => {
-        this.paging();
+        // this.paging();
       });
 
     } else {
-      console.log(this.state.folders);
       const result = this.state.folders.filter((obj) => {
-        return obj.Business.ID == value;
+        return obj.BusinessId == value;
       })
-
+      console.log(result);
       this.setState({
         filterData: result
       }, () => {
@@ -140,6 +139,48 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
       });
 
     }
+  }
+
+  private paging() {
+
+    const pageCount: number = Math.ceil(this.state.filterData.length / this.state.pageSize);
+    const totalPages = (this.state.filterData.length / this.state.pageSize) - 1;
+    //console.log('totalPages', pageCount);l
+    // this.setState({
+    //   images
+    // });
+    this.setState({
+      pageData: this.state.filterData.slice(0, this.state.pageSize),
+      totalPages: pageCount,
+      totalPage: pageCount,
+      currentPage: 1
+    });
+
+  }
+
+  private _getPage(page: number) {
+    // round a number up to the next largest integer.
+    const skipItems: number = this.state.pageSize * (page - 1);
+    const takeItems: number = skipItems + this.state.pageSize;
+
+    //console.log('page', page);
+    const roundupPage = Math.ceil(page);
+    // const images = this.state.allImages.slice(roundupPage, (roundupPage * pageSize));
+    const pageData = this.state.filterData.slice(skipItems, takeItems)
+    this.setState({
+      pageData,
+      currentPage: page
+    }, () => {
+      this.scrollToTop();
+
+    });
+  }
+  private scrollToTop(): void {
+
+    var element = document.getElementById("spPageCanvasContent");
+
+    element.scrollIntoView(true);
+
   }
 
   private async getGalleryItems(): Promise<void> {
@@ -157,7 +198,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
       .then((folders: any) => {
         // get files
         library.items.select('*, FileRef, FileLeafRef').filter('FSObjType eq 0').get().then((files: IImageItem[]) => {
-          console.log(folders);
+          console.log("test", folders);
           const _folders = [];
           folders.map((folder) => {
             const path = `${this.props.context.pageContext.web.serverRelativeUrl}/${libraryPath}/${folder.Name}`;
@@ -183,7 +224,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
             });
             //console.log(folder.Name, _files);
             const count = _files.length;
-            _folders.push({ ID: folder.ListItemAllFields.ID, Name: folder.Name, Count: count })
+            _folders.push({ ID: folder.ListItemAllFields.ID, Name: folder.Name, Count: count, BusinessId: folder.ListItemAllFields.BusinessId })
           });
           this.setState({
             folders: _folders,
@@ -338,6 +379,13 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
     });
   }
 
+  private closeVideoPreview(): void {
+    this.setState({
+      showVideo: false,
+      selectedVideoUrl: ''
+    });
+  }
+
   private previewImage(e: any): void {
     const src = e.target.attributes["data-src"].value;
     const id = e.target.attributes["data-id"].value;
@@ -393,7 +441,6 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
 
   public render(): React.ReactElement<IAgiCorpIntranetGalleryListingProps> {
     const tab = this.getQueryStringValue('tab');
-    console.log('tab', tab);
     const libraryPath = this.props.libraryPath;
     const imageUrl = this.state.currentImageUrl;
     return (
@@ -409,7 +456,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                       <div className="col-md-6">
                         <ul className="nav nav-tabs" id="myTab" role="tablist">
                           <li className="nav-item" role="presentation">
-                            <button className={tab == "image" ? `nav-link active` : `nav-link`} id="image-gallery-tab" data-bs-toggle="tab" data-bs-target="#image-gallery" type="button" role="tab" aria-controls="image-gallery" aria-selected="true">
+                            <button className={tab == "image" ? `nav-link active` : `nav-link`} id="image-gallery-tab" data-bs-toggle="tab" data-bs-target="#image-gallery" type="button" role="tab" aria-controls="image-gallery" aria-selected="true">Image Gallery
                               <i>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35">
                                   <g id="Image_Gallery_active" data-name="Image Gallery_active" transform="translate(-195 -370)">
@@ -427,7 +474,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                             </button>
                           </li>
                           <li className="nav-item" role="presentation">
-                            <button className={tab == "video" ? `nav-link active` : `nav-link`} id="video-gallery-tab" data-bs-toggle="tab" data-bs-target="#video-gallery" type="button" role="tab" aria-controls="video-gallery" aria-selected="false">
+                            <button className={tab == "video" ? `nav-link active` : `nav-link`} id="video-gallery-tab" data-bs-toggle="tab" data-bs-target="#video-gallery" type="button" role="tab" aria-controls="video-gallery" aria-selected="false">Video Gallery
                               <i>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35">
                                   <g id="Video_Galley_Active" data-name="Video Galley_Active" transform="translate(-409 -370)">
@@ -467,7 +514,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                     <div className={tab == "image" ? `tab-pane fade show active` : `tab-pane fade `} id="image-gallery" role="tabpanel" aria-labelledby="image-gallery-tab">
                       <div className="row">
                         {
-                          this.state.pageData1.map((folder) => {
+                          this.state.pageData.map((folder) => {
                             const targetUrl = `${this.props.siteUrl}/SitePages/Photos.aspx?folderName=${folder.Name}&libraryPath=${libraryPath}`
                             return (
                               <div className=" col-md-3">
@@ -487,13 +534,6 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                         }
                       </div>
                       <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
-                        {/* <Pagination
-                currentPage={this.state.currentPage}
-                totalPages={this.state.totalPage}
-                onChange={(page) => this._getPage(page)}
-                limiter={5}
-                //hideFirstPageJump={false}
-              /> */}
                         <Paging currentPage={this.state.currentPage}
                           totalItems={this.state.filterData.length}
                           itemsCountPerPage={this.state.pageSize}
@@ -608,7 +648,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
 
         <div className="imgOverlay" style={{ display: this.state.showVideo ? 'block' : 'none' }}>
           <div className="header">
-            <Icon iconName="Cancel" onClick={() => this.closePreview()} />
+            <Icon iconName="Cancel" onClick={() => this.closeVideoPreview()} />
           </div>
           <div className="videoPreview">
             <div className="video-wrapper">
