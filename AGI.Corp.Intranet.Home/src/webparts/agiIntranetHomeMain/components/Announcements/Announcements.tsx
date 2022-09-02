@@ -9,7 +9,7 @@ let siteUrl: string = '';
 
 const imageStyle = {
     height: '140px',
-    width: '140px'
+    width: '214px'
 }
 
 const Announcement = (props: IAnnouncement) => {
