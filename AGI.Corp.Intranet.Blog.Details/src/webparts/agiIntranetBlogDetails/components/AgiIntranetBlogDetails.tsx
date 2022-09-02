@@ -67,11 +67,11 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
         const id = parseInt(blogID);
         const _blogItem = items.filter((item) => item.ID == id);
         let blogItem = BLOG_NULL_ITEM;
-        if(_blogItem && _blogItem.length > 0) {
+        if (_blogItem && _blogItem.length > 0) {
           blogItem = _blogItem && _blogItem.length > 0 ? _blogItem[0] : BLOG_NULL_ITEM;
           this.updateViewCount(blogItem);
         }
-        
+
         this.setState({
           blogId: id,
           blog: blogItem,
@@ -417,7 +417,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     this.setState({
       currentIndex: prevItem.ID,
       blog: prevItem
-    },()=>{
+    }, () => {
       console.log('cruuent Item: ', prevIndex)
       this.scrollToTop();
     });
@@ -432,7 +432,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     this.setState({
       currentIndex: nextItem.ID,
       blog: nextItem
-    },()=>{
+    }, () => {
       console.log('cruuent Item: ', nextIndex);
       this.scrollToTop();
     });
@@ -440,7 +440,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
 
   private scrollToTop(): void {
     var element = document.getElementById("spPageCanvasContent");
-    element.scrollIntoView({ behavior: 'smooth'});
+    element.scrollIntoView({ behavior: 'smooth' });
   }
 
   private renderBlogDetail(): JSX.Element {
@@ -451,149 +451,140 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const commentsCount = this.state.commentsCount;
     //const newsSource = this.state.attachmentUrl;
     return (
-      <>
-        <div className="main-content blog-content">
-          <div className="content-wrapper blog-details-section">
-            <div className="container">
-              <article className="wrapper">
-                <header className="news-detail-header header">
-                  <p>
-                    <i><img src={`${this.props.siteUrl}/Assets/icons/Date.svg`} /></i>
-                    {
-                      blog.PublishedDate && moment(blog.PublishedDate).format('MMMM DD, YYYY')
-                    }
-                  </p>
-                  <h1>{blog.Title}</h1>
-                </header>
-                <section className="content row-meta-details">
-                  <div className="row">
-                    <div className="col-md-6">
-                      <ul className="justify-content-start ps-0">
-                        <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.png`} /></i> {blog.Business ? blog.Business.Title : ''}</li>
-                        <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/avatar.png`} alt="" /></i> {blog.Author ? blog.Author.Title : ''}</li>
-                      </ul>
+      <article className="wrapper">
+        <header className="news-detail-header header">
+          <p>
+            <i><img src={`${this.props.siteUrl}/Assets/icons/Date.svg`} /></i>
+            {
+              blog.PublishedDate && moment(blog.PublishedDate).format('MMMM DD, YYYY')
+            }
+          </p>
+          <h1>{blog.Title}</h1>
+        </header>
+        <section className="content row-meta-details">
+          <div className="row">
+            <div className="col-md-6">
+              <ul className="justify-content-start ps-0">
+                <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.png`} /></i> {blog.Business ? blog.Business.Title : ''}</li>
+                <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/avatar.png`} alt="" /></i> {blog.Author ? blog.Author.Title : ''}</li>
+              </ul>
+            </div>
+            <div className="col-md-6">
+              {/* <ul>
+                      <li><i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" /></i> Like</li>
+                      <li><i><img src={`${this.props.siteUrl}/Assets/icons/icon-comment.png`} alt="" /></i> 3 Comment</li>
+                      <li><i><img src={`${this.props.siteUrl}/Assets/icons/icon-view.png`} alt="" /></i> 8 Views</li>
+                    </ul> */}
+              <nav className="nav post-analytics">
+                {
+                  isLikedByCurrentUser ?
+                    <a className="nav-link" href="javascript:void(0)" onClick={(e) => this.unlikePost(e)}
+                      data-id={blog.ID}>
+                      <i><img src={`${this.props.siteUrl}/Assets/icons/icon-unlike.svg`} alt="" data-id={blog.ID} /></i> Unlike
+                    </a>
+                    :
+                    <a className="nav-link" href="javascript:void(0)" onClick={(e) => this.likePost(e)}
+                      data-id={blog.ID}>
+                      <i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" data-id={blog.ID} /></i> Like
+                    </a>
+                }
+                {/* <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" /></i>
+            <span className='txt'>Like</span>
+          </a> */}
+                <p className="nav-link" >
+                  <i><img src={`${this.props.siteUrl}/Assets/icons/icon-comment.png`} alt="" /></i> <span className='count'>{this.state.commentsCount}</span><span className='txt'> Comment</span>
+                </p>
+                <p className="nav-link"  >
+                  <i><img src={`${this.props.siteUrl}/Assets/icons/icon-view.png`} alt="" /></i> <span className='count'>{this.state.viewsCount}</span><span className='txt'> Views</span>
+                </p>
+              </nav>
+            </div>
+          </div>
+        </section>
+        <section className="news-detail-img">
+          <img src={imageUrl} className="d-block w-100" alt="..." />
+        </section>
+        <section className="news-detail-text">
+          <div dangerouslySetInnerHTML={{ __html: blog.Summary }}></div>
+        </section>
+        <footer className="news-detail-footer">
+          <div className="row">
+            <div className="col-6 col-md-6">
+              <nav className="nav">
+                <Link onClick={() => this.prevBlog()}  >
+                  <i><img src={`${this.props.siteUrl}/Assets/icons/icon-previous-post.svg`} alt="" /></i> Previous Post
+                </Link>
+
+              </nav>
+            </div>
+            <div className="col-6 col-md-6">
+              <nav className="nav justify-content-md-end">
+                <Link onClick={() => this.nextBlog()}  >
+                  Next Post<i><img src={`${this.props.siteUrl}/Assets/icons/icon-next-post.svg`} alt="" /></i>
+                </Link>
+              </nav>
+            </div>
+          </div>
+        </footer>
+        <div className="row">
+          <div className="comments-count-row">
+            {
+              <div className='comments-count'>
+                <span className='count'>{commentsCount}</span>
+                <span className='txt'>{commentsCount > 1 ? 'Comments' : 'Comment'}</span>
+              </div>
+            }
+          </div>
+        </div>
+        <div className="row">
+          <div className="comment-wrapper">
+            <div className="comment">
+              <div className="col d-flex align-items-center">
+                <img src={this.state.userPicture} alt="" className="flex-shrink-0 me-3 userImage comment-user-icon" width="60px" height="60px" />
+                <div className='formSection'>
+                  <div className="d-flex gap-3 align-items-center add-comment">
+                    <div>
+                      <label className="visually-hidden" >Add Comment</label>
+                      {/* <input type="text" className="form-control" placeholder="Add a comment." value={this.state.comment} onChange={(e) => this.handleComment(e)} /> */}
+                      <textarea className="form-control" placeholder="Add a comment." value={this.state.comment} onChange={(e) => this.handleComment(e)} rows={2}>
+                      </textarea>
                     </div>
-                    <div className="col-md-6">
-                      {/* <ul>
-                        <li><i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" /></i> Like</li>
-                        <li><i><img src={`${this.props.siteUrl}/Assets/icons/icon-comment.png`} alt="" /></i> 3 Comment</li>
-                        <li><i><img src={`${this.props.siteUrl}/Assets/icons/icon-view.png`} alt="" /></i> 8 Views</li>
-                      </ul> */}
-                      <nav className="nav post-analytics">
-                        {
-                          isLikedByCurrentUser ?
-                            <a className="nav-link" href="javascript:void(0)" onClick={(e) => this.unlikePost(e)}
-                              data-id={blog.ID}>
-                              <i><img src={`${this.props.siteUrl}/Assets/icons/icon-unlike.svg`} alt="" data-id={blog.ID} /></i> Unlike
-                            </a>
-                            :
-                            <a className="nav-link" href="javascript:void(0)" onClick={(e) => this.likePost(e)}
-                              data-id={blog.ID}>
-                              <i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" data-id={blog.ID} /></i> Like
-                            </a>
-                        }
-                        {/* <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" /></i>
-              <span className='txt'>Like</span>
-            </a> */}
-                        <p className="nav-link" >
-                          <i><img src={`${this.props.siteUrl}/Assets/icons/icon-comment.png`} alt="" /></i> <span className='count'>{this.state.commentsCount}</span><span className='txt'> Comment</span>
-                        </p>
-                        <p className="nav-link"  >
-                          <i><img src={`${this.props.siteUrl}/Assets/icons/icon-view.png`} alt="" /></i> <span className='count'>{this.state.viewsCount}</span><span className='txt'> Views</span>
-                        </p>
-                      </nav>
+                    <div>
+                      <label />
                     </div>
-                  </div>
-                </section>
-                <section className="news-detail-img">
-                  <img src={imageUrl} className="d-block w-100" alt="..." />
-                </section>
-                <section className="news-detail-text">
-                  <div dangerouslySetInnerHTML={{ __html: blog.Summary }}></div>
-                </section>
-                <footer className="news-detail-footer">
-                  <div className="row">
-                    <div className="col-6 col-md-6">
-                      <nav className="nav">
-                        <Link onClick={() => this.prevBlog()}  >
-                          <i><img src={`${this.props.siteUrl}/Assets/icons/icon-previous-post.svg`} alt="" /></i> Previous Post
-                        </Link>
-                        
-                      </nav>
-                    </div>
-                    <div className="col-6 col-md-6">
-                      <nav className="nav justify-content-md-end">
-                      <Link onClick={() => this.nextBlog()}  >
-                        Next Post<i><img src={`${this.props.siteUrl}/Assets/icons/icon-next-post.svg`} alt="" /></i>
-                      </Link>
-                      </nav>
-                    </div>
-                  </div>
-                </footer>
-                <div className="row">
-                  <div className="comments-count-row">
-                    {
-                      <div className='comments-count'>
-                        <span className='count'>{commentsCount}</span>
-                        <span className='txt'>{commentsCount > 1 ? 'Comments' : 'Comment'}</span>
-                      </div>
-                    }
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="comment-wrapper">
-                    <div className="comment">
-                      <div className="col d-flex align-items-center">
-                        <img src={this.state.userPicture} alt="" className="flex-shrink-0 me-3 userImage comment-user-icon" width="60px" height="60px" />
-                        <div className='formSection'>
-                          <div className="d-flex gap-3 align-items-center add-comment">
-                            <div>
-                              <label className="visually-hidden" >Add Comment</label>
-                              {/* <input type="text" className="form-control" placeholder="Add a comment." value={this.state.comment} onChange={(e) => this.handleComment(e)} /> */}
-                              <textarea className="form-control" placeholder="Add a comment." value={this.state.comment} onChange={(e) => this.handleComment(e)} rows={2}>
-                              </textarea>
-                            </div>
-                            <div>
-                              <label />
-                            </div>
-                            <div>
-                              <input type="button" className={this.state.comment ? "btn btn-gradient" : "btn btn-gradient disabled"} onClick={() => this.addComment()} value='Post' />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className='commentsContainer'>
-                      {
-                        this.state.comments.map((comment) => {
-                          return this.renderCommentRow(comment)
-                        })
-                      }
-                    </div>
-                    <div className="comment" style={{ display: 'none' }}>
-                      <div className="col d-flex">
-                        <img src="images/icon-user.png" alt="" className="flex-shrink-0 me-3" width="60px" height="60px" />
-                        <div className="comment-detail" >
-                          <h4 className="comment-username">Michael Montgomery</h4>
-                          <p className="comment-time">An hour ago</p>
-                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                          <div className="comment-controls">
-                            <nav className="nav">
-                              <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-comment.png`} alt="" /></i> Reply</a>
-                              <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" /></i> Like</a>
-                            </nav>
-                          </div>
-                        </div>
-                      </div>
+                    <div>
+                      <input type="button" className={this.state.comment ? "btn btn-gradient" : "btn btn-gradient disabled"} onClick={() => this.addComment()} value='Post' />
                     </div>
                   </div>
                 </div>
-              </article>
+              </div>
+            </div>
+            <div className='commentsContainer'>
+              {
+                this.state.comments.map((comment) => {
+                  return this.renderCommentRow(comment)
+                })
+              }
+            </div>
+            <div className="comment" style={{ display: 'none' }}>
+              <div className="col d-flex">
+                <img src="images/icon-user.png" alt="" className="flex-shrink-0 me-3" width="60px" height="60px" />
+                <div className="comment-detail" >
+                  <h4 className="comment-username">Michael Montgomery</h4>
+                  <p className="comment-time">An hour ago</p>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                  <div className="comment-controls">
+                    <nav className="nav">
+                      <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-comment.png`} alt="" /></i> Reply</a>
+                      <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" /></i> Like</a>
+                    </nav>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        {/** blog details */}
-      </>
+      </article>
     )
   }
 
@@ -725,7 +716,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const blogID = this.getQueryStringValue('blogID');
     return (
       <div className={styles.agiIntranetBlogDetails}>
-        <div className="main-content">
+        <div className="main-content blog-content">
           <div className="content-wrapper">
             <div className="container">
               {
