@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { ISnap } from "../../models/ISnap";
+import Common from "../../services/Common";
 import SPService from "../../services/SPService";
 import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
 import { ImagePreview } from "./ImagePreview";
@@ -10,6 +11,7 @@ export const SnapShare = (props: IAgiIntranetHomeMainProps) => {
     const [snapCarousel, setSnapCarousel] = useState([]);
     const [showImagePreview, setShowImagePreview] = useState(null);
     const _spService = new SPService(props);
+    const _common = new Common();
     let siteUrl: string = props.siteUrl;
 
     const displayOverlay = (e, itemId) => {
@@ -50,19 +52,7 @@ export const SnapShare = (props: IAgiIntranetHomeMainProps) => {
     useEffect(() => {
         const getSnapShare = async () => {
             const snaps: ISnap[] = await _spService.getSnaps();
-            const snapCarousel = [];
-            let snapsColl = [];
-            for (let i = 0; i < snaps.length; i += 6) {
-                snapsColl = [];
-                for (let j = 0; j < 6; j++) {
-                    if (snaps[i + j]) {
-                        snapsColl.push(snaps[i + j]);
-                    }
-                }
-                if (snapsColl.length) {
-                    snapCarousel.push(snapsColl);
-                }
-            }
+            const snapCarousel = _common.generateCarouselArray(snaps, 6);
             setSnapCarousel(snapCarousel);
         }
         getSnapShare().catch((error) => {

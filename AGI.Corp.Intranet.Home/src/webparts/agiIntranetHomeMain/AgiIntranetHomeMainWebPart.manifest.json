@@ -25,7 +25,8 @@
       "topLatestNews": 3,
       "topAnnouncements": 10,
       "topSnaps": 50,
-      "topNavigations": 4
+      "topNavigations": 4,
+      "topMyApps": 50
     }
   }]
 }

@@ -2,6 +2,7 @@ import * as moment from "moment";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { IAnnouncement } from "../../models/IAnnouncement";
+import Common from "../../services/Common";
 import SPService from "../../services/SPService";
 import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
 
@@ -53,14 +54,12 @@ export const Announcements = (props: IAgiIntranetHomeMainProps) => {
     const [error, setError] = useState(null);
     const [announcementCarousel, setAnnouncementCarousel] = useState([]);
     const _spService = new SPService(props);
+    const _common = new Common();
     siteUrl = props.siteUrl;
     useEffect(() => {
         const getLatestNews = async () => {
             let announcements: IAnnouncement[] = await _spService.getAnnouncements();
-            const announcementCarousel = [];
-            for (var i = 0; i < announcements.length; i += 2) {
-                announcementCarousel.push([announcements[i], announcements[i + 1]])
-            }
+            const announcementCarousel = _common.generateCarouselArray(announcements, 2);
             setAnnouncementCarousel(announcementCarousel);
         }
         getLatestNews().catch((error) => {

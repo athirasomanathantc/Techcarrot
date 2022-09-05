@@ -17,6 +17,7 @@ export interface IAgiIntranetHomeMainWebPartProps {
   topAnnouncements: number;
   topSnaps: number;
   topNavigations: number;
+  topMyApps: number;
 }
 
 export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IAgiIntranetHomeMainWebPartProps> {
@@ -31,11 +32,7 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
     const element: React.ReactElement<IAgiIntranetHomeMainProps> = React.createElement(
       AgiIntranetHomeMain,
       {
-        description: this.properties.description,
-        topLatestNews: this.properties.topLatestNews,
-        topAnnouncements: this.properties.topAnnouncements,
-        topSnaps: this.properties.topSnaps,
-        topNavigations: this.properties.topNavigations,
+        ...this.properties,
         siteUrl: this.context.pageContext.web.absoluteUrl,
         context: this.context
       }
@@ -94,6 +91,15 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
                   label: "topNavigations",
                   description: "No of navigation items",
                   value: this.properties.topNavigations,
+                  maxValue: 50,
+                  minValue: 1,
+                  disabled: false
+                }),
+                PropertyFieldNumber("topMyApps", {
+                  key: "topMyApps",
+                  label: "topMyApps",
+                  description: "No of myapps items",
+                  value: this.properties.topMyApps,
                   maxValue: 50,
                   minValue: 1,
                   disabled: false
