@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { IReward } from "../../models/IReward";
 import SPService from "../../services/SPService";
 import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
+import styles from "./Rewards.module.scss";
 
 let siteUrl: string = '';
 
@@ -12,7 +13,7 @@ const RewardCarousel = (props: IReward) => {
     return (<>
         <div className={`carousel-item ${!props.index ? 'active' : ''}`}>
             <img src={`${imageUrl}`} className="d-block w-100" alt="..." />
-            <div className="carousel-caption overlay">
+            <div className={`carousel-caption overlay ${styles.overlay}`}>
                 <p>{props.Description}</p>
                 <div className="offer-btn-container"><a href={`./Reward%20Details.aspx?rewardID=${props.Id}`} className="btn btn-lg btn-view-offer">View Offer</a></div>
             </div>
