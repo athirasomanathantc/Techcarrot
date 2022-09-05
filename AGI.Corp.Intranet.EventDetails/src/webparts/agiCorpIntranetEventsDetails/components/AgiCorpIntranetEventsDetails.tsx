@@ -103,7 +103,7 @@ export default class AgiCorpIntranetEventsDetails extends React.Component<IAgiCo
 
               <div className={'col-md-10  events-col'}>
                 <div className={'location-wrapper'}>
-                  <div><i><img src={`${this.props.siteUrl}/Assets/icons/icon-location.png`} /></i> {event.Location}</div>
+                  <div><i><img src={`${this.props.siteUrl}/Assets/icons/icon-location.png`} /></i> {event.City}, {event.Country}</div>
 
                 </div>
 
@@ -174,8 +174,8 @@ export default class AgiCorpIntranetEventsDetails extends React.Component<IAgiCo
               eventID ?
                 this.renderEventDetail()
                 :
-                <div>
-                  Invalid event ID.
+                <div className={'invalidTxt'}>
+                  INVALID EVENT ID.
                 </div>
             }
 

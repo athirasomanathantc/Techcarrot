@@ -76,19 +76,20 @@ export default class AgiIntranetAnnouncementsDetails extends React.Component<IAg
     }
     return (
       <>
-        {announcementData &&
+        
           <div className={'main-content'}>
             <div className={'content-wrapper'}>
               <div className={'container'}>
+              {announcementData ?
                 <article className="news-detail-wrapper announcement-details">
                   <header className="news-detail-header">
-                    <p><img src={`${this.props.siteUrl}/Assets/icons/Date.png`} />{moment(announcementData.PublishedDate).format('MMM DD, YYYY')}</p>
+                    <p><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} />{moment(announcementData.PublishedDate).format('MMM DD,YYYY')}</p>
                     <h1>{announcementData.Title}</h1>
                   </header>
                   <section className="news-detail-content">
                     <div className="row">
 
-                      <div className="col-md-12">
+                      <div className="col-md-12 p-0">
                         <ul className="justify-content-start ps-0">
                           <li className="ps-0"><img src={`${this.props.siteUrl}/Assets/icons/icon-location.png`} />{announcementData.Location}</li>
                         </ul>
@@ -103,13 +104,19 @@ export default class AgiIntranetAnnouncementsDetails extends React.Component<IAg
                     </div>
                   </section>
                 </article>
+                :
+                <div className={'invalidTxt'}>
+                  NO ANNOUNCEMENTS
+                </div>
+      
+              }
               </div>
             </div>
           </div>
-
-        }
+          
       </>
 
     );
   }
 }
+
