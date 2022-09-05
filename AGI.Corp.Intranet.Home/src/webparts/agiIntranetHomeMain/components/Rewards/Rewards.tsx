@@ -10,11 +10,11 @@ const RewardCarousel = (props: IReward) => {
     let imageUrl = JSON.parse(props.OfferImage);
     imageUrl = imageUrl?.serverUrl + imageUrl?.serverRelativeUrl;
     return (<>
-        <div className="carousel-item active">
+        <div className={`carousel-item ${!props.index ? 'active' : ''}`}>
             <img src={`${imageUrl}`} className="d-block w-100" alt="..." />
             <div className="carousel-caption overlay">
                 <p>{props.Description}</p>
-                <div className="offer-btn-container"><a href="" className="btn btn-lg btn-view-offer">View Offer</a></div>
+                <div className="offer-btn-container"><a href={`./Reward%20Details.aspx?rewardID=${props.Id}`} className="btn btn-lg btn-view-offer">View Offer</a></div>
             </div>
         </div>
     </>)
@@ -83,7 +83,10 @@ export const Rewards = (props: IAgiIntranetHomeMainProps) => {
 
                     <div id="employeeOffersControls" className="carousel slide" data-bs-ride="carousel">
                         <div className="carousel-inner">
-                            {rewardsCarousel.map((rewardsCarouselItem: IReward) => <RewardCarousel {...rewardsCarouselItem}></RewardCarousel>)}
+                            {rewardsCarousel.map((rewardsCarouselItem: IReward, index: number) => <RewardCarousel
+                                index={index}
+                                key={`key${index}`}
+                                {...rewardsCarouselItem}></RewardCarousel>)}
                         </div>
                         <div className="d-md-none button-bottom">
                             <button className="carousel-control-prev" type="button" data-bs-target="#employeeOffersControls" data-bs-slide="prev">
