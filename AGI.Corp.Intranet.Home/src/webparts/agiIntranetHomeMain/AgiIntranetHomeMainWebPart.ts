@@ -18,6 +18,7 @@ export interface IAgiIntranetHomeMainWebPartProps {
   topSnaps: number;
   topNavigations: number;
   topMyApps: number;
+  topSocialMediaPosts: number;
 }
 
 export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IAgiIntranetHomeMainWebPartProps> {
@@ -100,6 +101,15 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
                   label: "topMyApps",
                   description: "No of myapps items",
                   value: this.properties.topMyApps,
+                  maxValue: 50,
+                  minValue: 1,
+                  disabled: false
+                }),
+                PropertyFieldNumber("topSocialMediaPosts", {
+                  key: "topSocialMediaPosts",
+                  label: "topSocialMediaPosts",
+                  description: "No of social media post items",
+                  value: this.properties.topSocialMediaPosts,
                   maxValue: 50,
                   minValue: 1,
                   disabled: false
