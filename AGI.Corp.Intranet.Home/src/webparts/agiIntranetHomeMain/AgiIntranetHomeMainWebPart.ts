@@ -15,6 +15,8 @@ export interface IAgiIntranetHomeMainWebPartProps {
   description: string;
   topLatestNews: number;
   topAnnouncements: number;
+  topSnaps: number;
+  topNavigations: number;
 }
 
 export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IAgiIntranetHomeMainWebPartProps> {
@@ -32,6 +34,8 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
         description: this.properties.description,
         topLatestNews: this.properties.topLatestNews,
         topAnnouncements: this.properties.topAnnouncements,
+        topSnaps: this.properties.topSnaps,
+        topNavigations: this.properties.topNavigations,
         siteUrl: this.context.pageContext.web.absoluteUrl,
         context: this.context
       }
@@ -72,6 +76,24 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
                   label: "topAnnouncements",
                   description: "No of announcement carousel items",
                   value: this.properties.topAnnouncements,
+                  maxValue: 50,
+                  minValue: 1,
+                  disabled: false
+                }),
+                PropertyFieldNumber("topSnaps", {
+                  key: "topSnaps",
+                  label: "topSnaps",
+                  description: "No of snap items",
+                  value: this.properties.topSnaps,
+                  maxValue: 50,
+                  minValue: 1,
+                  disabled: false
+                }),
+                PropertyFieldNumber("topNavigations", {
+                  key: "topNavigations",
+                  label: "topNavigations",
+                  description: "No of navigation items",
+                  value: this.properties.topNavigations,
                   maxValue: 50,
                   minValue: 1,
                   disabled: false

@@ -4,4 +4,6 @@ export interface IAgiIntranetHomeMainProps {
   context: any;
   topLatestNews: number;
   topAnnouncements: number;
+  topSnaps: number;
+  topNavigations: number;
 }
