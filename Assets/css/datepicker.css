@@ -1,0 +1,407 @@
+.spo-daypickerbox {
+    /*box-shadow:0 3px 22px rgba(0,0,0,0.1);*/
+    box-shadow: 0 3px 22px rgb(110 110 110 / 10%);
+    border-radius: 8px;
+    background-color: #ffffff;
+    padding: 10px 20px;
+    position: relative;
+    left: 0;
+    margin-top: 20px;
+}
+
+.spo-daypickerbox .title {
+    text-align: left;
+    font-weight: 700;
+    font-size: 22px;
+    padding: 10px 0;
+    border-bottom: 1px solid #F4F4F4;
+    margin-bottom: 16px;
+    line-height: 1.5;
+
+    display: none !important
+}
+
+.spo-daypickerbox1 h4 {
+    padding-top: 12px;
+    margin-bottom: 16px;
+    font-size: 16px;
+    font-family: 'Graphik-Semibold' !important;
+    line-height: 1.5;
+}
+
+.spo-daypickerbox>div {
+    width: 100% !important;
+    padding: 0 !important;
+}
+
+.spo-daypickerbox .legend {
+    padding: 0 10px 20px;
+    font-family: 'Proxima Nova Rg';
+}
+
+.spo-daypickerbox .legend span {
+    position: relative;
+}
+
+.spo-daypickerbox .legend span:after {
+    position: absolute;
+    content: '';
+    height: 10px;
+    width: 10px;
+    top: 1px;
+    left: 0;
+    border-radius: 10px;
+}
+
+.spo-daypickerbox .legend span:first-child:after {
+    background: #9D0D71;
+}
+
+.spo-daypickerbox .legend span:nth-child(2):after {
+    background: #E94B2E;
+}
+
+.spo-daypickerbox .legend span:nth-child(3):after {
+    background: rgba(44, 95, 227, 1);
+}
+
+.spo-daypickerbox .events-of-month {
+    font-size: 12px;
+    line-height: 24px;
+}
+
+.spo-daypickerbox .events-of-month span {
+    font-weight: bold;
+}
+
+.spo-daypickerbox .details {
+    display: none;
+}
+
+.DayPicker {
+    font-family: 'Proxima Nova Rg', Helvetica, sans-serif;
+    width: 100%;
+    max-width: 400px;
+    font-size: 1.2rem !important;
+}
+
+.DayPicker .DayPicker-wrapper {
+    background: #9D0E7105 0% 0% no-repeat padding-box;
+    border: 1px solid #EBEBEB;
+    opacity: 1;
+}
+
+.DayPicker-Weekday {
+    display: table-cell !important;
+    padding: 10px 0 !important;
+    color: #494949 !important;
+    text-align: center;
+    font-size: 10px !important;
+    text-transform: uppercase !important;
+    line-height: 15px !important;
+    letter-spacing: 0.7px !important;
+    font-family: 'Proxima Nova Rg', Helvetica, sans-serif;
+    /* margin-top: 10px; */
+    /* margin-bottom: 10px; */
+    font-weight: 700;
+}
+
+.DayPicker-Month {
+    display: table !important;
+    margin: 1em 1em 0;
+    margin: 0 !important;
+    border-spacing: 2px 5px !important;
+    border-collapse: separate !important;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width: 100%;
+}
+
+.DayPicker-Caption {
+    padding: 1em;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.DayPicker-Caption div {
+    font-size: 12px;
+    text-align: center
+}
+
+.DayPicker-Day {
+    border-radius: 50%;
+    text-align: center;
+    /*width: 18px;
+	height: 18px;*/
+    position: relative;
+    width: 8%;
+    height: 0;
+    padding-bottom: 4% !important;
+    padding-top: 4% !important;
+}
+
+.DayPicker-NavBar {
+    margin: 20px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #EBEBEB;
+    opacity: 1;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+/* 
+.DayPicker-Day--today:not(.DayPicker-Day--outside) {
+    background-color: #9D0D71;
+    color: #494949 !important;
+}
+
+.DayPicker-Day--holiday:not(.DayPicker-Day--outside) {
+    background-color: #E94B2E !important;
+}
+
+.DayPicker-Day--event:hover {
+    background-color: #007bff !important;
+    color: white;
+} */
+
+.eventDetail {
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.eventDetail .datebox {
+    margin-right: 5px;
+}
+
+.DayPicker-Day {
+    cursor: auto !important;
+    font-size: 13px;
+
+}
+
+.DayPicker-Day--outside {
+    background-color: transparent !important;
+}
+
+
+
+.DayPicker-Day--holiday:not(.DayPicker-Day--outside):not(.DayPicker-Day--event) {
+    /*background-color: #E94B2E!important;*/
+    color: #000;
+}
+
+.DayPicker-Day--holiday:not(.DayPicker-Day--outside):not(.DayPicker-Day--event):after {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    -moz-border-radius: 7.5px;
+    -webkit-border-radius: 7.5px;
+    border-radius: 7.5px;
+    background-color: #E94B2E;
+    position: absolute;
+    bottom: 7px;
+    left: 45%;
+    transform: translate(0px, 0px);
+}
+
+.DayPicker-Day--event:not(.DayPicker-Day--outside) {
+    /*background-color: #036ef8!important;*/
+    color: #000;
+}
+
+.DayPicker-Day:not(.DayPicker-Day--today):not(.DayPicker-Day--event):not(.DayPicker-Day--holiday):hover {
+    background-color: transparent !important;
+}
+
+.DayPicker-Day--today:hover {
+    background-color: #9D0D71 !important;
+}
+
+/*.DayPicker-Day--holiday:not(.DayPicker-Day--outside):hover {
+        background-color: #E94B2E !important;
+    }*/
+
+/* .DayPicker-Day--event:not(.DayPicker-Day--outside):not(.DayPicker-Day--holiday):hover {
+        background-color: #036ef8!important;
+    }*/
+
+.DayPicker-Day--today,
+.DayPicker-Day--holiday,
+.DayPicker-Day--event {
+    cursor: pointer !important;
+}
+
+
+.DayPicker-Day--today:not(.DayPicker-Day--outside) {
+    background-color: #9D0D71;
+    color: #fff !important;
+}
+
+/*.DayPicker-Day--holiday:not(.DayPicker-Day--outside){
+    background-color: #E94B2E !important;
+}*/
+
+.datebox.Event {
+    background-color: #036ef8;
+}
+
+.datebox.Holiday {
+    background-color: #f5604d;
+}
+
+.datebox.Holiday,
+.datebox.Event {
+    display: inline-block;
+    text-align: center;
+    line-height: 1;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 20px;
+    height: 23px;
+    width: 23px;
+    padding: 6px 4px;
+}
+
+.eventsWrapper {
+    margin-bottom: 1em;
+    padding: 33px 10px;
+}
+
+.event {
+    font-size: 12px;
+    line-height: 22px;
+    letter-spacing: .5px;
+}
+
+.DayPicker-Caption>div {
+    position: relative;
+    top: -68px;
+    color: #9D0D71;
+    font: normal normal bold 20px/24px Gill Sans;
+    width: 80%;
+    margin: auto;
+}
+
+.DayPicker-NavButton--prev {
+    background-image: none !important;
+    /*margin-right: 20px;
+    position: absolute;
+    left: 0*/
+}
+
+.DayPicker-NavButton--prev:after {
+    content: "\f104";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+
+    font-size: 1.2em;
+    line-height: 1;
+    /*top: -30px;
+    position: relative;
+    left: -290px;*/
+    position: absolute;
+    left: 0;
+    top: 0px;
+
+}
+
+.DayPicker-NavButton--next {
+    background-image: none !important;
+    /*position: absolute;
+    right: 0*/
+}
+
+.DayPicker-NavButton--next:after {
+    content: "\f105";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 1.2em;
+    line-height: 1;
+    /*top: -30px;
+    position: relative;
+    right: -22px;*/
+    position: absolute;
+    right: 0;
+    top: -30px;
+}
+
+
+
+/*.DayPicker-NavButton {
+    position: absolute;
+    top: 8px;
+    right: 20px;
+    left: auto;
+    display: block;
+    margin-top: 2px;
+    width: 1.25em;
+    height: 1.25em;
+    background-position: 50%;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    color: #8b9898;
+    cursor: pointer;
+}*/
+
+.DayPicker-NavButton {
+    position: relative !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    display: inline-block !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.DayPicker-Caption {
+    display: table-caption;
+    margin-bottom: -1.5em !important;
+    padding: 0 .5em;
+    text-align: left;
+}
+
+@media screen and (max-width: 1100px) and (min-width: 992px) {
+
+    .DayPicker-Day,
+    .DayPicker-WeekNumber {
+        padding: .1em !important;
+    }
+}
+
+.legend {
+    position: relative;
+    top: -40px;
+    padding: 10px;
+}
+
+.legend span {
+    position: relative;
+    padding: 0 0 0 1.4em;
+    margin-right: 1.2em;
+    padding: 8px 25px;
+    font-size: .75em;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #EBEBEB;
+    border-radius: 20px;
+}
+
+.legend span:after {
+    position: absolute;
+    content: '';
+    height: 10px;
+    width: 10px;
+    top: 10px;
+    left: 10px;
+    border-radius: 10px;
+}
+
+.legend span:first-child:after {
+    background: #9D0D71;
+}
+
+.legend span:nth-child(2):after {
+    background: #0DC49A;
+}

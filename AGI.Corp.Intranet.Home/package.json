@@ -21,6 +21,7 @@
     "@pnp/spfx-property-controls": "^3.9.0",
     "moment": "^2.29.4",
     "react": "16.13.1",
+    "react-day-picker": "^7.4.10",
     "react-dom": "16.13.1"
   },
   "devDependencies": {
