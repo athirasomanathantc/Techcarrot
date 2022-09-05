@@ -1,14 +1,51 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
+import { IReward } from "../../models/IReward";
+import SPService from "../../services/SPService";
 import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
 
+let siteUrl: string = '';
+
+const RewardCarousel = (props: IReward) => {
+    let imageUrl = JSON.parse(props.OfferImage);
+    imageUrl = imageUrl?.serverUrl + imageUrl?.serverRelativeUrl;
+    return (<>
+        <div className="carousel-item active">
+            <img src={`${imageUrl}`} className="d-block w-100" alt="..." />
+            <div className="carousel-caption overlay">
+                <p>{props.Description}</p>
+                <div className="offer-btn-container"><a href="" className="btn btn-lg btn-view-offer">View Offer</a></div>
+            </div>
+        </div>
+    </>)
+}
+
 export const Rewards = (props: IAgiIntranetHomeMainProps) => {
+    const [error, setError] = useState(null);
+    const [rewardsCarousel, setRewardsCarousel] = useState([]);
+    const _spService = new SPService(props);
+    siteUrl = props.siteUrl;
+    useEffect(() => {
+        const getLatestNews = async () => {
+            let rewardsCarousel: IReward[] = await _spService.getRewards();
+            setRewardsCarousel(rewardsCarousel);
+        }
+        getLatestNews().catch((error) => {
+            setError(error);
+        })
+    }, [])
+
+    if (error) {
+        throw error;
+    }
+
     return (<div className="col-xs-12 col-sm-6 col-xl-6   employee-offer-section mb-4 mb-md-0">
 
         <div className="card h-100">
             <div data-bs-target="#employeeOffer" data-bs-toggle="collapse">
                 <div className="card-header d-flex align-items-center justify-content-between" >
-                    <h4 className="card-title mb-0">Employee Offers</h4>
-                    <a href="#" className="viewall-link d-none d-md-block">View All</a>
+                    <h4 className="card-title mb-0">Rewards</h4>
+                    <a href="./Rewards.aspx" className="viewall-link d-none d-md-block">View All</a>
                     <div className="d-md-none " >
                         <div className="float-right navbar-toggler d-md-none">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
@@ -46,27 +83,7 @@ export const Rewards = (props: IAgiIntranetHomeMainProps) => {
 
                     <div id="employeeOffersControls" className="carousel slide" data-bs-ride="carousel">
                         <div className="carousel-inner">
-                            <div className="carousel-item active">
-                                <img src={`${props.siteUrl}/Assets/images/Employee-offer-img-1.png`} className="d-block w-100" alt="..." />
-                                <div className="carousel-caption overlay">
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                    <div className="offer-btn-container"><a href="" className="btn btn-lg btn-view-offer">View Offer</a></div>
-                                </div>
-                            </div>
-                            <div className="carousel-item">
-                                <img src={`${props.siteUrl}/Assets/images/Employee-offer-img-1.png`} className="d-block w-100" alt="..." />
-                                <div className="carousel-caption overlay">
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                    <div className="offer-btn-container"><a href="" className="btn btn-lg btn-view-offer">View Offer</a></div>
-                                </div>
-                            </div>
-                            <div className="carousel-item">
-                                <img src={`${props.siteUrl}/Assets/images/Employee-offer-img-1.png`} className="d-block w-100" alt="..." />
-                                <div className="carousel-caption overlay">
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                    <div className="offer-btn-container"><a href="" className="btn btn-lg btn-view-offer">View Offer</a></div>
-                                </div>
-                            </div>
+                            {rewardsCarousel.map((rewardsCarouselItem: IReward) => <RewardCarousel {...rewardsCarouselItem}></RewardCarousel>)}
                         </div>
                         <div className="d-md-none button-bottom">
                             <button className="carousel-control-prev" type="button" data-bs-target="#employeeOffersControls" data-bs-slide="prev">

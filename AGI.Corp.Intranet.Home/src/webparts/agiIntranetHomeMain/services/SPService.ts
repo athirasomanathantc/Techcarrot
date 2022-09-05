@@ -4,6 +4,7 @@ import { IAnnouncement } from "../models/IAnnouncement";
 import { ILatestNews } from "../models/ILatestNews";
 import { IMyApp } from "../models/IMyApp";
 import { INavigation } from "../models/INavigation";
+import { IReward } from "../models/IReward";
 import { ISnap } from "../models/ISnap";
 import { ISocialMediaPost } from "../models/ISocialMediaPost";
 
@@ -77,6 +78,17 @@ export class SPService {
         return await sp.web.lists.getByTitle('SocialMediaPosts').items.select("Id,Title,Thumbnail,Description,Icon")
             .top(this._props.topSocialMediaPosts)()
             .then((items: ISocialMediaPost[]) => {
+                return items;
+            })
+            .catch((exception) => {
+                throw new Error(exception);
+            });
+    }
+
+    public async getRewards(): Promise<IReward[]> {
+        return await sp.web.lists.getByTitle('Offers').items.select("Id,Title,Description,OfferImage")
+            .top(this._props.topRewards)()
+            .then((items: IReward[]) => {
                 return items;
             })
             .catch((exception) => {
