@@ -927,6 +927,7 @@ input[type="radio"]:checked+label::after {
     opacity: 1;
     padding: 8px;
     border-radius: 5px;
+    line-height: 0.5em;
 }
 
 /* 
@@ -1056,7 +1057,7 @@ input[type="radio"]:checked+label::after {
 
 .DayPicker-Caption>div {
     position: relative;
-    top: -68px;
+    top: -51px;
     color: #9D0D71;
     font: normal normal bold 20px/24px Gill Sans;
     width: 80%;
@@ -1074,15 +1075,11 @@ input[type="radio"]:checked+label::after {
     content: "\f104";
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
-
     font-size: 1.2em;
     line-height: 1;
-    /*top: -30px;
-    position: relative;
-    left: -290px;*/
     position: absolute;
     left: 0;
-    top: 0px;
+    top: -10px;
 
 }
 
@@ -1098,12 +1095,9 @@ input[type="radio"]:checked+label::after {
     font-weight: 900;
     font-size: 1.2em;
     line-height: 1;
-    /*top: -30px;
-    position: relative;
-    right: -22px;*/
     position: absolute;
     right: 0;
-    top: -30px;
+    top: -20px;
 }
 
 
