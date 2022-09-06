@@ -67,7 +67,7 @@ export const SnapShare = (props: IAgiIntranetHomeMainProps) => {
     return (
         <>
             {
-                !showImagePreview?.show && <div className="col-md-12 snap-share-section mt-4 mb-4 stretch-card">
+                !showImagePreview?.show && snapCarousel.length > 0 && <div className="col-md-12 snap-share-section mt-4 mb-4 stretch-card">
                     <div className="card snap-share ">
                         <div className="card-body">
                             <div id="carouselExampleCaptions3" className="carousel slide"

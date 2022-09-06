@@ -72,46 +72,48 @@ export const Announcements = (props: IAgiIntranetHomeMainProps) => {
     }
 
 
-    return (<div className="col-md-12 announcement-section ">
-        <div className="card border-radius-0">
+    return (<>
+        {announcementCarousel.length > 0 && <div className="col-md-12 announcement-section ">
+            <div className="card border-radius-0">
 
-            <div className="card-body">
-                <div id="carouselExampleCaptions2" className="carousel slide"
-                    data-bs-ride="carousel">
-                    <div className="d-flex align-items-center justify-content-between flex-wrap mb-4 card-header announcement-header px-0">
+                <div className="card-body">
+                    <div id="carouselExampleCaptions2" className="carousel slide"
+                        data-bs-ride="carousel">
+                        <div className="d-flex align-items-center justify-content-between flex-wrap mb-4 card-header announcement-header px-0">
 
-                        <h4>Announcements</h4>
-                        <div className="d-flex align-items-center">
-                            <a href="./News/Announcements.aspx" className="viewall-link">View All</a>
-                            <div className="p-0 ms-3 position-relative ">
-                                <button className="carousel-control-prev" style={{ borderRadius: '60px' }} type="button"
-                                    data-bs-target="#carouselExampleCaptions2"
-                                    data-bs-slide="prev">
-                                    <span className="carousel-control-prev-icon"
-                                        aria-hidden="true"></span>
-                                    <span className="visually-hidden">Previous</span>
-                                </button>
-                                <button className="carousel-control-next" style={{ borderRadius: '60px' }} type="button"
-                                    data-bs-target="#carouselExampleCaptions2"
-                                    data-bs-slide="next">
-                                    <span className="carousel-control-next-icon"
-                                        aria-hidden="true"></span>
-                                    <span className="visually-hidden">Next</span>
-                                </button>
+                            <h4>Announcements</h4>
+                            <div className="d-flex align-items-center">
+                                <a href="./News/Announcements.aspx" className="viewall-link">View All</a>
+                                <div className="p-0 ms-3 position-relative ">
+                                    <button className="carousel-control-prev" style={{ borderRadius: '60px' }} type="button"
+                                        data-bs-target="#carouselExampleCaptions2"
+                                        data-bs-slide="prev">
+                                        <span className="carousel-control-prev-icon"
+                                            aria-hidden="true"></span>
+                                        <span className="visually-hidden">Previous</span>
+                                    </button>
+                                    <button className="carousel-control-next" style={{ borderRadius: '60px' }} type="button"
+                                        data-bs-target="#carouselExampleCaptions2"
+                                        data-bs-slide="next">
+                                        <span className="carousel-control-next-icon"
+                                            aria-hidden="true"></span>
+                                        <span className="visually-hidden">Next</span>
+                                    </button>
 
+                                </div>
                             </div>
-                        </div>
 
-                    </div>
-                    <div className="carousel-inner pt-9">
-                        {announcementCarousel.map((announcementCarouselItem: IAnnouncement[], index: number) => <AnnouncementCarousel
-                            index={index}
-                            key={`key${index}`}
-                            announcementCarouselItem={announcementCarouselItem}
-                        ></AnnouncementCarousel>)}
+                        </div>
+                        <div className="carousel-inner pt-9">
+                            {announcementCarousel.map((announcementCarouselItem: IAnnouncement[], index: number) => <AnnouncementCarousel
+                                index={index}
+                                key={`key${index}`}
+                                announcementCarouselItem={announcementCarouselItem}
+                            ></AnnouncementCarousel>)}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>);
+        </div>}
+    </>);
 }

@@ -52,43 +52,45 @@ export const SocialMedia = (props: IAgiIntranetHomeMainProps) => {
         throw error;
     }
 
-    return (<div className="col-sm-6 col-xl-6  social-media-section mb-4 mb-md-0">
-        <div className="card h-100">
-            <div data-bs-target="#socialOffer" data-bs-toggle="collapse">
-                <div className="card-header d-flex align-items-center justify-content-between" >
-                    <h4 className="card-title mb-0">Social Media</h4>
-                    <div className="p-0 position-relative d-none d-md-block">
-                        <button className="carousel-control-prev" type="button"
-                            data-bs-target="#socialMediaControls"
-                            data-bs-slide="prev">
-                            <span className="carousel-control-prev-icon"
-                                aria-hidden="true"></span>
-                            <span className="visually-hidden">Previous</span>
-                        </button>
-                        <button className="carousel-control-next" type="button"
-                            data-bs-target="#socialMediaControls"
-                            data-bs-slide="next">
-                            <span className="carousel-control-next-icon"
-                                aria-hidden="true"></span>
-                            <span className="visually-hidden">Next</span>
-                        </button>
+    return (<>
+        {socialMediaPosts.length > 0 && <div className="col-sm-6 col-xl-6  social-media-section mb-4 mb-md-0">
+            <div className="card h-100">
+                <div data-bs-target="#socialOffer" data-bs-toggle="collapse">
+                    <div className="card-header d-flex align-items-center justify-content-between" >
+                        <h4 className="card-title mb-0">Social Media</h4>
+                        <div className="p-0 position-relative d-none d-md-block">
+                            <button className="carousel-control-prev" type="button"
+                                data-bs-target="#socialMediaControls"
+                                data-bs-slide="prev">
+                                <span className="carousel-control-prev-icon"
+                                    aria-hidden="true"></span>
+                                <span className="visually-hidden">Previous</span>
+                            </button>
+                            <button className="carousel-control-next" type="button"
+                                data-bs-target="#socialMediaControls"
+                                data-bs-slide="next">
+                                <span className="carousel-control-next-icon"
+                                    aria-hidden="true"></span>
+                                <span className="visually-hidden">Next</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="collapse dont-collapse-sm" id="socialOffer">
-                <div className="card-body d-flex flex-column align-items-center justify-content-center ">
-                    <div id="socialMediaControls" className="carousel slide" data-bs-ride="carousel">
-                        <div className="carousel-inner">
-                            {socialMediaPosts.map((socialMediaPost: any, index: number) => <SocialMediaCarousel
-                                index={index}
-                                key={`key${index}`}
-                                {...socialMediaPost}>
-                            </SocialMediaCarousel>)}
+                <div className="collapse dont-collapse-sm" id="socialOffer">
+                    <div className="card-body d-flex flex-column align-items-center justify-content-center ">
+                        <div id="socialMediaControls" className="carousel slide" data-bs-ride="carousel">
+                            <div className="carousel-inner">
+                                {socialMediaPosts.map((socialMediaPost: any, index: number) => <SocialMediaCarousel
+                                    index={index}
+                                    key={`key${index}`}
+                                    {...socialMediaPost}>
+                                </SocialMediaCarousel>)}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>);
+        </div>}
+    </>);
 }

@@ -73,9 +73,9 @@ export default class AgiIntranetHomeMain extends React.Component<IAgiIntranetHom
                     <ErrorBoundary>
                       <CompanyEvents {...this.props}></CompanyEvents>
                     </ErrorBoundary>
-                    <ErrorBoundary>
+                    {/* <ErrorBoundary>
                       <EmployeeSurvey {...this.props}></EmployeeSurvey>
-                    </ErrorBoundary>
+                    </ErrorBoundary> */}
                   </div>
                 </div>
               </div>

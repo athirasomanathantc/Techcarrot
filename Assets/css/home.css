@@ -861,7 +861,7 @@ input[type="radio"]:checked+label::after {
 
 .DayPicker-Day {
     cursor: auto !important;
-    font-size: 13px;
+    font-size: 12px;
 
 }
 

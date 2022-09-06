@@ -231,43 +231,45 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
     }
 
     public render(): React.ReactElement<ICalendarProps> {
-        return (<div className="col-md-12 mt-4 ">
-            <div className="card calendar rounded-0">
-                <div className="card-body rounded-0">
-                    <div className="app">
-                        <div className="app__main">
-                            <div className="calendar">
-                                <DayPicker modifiers={{ holiday: this.state.holidays, event: this.state.events }}
-                                    month={this.state.selectedMonth}
-                                    selectedDays={this.state.selectedDay}
-                                    onDayClick={(day, modifiers, e) => this.handleDayClick(day, modifiers, e)}
-                                    onMonthChange={(month) => this.handleMonthChange(month)}
-                                    weekdaysShort={WEEK_DAYS}
-                                />
-                                <div className="legend calendar-legend">
-                                    <span>Today</span>
-                                    <span>Holidays</span>
-                                </div>
-                                <div>
-                                    {
-                                        this.state.dailyEvents.map((event, i) => {
-                                            return <div className='eventDetail'>
-                                                <div className={`datebox ${event.Category == 'Holiday' ? 'Holiday' : 'Event'}`}>{new Date(event.EventDate).getDate()}</div>
-                                                <div className="events in">
-                                                    <div className="event">
-                                                        <span>{event.Title}</span>
+        return (<>
+            {this.state.eventItems.length > 0 && <div className="col-md-12 mt-4 ">
+                <div className="card calendar rounded-0">
+                    <div className="card-body rounded-0">
+                        <div className="app">
+                            <div className="app__main">
+                                <div className="calendar">
+                                    <DayPicker modifiers={{ holiday: this.state.holidays, event: this.state.events }}
+                                        month={this.state.selectedMonth}
+                                        selectedDays={this.state.selectedDay}
+                                        onDayClick={(day, modifiers, e) => this.handleDayClick(day, modifiers, e)}
+                                        onMonthChange={(month) => this.handleMonthChange(month)}
+                                        weekdaysShort={WEEK_DAYS}
+                                    />
+                                    <div className="legend calendar-legend">
+                                        <span>Today</span>
+                                        <span>Holidays</span>
+                                    </div>
+                                    <div>
+                                        {
+                                            this.state.dailyEvents.map((event, i) => {
+                                                return <div className='eventDetail'>
+                                                    <div className={`datebox ${event.Category == 'Holiday' ? 'Holiday' : 'Event'}`}>{new Date(event.EventDate).getDate()}</div>
+                                                    <div className="events in">
+                                                        <div className="event">
+                                                            <span>{event.Title}</span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        })
-                                    }
+                                            })
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div>}
+        </>
         );
     }
 

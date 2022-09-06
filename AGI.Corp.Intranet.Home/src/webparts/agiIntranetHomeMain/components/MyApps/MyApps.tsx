@@ -57,37 +57,39 @@ export const MyApps = (props: IAgiIntranetHomeMainProps) => {
         throw error;
     }
 
-    return (<div className="col-md-12 my-app ">
-        <div className="card carousel slide" id="myApps">
-            <div className="card-header d-flex align-items-center justify-content-between border-bottom-0">
-                <h4 className="card-title m-2 me-2">My Apps</h4>
-                <div className="p-0 ms-3 position-relative">
-                    <button className="carousel-control-prev" style={{ borderRadius: '60px' }} type="button"
-                        data-bs-target="#myApps"
-                        data-bs-slide="prev">
-                        <span className="carousel-control-prev-icon"
-                            aria-hidden="true"></span>
-                        <span className="visually-hidden">Previous</span>
-                    </button>
-                    <button className="carousel-control-next" style={{ borderRadius: '60px' }} type="button"
-                        data-bs-target="#myApps"
-                        data-bs-slide="next">
-                        <span className="carousel-control-next-icon"
-                            aria-hidden="true"></span>
-                        <span className="visually-hidden">Next</span>
-                    </button>
+    return (<>
+        {myAppsCarousel.length > 0 && <div className="col-md-12 my-app ">
+            <div className="card carousel slide" id="myApps">
+                <div className="card-header d-flex align-items-center justify-content-between border-bottom-0">
+                    <h4 className="card-title m-2 me-2">My Apps</h4>
+                    <div className="p-0 ms-3 position-relative">
+                        <button className="carousel-control-prev" style={{ borderRadius: '60px' }} type="button"
+                            data-bs-target="#myApps"
+                            data-bs-slide="prev">
+                            <span className="carousel-control-prev-icon"
+                                aria-hidden="true"></span>
+                            <span className="visually-hidden">Previous</span>
+                        </button>
+                        <button className="carousel-control-next" style={{ borderRadius: '60px' }} type="button"
+                            data-bs-target="#myApps"
+                            data-bs-slide="next">
+                            <span className="carousel-control-next-icon"
+                                aria-hidden="true"></span>
+                            <span className="visually-hidden">Next</span>
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div className="card-body">
+                <div className="card-body">
 
-                <div className="app-wrapper carousel-inner">
-                    {myAppsCarousel.map((myAppsCarouselItem, index) =>
-                        <MyAppsCarousel
-                            index={index}
-                            key={`key${index}`}
-                            myAppsCarouselItem={myAppsCarouselItem}></MyAppsCarousel>)}
+                    <div className="app-wrapper carousel-inner">
+                        {myAppsCarousel.map((myAppsCarouselItem, index) =>
+                            <MyAppsCarousel
+                                index={index}
+                                key={`key${index}`}
+                                myAppsCarouselItem={myAppsCarouselItem}></MyAppsCarousel>)}
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>);
+        </div>}
+    </>);
 }
