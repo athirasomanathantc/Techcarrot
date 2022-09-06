@@ -1,6 +1,7 @@
 import { sp } from "@pnp/sp";
 import { IAgiIntranetHomeMainProps } from "../components/IAgiIntranetHomeMainProps";
 import { IAnnouncement } from "../models/IAnnouncement";
+import { IEvent } from "../models/IEvent";
 import { ILatestNews } from "../models/ILatestNews";
 import { IMyApp } from "../models/IMyApp";
 import { INavigation } from "../models/INavigation";
@@ -95,6 +96,19 @@ export class SPService {
                 throw new Error(exception);
             });
     }
+
+    public async getEvents(): Promise<IEvent[]> {
+        return await sp.web.lists.getByTitle('EventDetails').items.select("Id,Title,StartDate")
+            .top(this._props.topEvents)
+            .orderBy("StartDate", false)()
+            .then((items: IEvent[]) => {
+                return items;
+            })
+            .catch((exception) => {
+                throw new Error(exception);
+            });
+    }
+
 }
 
 export default SPService;
