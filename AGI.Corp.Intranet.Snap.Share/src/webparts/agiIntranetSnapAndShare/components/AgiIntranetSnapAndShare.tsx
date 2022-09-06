@@ -42,9 +42,18 @@ export default class AgiIntranetSnapAndShare extends React.Component<IAgiIntrane
   private async getImages(): Promise<void> {
     const webRelativeUrl = this.props.context.pageContext.web.serverRelativeUrl;
     const libraryName = LIBRARY_SNAP_SHARE;
+    const library = sp.web.lists.getByTitle(libraryName);
+    library.items.getAll().then((items) => {
+
+      const itemCount = items.length;
+    
     sp.web.lists.getByTitle(libraryName).items
       .select("FileLeafRef", "Created", "File", "ID", "Title", "Author/Title", "ImageDescription")
-      .expand("File, Author").get().then((images: IImageItem[]) => {
+      .expand("File, Author")
+      .top(itemCount)
+      .filter(`ApprovalStatus eq 'Approved'`)
+      .orderBy('Created', false)
+      .get().then((images: IImageItem[]) => {
         const totalPages: number = Math.ceil(images.length / this.state.pageSize);
         const pageData = images.slice(0, this.state.pageSize);
         const itemCount = images.length;
@@ -57,6 +66,7 @@ export default class AgiIntranetSnapAndShare extends React.Component<IAgiIntrane
           currentPage
         });
       });
+    })
   }
 
   private uploadFile = async () => {
@@ -282,7 +292,7 @@ export default class AgiIntranetSnapAndShare extends React.Component<IAgiIntrane
                 </div>
                 <div className="col-md-3">
                   <div className="upload-container">
-                    <p><i><img src="" alt="" /></i> Upload Images</p>
+                    <p><i><img src={`${this.props.siteUrl}/Assets/icons/Upload-icon.svg`} alt="" /></i> Upload Images</p>
                     <input className="form-control" type="file" id="fileInput" accept="image/x-png,image/gif,image/jpeg" onChange={(e) => this.handleFile(e)} />
                   </div>
                 </div>

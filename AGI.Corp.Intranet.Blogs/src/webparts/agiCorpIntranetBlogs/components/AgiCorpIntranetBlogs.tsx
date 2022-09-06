@@ -37,7 +37,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   private async fetch() {
     await this.getBusinessItems();
 
-    await this.getblog();
+    await this.getBlogItems();
 
   }
   private async getBusinessItems(): Promise<void> {
@@ -124,13 +124,13 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
 
   }
 
-  private async getblog(): Promise<void> {
+  private async getBlogItems(): Promise<void> {
 
-     const listName = "Blogs";
+    const listName = "Blogs";
     sp.web.lists.getByTitle(listName).items.select('ID,Title,Category,PublishedDate,BlogThumbnail,BlogImage,Author/ID,Author/Title,Business/ID,Business/Title')
     .expand('Author,Business').getAll().then((resp: IBlogData[]) => {
       const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
-      console.log(resp.length);
+      //console.log(resp.length);
       this.setState({
         blogData: resp,
         filterData:resp,
