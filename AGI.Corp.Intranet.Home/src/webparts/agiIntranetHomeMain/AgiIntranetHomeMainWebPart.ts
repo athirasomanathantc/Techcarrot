@@ -21,6 +21,7 @@ export interface IAgiIntranetHomeMainWebPartProps {
   topSocialMediaPosts: number;
   topRewards: number;
   topEvents: number;
+  topSurveyQuestions: number;
 }
 
 export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IAgiIntranetHomeMainWebPartProps> {
@@ -134,7 +135,16 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
                   maxValue: 50,
                   minValue: 1,
                   disabled: false
-                })                
+                }),
+                PropertyFieldNumber("topSurveyQuestions", {
+                  key: "topSurveyQuestions",
+                  label: "topSurveyQuestions",
+                  description: "No of survey questions",
+                  value: this.properties.topSurveyQuestions,
+                  maxValue: 50,
+                  minValue: 1,
+                  disabled: false
+                })
               ]
             }
           ]

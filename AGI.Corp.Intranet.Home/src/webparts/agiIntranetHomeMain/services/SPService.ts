@@ -8,6 +8,8 @@ import { INavigation } from "../models/INavigation";
 import { IReward } from "../models/IReward";
 import { ISnap } from "../models/ISnap";
 import { ISocialMediaPost } from "../models/ISocialMediaPost";
+import { ISurveyOption } from "../models/ISurveyOption";
+import { ISurveyQuestion } from "../models/ISurveyQuestion";
 
 export class SPService {
     private _props: IAgiIntranetHomeMainProps;
@@ -102,6 +104,30 @@ export class SPService {
             .top(this._props.topEvents)
             .orderBy("StartDate", false)()
             .then((items: IEvent[]) => {
+                return items;
+            })
+            .catch((exception) => {
+                throw new Error(exception);
+            });
+    }
+
+    public async getSurveyQuestions(): Promise<ISurveyQuestion[]> {
+        return await sp.web.lists.getByTitle('SurveyQuestions').items.select("Id,Title,SortOrder")
+            .top(this._props.topSurveyQuestions)
+            .orderBy("SortOrder", true)()
+            .then((items: ISurveyQuestion[]) => {
+                return items;
+            })
+            .catch((exception) => {
+                throw new Error(exception);
+            });
+    }
+
+    public async getSurveyOptions(): Promise<ISurveyOption[]> {
+        return await sp.web.lists.getByTitle('SurveyOptions').items.select("Id,Title,Question/Title,Question/Id")
+            .top(5000)
+            .expand("Question")()
+            .then((items: ISurveyOption[]) => {
                 return items;
             })
             .catch((exception) => {
