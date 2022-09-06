@@ -348,7 +348,7 @@ transition: all 0.15s ease-in-out;
 
 
 #success {
-    display: none;
+    /* display: none; */
 }
 
 #success h4 {

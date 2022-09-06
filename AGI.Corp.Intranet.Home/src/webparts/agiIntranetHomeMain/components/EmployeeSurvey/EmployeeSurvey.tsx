@@ -16,7 +16,8 @@ export const EmployeeSurvey = (props: IAgiIntranetHomeMainProps) => {
             question: null
         },
         questions: [],
-        options: []
+        options: [],
+        submitted: false
     });
     const _spService = new SPService(props);
     siteUrl = props.siteUrl;
@@ -34,6 +35,7 @@ export const EmployeeSurvey = (props: IAgiIntranetHomeMainProps) => {
 
             if (questions.length > 0) {
                 setSurvey({
+                    ...survey,
                     currentQuestion: {
                         question: questions[0],
                         options: options.filter((option: ISurveyOption) => option.Question.Id === questions[0].Id)
@@ -50,35 +52,37 @@ export const EmployeeSurvey = (props: IAgiIntranetHomeMainProps) => {
 
     const moveNext = (index: number) => {
         setSurvey({
+            ...survey,
             currentQuestion: {
                 question: survey.questions[index],
                 options: survey.options.filter((option: ISurveyOption) => option.Question.Id === survey.questions[index].Id)
-            },
-            questions: survey.questions,
-            options: survey.options
+            }
         });
     }
 
     const movePrev = (index: number) => {
         setSurvey({
+            ...survey,
             currentQuestion: {
                 question: survey.questions[index],
                 options: survey.options.filter((option: ISurveyOption) => option.Question.Id === survey.questions[index].Id)
-            },
-            questions: survey.questions,
-            options: survey.options
+            }
         });
     }
 
-    const onSubmit = () => {
-
+    const onSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+        setSurvey({
+            ...survey,
+            submitted: true
+        });
     }
 
     if (error) {
         throw error;
     }
 
-    const { currentQuestion, questions } = survey;
+    const { currentQuestion, questions, submitted } = survey;
 
     return (<>
         {questions.length > 0 && <div className="col-md-12 mt-4 mb-4 mb-md-0">
@@ -110,7 +114,7 @@ export const EmployeeSurvey = (props: IAgiIntranetHomeMainProps) => {
                             {currentQuestion.question && <form className="needs-validation" id="form-wrapper" method="post"
                                 name="form-wrapper">
                                 <div id="steps-container">
-                                    <div className="step d-block">
+                                    {!submitted && <div className="step d-block">
                                         <h4>{currentQuestion.question.Title}</h4>
                                         <div className="form-check ps-0 q-box">
 
@@ -125,23 +129,16 @@ export const EmployeeSurvey = (props: IAgiIntranetHomeMainProps) => {
                                             })}
 
                                         </div>
-                                    </div>
+                                    </div>}
 
-                                    <div id="success">
+                                    {submitted && <div id="success">
                                         <div className="mt-5">
-                                            <h4>Success! We'll get back to you ASAP!</h4>
-                                            <p>Meanwhile, clean your hands often, use soap and
-                                                water, or an alcohol-based hand rub, maintain a safe
-                                                distance from anyone who is coughing or sneezing and
-                                                always wear a mask when physical distancing is not
-                                                possible.</p>
-                                            <a className="back-link" href="">Go back from the beginning
-                                                ➜</a>
+                                            <h4>Success! You have submitted your response!</h4>
                                         </div>
-                                    </div>
+                                    </div>}
 
                                 </div>
-                                <div id="q-box__buttons">
+                                {!submitted && <div id="q-box__buttons">
                                     <button id="prev-btn" type="button" className={currentQuestion.question.SortOrder === 1 ? 'd-none' : ''} onClick={() => movePrev(currentQuestion.question.SortOrder - 2)}>
                                         <i><svg id="Group_8057" data-name="Group 8057"
                                             xmlns="http://www.w3.org/2000/svg" width="30"
@@ -179,8 +176,8 @@ export const EmployeeSurvey = (props: IAgiIntranetHomeMainProps) => {
                                         </svg></i>
                                     </button>
                                     <button id="submit-btn" type="submit"
-                                        className={questions.length === currentQuestion.question.SortOrder ? '' : 'd-none'} onClick={() => onSubmit()}>Submit</button>
-                                </div>
+                                        className={questions.length === currentQuestion.question.SortOrder ? '' : 'd-none'} onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onSubmit(e)}>Submit</button>
+                                </div>}
                             </form>}
                         </div>
 
