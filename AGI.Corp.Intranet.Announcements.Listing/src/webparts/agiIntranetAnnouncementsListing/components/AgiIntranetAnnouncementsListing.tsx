@@ -169,27 +169,35 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
             <article className="row gx-5 mb-5">
               <section className="col-lg-12 announcement-listing">
                 <div className="row">
-                  {
+                  { 
+                  this.state.currentPageAnnouncementData?
                     this.state.currentPageAnnouncementData.map((announcement) => {
                       return (
                         <div className="col-lg-3 mb-4 d-flex align-items-stretch">
                           <div className="card news-card">
                             <img src={this.getImageUrl(announcement)} className="card-img-top" alt="Card Image" />
                             <div className="card-body d-flex flex-column">
-                              <div className="mb-3 card-content-header">
+                            <div className={'category'}>
+                            <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {announcement.Business ? announcement.Business.Title : ""}</span>
+                              </div>
+                              <div className="mb-2 mt-2 card-content-header">
                                 <h5 className="card-title">{announcement.Title}</h5>
                               </div>
-                              <div className="news-details">
-                                <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date.svg`} alt="" /></i> {moment(announcement.PublishedDate).format('DD MMM YYYY')}</span>
-                                <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {announcement.Business ? announcement.Business.Title : ""}</span>
+                              <div className="date">
+                                <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i> {moment(announcement.PublishedDate).format('DD-MMM-YYYY')}</span>
+                                
                               </div>
-                              <p className="card-text">{announcement.Description}</p>
+                              <p className="card-text mt-2">{announcement.Description}</p>
                               <a href={`${this.props.siteUrl}/SitePages/News/Announcements/Announcement Details.aspx?announcementID=${announcement.ID}`} className="btn news-read-more  align-self-start">Read more</a>
                             </div>
                           </div>
                         </div>
                       )
                     })
+                    :
+                    <div className={'invalidTxt'}>
+                      NO ANNOUNCEMENTS
+                      </div>
                   }
                 </div>
               </section>

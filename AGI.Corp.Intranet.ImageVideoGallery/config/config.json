@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-corp-intranet-image-video-gallery-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiCorpIntranetImageVideoGallery/AgiCorpIntranetImageVideoGalleryWebPart.js",
+          "manifest": "./src/webparts/agiCorpIntranetImageVideoGallery/AgiCorpIntranetImageVideoGalleryWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiCorpIntranetImageVideoGalleryWebPartStrings": "lib/webparts/agiCorpIntranetImageVideoGallery/loc/{locale}.js"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-intranet-about-main-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiIntranetAboutMain/AgiIntranetAboutMainWebPart.js",
+          "manifest": "./src/webparts/agiIntranetAboutMain/AgiIntranetAboutMainWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {
+    "AGIAbout": {
+      "path": "./src/webparts/HelperJs/AGIAbout.Injector.js",
+      "globalName": "AGIAbout"
+    },
+    "jquery": "node_modules/jquery/dist/jquery.min.js",
+    "jqueryui": "node_modules/jqueryui/jquery-ui.min.js"
+  },
+  "localizedResources": {
+    "AgiIntranetAboutMainWebPartStrings": "lib/webparts/agiIntranetAboutMain/loc/{locale}.js"
+  }
+}

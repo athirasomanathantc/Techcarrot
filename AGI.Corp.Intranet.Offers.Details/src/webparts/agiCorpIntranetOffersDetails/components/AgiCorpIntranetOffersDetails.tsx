@@ -93,19 +93,19 @@ export default class AgiCorpIntranetOffersDetails extends React.Component<IAgiCo
           </div>
 
           <div className={'half-width mt-5'} style={{ display: offer.MiddleImage === null ? "none" : "display" }}>
-            <div className={'container'}>
-              <div className={'row gx-5'}>
-                <div className={'col-lg-6 '}>
+            
+              <div className={'row align-items-center'}>
+                <div className={'col-lg-5 '}>
                   <div className={'image-container'} >
                     <img className={'w-100  mb-4 mb-md-0'} src={imagebet} alt="" />
                   </div>
                 </div>
-                <div className={'col-lg-6 d-flex flex-column justify-content-center align-items-center'}>
+                <div className={'col-lg-7'}>
                   <div className={'text-container'} dangerouslySetInnerHTML={{ __html: offer.Content2 }}>
                     
                 </div>
               </div>
-            </div>
+            
           </div>
           </div>
 
@@ -139,8 +139,8 @@ export default class AgiCorpIntranetOffersDetails extends React.Component<IAgiCo
               offerId ?
                 this.renderData()
                 :
-                <div>
-                  Invalid Reward ID.
+                <div className={'invalidTxt'}>
+                  INVALID REWARD ID.
                 </div>
             }
 

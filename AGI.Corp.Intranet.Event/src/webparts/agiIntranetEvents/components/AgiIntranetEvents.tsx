@@ -110,7 +110,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
       return resp.value;
     });
 
-    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=ID,Title,Location,Description,StartDate,EndDate,EventThumbnail,Business/ID,Business/Title&$expand=Business&$top=${count}`;
+    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=ID,Title,Description,StartDate,EndDate,EventThumbnail,Country,City,Business/ID,Business/Title&$expand=Business&$top=${count}`;
     this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
       .then((response: SPHttpClientResponse) => {
         return response.json();
@@ -455,7 +455,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
                                   <h5 className={'card-title'}>{item.Title}</h5>
                                 </div>
                                 <div className={'news-details'}>
-                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/icon-location.png`} alt="" /></i> {item.Location}</span>
+                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/icon-location.png`} alt="" /></i> {item.City},{item.Country}</span>
 
                                 </div>
                                 <p className={'card-text'}>{item.Description}</p>
@@ -468,7 +468,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
                         )
                       })
                       :
-                          <div>
+                          <div className={'invalidTxt'}>
                           <p>NO EVENTS</p>
                           </div>
 

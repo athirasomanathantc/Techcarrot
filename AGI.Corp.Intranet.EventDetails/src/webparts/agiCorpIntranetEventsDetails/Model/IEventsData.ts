@@ -8,7 +8,8 @@ export interface IEventsData{
     Summary:string;
     EventThumbnail:string;
     EventImage:string;
-    Location:string;
+    Country:string;
+    City: string;
     ReadBy: string;
 
 }
