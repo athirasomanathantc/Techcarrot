@@ -7,4 +7,8 @@ export interface INewsItem {
     PublishedDate: Date;
     ViewsJSON: string;
     NewsLikedBy: string;
+    Business: {
+        Title: string;
+        ID: number;
+    };
 }

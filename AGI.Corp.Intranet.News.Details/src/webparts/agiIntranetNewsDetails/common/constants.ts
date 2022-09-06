@@ -9,7 +9,8 @@ export const NEWS_NULL_ITEM = {
     Category: '',
     PublishedDate: new Date(),
     ViewsJSON: '',
-    NewsLikedBy: ''
+    NewsLikedBy: '',
+    Business: {Title: '', ID: 0}
 };
 
 export const ViewsJSON_NULL = JSON.stringify({ "views": [] });

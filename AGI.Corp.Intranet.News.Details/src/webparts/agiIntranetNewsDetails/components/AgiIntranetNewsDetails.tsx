@@ -61,35 +61,46 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       newsId: id
     });
 
-    await sp.web.lists.getByTitle(listName).items.getById(id).get().then((item: INewsItem) => {
-      let viewJSON = '';
-      if (item.ViewsJSON) {
-        viewJSON = item.ViewsJSON;
-      }
-      else {
-        let _viewJSON = [];
-        _viewJSON.push({ userId: userId, views: 0 });
-        viewJSON = JSON.stringify(_viewJSON);
-        console.log('updated view JSON', _viewJSON);
-      }
-
-      const viewsCount = this.getViewCount(viewJSON);
-      // update view
-      let updateViewJSON = JSON.parse(viewJSON);
-      
-      const newViewsCount = viewsCount + 1;
-      const updatedViews = updateViewJSON.map((obj) => {
-        if(obj.userId == userId) {
-          return{...obj, views: newViewsCount}
+    await sp.web.lists.getByTitle(listName).items.getById(id)
+      .select('*,Business/Title,Business/ID')
+      .expand('Business')
+      .get().then((item: INewsItem) => {
+        let viewJSON = '';
+        if (item.ViewsJSON) {
+          viewJSON = item.ViewsJSON;
+          let _viewJSON = JSON.parse(viewJSON);
+          if (_viewJSON && _viewJSON.length > 0) {
+            const _records = _viewJSON.filter((o) => o.userId == this.state.userId);
+            if (_records && _records.length == 0) {
+              _viewJSON.push({ userId: userId, views: 0 });
+              viewJSON = JSON.stringify(_viewJSON);
+            }
+          }
         }
-        return obj;
+        else {
+          let _viewJSON = [];
+          _viewJSON.push({ userId: userId, views: 0 });
+          viewJSON = JSON.stringify(_viewJSON);
+          //console.log('updated view JSON', _viewJSON);
+        }
+
+        const viewsCount = this.getViewCount(viewJSON);
+        // update view
+        let updateViewJSON = JSON.parse(viewJSON);
+
+        const newViewsCount = viewsCount + 1;
+        const updatedViews = updateViewJSON.map((obj) => {
+          if (obj.userId == userId) {
+            return { ...obj, views: newViewsCount }
+          }
+          return obj;
+        });
+        this.updateViews(parseInt(newsID), JSON.stringify(updatedViews));
+        this.setState({
+          news: item,
+          viewsCount: viewsCount
+        });
       });
-      this.updateViews(parseInt(newsID), JSON.stringify(updatedViews));
-      this.setState({
-        news: item,
-        viewsCount: viewsCount
-      });
-    });
 
     await this.getComments(id);
 
@@ -151,7 +162,6 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
   }
 
   private getViewCount(viewsJSON: string): number {
-    console.log('get view count');
     let count = 0;
     if (viewsJSON) {
       //const data = JSON.parse(viewsJSON).views;
@@ -163,8 +173,6 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
           count = record.views;
         }
       }
-      console.log('json');
-      console.log(viewsJSON);
     }
 
     return count;
@@ -362,7 +370,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
             <div className="row">
               <div className="col-md-12">
                 <ul className="justify-content-start ps-0">
-                  <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.png`} /></i> {news.Category}</li>
+                  <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.png`} /></i> {news.Business && news.Business.Title}</li>
                 </ul>
               </div>
               {/* <div className="col-md-6">
@@ -423,10 +431,10 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
                     <span className='txt'>Like</span>
                   </a> */}
                   <p className="nav-link" >
-                    <i><img src={`${this.props.siteUrl}/Assets/icons/icon-comment.png`} alt="" /></i> <span className='count'>{this.state.commentsCount}</span><span className='txt'> Comment</span>
+                    <i><img src={`${this.props.siteUrl}/Assets/icons/comment.svg`} alt="" /></i> <span className='count'>{this.state.commentsCount}</span><span className='txt'> Comment</span>
                   </p>
                   <p className="nav-link"  >
-                    <i><img src={`${this.props.siteUrl}/Assets/icons/icon-view.png`} alt="" /></i> <span className='count'>{this.state.viewsCount}</span><span className='txt'> Views</span>
+                    <i><img src={`${this.props.siteUrl}/Assets/icons/view.svg`} alt="" /></i> <span className='count'>{this.state.viewsCount}</span><span className='txt'> Views</span>
                   </p>
                 </nav>
               </div>
@@ -486,7 +494,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                     <div className="comment-controls">
                       <nav className="nav">
-                        <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-comment.png`} alt="" /></i> Reply</a>
+                        <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/comment.svg`} alt="" /></i> Reply</a>
                         <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" /></i> Like</a>
                       </nav>
                     </div>
@@ -539,7 +547,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
                     <a className="nav-link" href="javascript:void(0)" onClick={(e) => this.replyToComment(e)}
                       data-id={comment.ID}>
                       <Icon iconName='Reply' className='replyIcon' data-id={comment.ID} /> Reply
-                      {/* <i><img src={`${this.props.siteUrl}/Assets/icons/icon-comment.png`} alt="" /></i> Reply */}
+                      {/* <i><img src={`${this.props.siteUrl}/Assets/icons/comment.svg`} alt="" /></i> Reply */}
                     </a>
                     <a className="nav-link" href="javascript:void(0)" onClick={(e) => this.likeComment(e)}
                       data-id={comment.ID}>
@@ -627,7 +635,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     const newsID = this.getQueryStringValue('newsID');
     return (
       <div className={styles.agiIntranetNewsDetails}>
-        <div className="main-content">
+        <div className="main-content news-content">
           <div className="content-wrapper">
             <div className="container">
               {
@@ -635,7 +643,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
 
                   this.renderNewsDetail()
                   :
-                  <div>
+                  <div className='warning-text'>
                     Invalid news ID.
                   </div>
               }
