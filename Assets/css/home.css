@@ -883,7 +883,7 @@ input[type="radio"]:checked+label::after {
     -moz-border-radius: 7.5px;
     -webkit-border-radius: 7.5px;
     border-radius: 7.5px;
-    background-color: #E94B2E;
+    background-color: #0DC49A;
     position: absolute;
     bottom: 7px;
     left: 45%;
@@ -914,13 +914,39 @@ input[type="radio"]:checked+label::after {
     color: #fff !important;
 }
 
+.DayPicker-Day--event:not(.DayPicker-Day--outside):after {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    -moz-border-radius: 7.5px;
+    -webkit-border-radius: 7.5px;
+    border-radius: 7.5px;
+    background-color: #036ef8;
+    position: absolute;
+    bottom: 7px;
+    left: 45%;
+    transform: translate(0px, 0px);
+
+}
+
+.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    position: relative;
+    background-color: #9D0D71;
+    color: #f0f8ff;
+}
+
+.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
+    opacity: 50%;
+    background-color: #9D0D71;
+}
 
 .datebox.Event {
     background-color: #036ef8;
 }
 
 .datebox.Holiday {
-    background-color: #f5604d;
+    background-color: #0DC49A;
 }
 
 .datebox.Holiday,

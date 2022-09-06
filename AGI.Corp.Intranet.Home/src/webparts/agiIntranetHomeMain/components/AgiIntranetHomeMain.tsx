@@ -10,10 +10,10 @@ import { SocialMedia } from './SocialMedia/SocialMedia';
 import { Rewards } from './Rewards/Rewards';
 import { PortalNavigation } from './PortalNavigation/PortalNavigation';
 import { MyApps } from './MyApps/MyApps';
-import { Calender } from './Calendar/Calendar';
 import { CompanyEvents } from './CompanyEvents/CompanyEvents';
 import { EmployeeSurvey } from './EmployeeSurvey/EmployeeSurvey';
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
+import Calender from './Calendar/Calendar';
 
 export default class AgiIntranetHomeMain extends React.Component<IAgiIntranetHomeMainProps, IAgiIntranetHomeMainState> {
 
