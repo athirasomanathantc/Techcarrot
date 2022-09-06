@@ -4,19 +4,18 @@ import { useEffect, useState } from "react";
 import { ILatestNews } from "../../models/ILatestNews";
 import SPService from "../../services/SPService";
 import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
-import styles from "./LatestNews.module.scss";
 
 const CarouselItem = (props: ILatestNews) => {
     let imageUrl = JSON.parse(props.NewsImage);
     imageUrl = imageUrl?.serverUrl + imageUrl?.serverRelativeUrl;
 
     return (<>
-        <div className={`carousel-item ${styles.carouselItem} ${!props.index ? 'active' : ''}`} onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => goToNews(e, props)}>
+        <div className={`carousel-item ${!props.index ? 'active' : ''}`} onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => goToNews(e, props)}>
             <img src={imageUrl} className="d-block w-100"
                 alt="..." />
             <div className="carousel-caption">
                 <span className="badge rounded-pill bg-light">{props.Business?.Title}</span>
-                <p className={styles.para} title={props.Title}>{props.Title}</p>
+                <p title={props.Title}>{props.Title}</p>
                 <h5 className="date">{moment(props.PublishedDate).format("DD MMM YYYY")}</h5>
             </div>
         </div>

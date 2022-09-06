@@ -776,86 +776,6 @@ input[type="radio"]:checked+label::after {
 }
 
 /* Date Picker */
-.spo-daypickerbox {
-    /*box-shadow:0 3px 22px rgba(0,0,0,0.1);*/
-    box-shadow: 0 3px 22px rgb(110 110 110 / 10%);
-    border-radius: 8px;
-    background-color: #ffffff;
-    padding: 10px 20px;
-    position: relative;
-    left: 0;
-    margin-top: 20px;
-}
-
-.spo-daypickerbox .title {
-    text-align: left;
-    font-weight: 700;
-    font-size: 22px;
-    padding: 10px 0;
-    border-bottom: 1px solid #F4F4F4;
-    margin-bottom: 16px;
-    line-height: 1.5;
-
-    display: none !important
-}
-
-.spo-daypickerbox1 h4 {
-    padding-top: 12px;
-    margin-bottom: 16px;
-    font-size: 16px;
-    font-family: 'Graphik-Semibold' !important;
-    line-height: 1.5;
-}
-
-.spo-daypickerbox>div {
-    width: 100% !important;
-    padding: 0 !important;
-}
-
-.spo-daypickerbox .legend {
-    padding: 0 10px 20px;
-    font-family: 'Proxima Nova Rg';
-}
-
-.spo-daypickerbox .legend span {
-    position: relative;
-}
-
-.spo-daypickerbox .legend span:after {
-    position: absolute;
-    content: '';
-    height: 10px;
-    width: 10px;
-    top: 1px;
-    left: 0;
-    border-radius: 10px;
-}
-
-.spo-daypickerbox .legend span:first-child:after {
-    background: #9D0D71;
-}
-
-.spo-daypickerbox .legend span:nth-child(2):after {
-    background: #E94B2E;
-}
-
-.spo-daypickerbox .legend span:nth-child(3):after {
-    background: rgba(44, 95, 227, 1);
-}
-
-.spo-daypickerbox .events-of-month {
-    font-size: 12px;
-    line-height: 24px;
-}
-
-.spo-daypickerbox .events-of-month span {
-    font-weight: bold;
-}
-
-.spo-daypickerbox .details {
-    display: none;
-}
-
 .DayPicker {
     font-family: 'Proxima Nova Rg', Helvetica, sans-serif;
     width: 100%;
@@ -930,21 +850,6 @@ input[type="radio"]:checked+label::after {
     line-height: 0.5em;
 }
 
-/* 
-.DayPicker-Day--today:not(.DayPicker-Day--outside) {
-    background-color: #9D0D71;
-    color: #494949 !important;
-}
-
-.DayPicker-Day--holiday:not(.DayPicker-Day--outside) {
-    background-color: #E94B2E !important;
-}
-
-.DayPicker-Day--event:hover {
-    background-color: #007bff !important;
-    color: white;
-} */
-
 .eventDetail {
     margin-bottom: 10px;
     display: flex;
@@ -967,7 +872,6 @@ input[type="radio"]:checked+label::after {
 
 
 .DayPicker-Day--holiday:not(.DayPicker-Day--outside):not(.DayPicker-Day--event) {
-    /*background-color: #E94B2E!important;*/
     color: #000;
 }
 
@@ -987,7 +891,6 @@ input[type="radio"]:checked+label::after {
 }
 
 .DayPicker-Day--event:not(.DayPicker-Day--outside) {
-    /*background-color: #036ef8!important;*/
     color: #000;
 }
 
@@ -998,14 +901,6 @@ input[type="radio"]:checked+label::after {
 .DayPicker-Day--today:hover {
     background-color: #9D0D71 !important;
 }
-
-/*.DayPicker-Day--holiday:not(.DayPicker-Day--outside):hover {
-        background-color: #E94B2E !important;
-    }*/
-
-/* .DayPicker-Day--event:not(.DayPicker-Day--outside):not(.DayPicker-Day--holiday):hover {
-        background-color: #036ef8!important;
-    }*/
 
 .DayPicker-Day--today,
 .DayPicker-Day--holiday,
@@ -1019,9 +914,6 @@ input[type="radio"]:checked+label::after {
     color: #fff !important;
 }
 
-/*.DayPicker-Day--holiday:not(.DayPicker-Day--outside){
-    background-color: #E94B2E !important;
-}*/
 
 .datebox.Event {
     background-color: #036ef8;
@@ -1066,9 +958,6 @@ input[type="radio"]:checked+label::after {
 
 .DayPicker-NavButton--prev {
     background-image: none !important;
-    /*margin-right: 20px;
-    position: absolute;
-    left: 0*/
 }
 
 .DayPicker-NavButton--prev:after {
@@ -1085,8 +974,6 @@ input[type="radio"]:checked+label::after {
 
 .DayPicker-NavButton--next {
     background-image: none !important;
-    /*position: absolute;
-    right: 0*/
 }
 
 .DayPicker-NavButton--next:after {
@@ -1101,22 +988,6 @@ input[type="radio"]:checked+label::after {
 }
 
 
-
-/*.DayPicker-NavButton {
-    position: absolute;
-    top: 8px;
-    right: 20px;
-    left: auto;
-    display: block;
-    margin-top: 2px;
-    width: 1.25em;
-    height: 1.25em;
-    background-position: 50%;
-    background-size: 50%;
-    background-repeat: no-repeat;
-    color: #8b9898;
-    cursor: pointer;
-}*/
 
 .DayPicker-NavButton {
     position: relative !important;
@@ -1180,6 +1051,7 @@ input[type="radio"]:checked+label::after {
 
 /* Date Picker End*/
 
+/* Additional Styles */
 /* My Apps */
 .my-app .carousel .carousel-control-prev,
 .my-app .carousel .carousel-control-next {
@@ -1220,3 +1092,31 @@ input[type="radio"]:checked+label::after {
     text-decoration: none;
     color: #212529;
 }
+
+/* Company Events End */
+
+/* Latest News */
+.carousel-inner .carousel-item {
+    cursor: pointer;
+}
+
+.latest-news-section .carousel-caption p {
+    height: 2.2em;
+    overflow: hidden
+}
+
+/* Latest News End*/
+
+/* Rewards */
+.employee-offer-section .overlay {
+    min-height: 136px;
+}
+
+/* Rewards End */
+
+/* Social Media */
+.social-media-section .overlay {
+    min-height: 136px;
+}
+
+/* Additional Styles End*/

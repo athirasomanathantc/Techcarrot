@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { ISocialMediaPost } from "../../models/ISocialMediaPost";
 import SPService from "../../services/SPService";
 import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
-import styles from "./SocialMedia.module.scss";
 
 let siteUrl: string = '';
 
@@ -12,7 +11,7 @@ const SocialMediaCarousel = (props: ISocialMediaPost) => {
     return (<>
         <div className={`carousel-item ${!props.index ? 'active' : ''}`}>
             <img src={`${siteUrl}/Assets/images/social-media-img-1.png`} className="d-block w-100" alt="..." />
-            <div className={`carousel-caption overlay ${styles.overlay}`}>
+            <div className={`carousel-caption overlay`}>
 
                 <p>{props.Description}</p>
                 <div className="caption-bottom d-flex justify-content-between">
