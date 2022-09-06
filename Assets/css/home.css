@@ -1209,10 +1209,3 @@ input[type="radio"]:checked+label::after {
 }
 
 /* My Apps End*/
-
-/* Rewards */
-.rewards-image {
-    min-height: 330px;
-}
-
-/* Rewards End */
