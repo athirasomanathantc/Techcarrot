@@ -105,7 +105,6 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
           let _viewJSON = [];
           _viewJSON.push({ userId: userId, views: 0 });
           viewJSON = JSON.stringify(_viewJSON);
-          console.log('updated view JSON', _viewJSON);
         }
 
         const viewsCount = this.getViewCount(viewJSON);
@@ -136,13 +135,24 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     let viewJSON = '';
     if (item.ViewsJSON) {
       viewJSON = item.ViewsJSON;
+      //check if current user id exists, else add it
+      let _viewJSON = JSON.parse(viewJSON);
+      if (_viewJSON && _viewJSON.length > 0) {
+        const _records = _viewJSON.filter((o) => o.userId == this.state.userId);
+        if (_records && _records.length == 0) {
+          _viewJSON.push({ userId: userId, views: 0 });
+          viewJSON = JSON.stringify(_viewJSON);
+        }
+      }
     }
     else {
       let _viewJSON = [];
       _viewJSON.push({ userId: userId, views: 0 });
       viewJSON = JSON.stringify(_viewJSON);
-      console.log('updated view JSON', _viewJSON);
+     // console.log('updated view JSON', _viewJSON);
     }
+
+    //console.log('view json', viewJSON);
 
     const viewsCount = this.getViewCount(viewJSON);
     // update view
@@ -166,6 +176,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
   }
 
   private async reloadBlogItem(blogID: string): Promise<void> {
+    const select = "ID,Title,Summary,BlogImage,Business/ID,Business/Title,Author/ID,Author/Title,PublishedDate,ViewsJSON,BlogLikedBy";
     const listName = LIST_BLOG;
     if (!blogID)
       return;
@@ -174,11 +185,14 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
       blogId: id
     });
 
-    await sp.web.lists.getByTitle(listName).items.getById(id).get().then((item: IBlogItem) => {
-      this.setState({
-        blog: item,
+    await sp.web.lists.getByTitle(listName).items.getById(id).
+      select(select).
+      expand('Author, Business').
+      get().then((item: IBlogItem) => {
+        this.setState({
+          blog: item,
+        });
       });
-    });
 
   }
 
@@ -221,7 +235,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
   }
 
   private getViewCount(viewsJSON: string): number {
-    console.log('get view count');
+    //console.log('get view count');
     let count = 0;
     if (viewsJSON) {
       //const data = JSON.parse(viewsJSON).views;
@@ -233,8 +247,8 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
           count = record.views;
         }
       }
-      console.log('json');
-      console.log(viewsJSON);
+      //console.log('json');
+      //console.log(viewsJSON);
     }
 
     return count;
@@ -247,7 +261,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
       return;
     }
 
-    console.log('comment', comment);
+    //console.log('comment', comment);
     const userName = this.props.context.pageContext.legacyPageContext.userDisplayName;
     const userId = this.props.context.pageContext.legacyPageContext.userId;
     const body = {
@@ -257,7 +271,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     };
 
     sp.web.lists.getByTitle(LIST_COMMENTS).items.add(body).then((data) => {
-      console.log('comments added.');
+      //console.log('comments added.');
       this.setState({
         comment: ''
       });
@@ -305,7 +319,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     }
 
     sp.web.lists.getByTitle(LIST_COMMENTS).items.add(body).then((data) => {
-      console.log('reply added..');
+      //console.log('reply added..');
       this.getComments(blogId);
       this.setState({
         reply: ''
@@ -325,9 +339,8 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const body = {
       BlogLikedBy: likedBy
     };
-    console.log(body);
+    //console.log(body);
     this.updateBlogItem(body, id);
-
   }
 
   private unlikePost(e: any) {
@@ -340,7 +353,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const body = {
       BlogLikedBy: likedBy
     };
-    console.log(body);
+    //console.log(body);
     this.updateBlogItem(body, id);
   }
 
@@ -353,7 +366,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const body = {
       CommentLikedBy: likedBy
     };
-    console.log(body);
+    //console.log(body);
     this.updateBlogCommentItem(body, id);
 
   }
@@ -368,7 +381,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const body = {
       CommentLikedBy: likedBy
     };
-    console.log(body);
+    //console.log(body);
     this.updateBlogCommentItem(body, id);
   }
 
@@ -418,7 +431,6 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
       currentIndex: prevItem.ID,
       blog: prevItem
     }, () => {
-      console.log('cruuent Item: ', prevIndex)
       this.scrollToTop();
     });
   }
@@ -429,12 +441,16 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const arrayIndex = blogs.map(e => e.ID).indexOf(index);
     const nextIndex = arrayIndex == (blogs.length - 1) ? 0 : arrayIndex + 1;
     const nextItem = blogs[nextIndex];
+    const nextItemID = nextItem.ID;
+    const url = `${this.props.siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${nextItemID}`;
+    // location.href.replace()
+    return;
     this.setState({
-      currentIndex: nextItem.ID,
+      currentIndex: nextItemID,
       blog: nextItem
     }, () => {
-      console.log('cruuent Item: ', nextIndex);
       this.scrollToTop();
+      //this.getComments(nextItemID);
     });
   }
 
@@ -470,12 +486,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
               </ul>
             </div>
             <div className="col-md-6">
-              {/* <ul>
-                      <li><i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" /></i> Like</li>
-                      <li><i><img src={`${this.props.siteUrl}/Assets/icons/icon-comment.png`} alt="" /></i> 3 Comment</li>
-                      <li><i><img src={`${this.props.siteUrl}/Assets/icons/icon-view.png`} alt="" /></i> 8 Views</li>
-                    </ul> */}
-              <nav className="nav post-analytics">
+              {/* <nav className="nav post-analytics">
                 {
                   isLikedByCurrentUser ?
                     <a className="nav-link" href="javascript:void(0)" onClick={(e) => this.unlikePost(e)}
@@ -488,16 +499,37 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
                       <i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" data-id={blog.ID} /></i> Like
                     </a>
                 }
-                {/* <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" /></i>
-            <span className='txt'>Like</span>
-          </a> */}
                 <p className="nav-link" >
-                  <i><img src={`${this.props.siteUrl}/Assets/icons/icon-comment.png`} alt="" /></i> <span className='count'>{this.state.commentsCount}</span><span className='txt'> Comment</span>
+                  <i><img src={`${this.props.siteUrl}/Assets/icons/comment.svg`} alt="" /></i> <span className='count'>{this.state.commentsCount}</span><span className='txt'> Comment</span>
                 </p>
                 <p className="nav-link"  >
-                  <i><img src={`${this.props.siteUrl}/Assets/icons/icon-view.png`} alt="" /></i> <span className='count'>{this.state.viewsCount}</span><span className='txt'> Views</span>
+                  <i><img src={`${this.props.siteUrl}/Assets/icons/view.svg`} alt="" /></i> <span className='count'>{this.state.viewsCount}</span><span className='txt'> Views</span>
                 </p>
-              </nav>
+              </nav> */}
+              <ul>
+                {
+                  isLikedByCurrentUser ?
+                    <li>
+                      <a  href="javascript:void(0)" onClick={(e) => this.unlikePost(e)}
+                        data-id={blog.ID}>
+                        <i><img src={`${this.props.siteUrl}/Assets/icons/icon-unlike.svg`} alt="" data-id={blog.ID} /></i> Unlike
+                      </a>
+                    </li>
+                    :
+                    <li>
+                      <a  href="javascript:void(0)" onClick={(e) => this.likePost(e)}
+                        data-id={blog.ID}>
+                        <i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" data-id={blog.ID} /></i> Like
+                      </a>
+                    </li>
+                }
+                <li>
+                  <i><img src={`${this.props.siteUrl}/Assets/icons/comment.svg`} alt="" /></i> <span className='count'>{this.state.commentsCount}</span><span className='txt'> Comment</span>
+                </li>
+                <li>
+                  <i><img src={`${this.props.siteUrl}/Assets/icons/view.svg`} alt="" /></i> <span className='count'>{this.state.viewsCount}</span><span className='txt'> Views</span>
+                </li>
+              </ul>
             </div>
           </div>
         </section>
@@ -575,7 +607,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
                   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                   <div className="comment-controls">
                     <nav className="nav">
-                      <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-comment.png`} alt="" /></i> Reply</a>
+                      <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/comment.svg`} alt="" /></i> Reply</a>
                       <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" /></i> Like</a>
                     </nav>
                   </div>
@@ -627,7 +659,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
                     <a className="nav-link" href="javascript:void(0)" onClick={(e) => this.replyToComment(e)}
                       data-id={comment.ID}>
                       <Icon iconName='Reply' className='replyIcon' data-id={comment.ID} /> Reply
-                      {/* <i><img src={`${this.props.siteUrl}/Assets/icons/icon-comment.png`} alt="" /></i> Reply */}
+                      {/* <i><img src={`${this.props.siteUrl}/Assets/icons/comment.svg`} alt="" /></i> Reply */}
                     </a>
                     <a className="nav-link" href="javascript:void(0)" onClick={(e) => this.likeComment(e)}
                       data-id={comment.ID}>
