@@ -17,22 +17,17 @@ export const EmployeeSurvey = (props: IAgiIntranetHomeMainProps) => {
         },
         questions: [],
         options: [],
+        responses: [],
         submitted: false
     });
     const _spService = new SPService(props);
     siteUrl = props.siteUrl;
+    const { currentQuestion, questions, submitted } = survey;
+
     useEffect(() => {
         const getLatestNews = async () => {
             let questions: ISurveyQuestion[] = await _spService.getSurveyQuestions();
             let options: ISurveyOption[] = await _spService.getSurveyOptions();
-            setSurvey({
-                ...survey,
-                currentQuestion: {
-                    ...currentQuestion,
-                    options
-                }
-            });
-
             if (questions.length > 0) {
                 setSurvey({
                     ...survey,
@@ -41,7 +36,15 @@ export const EmployeeSurvey = (props: IAgiIntranetHomeMainProps) => {
                         options: options.filter((option: ISurveyOption) => option.Question.Id === questions[0].Id)
                     },
                     questions: questions,
-                    options: options
+                    options: options,
+                    responses: questions.map((question) => {
+                        return {
+                            Title: question.Title,
+                            QuestionId: question.Id,
+                            UserEmail: props.context.pageContext.legacyPageContext.userEmail,
+                            UserId: props.context.pageContext.legacyPageContext.userId
+                        }
+                    })
                 });
             }
         }
@@ -70,6 +73,34 @@ export const EmployeeSurvey = (props: IAgiIntranetHomeMainProps) => {
         });
     }
 
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>, surveyOption: ISurveyOption) => {
+        const { question } = survey.currentQuestion;
+
+        const responses = survey.responses.map((surveyResponse) => {
+            if (surveyResponse.QuestionId === question.Id) {
+                return { ...surveyResponse, Option: surveyOption.Title, OptionId: surveyOption.Id }
+            }
+            return surveyResponse;
+        });
+
+        const options = survey.options.map((option) => {
+            if (option.Question.Id === question.Id) {
+                return { ...option, Checked: (option.Id === surveyOption.Id) }
+            }
+            return option;
+        });
+
+        setSurvey({
+            ...survey,
+            responses,
+            options,
+            currentQuestion: {
+                ...survey.currentQuestion,
+                options: options.filter((option: ISurveyOption) => option.Question.Id === question.Id)
+            }
+        })
+    }
+
     const onSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         setSurvey({
@@ -81,8 +112,6 @@ export const EmployeeSurvey = (props: IAgiIntranetHomeMainProps) => {
     if (error) {
         throw error;
     }
-
-    const { currentQuestion, questions, submitted } = survey;
 
     return (<>
         {questions.length > 0 && <div className="col-md-12 mt-4 mb-4 mb-md-0">
@@ -118,12 +147,12 @@ export const EmployeeSurvey = (props: IAgiIntranetHomeMainProps) => {
                                         <h4>{currentQuestion.question.Title}</h4>
                                         <div className="form-check ps-0 q-box">
 
-                                            {currentQuestion.options.map((option: ISurveyOption) => {
+                                            {currentQuestion.options.map((option: ISurveyOption, index: number) => {
                                                 return (<>
                                                     <div className="q-box__question">
-                                                        <input type="radio" checked id="q_1"
-                                                            name="survey-questions" />
-                                                        <label htmlFor="q_1">{option.Title}</label>
+                                                        <input type="radio" id={`q_${index}`}
+                                                            name="survey-questions" checked={option.Checked} onChange={(e) => onChange(e, option)} />
+                                                        <label htmlFor={`q_${index}`}>{option.Title}</label>
                                                     </div>
                                                 </>)
                                             })}
@@ -133,7 +162,7 @@ export const EmployeeSurvey = (props: IAgiIntranetHomeMainProps) => {
 
                                     {submitted && <div id="success">
                                         <div className="mt-5">
-                                            <h4>Success! You have submitted your response!</h4>
+                                            <h4>You have submitted your response!</h4>
                                         </div>
                                     </div>}
 

@@ -6,5 +6,6 @@ export interface ISurveyOption {
     Question: {
         Title: string;
         Id: number;
-    }
+    },
+    Checked: boolean;
 }
