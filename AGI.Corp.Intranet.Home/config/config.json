@@ -13,6 +13,7 @@
   },
   "externals": {},
   "localizedResources": {
-    "AgiIntranetHomeMainWebPartStrings": "lib/webparts/agiIntranetHomeMain/loc/{locale}.js"
+    "AgiIntranetHomeMainWebPartStrings": "lib/webparts/agiIntranetHomeMain/loc/{locale}.js",
+    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js"
   }
 }
