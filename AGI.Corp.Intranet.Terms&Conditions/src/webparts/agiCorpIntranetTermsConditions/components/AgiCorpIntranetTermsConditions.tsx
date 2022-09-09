@@ -46,7 +46,7 @@ export default class AgiCorpIntranetTermsConditions extends React.Component<IAgi
       <div className="main-content">
         <div className="content-wrapper">
           <div className="privacy-terms-section">
-            <div className="container .terms-privacy-wrappet">
+            <div className="container terms-privacy-wrapper">
               <div className="row">
                 {
                   this.state.content.map((item) => {
