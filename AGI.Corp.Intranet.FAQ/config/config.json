@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-corp-intranet-faq-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiCorpIntranetFaq/AgiCorpIntranetFaqWebPart.js",
+          "manifest": "./src/webparts/agiCorpIntranetFaq/AgiCorpIntranetFaqWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiCorpIntranetFaqWebPartStrings": "lib/webparts/agiCorpIntranetFaq/loc/{locale}.js"
+  }
+}
