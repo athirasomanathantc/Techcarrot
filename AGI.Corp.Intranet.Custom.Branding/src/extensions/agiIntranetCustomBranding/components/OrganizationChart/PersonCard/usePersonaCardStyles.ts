@@ -53,9 +53,9 @@ export const usePersonaCardStyles = () => {
       maxWidth: '260px !important',
       borderStyle: "solid",
       borderWidth: 1,
-      borderRadius: 0,
+      borderRadius: "5px",
 
-      boxShadow: "0 5px 15px rgba(50, 50, 90, .1)",
+      // boxShadow: "0 5px 15px rgba(50, 50, 90, .1)",
       background: "#F2F2F2 0% 0% no-repeat padding-box",
       borderColor: "#9D0E71"
     }),
@@ -64,10 +64,10 @@ export const usePersonaCardStyles = () => {
       maxWidth: '260px !important',
       borderStyle: "solid",
       borderWidth: 1,
-      borderRadius: 0,
+      borderRadius: "5px",
       borderColor: currentTheme.neutralQuaternaryAlt,
       backgroundColor: currentTheme.white,
-      boxShadow: "0 5px 15px rgba(50, 50, 90, .1)",
+      // boxShadow: "0 5px 15px rgba(50, 50, 90, .1)",
       selectors: {
         ":hover": {
           borderStyle: "solid",

@@ -20,23 +20,15 @@ import { useEffect, useState } from 'react';
 import { sp } from '@pnp/sp';
 
 export const OrgModal = (props: IOrgModal) => {
-    const dialogContentProps = {
-        type: DialogType.normal,
-        title: 'Missing Subject',
-        closeButtonAriaLabel: 'Close',
-        subText: 'Do you want to send this message without a subject?',
-    };
-
-    const dialogStyles = { main: { maxWidth: 450 } };
-
     const cancelIcon: IIconProps = { iconName: 'Cancel' };
-
     const theme = getTheme();
     const contentStyles = mergeStyleSets({
         container: {
             display: 'flex',
             flexFlow: 'column nowrap',
             alignItems: 'stretch',
+            'max-width': 'calc(100% - 500px)',
+            'max-height': 'calc(100% - 200px)'
         },
         header: [
             // eslint-disable-next-line deprecation/deprecation
@@ -62,11 +54,6 @@ export const OrgModal = (props: IOrgModal) => {
             },
         },
     });
-    const stackProps: Partial<IStackProps> = {
-        horizontal: true,
-        tokens: { childrenGap: 40 },
-        styles: { root: { marginBottom: 20 } },
-    };
     const iconButtonStyles: Partial<IButtonStyles> = {
         root: {
             color: theme.palette.neutralPrimary,
@@ -81,9 +68,9 @@ export const OrgModal = (props: IOrgModal) => {
 
     const titleId = useId('title');
 
-    const [isModalOpen, { setTrue: showModal, setFalse: hideModal }] = useBoolean(true);
-    const [isDraggable, { toggle: toggleIsDraggable }] = useBoolean(false);
-    const [keepInBounds, { toggle: toggleKeepInBounds }] = useBoolean(false);
+    const [isModalOpen, { setFalse: hideModal }] = useBoolean(true);
+    const [isDraggable] = useBoolean(false);
+    const [keepInBounds] = useBoolean(false);
     // Normally the drag options would be in a constant, but here the toggle can modify keepInBounds
     const dragOptions = React.useMemo(
         (): IDragOptions => ({
