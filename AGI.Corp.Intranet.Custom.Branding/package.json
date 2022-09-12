@@ -12,13 +12,23 @@
     "test": "gulp test"
   },
   "dependencies": {
+    "@fluentui/react": "^8.94.2",
+    "@fluentui/react-hooks": "^8.6.11",
+    "@fluentui/theme": "^2.1.0",
     "@microsoft/decorators": "1.15.2",
+    "@microsoft/office-ui-fabric-react-bundle": "^1.11.0",
     "@microsoft/sp-application-base": "1.15.2",
     "@microsoft/sp-core-library": "1.15.2",
     "@microsoft/sp-dialog": "1.15.2",
+    "@microsoft/sp-office-ui-fabric-core": "^1.11.0",
     "@pnp/sp": "^2.11.0",
+    "@pnp/spfx-controls-react": "^1.21.1",
+    "@pnp/spfx-property-controls": "^3.9.0",
+    "@uifabric/merge-styles": "^7.19.2",
+    "idb-keyval": "^5.1.5",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "spfx-uifabric-themes": "^0.8.5"
   },
   "devDependencies": {
     "@microsoft/sp-build-web": "1.15.2",

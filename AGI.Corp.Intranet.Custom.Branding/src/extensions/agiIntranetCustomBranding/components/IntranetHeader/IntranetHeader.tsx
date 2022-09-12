@@ -9,6 +9,7 @@ import { FontIcon, Icon, Modal, IconButton, IIconProps } from 'office-ui-fabric-
 import { sp } from '@pnp/sp/presets/all';
 import { IConfigItem } from "../../models/IConfigItem";
 import { ISocialLink } from "../../models/ISocialLinkItem";
+import { OrgModal } from "../OrganizationChart/OrgModal/OrgModal";
 
 const menuIcon: IIconProps = { iconName: 'GlobalNavButton' };
 const closeIcon: IIconProps = { iconName: 'Cancel' };
@@ -35,6 +36,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
       showMobileMenu: false,
       logoURL: '',
       notificationsURL: '',
+      displayOrgChart: false
     }
   }
 
@@ -181,8 +183,20 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
     }
   }
 
+  private displayOrgChart(e: any) {
+    this.setState({
+      displayOrgChart: true
+    })
+  }
+
   private gotoNotifications() {
     window.location.href = `${this.props.siteUrl}${this.state.notificationsURL}`;
+  }
+
+  private closeModal() {
+    this.setState({
+      displayOrgChart: false
+    })
   }
 
   private renderHeader(): JSX.Element {
@@ -281,7 +295,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                               <p className="text-left user-name"><strong>{this.state.userName}</strong></p>
                               <p className="text-left small user-email">{this.state.emailID}</p>
                               <p className="text-left">
-                                <a href="#viewOrganizationChart" className="organizational-chart-link" data-bs-toggle="modal">Oraganization Chart </a>
+                                <a href="#viewOrganizationChart" className="organizational-chart-link" data-bs-toggle="modal" onClick={(e) => this.displayOrgChart(e)}>Oraganization Chart </a>
 
                               </p>
                             </div>
@@ -408,6 +422,10 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
             </nav>
           </div>
         </div>
+        {this.state.displayOrgChart && <OrgModal
+          {...this.props}
+          closeModal={() => this.closeModal()}
+        ></OrgModal>}
       </header>
     );
   }

@@ -27,6 +27,7 @@ const LOG_SOURCE: string = 'AgiIntranetBrandingApplicationCustomizer';
 export interface IAgiIntranetBrandingApplicationCustomizerProperties {
   // This is an example; replace with your own property
   testMessage: string;
+  showManagers: string;
 }
 
 /** A Custom Action which can be run during execution of a Client Side Application */
@@ -114,7 +115,8 @@ export default class AgiIntranetBrandingApplicationCustomizer
         {
           siteUrl: this.context.pageContext.web.absoluteUrl,
           context: this.context,
-          spHttpClient: this.context.spHttpClient
+          spHttpClient: this.context.spHttpClient,
+          showManagers: 'all'
         }
       );
 
@@ -134,14 +136,14 @@ export default class AgiIntranetBrandingApplicationCustomizer
       });
 
       checkElement('#navbar').then((element: HTMLElement) => {
-       // const parentDivElems = document.querySelectorAll('[data-automationid="SiteHeader"]');
+        // const parentDivElems = document.querySelectorAll('[data-automationid="SiteHeader"]');
         const parentDivElems = document.querySelectorAll('[class^="headerRow"]');
         console.log(parentDivElems && parentDivElems.length);
-        if(parentDivElems && parentDivElems.length > 0) {
+        if (parentDivElems && parentDivElems.length > 0) {
           const parentDiv = parentDivElems[0];
           parentDiv.append(element);
         }
-        
+
       });
 
     }
@@ -207,7 +209,8 @@ export default class AgiIntranetBrandingApplicationCustomizer
         {
           siteUrl: this.context.pageContext.web.absoluteUrl,
           context: this.context,
-          spHttpClient: this.context.spHttpClient
+          spHttpClient: this.context.spHttpClient,
+          showManagers: this.properties.showManagers
         }
       );
 

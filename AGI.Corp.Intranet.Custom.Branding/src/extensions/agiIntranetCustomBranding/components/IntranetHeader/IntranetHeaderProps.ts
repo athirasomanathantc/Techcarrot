@@ -5,4 +5,5 @@ export interface IIntranetHeaderProps {
   siteUrl: string;
   context: any;
   spHttpClient: SPHttpClient;
+  showManagers: string;
 }
