@@ -3,6 +3,7 @@ import { SPHttpClient } from '@microsoft/sp-http';
 
 export interface IIntranetHeaderProps {
   siteUrl: string;
-  context: ApplicationCustomizerContext;
+  context: any;
   spHttpClient: SPHttpClient;
+  showManagers: string;
 }
