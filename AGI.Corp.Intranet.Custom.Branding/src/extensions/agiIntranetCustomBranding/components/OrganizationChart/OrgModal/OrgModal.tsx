@@ -43,7 +43,7 @@ export const OrgModal = (props: IOrgModal) => {
             theme.fonts.xLargePlus,
             {
                 flex: '1 1 auto',
-                borderTop: `4px solid ${theme.palette.themePrimary}`,
+                // borderTop: `4px solid ${theme.palette.themePrimary}`,
                 color: theme.palette.neutralPrimary,
                 display: 'flex',
                 alignItems: 'center',
@@ -111,17 +111,6 @@ export const OrgModal = (props: IOrgModal) => {
             ])
         }
         getStartFromUser();
-
-        // setTimeout(async () => {
-        //     setStartFromUser([
-        //         {
-        //             fullName: "Heman Dhagai",
-        //             login: "i:0#.f|membership|heman.dhagai@al-ghurair.com",
-        //             id: "i:0#.f|membership|heman.dhagai@al-ghurair.com",
-        //             imageUrl: "https://aginvestment.sharepoint.com/sites/AGIIntranetDev/_layouts/15/userphoto.aspx?size=S&accountname=arijit.bose@al-ghurair.com"
-        //         }
-        //     ])
-        // }, 1000);
     }, []);
 
     return (<>
@@ -135,7 +124,7 @@ export const OrgModal = (props: IOrgModal) => {
             dragOptions={isDraggable ? dragOptions : undefined}
         >
             <div className={contentStyles.header}>
-                <span id={titleId}>Organization Chart</span>
+                <span id={titleId}>Organizational Chart</span>
                 <IconButton
                     styles={iconButtonStyles}
                     iconProps={cancelIcon}

@@ -55,8 +55,9 @@ export const usePersonaCardStyles = () => {
       borderWidth: 1,
       borderRadius: 0,
 
-      borderColor: currentTheme.themePrimary,
       boxShadow: "0 5px 15px rgba(50, 50, 90, .1)",
+      background: "#F2F2F2 0% 0% no-repeat padding-box",
+      borderColor: "#9D0E71"
     }),
     tile: mergeStyles({
       minWidth: 260,
@@ -96,5 +97,5 @@ export const usePersonaCardStyles = () => {
     }),
   });
 
-  return {documentCardActionStyles, personaCardStyles, buttonStyles, stackPersonaStyles };
+  return { documentCardActionStyles, personaCardStyles, buttonStyles, stackPersonaStyles };
 };

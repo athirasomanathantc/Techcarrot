@@ -27,7 +27,7 @@ const currentTheme = window.__themeState__.theme;
 export const PersonCard: React.FunctionComponent<IPersonCardProps> = (
   props: IPersonCardProps
 ) => {
-  const { userInfo, onUserSelected, showActionsBar } = props;
+  const { userInfo, onUserSelected, showActionsBar, selectedUser } = props;
 
   const documentCardRef = React.useRef<IDocumentCard>(undefined);
   const {
@@ -122,10 +122,11 @@ export const PersonCard: React.FunctionComponent<IPersonCardProps> = (
     };
   }, [onRenderCompactCard, onRenderExpandedCard, userInfo]);
 
+  const isCurrentUser = selectedUser.email === userInfo.email;
   return (
     <>
       <DocumentCard
-        className={personaCardStyles.tile}
+        className={isCurrentUser ? personaCardStyles.tileCurrentUser : personaCardStyles.tile}
         componentRef={documentCardRef}
         onClick={() => {
           //  documentCardRef.current.focus();
