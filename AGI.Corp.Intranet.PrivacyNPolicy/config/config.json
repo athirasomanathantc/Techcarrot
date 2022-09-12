@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-corp-intranet-privacy-policy-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiCorpIntranetPrivacyPolicy/AgiCorpIntranetPrivacyPolicyWebPart.js",
+          "manifest": "./src/webparts/agiCorpIntranetPrivacyPolicy/AgiCorpIntranetPrivacyPolicyWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiCorpIntranetPrivacyPolicyWebPartStrings": "lib/webparts/agiCorpIntranetPrivacyPolicy/loc/{locale}.js"
+  }
+}
