@@ -27,7 +27,8 @@ export const OrgModal = (props: IOrgModal) => {
             display: 'flex',
             flexFlow: 'column nowrap',
             alignItems: 'stretch',
-            width: 'calc(100% - 500px)'
+            'max-width': 'calc(100% - 500px)',
+            'max-height': 'calc(100% - 200px)'
         },
         header: [
             // eslint-disable-next-line deprecation/deprecation
