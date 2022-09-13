@@ -1,0 +1,332 @@
+.content-section .search-wrapper {
+    padding: 15px 30px;
+    background: #FFF;
+    display: flex;
+    justify-content: end;
+    border: 1px solid #DFDFE1;
+    border-radius: 5px;
+
+}
+
+.sidebar-menu {
+    padding-top: 15px;
+    padding-bottom: 0;
+}
+
+
+.sidebar-nav {
+    background: #FFF;
+    border: 1px solid #DFDFE1;
+    border-radius: 5px;
+    height: 100%;
+}
+
+.sidebar-menu ul li {
+    /* border-bottom: 1px solid #ddd; */
+    padding: 0px;
+    font-family: 'Gill Sans';
+}
+
+.sidebar-menu ul li a {
+    font-size: 18px;
+    color: #666666;
+    padding: 12px 0;
+}
+
+.sidebar-menu ul li a:hover {
+    background: #F8F8F8;
+    color: #B03D8C;
+}
+
+.sidebar-menu ul li a.active {
+    font-size: 18px;
+    color: #B03D8C;
+}
+
+.policy-content-wrapper {
+    background: #FFF;
+    padding: 30px;
+    border: 1px solid #DFDFE1;
+    border-radius: 5px;
+
+
+}
+
+.policy-content-wrapper .policy-content h4.title {
+    font-family: 'Gill Sans';
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 0px;
+    color: #000000;
+    text-transform: capitalize;
+}
+
+.policy-content-wrapper .policy-content p.date {
+    font-family: 'Gill Sans';
+    font-size: 16px;
+    letter-spacing: 0px;
+    color: #300B55;
+    margin-top: 1rem;
+}
+
+.policy-content-wrapper .policy-content p.description {
+    font-family: 'Gill Sans';
+    font-size: 16px;
+    letter-spacing: 0px;
+    color: #666666;
+    margin-bottom: 0;
+}
+
+.policy-icon-section ul li {
+    margin-bottom: 20px;
+    list-style: none;
+    text-align: center;
+}
+
+.policy-icon-section ul li a {
+    text-decoration: none;
+    font-family: 'Gill Sans';
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0px;
+    color: #000000;
+    text-transform: capitalize;
+    border: 1px solid #DBDBDB;
+    border-radius: 5px;
+    display: block;
+    padding: 8px 15px;
+}
+
+.policy-icon-section ul li i img {
+    height: 22px;
+    margin-right: 5px;
+}
+
+.policy-icon-section ul li:last-child {
+    margin-bottom: 0;
+}
+
+.sidebar-menu.dropdown {
+    padding: 0;
+}
+
+.sidebar-menu.dropdown .dropdown-toggle {
+    display: none;
+}
+
+.sidebar-menu.dropdown .dropdown-menu {
+    display: block;
+    border: 0;
+    width: 100%;
+    padding: 0;
+    position: relative;
+}
+
+.content-section form.search-bar {
+    border-radius: 5px;
+    border: 1px solid #DBDBDB;
+    padding: 5px;
+    height: 55px;
+    min-width: 516px;
+}
+
+.content-section form.search-bar .input-group {
+    border: 0;
+}
+
+.content-section form.search-bar .input-group .form-control {
+    border: none;
+    border-radius: 0;
+    padding: 0 15px;
+    line-height: normal;
+    min-height: auto !important;
+    font-size: 20px;
+    color: #000;
+    opacity: 1;
+    border-right: 1px solid #dbdbdb;
+    margin-right: 15px;
+}
+
+.content-section form.search-bar button.btn-serach {
+    margin: 0;
+    padding: 0;
+    height: auto;
+    line-height: 0;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    background: transparent;
+    border: 0;
+}
+
+.sidebar-menu .nav-tabs {
+    flex-direction: column;
+    border: none;
+}
+
+.policy-section .sidebar-menu .nav-tabs .nav-link {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding-left: 30px;
+    padding-right: 30px;
+    border: none;
+    font-size: 18px;
+    color: #666666;
+    margin: 0;
+    position: relative;
+}
+
+.sidebar-menu .nav-tabs .nav-link:after {
+    display: block;
+    content: '';
+    height: 1px;
+    background: #dbdbdb;
+    position: absolute;
+    bottom: 0;
+    width: 80%;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    padding: 0 30px;
+}
+
+.sidebar-menu .nav-tabs .nav-link:hover,
+.sidebar-menu .nav-tabs .nav-link.active {
+    color: #B03D8C;
+    background: #F8F8F8;
+}
+
+@media (max-width: 991px) {
+    .main-content .content-wrapper {
+        padding: 10px;
+    }
+
+    .content-section .search-wrapper {
+        padding: 10px;
+    }
+
+    .page-header .page-header-img img {
+        min-height: 175px;
+        object-fit: initial;
+    }
+
+    .page-title {
+        max-width: 100%;
+        padding: 0;
+    }
+
+    .page-title p {
+        font-size: 14px;
+        margin-bottom: 14px;
+    }
+
+    .page-title h1 {
+        font-size: 22px;
+        line-height: 28px;
+        font-weight: 500;
+    }
+
+    .policy-content-wrapper .policy-content h4.title {
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 28px;
+    }
+
+    .policy-icon-section ul {
+        padding: 0;
+        margin-top: 1rem;
+        margin-bottom: 0;
+    }
+
+    .sidebar-nav {
+        padding: 0;
+    }
+
+    .sidebar-menu.dropdown .dropdown-toggle {
+        display: block;
+        width: 100%;
+        background: transparent;
+        border: 0;
+        color: #000;
+        text-align: left;
+        padding: 20px 54px 20px 24px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #9D0E71;
+        overflow: hidden;
+        white-space: normal;
+        line-height: 18px;
+    }
+
+    .sidebar-menu.dropdown .dropdown-toggle::after {
+        position: absolute;
+        right: 24px;
+        color: #000;
+        top: 31px;
+        border: none;
+        background: url(images/icon-dropdown.svg);
+        width: 20px;
+        height: 9px;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .sidebar-menu.dropdown .dropdown-menu {
+        position: absolute;
+        padding: 0;
+        display: none;
+    }
+
+    .sidebar-menu.dropdown .dropdown-menu.show {
+        display: block;
+        transform: translate(0) !important;
+        top: 67px !important;
+    }
+
+    .sidebar-menu ul li a {
+        font-size: 18px;
+        color: #666666;
+        padding: 13px;
+        font-weight: 600;
+    }
+
+    .content-section form.search-bar {
+        border-radius: 5px;
+        border: 1px solid #DBDBDB;
+        padding: 5px;
+        height: auto;
+        min-width: auto;
+    }
+
+    .content-section form.search-bar .input-group .form-control {
+        padding: 0 15px;
+        min-height: auto !important;
+        font-size: 16px;
+        margin-right: 0;
+    }
+
+    .content-section form.search-bar button.btn-serach {
+        margin: 0;
+        padding: 0;
+        height: auto;
+        line-height: 0;
+        width: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0;
+        background: transparent;
+        border: 0;
+    }
+
+    .sidebar-menu .nav-tabs .nav-link {
+        font-weight: 600;
+    }
+
+    .main-content .content-wrapper .container {
+        padding: 0;
+    }
+}
