@@ -92,7 +92,6 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
     const visionContentItems = this.state.purposeCultureVisionItems.filter(item => item.Title == TEXT_ABOUT_VISION_CONTENT);
     const purposeContentItems = this.state.purposeCultureVisionItems.filter(item => item.Title == TEXT_ABOUT_PURPOSE_CONTENT);
     const cultureContentItems = this.state.purposeCultureVisionItems.filter(item => item.Title == TEXT_ABOUT_CULTURE_NAVIGATION);
-    debugger;
     const leadershipTeamHeading = this.state.leadershipTeamItems.filter(item => item.Category == TEXT_ABOUT_LEADERSHIP_HEADING_CONTENT);
     const leadershipTeamHeadingItem = leadershipTeamHeading.length > 0 ? leadershipTeamHeading[0] : null;
     console.log("Leadership Team " + leadershipTeamHeadingItem);
@@ -101,139 +100,83 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
 
     const test12 = $.fn.jquery;
     console.log("test " + test12);
+
+    console.log('leadershipteamitems', leadershipTeamItems);
+
     return (
 
-       
-    //
-    <div className="main-content about-us-wrapper">
-      <div className="content-wrapper">
-        <div className="container">
-          <div className="section-wrapper">
-            <div className="leadership-section">
-              <div className="leadership-content">
-                <div className="leadership-content-header">
-                  <h5>{this.state.leadershipMessageItem.Title}</h5>
-                  <h3>{this.state.leadershipMessageItem.Name}</h3>
-                  <h6>{this.state.leadershipMessageItem.Designation}</h6>
-                </div>
-                <div className="leadership-image">
-                  <img src={leadershipMessageImg} className="w-100" />
-                </div>
-                <p dangerouslySetInnerHTML={{ __html: this.state.leadershipMessageItem.Description }}></p>
-                <div className="more">
-                  <p dangerouslySetInnerHTML={{ __html: this.state.leadershipMessageItem.MoreDescription }}></p>
-                </div>
-                <button className="toggle">Read More</button>
-              </div>
-            </div>
-            <hr className="m-0 mx-5 divider-horizontal" />
-            <div className="about-section">
-              <div className="about-content">
-                <h5>{this.state.aboutUsItem.Title}</h5>
-                <h3>{this.state.aboutUsItem.Heading}</h3>
-                <p dangerouslySetInnerHTML={{ __html: this.state.aboutUsItem.Description }}></p>
-                <button className="toggle1">Read More</button>
-              </div>
-            </div>
-          </div>
-          <div className="row mx-0 vision-container">
-            <div className="col-lg-4  p-0">
-              {
-                visionContentItems.map((item, i) => {
-                  return (
-                    <div className="vision-img-wrapper">
-                      <img src={`${this.props.siteUrl}/Assets/images/about/vision.png`} className="w-100" />
-                      <div className="vision-content">
-                        <h3>{item.Title}</h3>
-                        <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
-                      </div>
-                    </div>
-                  )
-                })
-              }
-            </div>
-            <div className="col-lg-4  p-lg-0 our-purpose-section">
-              {
-                purposeContentItems.map((item, i) => {
-                  return (
-                    <div className="our-purpose-wrapper">
-                      <div className="our-purpose-content">
-                        <h3>{item.Title}</h3>
-                        <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
-                      </div>
-                    </div>
-                  )
-                })
-              }
-            </div>
-            <div className="col-lg-4  p-lg-0">
-              {
-                cultureContentItems.map((item, i) => {
-                  return (
-                    <div className="our-culture-section">
-                      <div className="our-culture-content">
-                        <h3>{item.Title}</h3>
-                        <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
-                        <button className="toggle2">Read More</button>
-                      </div>
-                    </div>
-                  )
-                })
-              }
-            </div>
-          </div>
 
-          <div className="row mx-0 leadership-team-section">
-            {
-              leadershipTeamHeading.map((item, i) => {
-                return (
-                  <div className="col-lg-11">
-                    <h3 className="leadership-team-heading">{item.HeadingTitle}</h3>
-                    <p className="leadership-team-description">{item.HeadingDescription}</p>
+      //
+      <div className="main-content about-us-wrapper">
+        <div className="content-wrapper">
+          <div className="container">
+            <div className="section-wrapper">
+              <div className="leadership-section">
+                <div className="leadership-content">
+                  <div className="leadership-content-header">
+                    <h5>{this.state.leadershipMessageItem.Title}</h5>
+                    <h3>{this.state.leadershipMessageItem.Name}</h3>
+                    <h6>{this.state.leadershipMessageItem.Designation}</h6>
                   </div>
-                )
-              })
-            }
-            <div className="align-self-end col-lg-1">
-              <div className="button-container">
-                <button className="carousel-control-prev" type="button" data-bs-target="#leadershipCarousel"
-                  data-bs-slide="prev">
-                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span className="visually-hidden">Previous</span>
-                </button>
-                <button className="carousel-control-next" type="button" data-bs-target="#leadershipCarousel"
-                  data-bs-slide="next">
-                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span className="visually-hidden">Next</span>
-                </button>
+                  <div className="leadership-image">
+                    <img src={leadershipMessageImg} className="w-100" />
+                  </div>
+                  <p dangerouslySetInnerHTML={{ __html: this.state.leadershipMessageItem.Description }}></p>
+                  <div className="more">
+                    <p dangerouslySetInnerHTML={{ __html: this.state.leadershipMessageItem.MoreDescription }}></p>
+                  </div>
+                  <button className="toggle">Read More</button>
+                </div>
+              </div>
+              <hr className="m-0 mx-5 divider-horizontal" />
+              <div className="about-section">
+                <div className="about-content">
+                  <h5>{this.state.aboutUsItem.Title}</h5>
+                  <h3>{this.state.aboutUsItem.Heading}</h3>
+                  <p dangerouslySetInnerHTML={{ __html: this.state.aboutUsItem.Description }}></p>
+                  <button className="toggle1">Read More</button>
+                </div>
               </div>
             </div>
-            <div id="leadershipCarousel" className="carousel js-carousel slide leadership-carousel"
-              data-bs-ride="carousel">
-              <div className="carousel-inner" role="listbox">
+            <div className="row mx-0 vision-container">
+              <div className="col-lg-4  p-0">
                 {
-                  leadershipTeamItems.map((item, i) => {
-
-                    const leadershipMessageImgVal = item.LeadershipImage && item.LeadershipImage ? this.getImageUrl(item.LeadershipImage) : '';
-
+                  visionContentItems.map((item, i) => {
                     return (
-                      <div className={i == 0 ? `carousel-item js-carousel-item active` : `carousel-item js-carousel-item`}>
-                        <div className="col-md-3 d-flex align-items-stretch">
-                          <div className="team-card">
-                            <div className="team-img">
-                              <img src={leadershipMessageImgVal} alt="Card Design" className="w-100" />
-                            </div>
-                            <div className="team-content mt-3 mb-3">
-                              <h2 className="team-title">{item.Name}</h2>
-                              <h2 className="team-subtitle">{item.Designation}</h2>
-                              <button type="button" className="view-profile" data-bs-toggle="modal"
-                                data-bs-target="#viewProfileModal" onClick={() => this.openVideo(item.ID)}>
-                                Read More
-                              </button>
-                              {/* <a href="javascript:void(0)" className="view-profile" data-bs-toggle="modal" >View
-                                  Profile <span><img src={`${this.props.siteUrl}/Assets/images/icon-view-more.svg`} alt="" /></span></a> */}
-                            </div>
-                          </div>
+                      <div className="vision-img-wrapper">
+                        <img src={`${this.props.siteUrl}/Assets/images/about/vision.png`} className="w-100" />
+                        <div className="vision-content">
+                          <h3>{item.Title}</h3>
+                          <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
+                        </div>
+                      </div>
+                    )
+                  })
+                }
+              </div>
+              <div className="col-lg-4  p-lg-0 our-purpose-section">
+                {
+                  purposeContentItems.map((item, i) => {
+                    return (
+                      <div className="our-purpose-wrapper">
+                        <div className="our-purpose-content">
+                          <h3>{item.Title}</h3>
+                          <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
+                        </div>
+                      </div>
+                    )
+                  })
+                }
+              </div>
+              <div className="col-lg-4  p-lg-0">
+                {
+                  cultureContentItems.map((item, i) => {
+                    return (
+                      <div className="our-culture-section">
+                        <div className="our-culture-content">
+                          <h3>{item.Title}</h3>
+                          <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
+                          <button className="toggle2">Read More</button>
                         </div>
                       </div>
                     )
@@ -241,13 +184,87 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                 }
               </div>
             </div>
+
+            <div className="row mx-0 leadership-team-section">
+              {
+                leadershipTeamHeading.map((item, i) => {
+                  return (
+                    <div className="col-lg-11">
+                      <h3 className="leadership-team-heading">{item.HeadingTitle}</h3>
+                      <p className="leadership-team-description">{item.HeadingDescription}</p>
+                    </div>
+                  )
+                })
+              }
+              <div className="align-self-end col-lg-1">
+                <div className="button-container">
+                  <button className="carousel-control-prev" type="button" data-bs-target="#leadershipCarousel"
+                    data-bs-slide="prev">
+                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span className="visually-hidden">Previous</span>
+                  </button>
+                  <button className="carousel-control-next" type="button" data-bs-target="#leadershipCarousel"
+                    data-bs-slide="next">
+                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span className="visually-hidden">Next</span>
+                  </button>
+                </div>
+              </div>
+              <div id="leadershipCarousel" className="carousel js-carousel slide leadership-carousel"
+                data-bs-ride="carousel">
+                <div className="carousel-inner" role="listbox">
+                  <div className={`carousel-item js-carousel-item`} >
+                    <div className="col-md-3 d-flex align-items-stretch">
+                      {
+                        leadershipTeamItems.map((item, i) => {
+
+                          const leadershipMessageImgVal = item.LeadershipImage && item.LeadershipImage ? this.getImageUrl(item.LeadershipImage) : '';
+
+                          return (
+
+                            <div className="team-card" onClick={() => this.showLeaderDetail(item.ID)} key={i}  >
+                              <div className="team-img" >
+                                <img src={leadershipMessageImgVal} alt="Card Design" className="w-100" />
+                              </div>
+                              <div className="team-content mt-3 mb-3">
+                                <h2 className="team-title">{item.Name}</h2>
+                                <h2 className="team-subtitle">{item.Designation}</h2>
+                                {/* <button type="button" className="view-profile" data-bs-toggle="modal"
+                                data-bs-target="#viewProfileModal" onClick={() => this.openVideo(item.ID)}>
+                                Read More
+                              </button> */}
+                                <input type="button" className="view-profile" onClick={() => this.showLeaderDetail(item.ID)} value='Read More' />
+
+                                {/* <a href="javascript:void(0)" className="view-profile" data-bs-toggle="modal" >View
+                                  Profile <span><img src={`${this.props.siteUrl}/Assets/images/icon-view-more.svg`} alt="" /></span></a> */}
+                              </div>
+                            </div>
+
+                          )
+                        })
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
     );
 
+  }
+
+
+  private showLeaderDetail(id: number) {
+    console.log("ID" + id);
+    debugger;
+    const selectedItem = this.state.leadershipTeamItems.filter(item => item.ID == id)[0];
+    this.setState({
+      selectedItem,
+      showVideo: true
+    });
   }
 
   private openVideo(id) {
@@ -255,11 +272,12 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
     debugger;
     const selectedItem = this.state.leadershipTeamItems.filter(item => item.ID == id)[0];
     this.setState({
-      selectedItem
-    });
-    this.setState({
+      selectedItem,
       showVideo: true
     });
+    // this.setState({
+    //   showVideo: true
+    // });
   }
 
   private closePreview() {
