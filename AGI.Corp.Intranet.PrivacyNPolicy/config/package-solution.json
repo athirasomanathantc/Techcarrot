@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "agi-corp-intranet-privacy-policy-client-side-solution",
+    "id": "ff9f9b36-42a7-4057-8f6a-cd7e7948e6df",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.14.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "AGICorpIntranetPrivacy&Policy description"
+      },
+      "longDescription": {
+        "default": "AGICorpIntranetPrivacy&Policy description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "agi-corp-intranet-privacy-policy Feature",
+        "description": "The feature that activates elements of the agi-corp-intranet-privacy-policy solution.",
+        "id": "a417fc82-604e-4bc5-82bf-987a828af466",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/agi-corp-intranet-privacy-policy.sppkg"
+  }
+}

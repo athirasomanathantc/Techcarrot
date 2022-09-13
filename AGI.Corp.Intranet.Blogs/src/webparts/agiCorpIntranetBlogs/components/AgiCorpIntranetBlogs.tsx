@@ -7,7 +7,7 @@ import { IAgiCorpIntranetBlogsState } from './IAgiCorpIntranetBlogsState'
 import { sp } from '@pnp/sp/presets/all';
 import * as moment from 'moment';
 import Paging from './Paging/Paging';
-import{
+import {
   SPHttpClient,
   SPHttpClientResponse
 } from '@microsoft/sp-http'
@@ -25,7 +25,8 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
       pageData: [],
       totalPages: 0,
       currentPage: 1,
-      pageSize:0
+      pageSize: 0,
+      isDataLoaded: false
 
 
     }
@@ -37,34 +38,34 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   private async fetch() {
     await this.getBusinessItems();
 
-    await this.getBlogItems();
+    await this.getblog();
 
   }
   private async getBusinessItems(): Promise<void> {
-    const listName="Business";
+    const listName = "Business";
     sp.web.lists.getByTitle(listName).items.select('ID,Title').get()
-    
-      .then((response:[]) => {
+
+      .then((response: []) => {
         console.log(response);
-        
-       this.setState({
-        filterValues:response
-       },()=>{
-        console.log("filter",this.state.filterValues);
-       });
-       
-    })
-    .catch((error) => {
-      console.log('Error:', error);
-    })
-    if (window.innerWidth<=767){
+
+        this.setState({
+          filterValues: response
+        }, () => {
+          console.log("filter", this.state.filterValues);
+        });
+
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
+    if (window.innerWidth <= 767) {
       this.setState({
-        pageSize:6
+        pageSize: 6
       });
 
-    }else{
+    } else {
       this.setState({
-        pageSize:12
+        pageSize: 12
       });
 
     }
@@ -95,14 +96,14 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
 
   }
 
- 
+
   private handleFilter(e: any) {
     const value = parseInt(e.target.value);
     if (value == 0) {
       const result: IBlogData[] = this.state.blogData;
       this.setState({
         filterData: result
-      },()=>{
+      }, () => {
         this.paging();
       });
 
@@ -110,40 +111,45 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
       const result = this.state.blogData.filter((obj) => {
         return obj.Business.ID == value;
       })
-      
+
       this.setState({
         filterData: result
-      },()=>{
-       this.paging();
+      }, () => {
+        this.paging();
       });
-      
-      
+
+
     }
-    
-    
+
+
 
   }
 
-  private async getBlogItems(): Promise<void> {
+  private async getblog(): Promise<void> {
 
     const listName = "Blogs";
-    sp.web.lists.getByTitle(listName).items.select('ID,Title,Category,PublishedDate,BlogThumbnail,BlogImage,Author/ID,Author/Title,Business/ID,Business/Title')
-    .expand('Author,Business').getAll().then((resp: IBlogData[]) => {
-      const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
-      //console.log(resp.length);
-      this.setState({
-        blogData: resp,
-        filterData:resp,
-        pageData: resp.slice(0, this.state.pageSize),
-        totalPages: pageCount
+    sp.web.lists.getByTitle(listName).items.select('ID,Title,PublishedDate,BlogThumbnail,BlogImage,Author/ID,Author/Title,Business/ID,Business/Title')
+      .expand('Author,Business').getAll().then((resp: IBlogData[]) => {
+        const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
+        console.log(resp.length);
+        setTimeout(() => {
+          this.setState({
+            blogData: resp,
+            filterData: resp,
+            pageData: resp.slice(0, this.state.pageSize),
+            totalPages: pageCount,
+            isDataLoaded: true
 
-      }, () => {
-        //console.log(this.state.blogData)
-      });
-    }).catch((error) => {
-      console.log('error in fetching news items', error);
-    })
-   this.paging();
+          }, () => {
+            //console.log(this.state.blogData)
+          });
+
+        }, 3000);
+
+      }).catch((error) => {
+        console.log('error in fetching news items', error);
+      })
+    this.paging();
   }
   private _getPage(page: number) {
     // round a number up to the next largest integer.
@@ -157,7 +163,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
     this.setState({
       pageData,
       currentPage: page
-    },()=>{
+    }, () => {
       this.scrollToTop();
 
     });
@@ -176,29 +182,27 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
     return (
       <div className={'main-content'} id='blogTop'>
         <div className={'content-wrapper'}>
-          <div className={'container'}>
+          <div className={'container'} style={{ display: this.state.isDataLoaded ? 'none' : 'none' }}>
 
-          <div className={'main-header-section' }>
-                <div className={'row'} >
-                  <div className={'col-12 col-md-6 heading-section'} >
-                    <h3>Blogs</h3>
-                  </div>
-                  <div className={'col-12 col-md-6 filter-section text-end'}>
-                    <div className={'form-select custom-select '}>
-                      <select onChange={(e) => this.handleFilter(e)}>
+            <div className={'main-header-section'}>
+              <div className={'row'} >
+                <div className={'col-12 col-md-6 heading-section'} >
+                  <h3>Blogs</h3>
+                </div>
+                <div className={'col-12 col-md-6 filter-section text-end'}>
+                  <div className={'form-select custom-select '}>
+                    <select onChange={(e) => this.handleFilter(e)}>
 
-                        <option value="0">Filter By</option>
-                        {
-                          this.state.filterValues.map((business) => {
-                            return (
-                              <option value={business.ID}>{business.Title}</option>
-                            )
-                          })
-                        }
+                      <option value="0">Filter By</option>
+                      {
+                        this.state.filterValues.map((business) => {
+                          return (
+                            <option value={business.ID}>{business.Title}</option>
+                          )
+                        })
+                      }
 
-                      </select>
-
-                    </div>
+                    </select>
 
                   </div>
 
@@ -206,28 +210,30 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
 
               </div>
 
-           <article className={'row gx-5 mb-5'}>
+            </div>
+
+            <article className={'row gx-5 mb-5'}>
 
               <section className={'col-lg-12 blog-section'}>
                 <div className={'row'}>
                   {
-                    this.state.pageData.length>0?
-                    this.state.pageData.map((item) => {
-                      let imageJSON = { serverRelativeUrl: "" };
-                      if (item .BlogThumbnail != null) {
-                        imageJSON = JSON.parse(item.BlogThumbnail);
-                      }
-                      return (
-                        
+                    this.state.pageData.length > 0 ?
+                      this.state.pageData.map((item) => {
+                        let imageJSON = { serverRelativeUrl: "" };
+                        if (item.BlogThumbnail != null) {
+                          imageJSON = JSON.parse(item.BlogThumbnail);
+                        }
+                        return (
+
                           < div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
                             <div className={'card news-card'}>
-                            <a href={`${this.props.siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">
-                              <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Card Image" />
+                              <a href={`${this.props.siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">
+                                <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Card Image" />
                               </a>
                               <div className={'card-body d-flex flex-column'}>
-                              <div className={'category'}>
-                              <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {item.Business.Title}</span>
-                              </div>
+                                <div className={'category'}>
+                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {item.Business.Title}</span>
+                                </div>
                                 <a href={`${this.props.siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">
                                   <div className={'mb-2 mt-2 card-content-header'}>
                                     <h5 className={'card-title'}>{item.Title}</h5>
@@ -240,16 +246,16 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                               </div>
                             </div>
                           </div>
-                        
-                      )
 
-                    })
-                    :
-                    <div>
-                      <p>
-                        NO BLOGS
-                      </p>
-                    </div>
+                        )
+
+                      })
+                      :
+                      <div>
+                        <p>
+                          NO BLOGS
+                        </p>
+                      </div>
 
                   }
 
@@ -266,18 +272,21 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                   onChange={(page) => this._getPage(page)}
                   limiter={5}
                 /> */}
-                <Paging currentPage={this.state.currentPage}
+              <Paging currentPage={this.state.currentPage}
                 totalItems={this.state.filterData.length}
                 itemsCountPerPage={this.state.pageSize}
-                onPageUpdate={(page) => this._getPage(page)} 
-                />
-                
-                
-              </div>
+                onPageUpdate={(page) => this._getPage(page)}
+              />
+
+
+            </div>
+          </div>
+        </div>
+        <div className='loaderContainer' style={{ display: this.state.isDataLoaded ? 'flex' : 'flex' }}>
+          <div className="loader">
           </div>
         </div>
       </div >
-
     );
   }
 

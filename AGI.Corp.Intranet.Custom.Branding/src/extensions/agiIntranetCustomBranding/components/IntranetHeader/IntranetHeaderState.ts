@@ -17,4 +17,5 @@ export interface IIntranetHeaderState {
     showMobileMenu: boolean;
     logoURL: string;
     notificationsURL: string;
+    displayOrgChart: boolean;
 }

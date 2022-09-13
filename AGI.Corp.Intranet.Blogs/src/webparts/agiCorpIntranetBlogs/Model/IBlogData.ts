@@ -1,7 +1,6 @@
 export interface IBlogData{
     ID:string;
     Title:string;
-    Category:string;
     PublishedDate:string;
     BlogThumbnail:string;
     BlogImage:string;
