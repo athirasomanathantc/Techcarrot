@@ -7,20 +7,35 @@ import { Policies } from './Policies/Policies';
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 import { sp } from '@pnp/sp/presets/all';
 
-export default class AgiIntranetCompanyPolicy extends React.Component<IAgiIntranetCompanyPolicyProps, { policyType: string }> {
+export default class AgiIntranetCompanyPolicy extends React.Component<IAgiIntranetCompanyPolicyProps, { policyType: string; policies: any, filteredPolicies: any }> {
   constructor(props: IAgiIntranetCompanyPolicyProps) {
     super(props);
     sp.setup({
       spfxContext: this.props.context
     });
     this.state = {
-      policyType: 'General Policies'
+      policyType: 'General Policies',
+      policies: [],
+      filteredPolicies: []
     }
   }
 
   private showPolicies(e: React.MouseEvent<HTMLLIElement, MouseEvent>, policyType: string) {
     this.setState({
       policyType
+    })
+  }
+
+  private showFilteredPolicies(filteredPolicies: []) {
+    this.setState({
+      filteredPolicies
+    })
+  }
+
+  private setPolicies(policies: any) {
+    this.setState({
+      policies,
+      filteredPolicies: policies
     })
   }
 
@@ -45,10 +60,10 @@ export default class AgiIntranetCompanyPolicy extends React.Component<IAgiIntran
                   </ErrorBoundary>
                   <div className="content-section col-lg-9">
                     <ErrorBoundary>
-                      <SearchBox></SearchBox>
+                      <SearchBox policies={this.state.policies} showFilteredPolicies={(policies: []) => this.showFilteredPolicies(policies)}></SearchBox>
                     </ErrorBoundary>
                     <ErrorBoundary>
-                      <Policies policyType={this.state.policyType}></Policies>
+                      <Policies setPolicies={(policies: []) => this.setPolicies(policies)} policies={this.state.filteredPolicies} policyType={this.state.policyType}></Policies>
                     </ErrorBoundary>
                   </div>
                 </div>

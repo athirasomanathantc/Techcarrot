@@ -3,9 +3,8 @@ import { useEffect, useState } from "react";
 import { sp } from "@pnp/sp/presets/all";
 import * as moment from "moment";
 
-export const Policies = (props: { policyType: string }) => {
+export const Policies = (props: { policyType: string, policies: [], setPolicies: Function }) => {
     const [error, setError] = useState(null);
-    const [policies, setPolicies] = useState([]);
     useEffect(() => {
         const getPolicies = async (policyType: string) => {
             const policies = await sp.web.lists.getByTitle('CompanyPolicies').items
@@ -23,7 +22,7 @@ export const Policies = (props: { policyType: string }) => {
                 .catch((exception) => {
                     throw new Error(exception);
                 });
-            setPolicies(policies);
+            props.setPolicies(policies);
         }
         getPolicies(props.policyType).catch((error) => {
             setError(error);
@@ -39,7 +38,7 @@ export const Policies = (props: { policyType: string }) => {
         <>
             <div className="tab-content px-0" id="policiesTabContent">
                 <div className="tab-pane fade show active" id="general-tab-content" role="tabpanel" aria-labelledby="general-tab">
-                    {policies.map((policy: {
+                    {props.policies.map((policy: {
                         Id: number,
                         Title: string,
                         PolicyType: string,
@@ -67,7 +66,7 @@ export const Policies = (props: { policyType: string }) => {
                         </>)
                     })}
                     {
-                        !policies.length && <div className="policy-content-wrapper col-12 mt-3">
+                        !props.policies.length && <div className="policy-content-wrapper col-12 mt-3">
                             <div className="row align-items-center">
                                 <div className="policy-content col-lg-9">
                                     <h4 className="title">No items found</h4>
