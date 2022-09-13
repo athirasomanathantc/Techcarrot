@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { sp } from "@pnp/sp/presets/all";
 
-export const LeftNavigation = () => {
+export const LeftNavigation = (props: { showPolicies: Function }) => {
     const [error, setError] = useState(null);
     const [policyTypes, setPolicyTypes] = useState([]);
     useEffect(() => {
@@ -35,7 +35,7 @@ export const LeftNavigation = () => {
                         <ul className="nav nav-tabs dropdown-menu" id="policiesTab" role="tablist">
                             {policyTypes.map((policyType: { Title: string }, index: number) => {
                                 return (<>
-                                    <li className="nav-item" role="presentation">
+                                    <li className="nav-item" role="presentation" onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => props.showPolicies(e, policyType.Title)}>
                                         <button className={`nav-link ${!index ? 'active' : ''}`} id="general-tab" data-bs-toggle="tab" data-bs-target="#general-tab-content" type="button" role="tab" aria-controls="home" aria-selected="false">{policyType.Title}</button>
                                     </li>
                                 </>)

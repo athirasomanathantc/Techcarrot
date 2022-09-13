@@ -7,15 +7,21 @@ import { Policies } from './Policies/Policies';
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 import { sp } from '@pnp/sp/presets/all';
 
-export default class AgiIntranetCompanyPolicy extends React.Component<IAgiIntranetCompanyPolicyProps, {}> {
+export default class AgiIntranetCompanyPolicy extends React.Component<IAgiIntranetCompanyPolicyProps, { policyType: string }> {
   constructor(props: IAgiIntranetCompanyPolicyProps) {
     super(props);
     sp.setup({
       spfxContext: this.props.context
     });
     this.state = {
-
+      policyType: 'General Policies'
     }
+  }
+
+  private showPolicies(e: React.MouseEvent<HTMLLIElement, MouseEvent>, policyType: string) {
+    this.setState({
+      policyType
+    })
   }
 
   public render(): React.ReactElement<IAgiIntranetCompanyPolicyProps> {
@@ -35,14 +41,14 @@ export default class AgiIntranetCompanyPolicy extends React.Component<IAgiIntran
               <div className="container">
                 <div className="row mb-5">
                   <ErrorBoundary>
-                    <LeftNavigation></LeftNavigation>
+                    <LeftNavigation showPolicies={(e: React.MouseEvent<HTMLLIElement, MouseEvent>, policyType: string) => this.showPolicies(e, policyType)}></LeftNavigation>
                   </ErrorBoundary>
                   <div className="content-section col-lg-9">
                     <ErrorBoundary>
                       <SearchBox></SearchBox>
                     </ErrorBoundary>
                     <ErrorBoundary>
-                      <Policies></Policies>
+                      <Policies policyType={this.state.policyType}></Policies>
                     </ErrorBoundary>
                   </div>
                 </div>

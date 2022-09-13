@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import { sp } from "@pnp/sp/presets/all";
 import * as moment from "moment";
 
-export const Policies = () => {
+export const Policies = (props: { policyType: string }) => {
     const [error, setError] = useState(null);
     const [policies, setPolicies] = useState([]);
     useEffect(() => {
-        const getPolicies = async () => {
+        const getPolicies = async (policyType: string) => {
             const policies = await sp.web.lists.getByTitle('CompanyPolicies').items
                 .select("Id,Title,PolicyType/Title,PublishedDate,PolicyDescription")
+                .filter(`PolicyType/Title eq '${policyType}'`)
                 .expand("PolicyType")
                 .top(5000)().then((items: [{
                     Id: number,
@@ -24,10 +25,10 @@ export const Policies = () => {
                 });
             setPolicies(policies);
         }
-        getPolicies().catch((error) => {
+        getPolicies(props.policyType).catch((error) => {
             setError(error);
         })
-    }, [])
+    }, [props.policyType])
 
     if (error) {
         throw error;
@@ -46,7 +47,7 @@ export const Policies = () => {
                         PolicyDescription: string
                     }) => {
                         return (<>
-                            <div className="policy-content-wrapper col-12">
+                            <div className="policy-content-wrapper col-12 mt-3">
                                 <div className="row align-items-center">
                                     <div className="policy-content col-lg-9">
                                         <h4 className="title">{policy.Title}</h4>
@@ -66,7 +67,7 @@ export const Policies = () => {
                         </>)
                     })}
                     {
-                        !policies.length && <div className="policy-content-wrapper col-12">
+                        !policies.length && <div className="policy-content-wrapper col-12 mt-3">
                             <div className="row align-items-center">
                                 <div className="policy-content col-lg-9">
                                     <h4 className="title">No items found</h4>
