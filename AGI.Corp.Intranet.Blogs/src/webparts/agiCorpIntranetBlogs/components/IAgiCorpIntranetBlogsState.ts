@@ -10,5 +10,6 @@ export interface IAgiCorpIntranetBlogsState {
   totalPages: number;
   pageData:IBlogData[];
   pageSize:number;
+  isDataLoaded: boolean;
   
 }

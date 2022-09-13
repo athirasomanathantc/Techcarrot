@@ -149,7 +149,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
       let _viewJSON = [];
       _viewJSON.push({ userId: userId, views: 0 });
       viewJSON = JSON.stringify(_viewJSON);
-     // console.log('updated view JSON', _viewJSON);
+      // console.log('updated view JSON', _viewJSON);
     }
 
     //console.log('view json', viewJSON);
@@ -444,7 +444,6 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const nextItemID = nextItem.ID;
     const url = `${this.props.siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${nextItemID}`;
     // location.href.replace()
-    return;
     this.setState({
       currentIndex: nextItemID,
       blog: nextItem
@@ -479,45 +478,35 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
         </header>
         <section className="content row-meta-details">
           <div className="row">
-            <div className="col-md-6">
-              <ul className="justify-content-start ps-0">
+            <div className="col-md-12">
+              <ul className="justify-content-between ps-0">
                 <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.png`} /></i> {blog.Business ? blog.Business.Title : ''}</li>
                 <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/avatar.png`} alt="" /></i> {blog.Author ? blog.Author.Title : ''}</li>
               </ul>
             </div>
+          </div>
+        </section>
+        <section className="news-detail-img">
+          <img src={imageUrl} className="d-block w-100" alt="..." />
+        </section>
+        <section className="news-detail-text">
+          <div dangerouslySetInnerHTML={{ __html: blog.Summary }}></div>
+        </section>
+        <section className="content row-meta-details">
+          <div className="row">
             <div className="col-md-6">
-              {/* <nav className="nav post-analytics">
-                {
-                  isLikedByCurrentUser ?
-                    <a className="nav-link" href="javascript:void(0)" onClick={(e) => this.unlikePost(e)}
-                      data-id={blog.ID}>
-                      <i><img src={`${this.props.siteUrl}/Assets/icons/icon-unlike.svg`} alt="" data-id={blog.ID} /></i> Unlike
-                    </a>
-                    :
-                    <a className="nav-link" href="javascript:void(0)" onClick={(e) => this.likePost(e)}
-                      data-id={blog.ID}>
-                      <i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" data-id={blog.ID} /></i> Like
-                    </a>
-                }
-                <p className="nav-link" >
-                  <i><img src={`${this.props.siteUrl}/Assets/icons/comment.svg`} alt="" /></i> <span className='count'>{this.state.commentsCount}</span><span className='txt'> Comment</span>
-                </p>
-                <p className="nav-link"  >
-                  <i><img src={`${this.props.siteUrl}/Assets/icons/view.svg`} alt="" /></i> <span className='count'>{this.state.viewsCount}</span><span className='txt'> Views</span>
-                </p>
-              </nav> */}
               <ul>
                 {
                   isLikedByCurrentUser ?
                     <li>
-                      <a  href="javascript:void(0)" onClick={(e) => this.unlikePost(e)}
+                      <a href="javascript:void(0)" onClick={(e) => this.unlikePost(e)}
                         data-id={blog.ID}>
                         <i><img src={`${this.props.siteUrl}/Assets/icons/icon-unlike.svg`} alt="" data-id={blog.ID} /></i> Unlike
                       </a>
                     </li>
                     :
                     <li>
-                      <a  href="javascript:void(0)" onClick={(e) => this.likePost(e)}
+                      <a href="javascript:void(0)" onClick={(e) => this.likePost(e)}
                         data-id={blog.ID}>
                         <i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" data-id={blog.ID} /></i> Like
                       </a>
@@ -533,13 +522,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
             </div>
           </div>
         </section>
-        <section className="news-detail-img">
-          <img src={imageUrl} className="d-block w-100" alt="..." />
-        </section>
-        <section className="news-detail-text">
-          <div dangerouslySetInnerHTML={{ __html: blog.Summary }}></div>
-        </section>
-        <footer className="news-detail-footer">
+        <footer className="news-detail-footer" style={{ display: 'none' }}>
           <div className="row">
             <div className="col-6 col-md-6">
               <nav className="nav">

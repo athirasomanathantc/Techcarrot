@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.14.0",
+    "libraryName": "agi-corp-intranet-faq",
+    "libraryId": "8610d2cd-c8c3-460d-b5e3-5bb772089a67",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "AGICorpIntranetFAQ",
+    "solutionShortDescription": "AGICorpIntranetFAQ description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

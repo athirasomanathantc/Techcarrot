@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.14.0",
+    "libraryName": "agi-corp-intranet-privacy-policy",
+    "libraryId": "ff9f9b36-42a7-4057-8f6a-cd7e7948e6df",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "AGICorpIntranetPrivacy&Policy",
+    "solutionShortDescription": "AGICorpIntranetPrivacy&Policy description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
