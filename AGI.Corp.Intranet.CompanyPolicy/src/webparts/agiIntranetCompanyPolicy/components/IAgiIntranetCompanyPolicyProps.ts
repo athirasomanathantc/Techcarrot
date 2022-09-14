@@ -4,5 +4,5 @@ export interface IAgiIntranetCompanyPolicyProps {
   environmentMessage: string;
   hasTeamsContext: boolean;
   userDisplayName: string;
-  context: any;
+  context: { pageContext: { web: { absoluteUrl: string; }; }; };
 }

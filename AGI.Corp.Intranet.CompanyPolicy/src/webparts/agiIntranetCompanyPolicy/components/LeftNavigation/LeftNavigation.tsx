@@ -2,11 +2,11 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { sp } from "@pnp/sp/presets/all";
 
-export const LeftNavigation = (props: { showPolicies: Function }) => {
+export const LeftNavigation = (props: { showPolicies: (arg0: React.MouseEvent<HTMLLIElement, MouseEvent>, arg1: string) => void }): JSX.Element => {
     const [error, setError] = useState(null);
     const [policyTypes, setPolicyTypes] = useState([]);
     useEffect(() => {
-        const getPolicyTypes = async () => {
+        const getPolicyTypes = async (): Promise<void> => {
             const policyTypes = await sp.web.lists.getByTitle('PolicyType').items
                 .select("Id,Title")
                 .top(100)().then((items: [{ Id: number, Title: string }]) => {

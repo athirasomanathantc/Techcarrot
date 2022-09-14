@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { ErrorInfo } from 'react';
 import styles from './ErrorBoundary.module.scss';
 
 export interface IErrorBoundaryProps {
@@ -6,19 +7,17 @@ export interface IErrorBoundaryProps {
 }
 
 export interface IErrorBoundaryState {
-    error: any;
-    errorInfo: {
-        componentStack: any
-    };
+    error: Error;
+    errorInfo: ErrorInfo
 }
 
 class ErrorBoundary extends React.Component<IErrorBoundaryProps, IErrorBoundaryState> {
-    constructor(props: any) {
+    constructor(props: IErrorBoundaryProps | Readonly<IErrorBoundaryProps>) {
         super(props);
         this.state = { error: null, errorInfo: null };
     }
 
-    componentDidCatch(error: any, errorInfo: any) {
+    componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
         // Catch errors in any components below and re-render with error message
         this.setState({
             error: error,
@@ -29,7 +28,7 @@ class ErrorBoundary extends React.Component<IErrorBoundaryProps, IErrorBoundaryS
         console.log(`ErrorInfo: ${JSON.stringify(errorInfo)}`);
     }
 
-    render() {
+    render(): React.ReactNode {
         if (this.state.errorInfo) {
             // Error path
             return (

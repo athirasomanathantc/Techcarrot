@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { IPolicy } from '../../models/IPolicy';
 
-export const SearchBox = (props: any) => {
-    const getFilteredPolicies = (keyword: string) => props.policies.filter(
-        (policy: any) => {
+export const SearchBox = (props: { showFilteredPolicies: (arg0: IPolicy[]) => void, policies: IPolicy[] }): JSX.Element => {
+    const getFilteredPolicies = (keyword: string): IPolicy[] => props.policies.filter(
+        (policy: IPolicy) => {
             return (
                 policy
                     .Title
@@ -17,8 +17,8 @@ export const SearchBox = (props: any) => {
         }
     );
 
-    const handleChange = (e: any) => {
-        props.showFilteredPolicies(getFilteredPolicies(e.target.value));
+    const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e: React.FormEvent<HTMLInputElement>) => {
+        props.showFilteredPolicies(getFilteredPolicies((e.target as HTMLInputElement).value));
     };
 
     return (

@@ -2,22 +2,17 @@ import * as React from "react"
 import { useEffect, useState } from "react";
 import { sp } from "@pnp/sp/presets/all";
 import * as moment from "moment";
+import { IPolicy } from "../../models/IPolicy";
 
-export const Policies = (props: { siteUrl: string, policyType: string, policies: [], setPolicies: Function }) => {
+export const Policies = (props: { siteUrl: string, policyType: string, policies: IPolicy[], setPolicies: (arg0: IPolicy[]) => void }): JSX.Element => {
     const [error, setError] = useState(null);
     useEffect(() => {
-        const getPolicies = async (policyType: string) => {
+        const getPolicies = async (policyType: string): Promise<void> => {
             const policies = await sp.web.lists.getByTitle('CompanyPolicies').items
                 .select("Id,Title,FileLeafRef,PolicyType/Title,PublishedDate,PolicyDescription")
                 .filter(`PolicyType/Title eq '${policyType}'`)
                 .expand("PolicyType")
-                .top(5000)().then((items: [{
-                    Id: number,
-                    Title: string,
-                    FileLeafRef: string;
-                    PolicyType: string,
-                    PublishedDate: string
-                }]) => {
+                .top(5000)().then((items: [IPolicy]) => {
                     return items
                 })
                 .catch((exception) => {
@@ -39,14 +34,7 @@ export const Policies = (props: { siteUrl: string, policyType: string, policies:
         <>
             <div className="tab-content px-0" id="policiesTabContent">
                 <div className="tab-pane fade show active" id="general-tab-content" role="tabpanel" aria-labelledby="general-tab">
-                    {props.policies.map((policy: {
-                        Id: number,
-                        Title: string,
-                        FileLeafRef: string;
-                        PolicyType: string,
-                        PublishedDate: string,
-                        PolicyDescription: string
-                    }) => {
+                    {props.policies.map((policy: IPolicy) => {
                         return (<>
                             <div className="policy-content-wrapper col-12 mt-3">
                                 <div className="row align-items-center">
@@ -58,8 +46,8 @@ export const Policies = (props: { siteUrl: string, policyType: string, policies:
 
                                     <div className="policy-icon-section col-lg-3 ">
                                         <ul>
-                                            <li><a target="_blank" href={`../CompanyPolicies/${policy.FileLeafRef}?web=1`}><i><img src="../Assets/images/icon-pdf-file.svg" alt="" /></i> View</a></li>
-                                            <li><a target="_blank" href={`../_layouts/download.aspx?SourceUrl=${props.siteUrl}/CompanyPolicies/${policy.FileLeafRef}?web=1`}><i><img src="../Assets/images/icon-download.svg" alt="" /></i>
+                                            <li><a target="_blank" rel="noreferrer" href={`../CompanyPolicies/${policy.FileLeafRef}?web=1`}><i><img src="../Assets/images/icon-pdf-file.svg" alt="" /></i> View</a></li>
+                                            <li><a target="_blank" rel="noreferrer" href={`../_layouts/download.aspx?SourceUrl=${props.siteUrl}/CompanyPolicies/${policy.FileLeafRef}?web=1`}><i><img src="../Assets/images/icon-download.svg" alt="" /></i>
                                                 Download</a></li>
                                         </ul>
                                     </div>
