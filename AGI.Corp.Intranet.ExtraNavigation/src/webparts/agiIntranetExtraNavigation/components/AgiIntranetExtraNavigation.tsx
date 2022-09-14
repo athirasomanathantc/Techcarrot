@@ -48,7 +48,9 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
         if(isLastPage == true)
         {
           const newItem = currentSitePagesNav[i].split(".aspx")[0];
-          const tempItem = newItem.replace("%20", " ");
+          var re =/%20/gi
+          const tempItem = newItem.replace(re, " ");
+          console.log("Tag",tempItem);
           currentArray.push(tempItem);
           this.setState({
             lastNavItem: tempItem
