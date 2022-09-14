@@ -63,7 +63,7 @@ export default class AgiIntranetCompanyPolicy extends React.Component<IAgiIntran
                       <SearchBox policies={this.state.policies} showFilteredPolicies={(policies: []) => this.showFilteredPolicies(policies)}></SearchBox>
                     </ErrorBoundary>
                     <ErrorBoundary>
-                      <Policies setPolicies={(policies: []) => this.setPolicies(policies)} policies={this.state.filteredPolicies} policyType={this.state.policyType}></Policies>
+                      <Policies siteUrl={this.props.context.pageContext.web.absoluteUrl} setPolicies={(policies: []) => this.setPolicies(policies)} policies={this.state.filteredPolicies} policyType={this.state.policyType}></Policies>
                     </ErrorBoundary>
                   </div>
                 </div>

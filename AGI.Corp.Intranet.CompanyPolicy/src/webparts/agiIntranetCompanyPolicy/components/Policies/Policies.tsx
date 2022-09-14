@@ -3,17 +3,18 @@ import { useEffect, useState } from "react";
 import { sp } from "@pnp/sp/presets/all";
 import * as moment from "moment";
 
-export const Policies = (props: { policyType: string, policies: [], setPolicies: Function }) => {
+export const Policies = (props: { siteUrl: string, policyType: string, policies: [], setPolicies: Function }) => {
     const [error, setError] = useState(null);
     useEffect(() => {
         const getPolicies = async (policyType: string) => {
             const policies = await sp.web.lists.getByTitle('CompanyPolicies').items
-                .select("Id,Title,PolicyType/Title,PublishedDate,PolicyDescription")
+                .select("Id,Title,FileLeafRef,PolicyType/Title,PublishedDate,PolicyDescription")
                 .filter(`PolicyType/Title eq '${policyType}'`)
                 .expand("PolicyType")
                 .top(5000)().then((items: [{
                     Id: number,
                     Title: string,
+                    FileLeafRef: string;
                     PolicyType: string,
                     PublishedDate: string
                 }]) => {
@@ -41,6 +42,7 @@ export const Policies = (props: { policyType: string, policies: [], setPolicies:
                     {props.policies.map((policy: {
                         Id: number,
                         Title: string,
+                        FileLeafRef: string;
                         PolicyType: string,
                         PublishedDate: string,
                         PolicyDescription: string
@@ -56,8 +58,8 @@ export const Policies = (props: { policyType: string, policies: [], setPolicies:
 
                                     <div className="policy-icon-section col-lg-3 ">
                                         <ul>
-                                            <li><a href="policy-detail.html"><i><img src="../Assets/images/icon-pdf-file.svg" alt="" /></i> View</a></li>
-                                            <li><a href="#"><i><img src="../Assets/images/icon-download.svg" alt="" /></i>
+                                            <li><a target="_blank" href={`../CompanyPolicies/${policy.FileLeafRef}?web=1`}><i><img src="../Assets/images/icon-pdf-file.svg" alt="" /></i> View</a></li>
+                                            <li><a target="_blank" href={`../_layouts/download.aspx?SourceUrl=${props.siteUrl}/CompanyPolicies/${policy.FileLeafRef}?web=1`}><i><img src="../Assets/images/icon-download.svg" alt="" /></i>
                                                 Download</a></li>
                                         </ul>
                                     </div>
