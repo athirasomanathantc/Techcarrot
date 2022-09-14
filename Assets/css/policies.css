@@ -330,3 +330,7 @@
         padding: 0;
     }
 }
+
+.ms-ProgressIndicator {
+    display: none;
+}
