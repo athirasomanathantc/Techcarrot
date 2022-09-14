@@ -96,6 +96,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
           return obj;
         });
         this.updateViews(parseInt(newsID), JSON.stringify(updatedViews));
+        console.log("items",item);
         this.setState({
           news: item,
           viewsCount: viewsCount
@@ -115,7 +116,10 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       newsId: id
     });
 
-    await sp.web.lists.getByTitle(listName).items.getById(id).get().then((item: INewsItem) => {
+    await sp.web.lists.getByTitle(listName).items.getById(id)
+    .select('*,Business/Title,Business/ID')
+    .expand('Business')
+    .get().then((item: INewsItem) => {
       this.setState({
         news: item,
       });
@@ -265,7 +269,9 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       NewsLikedBy: likedBy
     };
     console.log(body);
+    console.log("Business",this.state.news.Business.Title);
     this.updateNewsItem(body, id);
+   
 
   }
 
@@ -280,6 +286,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       NewsLikedBy: likedBy
     };
     console.log(body);
+    console.log("Business",this.state.news.Business.Title);
     this.updateNewsItem(body, id);
   }
 
@@ -370,7 +377,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
             <div className="row">
               <div className="col-md-12">
                 <ul className="justify-content-start ps-0">
-                  <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.png`} /></i> {news.Business && news.Business.Title}</li>
+                  <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.png`} /></i> {news.Business? news.Business.Title:""}</li>
                 </ul>
               </div>
               {/* <div className="col-md-6">
