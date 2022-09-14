@@ -15,5 +15,8 @@ export interface IImageItem {
     },
     ListItemAllFields?: {
         ID: number
-    }
+    };
+    File?: { ServerRelativeUrl: string, Name: string };
+    ImageDescription?: string;
+    Author?: { Title: string, ID: number };
 }

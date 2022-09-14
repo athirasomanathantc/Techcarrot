@@ -4,7 +4,7 @@ import { IAgiCorpIntranetImageVideoGalleryProps } from './IAgiCorpIntranetImageV
 import { escape } from '@microsoft/sp-lodash-subset';
 import { containsInvalidFileFolderChars, sp } from '@pnp/sp/presets/all';
 import { IAgiCorpIntranetImageVideoGalleryState } from './IAgiCorpIntranetImageVideoGalleryState';
-import { LIBRARY_PHOTO_GALLERY, LIBRARY_VIDEO_GALLERY, NULL_SELECTED_ITEM, PATH_PHOTO_GALLERY, PROP_DEFAULT_ORDERBY } from '../common/constants';
+import { LIBRARY_PHOTO_GALLERY, LIBRARY_VIDEO_GALLERY, NULL_IMAGE_ITEM, NULL_SELECTED_ITEM, PATH_PHOTO_GALLERY, PROP_DEFAULT_ORDERBY } from '../common/constants';
 import {
   SPHttpClient,
   SPHttpClientResponse,
@@ -89,7 +89,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         console.log('Error:', error);
       })
     if (window.innerWidth <= 767) {
-      this.setState({//debugger;
+      this.setState({////debugger;
         pageSize: 6
       });
 
@@ -103,7 +103,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   }
 
   private handleFilter(e: any) {
-    //debugger;
+    ////debugger;
     const value = parseInt(e.target.value);
     this.setState({
       curFilterValue: value
@@ -122,7 +122,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         this.setState({
           filterData: result
         }, () => {
-          // this.paging();
+           this.paging();
         });
 
       } else {
@@ -145,7 +145,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         this.setState({
           filterVideoData: result
         }, () => {
-          // this.paging();
+           this.paging();
         });
 
       } else {
@@ -170,7 +170,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           this.setState({
             filterData: result
           }, () => {
-            // this.paging();
+             this.paging();
           });
 
         } else {
@@ -324,7 +324,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   }
 
   private async getGalleryItems(): Promise<void> {
-    // debugger;
+    // //debugger;
     const libraryName = this.props.libraryName;
     const libraryPath = this.props.libraryPath;
     const library = sp.web.lists.getByTitle(libraryName);
@@ -380,7 +380,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
 
   }
 
-  private getImageUrl(imageContent: string): string {//debugger;
+  private getImageUrl(imageContent: string): string {////debugger;
     if (!imageContent) {
       return;
     }
@@ -390,7 +390,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   }
 
   private async getImageGalleryItems(subFolderName): Promise<void> {
-    debugger;
+    //debugger;
     // sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(subFolderName).files.select('*, FileRef, FileLeafRef').get().then((allItems) => {
     const libraryPath = `${this.props.context.pageContext.web.serverRelativeUrl}/Image Gallery/${subFolderName}`;
     sp.web.getFolderByServerRelativePath(libraryPath).files.select('*, FileRef, FileLeafRef, ID').expand("ListItemAllFields").get().then((allItems) => {
@@ -435,7 +435,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   }
 
   private openVideo(id) {
-    // debugger;
+    // //debugger;
     const selectedItem = this.state.videoItems.filter(item => item.ID == id)[0];
     this.setState({
       selectedItem
@@ -461,13 +461,16 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     });
   }
 
-  private previewImage(e: any): void {
+  private previewImage(e: any): void { debugger;
     const src = e.target.attributes["data-src"].value;
     const id = e.target.attributes["data-id"].value;
     const index = id ? parseInt(id) : -1;
+    const _imageItem = this.state.imageItems.filter((image) => image.ListItemAllFields.ID == id);
+    const imageItem = _imageItem && _imageItem.length > 0 ? _imageItem[0] : NULL_IMAGE_ITEM;
     this.setState({
       preview: true,
       currentImageUrl: src,
+    //  currentImageTitle: imageItem.File.Name,
       currentIndex: index
     })
   }
@@ -484,7 +487,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     });
   }
 
-  private nextImage() {//debugger;
+  private nextImage() {////debugger;
     const index = this.state.currentIndex;
     const images = this.state.imageItems;
     const arrayIndex = images.map(e => e.ListItemAllFields.ID).indexOf(index);
@@ -757,15 +760,15 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                 <div className="row">
                   {
                     this.state.imageItems.map((items) => {
-                      //debugger;
+                      ////debugger;
                       const test = items.ServerRelativeUrl;
                       return (
                         // <a href="images/gallery-folder-img-large.png" data-toggle="lightbox" data-gallery="image-gallery" className="col-md-3 gallery-item gallery-folder-item" data-caption="<h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><ul><li><i class='icon user-icon'><img src='images/icon-avatar.svg'></i> Debra Teles</li></ul>">
                         //   <img src={`${this.props.siteUrl}/Assets/images/gallery-folder-img.png`} alt="" className="gallery-item--img" />
                         // </a>
-                        <a href={'javascript:void(0);'} onClick={(e) => this.previewImage(e)} data-src={items.ServerRelativeUrl} data-id={1} data-toggle="lightbox" data-gallery="image-gallery"
+                        <a href={'javascript:void(0);'} onClick={(e) => this.previewImage(e)} data-src={items.ServerRelativeUrl} data-id={items.ListItemAllFields.ID} data-toggle="lightbox" data-gallery="image-gallery"
                           className=" col-6 col-md-3 gallery-item gallery-folder-item" data-caption="<h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><ul><li><i class='icon user-icon'><img src='images/icon-avatar.svg'></i> Debra Teles</li></ul>">
-                          <img src={items.ServerRelativeUrl} alt={items.Title} style={{ width: '100%' }} data-src={items.ServerRelativeUrl} data-id={1} className="gallery-item--img" />
+                          <img src={items.ServerRelativeUrl} alt={items.Title} style={{ width: '100%' }} data-src={items.ServerRelativeUrl} data-id={items.ListItemAllFields.ID} className="gallery-item--img" />
                         </a>
                       )
                     })
