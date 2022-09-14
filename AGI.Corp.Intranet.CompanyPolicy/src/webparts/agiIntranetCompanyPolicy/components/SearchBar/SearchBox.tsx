@@ -12,6 +12,10 @@ export const SearchBox = (props: { showFilteredPolicies: (arg0: IPolicy[]) => vo
                 policy
                     .PolicyDescription
                     .toLowerCase()
+                    .includes(keyword.toLowerCase()) ||
+                policy
+                    .Tags
+                    .toLowerCase()
                     .includes(keyword.toLowerCase())
             );
         }
