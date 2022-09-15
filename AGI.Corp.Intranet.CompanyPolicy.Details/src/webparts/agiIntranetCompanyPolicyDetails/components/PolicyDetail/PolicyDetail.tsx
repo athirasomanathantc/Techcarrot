@@ -27,7 +27,7 @@ export const PolicyDetail = (props: IPolicyDetail): JSX.Element => {
         const getPolicyDetail = async (): Promise<void> => {
             const policyDetail = await sp.web.lists.getByTitle('CompanyPolicies').items
                 .getById(getQueryStringValue('policyId'))
-                .select("Id,Title,AttachmentFiles,Tags,PolicyType/Title,PublishedDate,PolicyDescription")
+                .select("Id,Title,AttachmentFiles,Tags,PolicyImage,PolicyType/Title,PublishedDate,PolicyDescription")
                 .expand("PolicyType,AttachmentFiles")()
                 .then((item: IPolicy) => {
                     return item
@@ -95,8 +95,9 @@ export const PolicyDetail = (props: IPolicyDetail): JSX.Element => {
             </div>
         </div>
         <h3>{policyDetail?.Title}</h3>
-        <div className="img-responsive pt-3 pb-3">
+        <>
+            <img className="img-responsive pt-3 pb-3" src={policyDetail?.PolicyImage?.Url} />
             {ReactHtmlParser(policyDetail?.PolicyDescription)}
-        </div>
+        </>
     </>);
 }
