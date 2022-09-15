@@ -63,7 +63,6 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
         }
         
       }
-
       
       this.setState({
         currentSitePagesNavArr: currentArray
@@ -93,6 +92,7 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
 
     const lastNavigationVal = this.state.lastNavItem;
     const curDescriptionVal = this.props.description;
+    var tempURL = `${this.props.siteUrl}/SitePages`;
     return (
       //
       <div className="extra-navs">
@@ -104,6 +104,7 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
                   className="breadcrumb justify-content-center justify-content-md-start mb-3 mt-3 mt-md-0 mb-md-0">
                   <li className="breadcrumb-item"><a href={`${this.props.siteUrl}`}>Home</a></li>
                   {
+                     
                     this.state.currentSitePagesNavArr.map((item, i) => {
                     //  debugger;
                       var isLast = /aspx/.test(item);
@@ -114,9 +115,10 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
                             <li className="breadcrumb-item active">{item}</li>
                           )
                         }
-                        else {
+                        else {debugger;
+                           tempURL = `${tempURL}/${item}`;
                           return (
-                            <li className="breadcrumb-item"><a href={`${this.props.siteUrl}/SitePages/${item}.aspx`}>{item}</a></li>
+                            <li className="breadcrumb-item"><a href={`${tempURL}.aspx`}>{item}</a></li>
                           )
                         }
                       }
