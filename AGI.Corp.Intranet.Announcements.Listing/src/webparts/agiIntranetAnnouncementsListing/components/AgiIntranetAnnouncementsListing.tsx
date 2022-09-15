@@ -27,7 +27,9 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       totalPage: 0,
       currentPageAnnouncementData: [],
       filterValues: [],
-      businessData: []
+      businessData: [],
+      itemsPerPage:0,
+     
     }
   }
   async componentDidMount(): Promise<void> {
@@ -45,6 +47,17 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       this.setState({
         exceptionOccured: true
       });
+    }
+    if (window.innerWidth<=767){
+      this.setState({
+        itemsPerPage:6
+      });
+
+    }else{
+      this.setState({
+        itemsPerPage:12
+      });
+
     }
   }
   private getImageUrl(announcementItem: IAnnouncementData): string {
@@ -82,6 +95,23 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       });
     }
   }
+  private paging() {
+
+    const pageCount: number = Math.ceil(this.state.filteredAnnouncementData.length / this.state.itemsPerPage);
+    const totalPages = (this.state.filteredAnnouncementData.length / this.state.itemsPerPage) - 1;
+    //console.log('totalPages', pageCount);l
+    // this.setState({
+    //   images
+    // });
+    this.setState({
+      currentPageAnnouncementData: this.state.filteredAnnouncementData.slice(0, this.state.itemsPerPage),
+      totalPage: pageCount,
+      currentPage: 1
+    },()=>{
+      console.log("totalpage",this.state.totalPage);
+    });
+
+  }
 
   private _getSelectedPageAnnouncements(selectedPageNumber: number) {
     try {
@@ -96,6 +126,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
         currentPageAnnouncementData,
         currentPage: selectedPageNumber
       }, () => {
+        
         this.scrollToTop();
       });
     }
@@ -104,16 +135,19 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
         exceptionOccured: true
       });
     }
+    
   }
 
   private filterAnnouncementByBusiness(e: any) {
+    debugger;
     const value = parseInt(e.target.value);
     if (value == 0) {
       const result: IAnnouncementData[] = this.state.totalAnnouncementData;
       this.setState({
         filteredAnnouncementData: result
       }, () => {
-        this.getFirstPageAnnouncements();
+        this.paging();
+        //this.getFirstPageAnnouncements();
       });
 
     } else {
@@ -123,7 +157,8 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       this.setState({
         filteredAnnouncementData: result
       }, () => {
-        this.getFirstPageAnnouncements();
+        this.paging();
+        //this.getFirstPageAnnouncements();
       });
     }
   }
@@ -170,7 +205,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
               <section className="col-lg-12 announcement-listing">
                 <div className="row">
                   { 
-                  this.state.currentPageAnnouncementData?
+                  this.state.currentPageAnnouncementData.length>0 ?
                     this.state.currentPageAnnouncementData.map((announcement) => {
                       return (
                         <div className="col-lg-3 mb-4 d-flex align-items-stretch">
@@ -197,7 +232,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
                     :
                     <div className={'invalidTxt'}>
                       NO ANNOUNCEMENTS
-                      </div>
+                    </div>
                   }
                 </div>
               </section>
