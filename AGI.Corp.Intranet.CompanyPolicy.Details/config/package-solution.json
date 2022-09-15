@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "agi-corp-intranet-company-policy-details-client-side-solution",
+    "id": "7d030441-cfbd-496e-a4f6-e9d457923eb9",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.15.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "AGI.Corp.Intranet.CompanyPolicy.Details description"
+      },
+      "longDescription": {
+        "default": "AGI.Corp.Intranet.CompanyPolicy.Details description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "agi-corp-intranet-company-policy-details Feature",
+        "description": "The feature that activates elements of the agi-corp-intranet-company-policy-details solution.",
+        "id": "dc3be3ae-4cf9-4c6a-a0f1-6fe613796541",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/agi-corp-intranet-company-policy-details.sppkg"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-intranet-company-policy-details-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiIntranetCompanyPolicyDetails/AgiIntranetCompanyPolicyDetailsWebPart.js",
+          "manifest": "./src/webparts/agiIntranetCompanyPolicyDetails/AgiIntranetCompanyPolicyDetailsWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiIntranetCompanyPolicyDetailsWebPartStrings": "lib/webparts/agiIntranetCompanyPolicyDetails/loc/{locale}.js"
+  }
+}
