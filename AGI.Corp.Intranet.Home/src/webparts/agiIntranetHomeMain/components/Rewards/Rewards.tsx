@@ -47,7 +47,7 @@ export const Rewards = (props: IAgiIntranetHomeMainProps) => {
                     <div className="card-header d-flex align-items-center justify-content-between" >
                         <h4 className="card-title mb-0">Rewards</h4>
                         <div className="d-flex align-items-center">
-                            <a href="./Rewards.aspx" className="viewall-link d-none d-md-block">View All</a>
+                            <a href={`${props.siteUrl}/SitePages/Rewards.aspx`} className="viewall-link d-none d-md-block">View All</a>
                             <div className="p-0 ms-3 position-relative d-none d-md-block">
                                 <button className="carousel-control-prev" type="button"
                                     data-bs-target="#employeeOffersControls"
