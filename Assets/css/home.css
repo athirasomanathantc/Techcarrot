@@ -206,9 +206,21 @@ h2.chart-heading {
 #qbox-container {
     position: relative;
     /*padding: 20px;*/
-
+    text-align: center;
 }
-
+#qbox-container img{
+    padding: 20px 0;
+}
+#qbox-container h5{
+    font: normal normal 600 20px/28px Gill Sans;
+    letter-spacing: 0px;
+    color: #880D6C;
+    opacity: 1;
+    padding: 15px 0 20px 0;
+}
+#qbox-container .btn{
+    margin-bottom: 15px;
+}
 #steps-container {
     margin: auto;
     width: 100%;
