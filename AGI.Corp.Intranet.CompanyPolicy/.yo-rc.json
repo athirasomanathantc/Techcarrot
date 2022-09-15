@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.2",
+    "libraryName": "agi-corp-intranet-company-policy",
+    "libraryId": "82b1d7b7-09ea-4b73-aaf2-18a3e27dffeb",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "AGI.Corp.Intranet.CompanyPolicy",
+    "solutionShortDescription": "AGI.Corp.Intranet.CompanyPolicy description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
