@@ -61,7 +61,7 @@ export const Policies = (props: IPolicies): JSX.Element => {
                                     <div className="policy-icon-section col-lg-3 ">
                                         <ul>
                                             <li>
-                                                <a href={`./Policies/Policy-Detail.aspx?Id=${policy.Id}`}>
+                                                <a href={`./Policies/Policy%20Detail.aspx?policyId=${policy.Id}`}>
                                                     <i>
                                                         <img src="../Assets/images/icon-pdf-file.svg" alt="" />
                                                     </i>
