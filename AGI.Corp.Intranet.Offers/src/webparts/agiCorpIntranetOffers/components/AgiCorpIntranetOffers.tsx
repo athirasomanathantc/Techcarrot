@@ -226,7 +226,7 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
                                 <p className={'card-text'}>{item.Description}</p>
                                 </a>
                                 
-                                <a href={`${this.props.siteURL}/SitePages/Reward Details.aspx?rewardID=${item.ID}`} className={'read-more  align-self-start'}>Read more</a>
+                                <a href={`${this.props.siteURL}/SitePages/Rewards/Reward Details.aspx?rewardID=${item.ID}`} className={'read-more  align-self-start'}>Read more</a>
                                 {/* <!--<a href='{'} className={'btn read-more mt-auto align-self-start'}>View Full Article</a>--> */}
                               </div>
                             </div>
