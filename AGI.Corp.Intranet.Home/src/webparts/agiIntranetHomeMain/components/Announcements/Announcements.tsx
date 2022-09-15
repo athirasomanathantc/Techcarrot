@@ -83,7 +83,7 @@ export const Announcements = (props: IAgiIntranetHomeMainProps) => {
 
                             <h4>Announcements</h4>
                             <div className="d-flex align-items-center">
-                                <a href="./News/Announcements.aspx" className="viewall-link">View All</a>
+                                <a href={`${props.siteUrl}/SitePages/News/Announcements.aspx`} className="viewall-link">View All</a>
                                 <div className="p-0 ms-3 position-relative ">
                                     <button className="carousel-control-prev" style={{ borderRadius: '60px' }} type="button"
                                         data-bs-target="#carouselExampleCaptions2"

@@ -53,7 +53,7 @@ export const CompanyEvents = (props: IAgiIntranetHomeMainProps) => {
             <div className="card  company-event">
                 <div className="card-header d-flex align-items-center justify-content-between">
                     <h4 className="card-title m-2 me-2">Company Events</h4>
-                    <a href="./News/Events.aspx" className="viewall-link">View All</a>
+                    <a href={`${props.siteUrl}/SitePages/News/Events.aspx`} className="viewall-link">View All</a>
                 </div>
                 <div className="card-body">
                     <ul className="p-0 m-0 list-group">
