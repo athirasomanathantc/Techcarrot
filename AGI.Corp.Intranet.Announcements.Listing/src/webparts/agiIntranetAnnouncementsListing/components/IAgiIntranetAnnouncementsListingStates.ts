@@ -12,4 +12,6 @@ export interface IAgiIntranetEventsStates {
         ID:number;
         Title:string;
       }[];
+      itemsPerPage:number;
+      
 }
