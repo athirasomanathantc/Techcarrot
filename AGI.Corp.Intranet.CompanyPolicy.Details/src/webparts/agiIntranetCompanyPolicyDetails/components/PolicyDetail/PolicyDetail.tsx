@@ -102,7 +102,7 @@ export const PolicyDetail = (props: IPolicyDetail): JSX.Element => {
                                             </g>
                                         </svg>
                                         Print</a>
-                                    <a className="sec-btn" href={`${props.siteUrl}/_layouts/download.aspx?SourceUrl=${props.siteUrl}/Lists/CompanyPolicies/Attachments/${policyDetail?.Id}/${policyDetail?.AttachmentFiles[0]?.FileName}?download=1`}><svg xmlns="http://www.w3.org/2000/svg" width="21.094" height="22.5" viewBox="0 0 21.094 22.5">
+                                    {policyDetail?.AttachmentFiles.length > 0 && <a className="sec-btn" href={`${props.siteUrl}/_layouts/download.aspx?SourceUrl=${props.siteUrl}/Lists/CompanyPolicies/Attachments/${policyDetail?.Id}/${policyDetail?.AttachmentFiles[0]?.FileName}?download=1`}><svg xmlns="http://www.w3.org/2000/svg" width="21.094" height="22.5" viewBox="0 0 21.094 22.5">
                                         <g id="download_2_" data-name="download (2)" transform="translate(-16)">
                                             <g id="Group_9961" data-name="Group 9961" transform="translate(20.922)">
                                                 <g id="Group_9960" data-name="Group 9960">
@@ -115,7 +115,7 @@ export const PolicyDetail = (props: IPolicyDetail): JSX.Element => {
                                                 </g>
                                             </g>
                                         </g>
-                                    </svg>Download</a>
+                                    </svg>Download</a>}
                                 </div>}
                             </div>
                             <h3>{policyDetail?.Title}</h3>
