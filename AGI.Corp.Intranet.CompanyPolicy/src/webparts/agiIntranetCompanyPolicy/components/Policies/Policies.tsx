@@ -51,7 +51,7 @@ export const Policies = (props: IPolicies): JSX.Element => {
                     {props.policies.map((policy: IPolicy) => {
                         return (<>
                             <div className="policy-content-wrapper col-12 mt-3">
-                                <div className="row align-items-center">
+                                <div className="row">
                                     <div className="policy-content col-lg-9">
                                         <h4 className="title">{policy.Title}</h4>
                                         <p className="date">Published: {moment(policy.PublishedDate).format("MMMM D, YYYY")}</p>
