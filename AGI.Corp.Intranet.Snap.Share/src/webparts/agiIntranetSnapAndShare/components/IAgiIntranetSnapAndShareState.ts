@@ -9,6 +9,7 @@ export interface IAgiIntranetSnapAndShareState {
     selectedImageTitle: string;
     selectedImageDescription: string;
     selectedImageAuthorName: string;
+    selectedImageDate: string;
     description: string;
     fileName: string;
     file: any;

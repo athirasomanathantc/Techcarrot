@@ -14,5 +14,6 @@ export const NULL_IMAGE_ITEM: IImageItem = {
     ID: 0,
     File: { ServerRelativeUrl: '', Name: '' },
     ImageDescription: '',
-    Author: { Title: '', ID: 0 }
+    Author: { Title: '', ID: 0 },
+    Created:""
 }

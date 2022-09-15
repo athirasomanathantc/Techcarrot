@@ -8,6 +8,7 @@ import { IImageItem } from '../models/IImageItem';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { LIBRARY_SNAP_SHARE, NULL_IMAGE_ITEM, PAGE_SIZE, TEXT_UPLOAD_SUCCESS, WARNING_TEXT_DESCRIPTION_LENGTH, WARNING_TEXT_DESCRIPTION_REQUIRED, WARNING_TEXT_FILE_SIZE, WARNING_TEXT_INVALID_FILETYPE } from '../common/constants';
 import Paging from './Paging/Paging';
+import * as moment from 'moment';
 
 export default class AgiIntranetSnapAndShare extends React.Component<IAgiIntranetSnapAndShareProps, IAgiIntranetSnapAndShareState> {
   constructor(props: IAgiIntranetSnapAndShareProps) {
@@ -24,6 +25,7 @@ export default class AgiIntranetSnapAndShare extends React.Component<IAgiIntrane
       selectedImageTitle: '',
       selectedImageDescription: '',
       selectedImageAuthorName: '',
+      selectedImageDate:'',
       description: '',
       fileName: '',
       file: null,
@@ -157,7 +159,8 @@ export default class AgiIntranetSnapAndShare extends React.Component<IAgiIntrane
       selectedImageUrl: '',
       selectedImageTitle: '',
       selectedImageDescription: '',
-      selectedImageAuthorName: ''
+      selectedImageAuthorName: '',
+      selectedImageDate: ''
     });
   }
 
@@ -197,6 +200,7 @@ export default class AgiIntranetSnapAndShare extends React.Component<IAgiIntrane
       selectedImageTitle: imageItem.File.Name,
       selectedImageDescription: imageItem.ImageDescription,
       selectedImageAuthorName: imageItem.Author.Title,
+      selectedImageDate:imageItem.Created,
       currentIndex: index,
       preview: true
     });
@@ -213,7 +217,8 @@ export default class AgiIntranetSnapAndShare extends React.Component<IAgiIntrane
       selectedImageUrl: prevImage.File.ServerRelativeUrl,
       selectedImageTitle: prevImage.File.Name,
       selectedImageDescription: prevImage.ImageDescription,
-      selectedImageAuthorName: prevImage.Author.Title
+      selectedImageAuthorName: prevImage.Author.Title,
+      selectedImageDate: prevImage.Created
     });
   }
 
@@ -229,6 +234,7 @@ export default class AgiIntranetSnapAndShare extends React.Component<IAgiIntrane
       selectedImageTitle: nextImage.File.Name,
       selectedImageDescription: nextImage.ImageDescription,
       selectedImageAuthorName: nextImage.Author.Title,
+      selectedImageDate: nextImage.Created
     });
   }
 
@@ -375,6 +381,9 @@ export default class AgiIntranetSnapAndShare extends React.Component<IAgiIntrane
                   <i className="icon user-icon"><img src={`${this.props.siteUrl}/Assets/icons/icon-avatar.svg`} /></i>
                   <span className='userName'>
                     {this.state.selectedImageAuthorName}
+                  </span>
+                  <span className='createdDate'>
+                  <span> Date Taken:</span> {moment(this.state.selectedImageDate).format('DD MMMM YYYY')}
                   </span>
                 </li>
               </ul>

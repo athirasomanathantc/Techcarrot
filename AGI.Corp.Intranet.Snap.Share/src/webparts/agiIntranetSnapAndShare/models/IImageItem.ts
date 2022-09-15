@@ -3,4 +3,5 @@ export interface IImageItem {
     File: { ServerRelativeUrl: string, Name: string };
     ImageDescription: string;
     Author: { Title: string, ID: number };
+    Created:string;
 }
