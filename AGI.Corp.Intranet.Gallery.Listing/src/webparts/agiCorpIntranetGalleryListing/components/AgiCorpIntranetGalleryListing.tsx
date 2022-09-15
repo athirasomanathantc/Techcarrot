@@ -53,10 +53,9 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
       filterData: [],
       filterValues: [],
       pageData: [],
-      totalPages: 0,
       currentPage: 1,
       pageSize: 0,
-      totalPage: 1
+      totalPage: 0
     }
     // this.getImages = this.getImages.bind(this);
   }
@@ -118,13 +117,16 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
   }
 
   private handleFilter(e: any) {
+    
     const value = parseInt(e.target.value);
+    debugger;
     if (value == 0) {
-      const result: IImageItem[] = this.state.folders;
+      //const result: IImageItem[] = this.state.folders;
       this.setState({
-        filterData: result
+        filterData: this.state.folders
       }, () => {
-        // this.paging();
+        console.log("filterData",this.state.filterData);
+        this.paging();
       });
 
     } else {
@@ -151,9 +153,10 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
     // });
     this.setState({
       pageData: this.state.filterData.slice(0, this.state.pageSize),
-      totalPages: pageCount,
       totalPage: pageCount,
       currentPage: 1
+    },()=>{
+      console.log("PageData",this.state.pageData);
     });
 
   }
@@ -239,48 +242,48 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
       });
 
   }
-  private paging() {
+  /*private paging() {
     const pageCount: number = Math.ceil(this.state.filterData.length / this.state.pageSize);
     const totalPages = (this.state.filterData.length / this.state.pageSize) - 1;
-    //console.log('totalPages', pageCount);
-    // this.setState({
-    //   images
-    // });
+    console.log('totalPages', pageCount);
+    this.setState({
+      images
+    });
     this.setState({
       pageData1: this.state.filterData.slice(0, this.state.pageSize),
       totalPage: pageCount,
       currentPage: 1
     }, () => {
-      //console.log('filterData', this.state.filterData);
+      console.log('filterData', this.state.filterData);
       console.log('pageData', this.state.pageData);
     });
 
-  }
+  }*/
 
-  private _getPage(page: number) {
-    // round a number up to the next largest integer.
-    const skipItems: number = this.state.pageSize * (page - 1);
-    const takeItems: number = skipItems + this.state.pageSize;
+  // private _getPage(page: number) {
+  //   // round a number up to the next largest integer.
+  //   const skipItems: number = this.state.pageSize * (page - 1);
+  //   const takeItems: number = skipItems + this.state.pageSize;
 
-    //console.log('page', page);
-    const roundupPage = Math.ceil(page);
-    // const images = this.state.allImages.slice(roundupPage, (roundupPage * pageSize));
-    const pageData1 = this.state.filterData.slice(skipItems, takeItems)
-    this.setState({
-      pageData1,
-      currentPage: page
-    }, () => {
-      this.scrollToTop();
+  //   //console.log('page', page);
+  //   const roundupPage = Math.ceil(page);
+  //   // const images = this.state.allImages.slice(roundupPage, (roundupPage * pageSize));
+  //   const pageData1 = this.state.filterData.slice(skipItems, takeItems)
+  //   this.setState({
+  //     pageData1,
+  //     currentPage: page
+  //   }, () => {
+  //     this.scrollToTop();
 
-    });
-  }
-  private scrollToTop(): void {
+  //   });
+  // }
+  // private scrollToTop(): void {
 
-    var element = document.getElementById("spPageCanvasContent");
+  //   var element = document.getElementById("spPageCanvasContent");
 
-    element.scrollIntoView(true);
+  //   element.scrollIntoView(true);
 
-  }
+  // }
 
   private async getGalleryItems1(): Promise<void> {
     debugger;
@@ -514,6 +517,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                     <div className={tab == "image" ? `tab-pane fade show active` : `tab-pane fade `} id="image-gallery" role="tabpanel" aria-labelledby="image-gallery-tab">
                       <div className="row">
                         {
+                          this.state.pageData.length>0?
                           this.state.pageData.map((folder) => {
                             const targetUrl = `${this.props.siteUrl}/SitePages/Photos.aspx?folderName=${folder.Name}&libraryPath=${libraryPath}`
                             return (
@@ -531,6 +535,10 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                               </div>
                             )
                           })
+                          :
+                          <div  className={'invalidTxt'}>
+                            NO IMAGES
+                          </div>
                         }
                       </div>
                       <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
@@ -544,7 +552,8 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                     <div className={tab == "video" ? `tab-pane fade show active` : `tab-pane fade `} id="video-gallery" role="tabpanel" aria-labelledby="video-gallery-tab">
                       <div className="row">
                         {
-                          this.state.videoItems.map((item, i) => {
+                          this.state.pageData.length>0?
+                          this.state.videoItems.map((item) => {
                             const imageUrl = this.getImageUrl(item.VideoThumbnail);
                             //  const navUrl = item.NavigationUrl ? item.NavigationUrl.Url : '';
                             return (
@@ -562,6 +571,11 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                               </div>
                             )
                           })
+                          :
+                          <div  className={'invalidTxt'}>
+                            NO VIDEOS
+                          </div>
+                        
                         }
 
                       </div>
@@ -626,6 +640,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                 </div>
                 <div className="row">
                   {
+                    this.state.imageItems.length>0?
                     this.state.imageItems.map((items) => {
                       debugger;
                       const test = items.ServerRelativeUrl;
@@ -639,6 +654,11 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
                         </a>
                       )
                     })
+                    :
+                          <div  className={'invalidTxt'}>
+                            NO IMAGES
+                          </div>
+                        
                   }
                 </div>
               </div>
