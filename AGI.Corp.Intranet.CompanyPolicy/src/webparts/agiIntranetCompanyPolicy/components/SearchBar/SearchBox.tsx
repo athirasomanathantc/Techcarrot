@@ -20,7 +20,7 @@ export const SearchBox = (props: ISearchBox): JSX.Element => {
                         <input type="text" className="form-control form-control-lg" placeholder="Search Here" onChange={handleChange} value={props.keyword} />
                         <button type="submit" className="input-group-text btn-serach" onClick={handleClick}>
                             <i className="bi bi-search">
-                                <img src="../Assets/images/icon-search-dark.svg" alt="" />
+                                <img src={`${props.siteUrl}/Assets/images/icon-search-dark.svg`} alt="" />
                             </i>
                         </button>
                     </div>

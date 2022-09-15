@@ -63,15 +63,15 @@ export const Policies = (props: IPolicies): JSX.Element => {
                                             <li>
                                                 <a href={`./Policies/Policy%20Detail.aspx?policyId=${policy.Id}`}>
                                                     <i>
-                                                        <img src="../Assets/images/icon-pdf-file.svg" alt="" />
+                                                        <img src={`${props.siteUrl}/Assets/images/icon-pdf-file.svg`} alt="" />
                                                     </i>
                                                     View
                                                 </a>
                                             </li>
                                             {policy.AttachmentFiles.length > 0 && <li>
-                                                <a target="_blank" rel="noreferrer" href={`../_layouts/download.aspx?SourceUrl=${props.siteUrl}/Lists/CompanyPolicies/Attachments/${policy.Id}/${policy.AttachmentFiles[0]?.FileName}?download=1`}>
+                                                <a target="_blank" rel="noreferrer" href={`${props.siteUrl}/_layouts/download.aspx?SourceUrl=${props.siteUrl}/Lists/CompanyPolicies/Attachments/${policy.Id}/${policy.AttachmentFiles[0]?.FileName}?download=1`}>
                                                     <i>
-                                                        <img src="../Assets/images/icon-download.svg" alt="" />
+                                                        <img src={`${props.siteUrl}/Assets/images/icon-download.svg`} alt="" />
                                                     </i>
                                                     Download
                                                 </a>
