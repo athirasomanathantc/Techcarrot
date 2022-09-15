@@ -4,27 +4,40 @@ import { sp } from "@pnp/sp/presets/all";
 import * as moment from "moment";
 import { IPolicy } from "../../models/IPolicy";
 import ReactHtmlParser from 'react-html-parser';
+import { IPolicies } from "../../models/IPolicies";
 
-export const Policies = (props: { siteUrl: string, policyType: string, policies: IPolicy[], setPolicies: (arg0: IPolicy[]) => void }): JSX.Element => {
+export const Policies = (props: IPolicies): JSX.Element => {
     const [error, setError] = useState(null);
+
+    const getFilteredPolicies = (keyword: string, policies: IPolicy[]): IPolicy[] => policies.filter(
+        (policy: IPolicy) => {
+            return (
+                policy.Title?.toLowerCase().includes(keyword.trim().toLowerCase()) ||
+                policy.PolicyDescription?.toLowerCase().includes(keyword.trim().toLowerCase()) ||
+                policy.Tags?.toLowerCase().includes(keyword.trim().toLowerCase())
+            );
+        }
+    );
+
     useEffect(() => {
         const getPolicies = async (policyType: string): Promise<void> => {
-            const policies = await sp.web.lists.getByTitle('CompanyPolicies').items
+            let policies = await sp.web.lists.getByTitle('CompanyPolicies').items
                 .select("Id,Title,AttachmentFiles,Tags,PolicyType/Title,PublishedDate,PolicyDescription")
                 .filter(`PolicyType/Title eq '${policyType}'`)
                 .expand("PolicyType,AttachmentFiles")
-                .top(5000)().then((items: [IPolicy]) => {
+                .top(5000)().then((items: IPolicy[]) => {
                     return items
                 })
                 .catch((exception) => {
                     throw new Error(exception);
                 });
+            policies = getFilteredPolicies(props.keyword, policies)
             props.setPolicies(policies);
         }
         getPolicies(props.policyType).catch((error) => {
             setError(error);
         })
-    }, [props.policyType])
+    }, [props.policyType, props.keyword])
 
     if (error) {
         throw error;
