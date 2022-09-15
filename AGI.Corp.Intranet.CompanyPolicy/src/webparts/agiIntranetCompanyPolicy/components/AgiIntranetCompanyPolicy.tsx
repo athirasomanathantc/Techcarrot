@@ -48,7 +48,7 @@ export default class AgiIntranetCompanyPolicy extends React.Component<IAgiIntran
     })
   }
 
-  private setKeyword(keyword: string) {
+  private setKeyword(keyword: string): void {
     this.setState({
       keyword
     })
