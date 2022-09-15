@@ -71,7 +71,7 @@ export default class AgiIntranetCompanyPolicy extends React.Component<IAgiIntran
                   </ErrorBoundary>
                   <div className="content-section col-lg-9">
                     <ErrorBoundary>
-                      <SearchBox keyword={this.state.keyword} setKeyword={(keyword: string) => this.setKeyword(keyword)} />
+                      <SearchBox siteUrl={this.props.context.pageContext.web.absoluteUrl} keyword={this.state.keyword} setKeyword={(keyword: string) => this.setKeyword(keyword)} />
                     </ErrorBoundary>
                     <ErrorBoundary>
                       <Policies siteUrl={this.props.context.pageContext.web.absoluteUrl} setPolicies={(policies: []) => this.setPolicies(policies)} policies={this.state.filteredPolicies} policyType={this.state.policyType} keyword={this.state.keyword} />

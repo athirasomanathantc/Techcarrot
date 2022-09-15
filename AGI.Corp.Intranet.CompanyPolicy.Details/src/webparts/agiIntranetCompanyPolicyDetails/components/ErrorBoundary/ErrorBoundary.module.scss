@@ -1,0 +1,13 @@
+.errorBoundary {
+  max-width: 100%;
+  margin: 0;
+  padding: 0px 12px;
+
+  .error {
+    font-weight: 600;
+    color: #9D0D71;
+    border: 1px solid #9d0d71;
+    padding: 20px;
+    border-radius: 8px;
+  }
+}
