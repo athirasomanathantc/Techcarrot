@@ -25,7 +25,6 @@ export interface IAgiCorpIntranetGalleryListingState {
       Title:string;
     }[];
     currentPage: number;
-    totalPages: number;
     pageData:IFolderItem[];
     pageSize:number;
     totalPage:number;

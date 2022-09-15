@@ -501,14 +501,14 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
                     <li>
                       <a href="javascript:void(0)" onClick={(e) => this.unlikePost(e)}
                         data-id={blog.ID}>
-                        <i><img src={`${this.props.siteUrl}/Assets/icons/icon-unlike.svg`} alt="" data-id={blog.ID} /></i> Unlike
+                        <i><img src={`${this.props.siteUrl}/Assets/icons/icon-unlike.svg`} alt="" data-id={blog.ID} /></i> <span>Unlike</span>
                       </a>
                     </li>
                     :
                     <li>
                       <a href="javascript:void(0)" onClick={(e) => this.likePost(e)}
                         data-id={blog.ID}>
-                        <i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" data-id={blog.ID} /></i> Like
+                        <i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" data-id={blog.ID} /></i> <span>Like</span>
                       </a>
                     </li>
                 }

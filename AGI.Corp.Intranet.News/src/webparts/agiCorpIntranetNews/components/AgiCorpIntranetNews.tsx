@@ -15,12 +15,16 @@ import { sp } from "@pnp/sp/presets/all";
 import { Pagination } from '@pnp/spfx-controls-react/lib/pagination';
 import Paging from './Paging/Paging';
 
+
 //const pageSize: number = 12;
 
 export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntranetNewsProps, IAgiCorpIntranetNewsState> {
 
   constructor(props) {
     super(props),
+    sp.setup({
+      spfxContext: this.props.context
+    });
       this.state = {
         newsData: [],
         filterData: [],
@@ -77,13 +81,11 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
     }).then((resp)=>{
       return resp.value;
     });
-    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=ID,Title,PublishedDate,Description,NewsThumbnail,NewsImage,Business/ID,Business/Title&$expand=Business&$top=${count}`;
-    this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
-      .then((response: SPHttpClientResponse) => {
-        return response.json();
-      })
-      .then((response) => {
-        const items: INewsData[] = response.value;
+    sp.web.lists.getByTitle(list).items.select("ID,Title,PublishedDate,Description,NewsThumbnail,NewsImage,Business/ID,Business/Title").orderBy("PublishedDate",false)
+    .expand("Business").top(count)()
+    //this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+      .then((response:INewsData[]) => {
+        const items: INewsData[] = response;
         console.log('Data',items);
         const pageCount: number = Math.ceil(items.length / this.state.pageSize);
 

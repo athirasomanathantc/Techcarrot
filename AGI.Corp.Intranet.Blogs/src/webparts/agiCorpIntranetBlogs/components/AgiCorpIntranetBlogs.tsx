@@ -128,8 +128,8 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   private async getblog(): Promise<void> {
 
     const listName = "Blogs";
-    sp.web.lists.getByTitle(listName).items.select('ID,Title,PublishedDate,BlogThumbnail,BlogImage,Author/ID,Author/Title,Business/ID,Business/Title')
-      .expand('Author,Business').getAll().then((resp: IBlogData[]) => {
+    sp.web.lists.getByTitle(listName).items.select('ID,Title,PublishedDate,BlogThumbnail,BlogImage,Author/ID,Author/Title,Business/ID,Business/Title').orderBy('PublishedDate',false)
+      .expand('Author,Business').top(5000)().then((resp: IBlogData[]) => {
         const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
         console.log(resp.length);
         setTimeout(() => {
@@ -182,7 +182,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
     return (
       <div className={'main-content'} id='blogTop'>
         <div className={'content-wrapper'}>
-          <div className={'container'} style={{ display: this.state.isDataLoaded ? 'none' : 'none' }}>
+          <div className={'container'} style={{ display: this.state.isDataLoaded ? 'block' : 'none' }}>
 
             <div className={'main-header-section'}>
               <div className={'row'} >
@@ -282,7 +282,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
             </div>
           </div>
         </div>
-        <div className='loaderContainer' style={{ display: this.state.isDataLoaded ? 'flex' : 'flex' }}>
+        <div className='loaderContainer' style={{ display: this.state.isDataLoaded ? 'none' : 'flex' }}>
           <div className="loader">
           </div>
         </div>
