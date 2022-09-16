@@ -19,6 +19,10 @@ export const Policies = (props: IPolicies): JSX.Element => {
         }
     );
 
+    const goToDetails = (policyId: number) => {
+        window.location.href = `${props.siteUrl}/SitePages/Policies/Policy%20Detail.aspx?policyId=${policyId}`;
+    }
+
     useEffect(() => {
         const getPolicies = async (policyType: string): Promise<void> => {
             let policies = await sp.web.lists.getByTitle('CompanyPolicies').items
@@ -61,15 +65,15 @@ export const Policies = (props: IPolicies): JSX.Element => {
                                     <div className="policy-icon-section col-lg-3 ">
                                         <ul>
                                             <li>
-                                                <a href={`./Policies/Policy%20Detail.aspx?policyId=${policy.Id}`}>
+                                                <div onClick={() => goToDetails(policy.Id)}>
                                                     <i>
                                                         <img src={`${props.siteUrl}/Assets/images/icon-pdf-file.svg`} alt="" />
                                                     </i>
                                                     View
-                                                </a>
+                                                </div>
                                             </li>
                                             {policy.AttachmentFiles.length > 0 && <li>
-                                                <a target="_blank" rel="noreferrer" href={`${props.siteUrl}/_layouts/download.aspx?SourceUrl=${props.siteUrl}/Lists/CompanyPolicies/Attachments/${policy.Id}/${policy.AttachmentFiles[0]?.FileName}?download=1`}>
+                                                <a target="_blank" rel="noreferrer" href={`${props.siteUrl}/_layouts/download.aspx?SourceUrl=${props.siteUrl}/Lists/CompanyPolicies/Attachments/${policy.Id}/${policy.AttachmentFiles[0]?.FileName}&download=1`}>
                                                     <i>
                                                         <img src={`${props.siteUrl}/Assets/images/icon-download.svg`} alt="" />
                                                     </i>
