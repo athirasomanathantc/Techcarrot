@@ -67,7 +67,7 @@ export default class AgiIntranetCompanyPolicy extends React.Component<IAgiIntran
               <div className="container">
                 <div className="row mb-5">
                   <ErrorBoundary>
-                    <LeftNavigation showPolicies={(e: React.MouseEvent<HTMLLIElement, MouseEvent>, policyType: string) => this.showPolicies(e, policyType)} />
+                    <LeftNavigation policyType={this.state.policyType} showPolicies={(e: React.MouseEvent<HTMLLIElement, MouseEvent>, policyType: string) => this.showPolicies(e, policyType)} />
                   </ErrorBoundary>
                   <div className="content-section col-lg-9">
                     <ErrorBoundary>

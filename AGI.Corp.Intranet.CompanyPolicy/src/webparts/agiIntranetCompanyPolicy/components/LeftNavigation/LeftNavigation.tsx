@@ -1,10 +1,22 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { sp } from "@pnp/sp/presets/all";
+import { ILeftNavigation } from '../../models/ILeftNavigation';
 
-export const LeftNavigation = (props: { showPolicies: (arg0: React.MouseEvent<HTMLLIElement, MouseEvent>, arg1: string) => void }): JSX.Element => {
+interface IPolicyType {
+    Title: string
+}
+
+export const LeftNavigation = (props: ILeftNavigation): JSX.Element => {
     const [error, setError] = useState(null);
+    const [policyType, setPolicyType] = useState(props.policyType);
     const [policyTypes, setPolicyTypes] = useState([]);
+
+    const showPolicies = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, policyType: IPolicyType): void => {
+        setPolicyType(policyType.Title)
+        props.showPolicies(e, policyType.Title)
+    }
+
     useEffect(() => {
         const getPolicyTypes = async (): Promise<void> => {
             const policyTypes = await sp.web.lists.getByTitle('PolicyType').items
@@ -31,11 +43,11 @@ export const LeftNavigation = (props: { showPolicies: (arg0: React.MouseEvent<HT
             <div className="col-lg-3 mb-3 mb-md-0">
                 <div className="sidebar-nav">
                     <div className="sidebar-menu dropdown">
-                        <button className="btn btn-secondary dropdown-toggle" type="button" id="sidebarMenuDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">General Policies</button>
+                        <button className="btn btn-secondary dropdown-toggle" type="button" id="sidebarMenuDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">{policyType}</button>
                         <ul className="nav nav-tabs dropdown-menu" id="policiesTab" role="tablist">
-                            {policyTypes.map((policyType: { Title: string }, index: number) => {
+                            {policyTypes.map((policyType: IPolicyType, index: number) => {
                                 return (<>
-                                    <li className="nav-item" role="presentation" onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => props.showPolicies(e, policyType.Title)}>
+                                    <li className="nav-item" role="presentation" onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => showPolicies(e, policyType)}>
                                         <button className={`nav-link ${!index ? 'active' : ''}`} id="general-tab" data-bs-toggle="tab" data-bs-target="#general-tab-content" type="button" role="tab" aria-controls="home" aria-selected="false">{policyType.Title}</button>
                                     </li>
                                 </>)
