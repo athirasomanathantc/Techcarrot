@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { ISurveyOption } from "../../models/ISurveyOption";
-import { ISurveyQuestion } from "../../models/ISurveyQuestion";
+import { IConfigItem } from "../../models/IConfigItem";
 import SPService from "../../services/SPService";
 import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
 
@@ -10,111 +9,25 @@ let siteUrl: string = '';
 export const EmployeeSurvey = (props: IAgiIntranetHomeMainProps) => {
 
     const [error, setError] = useState(null);
-    const [survey, setSurvey] = useState({
-        currentQuestion: {
-            options: [],
-            question: null
-        },
-        questions: [],
-        options: [],
-        responses: [],
-        submitted: false
-    });
+    const [configItem, setConfigItem] = useState(null);
     const _spService = new SPService(props);
-    siteUrl = props.siteUrl;
-    const { currentQuestion, questions, submitted } = survey;
 
     useEffect(() => {
-        const getLatestNews = async () => {
-            let questions: ISurveyQuestion[] = await _spService.getSurveyQuestions();
-            let options: ISurveyOption[] = await _spService.getSurveyOptions();
-            if (questions.length > 0) {
-                setSurvey({
-                    ...survey,
-                    currentQuestion: {
-                        question: questions[0],
-                        options: options.filter((option: ISurveyOption) => option.Question.Id === questions[0].Id)
-                    },
-                    questions: questions,
-                    options: options,
-                    responses: questions.map((question) => {
-                        return {
-                            Title: question.Title,
-                            QuestionId: question.Id,
-                            UserEmail: props.context.pageContext.legacyPageContext.userEmail,
-                            UserId: props.context.pageContext.legacyPageContext.userId
-                        }
-                    })
-                });
-            }
+        const getConfigItem = async () => {
+            let configItem: IConfigItem = await _spService.getConfigItems();
+            setConfigItem(configItem);
         }
-        getLatestNews().catch((error) => {
+        getConfigItem().catch((error) => {
             setError(error);
         })
     }, [])
-
-    const moveNext = (index: number) => {
-        setSurvey({
-            ...survey,
-            currentQuestion: {
-                question: survey.questions[index],
-                options: survey.options.filter((option: ISurveyOption) => option.Question.Id === survey.questions[index].Id)
-            }
-        });
-    }
-
-    const movePrev = (index: number) => {
-        setSurvey({
-            ...survey,
-            currentQuestion: {
-                question: survey.questions[index],
-                options: survey.options.filter((option: ISurveyOption) => option.Question.Id === survey.questions[index].Id)
-            }
-        });
-    }
-
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>, surveyOption: ISurveyOption) => {
-        const { question } = survey.currentQuestion;
-
-        const responses = survey.responses.map((surveyResponse) => {
-            if (surveyResponse.QuestionId === question.Id) {
-                return { ...surveyResponse, Option: surveyOption.Title, OptionId: surveyOption.Id }
-            }
-            return surveyResponse;
-        });
-
-        const options = survey.options.map((option) => {
-            if (option.Question.Id === question.Id) {
-                return { ...option, Checked: (option.Id === surveyOption.Id) }
-            }
-            return option;
-        });
-
-        setSurvey({
-            ...survey,
-            responses,
-            options,
-            currentQuestion: {
-                ...survey.currentQuestion,
-                options: options.filter((option: ISurveyOption) => option.Question.Id === question.Id)
-            }
-        })
-    }
-
-    const onSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.preventDefault();
-        setSurvey({
-            ...survey,
-            submitted: true
-        });
-    }
 
     if (error) {
         throw error;
     }
 
     return (<>
-        {questions.length > 0 && <div className="col-md-12 mt-4 mb-4 mb-md-0">
+        {configItem && <div className="col-md-12 mt-4 mb-4 mb-md-0">
             <div className="card h-100">
                 <div className="card-header d-flex align-items-center justify-content-between"
                     data-bs-target="#survey" data-bs-toggle="collapse">
@@ -135,17 +48,13 @@ export const EmployeeSurvey = (props: IAgiIntranetHomeMainProps) => {
                         </div>
                     </div>
                 </div>
-
                 <div className="collapse dont-collapse-sm" id="survey">
                     <div className="card-body">
-
                         <div id="qbox-container">
-                            <img src={`${props.siteUrl}/assets/images/survey-icon.svg`}/>
-                            <h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</h5>
-                            <a className="btn btn-lg btn-gradient">Start Survey</a>
+                            <img src={`${props.siteUrl}/assets/images/survey-icon.svg`} />
+                            <h5>{configItem.Detail}</h5>
+                            <a href={configItem.Link} className="btn btn-lg btn-gradient">Start Survey</a>
                         </div>
-
-
                     </div>
                 </div>
             </div>
