@@ -17,7 +17,7 @@ export const SearchBox = (props: ISearchBox): JSX.Element => {
             <div className="search-wrapper mb-3">
                 <form action="" className="search-bar d-md-flex ">
                     <div className="input-group">
-                        <input type="text" className="form-control form-control-lg" placeholder="Search Here" onChange={handleChange} value={props.keyword} />
+                        <input type="text" className="form-control form-control-lg" placeholder="Search Policies" onChange={handleChange} value={props.keyword} />
                         <button type="submit" className="input-group-text btn-serach" onClick={handleClick}>
                             <i className="bi bi-search">
                                 <img src={`${props.siteUrl}/Assets/images/icon-search-dark.svg`} alt="" />
