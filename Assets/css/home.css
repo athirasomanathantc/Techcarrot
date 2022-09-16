@@ -799,7 +799,7 @@ input[type="radio"]:checked+label::after {
 .DayPicker {
     font-family: 'Proxima Nova Rg', Helvetica, sans-serif;
     width: 100%;
-    max-width: 400px;
+    /* max-width: 400px; */
     font-size: 1.2rem !important;
 }
 
@@ -807,6 +807,8 @@ input[type="radio"]:checked+label::after {
     background: #9D0E7105 0% 0% no-repeat padding-box;
     border: 1px solid #EBEBEB;
     opacity: 1;
+    padding-bottom: 60px;
+    border-radius:5px;
 }
 
 .DayPicker-Weekday {
@@ -1065,7 +1067,7 @@ input[type="radio"]:checked+label::after {
 
 .legend {
     position: relative;
-    top: -40px;
+    top: -60px;
     padding: 10px;
 }
 
@@ -1182,3 +1184,8 @@ input[type="radio"]:checked+label::after {
         max-width: 1600px;
     }
 } */
+
+#carouselLatestNews{
+    border-radius:8px!important;    
+    overflow:hidden;
+}
