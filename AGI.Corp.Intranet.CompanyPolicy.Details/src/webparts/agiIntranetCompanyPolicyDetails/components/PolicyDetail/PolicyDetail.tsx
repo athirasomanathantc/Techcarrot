@@ -42,6 +42,10 @@ export const PolicyDetail = (props: IPolicyDetail): JSX.Element => {
         return parseInt(value);
     }
 
+    const downloadAttachment = (): void => {
+        window.location.href = `${props.siteUrl}/_layouts/download.aspx?SourceUrl=${props.siteUrl}/Lists/CompanyPolicies/Attachments/${policyDetail?.Id}/${policyDetail?.AttachmentFiles[0]?.FileName}&download=1`;
+    }
+
     useEffect(() => {
         const getPolicyDetail = async (): Promise<void> => {
             const policyDetail = await sp.web.lists.getByTitle('CompanyPolicies').items
@@ -81,7 +85,7 @@ export const PolicyDetail = (props: IPolicyDetail): JSX.Element => {
                                         Published: {moment(policyDetail?.PublishedDate).format("MMMM D, YYYY")}</p>
                                 </div>
                                 {!excludePrint && <div className="col text-end">
-                                    <a className="sec-btn" onClick={handlePrint}>
+                                    <div className="sec-btn" onClick={handlePrint}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="23.639" height="21.971" viewBox="0 0 23.639 21.971">
                                             <g id="printing" transform="translate(0 -18.065)">
                                                 <g id="Group_9984" data-name="Group 9984" transform="translate(7.617 35.691)">
@@ -101,8 +105,8 @@ export const PolicyDetail = (props: IPolicyDetail): JSX.Element => {
                                                 </g>
                                             </g>
                                         </svg>
-                                        Print</a>
-                                    {policyDetail?.AttachmentFiles.length > 0 && <a className="sec-btn" href={`${props.siteUrl}/_layouts/download.aspx?SourceUrl=${props.siteUrl}/Lists/CompanyPolicies/Attachments/${policyDetail?.Id}/${policyDetail?.AttachmentFiles[0]?.FileName}?download=1`}><svg xmlns="http://www.w3.org/2000/svg" width="21.094" height="22.5" viewBox="0 0 21.094 22.5">
+                                        Print</div>
+                                    {policyDetail?.AttachmentFiles.length > 0 && <div className="sec-btn" onClick={() => { downloadAttachment() }} ><svg xmlns="http://www.w3.org/2000/svg" width="21.094" height="22.5" viewBox="0 0 21.094 22.5">
                                         <g id="download_2_" data-name="download (2)" transform="translate(-16)">
                                             <g id="Group_9961" data-name="Group 9961" transform="translate(20.922)">
                                                 <g id="Group_9960" data-name="Group 9960">
@@ -115,7 +119,7 @@ export const PolicyDetail = (props: IPolicyDetail): JSX.Element => {
                                                 </g>
                                             </g>
                                         </g>
-                                    </svg>Download</a>}
+                                    </svg>Download</div>}
                                 </div>}
                             </div>
                             <h3>{policyDetail?.Title}</h3>

@@ -19,8 +19,12 @@ export const Policies = (props: IPolicies): JSX.Element => {
         }
     );
 
-    const goToDetails = (policyId: number) => {
+    const goToDetails = (policyId: number): void => {
         window.location.href = `${props.siteUrl}/SitePages/Policies/Policy%20Detail.aspx?policyId=${policyId}`;
+    }
+
+    const downloadAttachment = (policy: IPolicy): void => {
+        window.location.href = `${props.siteUrl}/_layouts/download.aspx?SourceUrl=${props.siteUrl}/Lists/CompanyPolicies/Attachments/${policy.Id}/${policy.AttachmentFiles[0]?.FileName}&download=1`;
     }
 
     useEffect(() => {
@@ -73,12 +77,12 @@ export const Policies = (props: IPolicies): JSX.Element => {
                                                 </div>
                                             </li>
                                             {policy.AttachmentFiles.length > 0 && <li>
-                                                <a target="_blank" rel="noreferrer" href={`${props.siteUrl}/_layouts/download.aspx?SourceUrl=${props.siteUrl}/Lists/CompanyPolicies/Attachments/${policy.Id}/${policy.AttachmentFiles[0]?.FileName}&download=1`}>
+                                                <div onClick={() => { downloadAttachment(policy) }}>
                                                     <i>
                                                         <img src={`${props.siteUrl}/Assets/images/icon-download.svg`} alt="" />
                                                     </i>
                                                     Download
-                                                </a>
+                                                </div>
                                             </li>}
                                         </ul>
                                     </div>
