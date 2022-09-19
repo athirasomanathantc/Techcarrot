@@ -40,6 +40,7 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
       const currentWindowUrl = window.location.href;
       const currentSitePages = currentWindowUrl.split("SitePages");
       const currentSitePagesNav: any = currentSitePages[1].split("/");
+      
       const currentArray:any = [];
       let i:any;
       for(i=0;i<currentSitePagesNav.length; i++)
@@ -47,7 +48,19 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
         const isLastPage = currentSitePagesNav[i].includes(".aspx");
         if(isLastPage == true)
         {
-          const newItem = currentSitePagesNav[i].split(".aspx")[0];
+          var newItem = currentSitePagesNav[i].split(".aspx")[0];
+          // if (newItem=='Gallery')
+          // {
+          //   const temp =currentSitePagesNav[i].split("&")[0];
+          //   if(temp.includes('tab=image')){
+          //     newItem="Image Gallery"
+          //   }else if(temp.includes('tab=video')){
+          //     newItem="Video Gallery"
+
+          //   }
+          //   console.log("arrayValue",newItem);
+          // }
+          
           var re =/%20/gi
           const tempItem = newItem.replace(re, " ");
           console.log("Tag",tempItem);
@@ -66,6 +79,8 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
       
       this.setState({
         currentSitePagesNavArr: currentArray
+      },()=>{
+       // console.log("arrayValue",this.state.currentSitePagesNavArr);
       })
     }
     catch (e) {
@@ -106,14 +121,15 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
                   {
                      
                     this.state.currentSitePagesNavArr.map((item, i) => {
-                    //  debugger;
+                    debugger;
                       var isLast = /aspx/.test(item);
                       if (item != '') {
                         if (item === lastNavigationVal) {
                           // const str:any = item.splice();//.substring(0, str.length - 1);
-                          return (
-                            <li className="breadcrumb-item active">{item}</li>
-                          )
+                                                    
+                            return (
+                              <li className="breadcrumb-item active">{item}</li>
+                            )
                         }
                         else {debugger;
                            tempURL = `${tempURL}/${item}`;
