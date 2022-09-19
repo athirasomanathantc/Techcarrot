@@ -522,7 +522,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
             </div>
           </div>
         </section>
-        <footer className="news-detail-footer" style={{ display: 'none' }}>
+        <footer className="news-detail-footer" style={{ display: 'display' }}>
           <div className="row">
             <div className="col-6 col-md-6">
               <nav className="nav">
