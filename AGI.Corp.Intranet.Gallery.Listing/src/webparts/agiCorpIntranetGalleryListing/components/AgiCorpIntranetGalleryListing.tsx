@@ -75,7 +75,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
       })
       .then((response) => {
         const items = response.value;
-        console.log('choices', items);
+        
         this.setState({
           filterValues: items
         });
@@ -93,14 +93,14 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
      .then((response) => {
        const items = response.value;
        val=val.concat(items);
-       console.log('choices', items);
+      
        this.setState({
          filterValues: items
        });
 
      })
      .catch((error) => {
-       console.log('Error:', error);
+       
      })*/
     if (window.innerWidth <= 767) {
       this.setState({//debugger;
@@ -119,25 +119,27 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
   private handleFilter(e: any) {
     
     const value = parseInt(e.target.value);
+    console.log("filter",value);
     debugger;
     if (value == 0) {
       //const result: IImageItem[] = this.state.folders;
+      console.log("entered filter");
       this.setState({
         filterData: this.state.folders
       }, () => {
-        console.log("filterData",this.state.filterData);
-        this.paging();
+        
+       // this.paging();
       });
 
     } else {
       const result = this.state.folders.filter((obj) => {
         return obj.BusinessId == value;
       })
-      console.log(result);
+      
       this.setState({
         filterData: result
       }, () => {
-        this.paging();
+       // this.paging();
       });
 
     }
@@ -147,7 +149,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
 
     const pageCount: number = Math.ceil(this.state.filterData.length / this.state.pageSize);
     const totalPages = (this.state.filterData.length / this.state.pageSize) - 1;
-    //console.log('totalPages', pageCount);l
+    
     // this.setState({
     //   images
     // });
@@ -156,7 +158,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
       totalPage: pageCount,
       currentPage: 1
     },()=>{
-      console.log("PageData",this.state.pageData);
+      //console.log("PageData",this.state.pageData);
     });
 
   }
@@ -166,7 +168,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
     const skipItems: number = this.state.pageSize * (page - 1);
     const takeItems: number = skipItems + this.state.pageSize;
 
-    //console.log('page', page);
+   
     const roundupPage = Math.ceil(page);
     // const images = this.state.allImages.slice(roundupPage, (roundupPage * pageSize));
     const pageData = this.state.filterData.slice(skipItems, takeItems)
@@ -205,7 +207,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
           const _folders = [];
           folders.map((folder) => {
             const path = `${this.props.context.pageContext.web.serverRelativeUrl}/${libraryPath}/${folder.Name}`;
-            console.log('path', path);
+            
             //   const _coverPhoto = sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(folder.Name).files.select('FileLeafRef').filter("isCoverPhoto eq 1").get().then((allItems) => {
             //     const test1 = allItems
             //   });;
@@ -216,7 +218,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
             //     for (var i = 0; i < files.length; i++) {
             //       var _ServerRelativeUrl = files[i].FileRef;
             //       sp.web.getFileByServerRelativeUrl(_ServerRelativeUrl).getItem().then(item => {
-            //         console.log(item);
+            //         
             //       });
             //     }
             //   });;
@@ -225,7 +227,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
               const folderPath = file.FileRef.replace(`/${file.FileLeafRef}`, '');
               return folderPath == path;
             });
-            //console.log(folder.Name, _files);
+            
             const count = _files.length;
             _folders.push({ ID: folder.ListItemAllFields.ID, Name: folder.Name, Count: count, BusinessId: folder.ListItemAllFields.BusinessId })
           });
@@ -245,7 +247,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
   /*private paging() {
     const pageCount: number = Math.ceil(this.state.filterData.length / this.state.pageSize);
     const totalPages = (this.state.filterData.length / this.state.pageSize) - 1;
-    console.log('totalPages', pageCount);
+    
     this.setState({
       images
     });
@@ -254,8 +256,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
       totalPage: pageCount,
       currentPage: 1
     }, () => {
-      console.log('filterData', this.state.filterData);
-      console.log('pageData', this.state.pageData);
+      
     });
 
   }*/
@@ -265,7 +266,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
   //   const skipItems: number = this.state.pageSize * (page - 1);
   //   const takeItems: number = skipItems + this.state.pageSize;
 
-  //   //console.log('page', page);
+  //   
   //   const roundupPage = Math.ceil(page);
   //   // const images = this.state.allImages.slice(roundupPage, (roundupPage * pageSize));
   //   const pageData1 = this.state.filterData.slice(skipItems, takeItems)
@@ -294,8 +295,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
     });
     const _coverPhoto = items.filter(img => img.CoverPhoto);
     const coverPhoto = _coverPhoto && _coverPhoto.length > 0 ? _coverPhoto[0] : null;
-    // console.log('coverphoto', coverPhoto);
-    // console.log('items', items);
+   
     //items.splice(items.findIndex(item => item.CoverPhoto == true), 1);
     items.unshift(coverPhoto);
     const slides = items.map((item) => {
@@ -306,8 +306,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
       </div>
       );
     });
-    //console.log('slides');
-    //console.log(slides);
+    
     this.setState({
       slides,
       images
@@ -431,7 +430,7 @@ export default class AgiCorpIntranetGalleryListing extends React.Component<IAgiC
   private setWidgetHeight(className: string) {
     $('.' + className).css('height', this.getWidgetHeight());
     setTimeout(function () {
-      //console.log('widGetHeightOverride'+ $('.'+className).find('img').height());
+      
       $('.' + className).css('height', $('.' + className).find('img').height());
     }, 1500);
   }
