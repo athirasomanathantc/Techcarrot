@@ -233,7 +233,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                                 data-bs-target="#viewProfileModal" onClick={() => this.openVideo(item.ID)}>
                                 Read More
                               </button> */}
-                                <input type="button" className="view-profile" onClick={() => this.showLeaderDetail(item.ID)} value='Read More' />
+                                <input type="button" className="view-profile" onClick={() => this.showLeaderDetail(item.ID)} value='View Profile' />
 
                                 {/* <a href="javascript:void(0)" className="view-profile" data-bs-toggle="modal" >View
                                   Profile <span><img src={`${this.props.siteUrl}/Assets/images/icon-view-more.svg`} alt="" /></span></a> */}

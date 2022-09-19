@@ -8097,7 +8097,7 @@ var AgiIntranetAboutMain = /** @class */ (function (_super) {
                                             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "team-content mt-3 mb-3" },
                                                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("h2", { className: "team-title" }, item.Name),
                                                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("h2", { className: "team-subtitle" }, item.Designation),
-                                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("input", { type: "button", className: "view-profile", onClick: function () { return _this.showLeaderDetail(item.ID); }, value: 'Read More' }))));
+                                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("input", { type: "button", className: "view-profile", onClick: function () { return _this.showLeaderDetail(item.ID); }, value: 'View Profile' }))));
                                     }))))))))));
     };
     AgiIntranetAboutMain.prototype.showLeaderDetail = function (id) {
