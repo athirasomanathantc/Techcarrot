@@ -2,6 +2,7 @@ import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { sp } from "@pnp/sp";
 import { IAnnouncementData } from "../models/IAnnouncementData";
 import { IBusinessData } from "../models/IBusinessData";
+import { IFunctionData } from "../models/IFunctionData";
 
 export class SPService {
 
@@ -20,6 +21,14 @@ export class SPService {
         const listName = 'Business';
         return await sp.web.lists.getByTitle(listName).items.select("ID,Title")
             .getAll(5000).then((items: IBusinessData[]) => {
+                return items;
+            });
+    }    
+
+    public async getFunctionData(): Promise<IFunctionData[]> {
+        const listName = 'Functions';
+        return await sp.web.lists.getByTitle(listName).items.select("ID,Title")
+            .getAll(5000).then((items: IFunctionData[]) => {
                 return items;
             });
     }

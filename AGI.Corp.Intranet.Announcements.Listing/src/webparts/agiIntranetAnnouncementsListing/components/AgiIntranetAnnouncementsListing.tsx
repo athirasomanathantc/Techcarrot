@@ -9,6 +9,7 @@ import { IAnnouncementData } from '../models/IAnnouncementData';
 import Paging from './Paging/Paging';
 import * as moment from 'moment';
 import { IBusinessData } from '../models/IBusinessData';
+import { IFunctionData } from '../models/IFunctionData';
 const itemsPerPage: number = 12;
 
 export default class AgiIntranetAnnouncementsListing extends React.Component<IAgiIntranetAnnouncementsListingProps, IAgiIntranetEventsStates> {
@@ -21,25 +22,28 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
     })
     this.state = {
       totalAnnouncementData: [],
-      filteredAnnouncementData:[],
+      filteredAnnouncementData: [],
       exceptionOccured: false,
       currentPage: 1,
       totalPage: 0,
       currentPageAnnouncementData: [],
       filterValues: [],
       businessData: [],
-      itemsPerPage:0,
-     
+      functionData: [],
+      itemsPerPage: 0,
+      showBusinessData: true
     }
   }
   async componentDidMount(): Promise<void> {
     try {
       const announcements: IAnnouncementData[] = await this._spServices.getAnnouncements();
       const business: IBusinessData[] = await this._spServices.getBussiness();
+      const functions: IFunctionData[] = await this._spServices.getFunctionData();
       this.setState({
         totalAnnouncementData: announcements,
-        filteredAnnouncementData:announcements,
-        businessData: business
+        filteredAnnouncementData: announcements,
+        businessData: business,
+        functionData: functions
       });
       this.getFirstPageAnnouncements();
     }
@@ -48,18 +52,19 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
         exceptionOccured: true
       });
     }
-    if (window.innerWidth<=767){
+    if (window.innerWidth <= 767) {
       this.setState({
-        itemsPerPage:6
+        itemsPerPage: 6
       });
 
-    }else{
+    } else {
       this.setState({
-        itemsPerPage:12
+        itemsPerPage: 12
       });
 
     }
   }
+
   private getImageUrl(announcementItem: IAnnouncementData): string {
     try {
       let imageJSON = { serverRelativeUrl: "" }
@@ -107,8 +112,8 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       currentPageAnnouncementData: this.state.filteredAnnouncementData.slice(0, this.state.itemsPerPage),
       totalPage: pageCount,
       currentPage: 1
-    },()=>{
-      console.log("totalpage",this.state.totalPage);
+    }, () => {
+      console.log("totalpage", this.state.totalPage);
     });
 
   }
@@ -126,7 +131,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
         currentPageAnnouncementData,
         currentPage: selectedPageNumber
       }, () => {
-        
+
         this.scrollToTop();
       });
     }
@@ -135,7 +140,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
         exceptionOccured: true
       });
     }
-    
+
   }
 
   private filterAnnouncementByBusiness(e: any) {
@@ -163,6 +168,19 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
     }
   }
 
+  private onSelectFilterBy(filterBy: string) {
+    if (filterBy === "Business") {
+      this.setState({
+        showBusinessData: true
+      })
+    }
+    else {
+      this.setState({
+        showBusinessData: false
+      })
+    }
+  }
+
 
   public render(): React.ReactElement<IAgiIntranetAnnouncementsListingProps> {
 
@@ -176,6 +194,9 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
     if (this.state.exceptionOccured) {
       throw new Error('Something went wrong');
     }
+
+    const options = this.state.showBusinessData ? this.state.businessData : this.state.functionData;
+
     return (
       <div className="main-content" id='announcementContent'>
         <div className="content-wrapper">
@@ -186,53 +207,73 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
                   <h3>Announcements</h3>
                 </div>
                 <div className={'col-12 col-md-6 filter-section text-end'}>
-                  <div className={'form-select custom-select '}>
-                    <select onChange={(e) => this.filterAnnouncementByBusiness(e)}>
-                      <option value="0">Filter By</option>
-                      {
-                        this.state.businessData.map((business) => {
-                          return (
-                            <option value={business.ID}>{business.Title}</option>
-                          )
-                        })
-                      }
-                    </select>
+                  <div className="row">
+                    <div className="col-4 d-flex align-items-center justify-content-around">
+                      <div className="form-check">
+                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business') }} />
+                        <label className="form-check-label" htmlFor="flexRadioDefault1">
+                          Business
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
+                        <label className="form-check-label" htmlFor="flexRadioDefault2">
+                          Function
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-8">
+                      <div className={'form-select custom-select w-100 '}>
+                        <select onChange={(e) => this.filterAnnouncementByBusiness(e)}>
+                          <option value="0">Filter By</option>
+                          {
+                            options.map((business) => {
+                              return (
+                                <option value={business.ID}>{business.Title}</option>
+                              )
+                            })
+                          }
+                        </select>
+                      </div>
+                    </div>
                   </div>
+
+
                 </div>
               </div>
             </div>
             <article className="row gx-5 mb-5">
               <section className="col-lg-12 announcement-listing">
                 <div className="row">
-                  { 
-                  this.state.currentPageAnnouncementData.length>0 ?
-                    this.state.currentPageAnnouncementData.map((announcement) => {
-                      return (
-                        <div className="col-lg-3 mb-4 d-flex align-items-stretch">
-                          <div className="card news-card">
-                            <img src={this.getImageUrl(announcement)} className="card-img-top" alt="Card Image" />
-                            <div className="card-body d-flex flex-column">
-                            <div className={'category'}>
-                            <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {announcement.Business ? announcement.Business.Title : ""}</span>
+                  {
+                    this.state.currentPageAnnouncementData.length > 0 ?
+                      this.state.currentPageAnnouncementData.map((announcement) => {
+                        return (
+                          <div className="col-lg-3 mb-4 d-flex align-items-stretch">
+                            <div className="card news-card">
+                              <img src={this.getImageUrl(announcement)} className="card-img-top" alt="Card Image" />
+                              <div className="card-body d-flex flex-column">
+                                <div className={'category'}>
+                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {announcement.Business ? announcement.Business.Title : ""}</span>
+                                </div>
+                                <div className="mb-2 mt-2 card-content-header">
+                                  <h5 className="card-title">{announcement.Title}</h5>
+                                </div>
+                                <div className="date">
+                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i> {moment(announcement.PublishedDate).format('DD-MMM-YYYY')}</span>
+
+                                </div>
+                                <p className="card-text mt-2">{announcement.Description}</p>
+                                <a href={`${this.props.siteUrl}/SitePages/News/Announcements/Announcement Details.aspx?announcementID=${announcement.ID}`} className="btn news-read-more  align-self-start">Read more</a>
                               </div>
-                              <div className="mb-2 mt-2 card-content-header">
-                                <h5 className="card-title">{announcement.Title}</h5>
-                              </div>
-                              <div className="date">
-                                <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i> {moment(announcement.PublishedDate).format('DD-MMM-YYYY')}</span>
-                                
-                              </div>
-                              <p className="card-text mt-2">{announcement.Description}</p>
-                              <a href={`${this.props.siteUrl}/SitePages/News/Announcements/Announcement Details.aspx?announcementID=${announcement.ID}`} className="btn news-read-more  align-self-start">Read more</a>
                             </div>
                           </div>
-                        </div>
-                      )
-                    })
-                    :
-                    <div className={'invalidTxt'}>
-                      NO ANNOUNCEMENTS
-                    </div>
+                        )
+                      })
+                      :
+                      <div className={'invalidTxt'}>
+                        NO ANNOUNCEMENTS
+                      </div>
                   }
                 </div>
               </section>
