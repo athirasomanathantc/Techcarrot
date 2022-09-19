@@ -7987,6 +7987,9 @@ var AgiIntranetAboutMain = /** @class */ (function (_super) {
                 _pnp_sp_presets_all__WEBPACK_IMPORTED_MODULE_2__["sp"].web.lists.getByTitle(_common_constants__WEBPACK_IMPORTED_MODULE_3__["LIST_ABOUT_LEADERSHIPTEAM"]).items.get().then(function (items) {
                     _this.setState({
                         leadershipTeamItems: items
+                    }, function () {
+                        _this.fnInitiate();
+                        _this.renderScripts();
                     });
                 });
                 return [2 /*return*/];
@@ -8021,11 +8024,7 @@ var AgiIntranetAboutMain = /** @class */ (function (_super) {
         var cultureContentItems = this.state.purposeCultureVisionItems.filter(function (item) { return item.Title == _common_constants__WEBPACK_IMPORTED_MODULE_3__["TEXT_ABOUT_CULTURE_NAVIGATION"]; });
         var leadershipTeamHeading = this.state.leadershipTeamItems.filter(function (item) { return item.Category == _common_constants__WEBPACK_IMPORTED_MODULE_3__["TEXT_ABOUT_LEADERSHIP_HEADING_CONTENT"]; });
         var leadershipTeamHeadingItem = leadershipTeamHeading.length > 0 ? leadershipTeamHeading[0] : null;
-        console.log("Leadership Team " + leadershipTeamHeadingItem);
         var leadershipTeamItems = this.state.leadershipTeamItems.filter(function (item) { return item.Category == _common_constants__WEBPACK_IMPORTED_MODULE_3__["TEXT_ABOUT_LEADERSHIP_TEAM_CONTENT"]; });
-        var test12 = jquery__WEBPACK_IMPORTED_MODULE_4__["fn"].jquery;
-        console.log("test " + test12);
-        console.log('leadershipteamitems', leadershipTeamItems);
         return (
         //
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "main-content about-us-wrapper" },
@@ -8087,39 +8086,30 @@ var AgiIntranetAboutMain = /** @class */ (function (_super) {
                                     react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: "carousel-control-next-icon", "aria-hidden": "true" }),
                                     react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: "visually-hidden" }, "Next")))),
                         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { id: "leadershipCarousel", className: "carousel js-carousel slide leadership-carousel", "data-bs-ride": "carousel" },
-                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "carousel-inner", role: "listbox" },
-                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "carousel-item js-carousel-item" },
-                                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "col-md-3 d-flex align-items-stretch" }, leadershipTeamItems.map(function (item, i) {
-                                        var leadershipMessageImgVal = item.LeadershipImage && item.LeadershipImage ? _this.getImageUrl(item.LeadershipImage) : '';
-                                        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "team-card", onClick: function () { return _this.showLeaderDetail(item.ID); }, key: i },
+                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "carousel-inner", role: "listbox" }, leadershipTeamItems.map(function (item, i) {
+                                var leadershipMessageImgVal = item.LeadershipImage && item.LeadershipImage ? _this.getImageUrl(item.LeadershipImage) : '';
+                                return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: i == 0 ? "carousel-item js-carousel-item active" : "carousel-item js-carousel-item" },
+                                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "col-md-3 d-flex align-items-stretch" },
+                                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "team-card cardItem", key: i, "data-id": item.ID },
                                             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "team-img" },
                                                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("img", { src: leadershipMessageImgVal, alt: "Card Design", className: "w-100" })),
                                             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "team-content mt-3 mb-3" },
                                                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("h2", { className: "team-title" }, item.Name),
                                                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("h2", { className: "team-subtitle" }, item.Designation),
-                                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("input", { type: "button", className: "view-profile", onClick: function () { return _this.showLeaderDetail(item.ID); }, value: 'View Profile' }))));
-                                    }))))))))));
+                                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("input", { type: "button", className: "view-profile", onClick: function () { return _this.showLeaderDetail(item.ID); }, value: 'View Profile' }))))));
+                            }))))))));
     };
     AgiIntranetAboutMain.prototype.showLeaderDetail = function (id) {
-        console.log("ID" + id);
-        debugger;
         var selectedItem = this.state.leadershipTeamItems.filter(function (item) { return item.ID == id; })[0];
         this.setState({
             selectedItem: selectedItem,
             showVideo: true
         });
     };
-    AgiIntranetAboutMain.prototype.openVideo = function (id) {
-        console.log("ID" + id);
-        debugger;
-        var selectedItem = this.state.leadershipTeamItems.filter(function (item) { return item.ID == id; })[0];
+    AgiIntranetAboutMain.prototype.closeLeaderModal = function () {
         this.setState({
-            selectedItem: selectedItem,
-            showVideo: true
+            showVideo: false
         });
-        // this.setState({
-        //   showVideo: true
-        // });
     };
     AgiIntranetAboutMain.prototype.closePreview = function () {
         this.setState({
@@ -8144,31 +8134,45 @@ var AgiIntranetAboutMain = /** @class */ (function (_super) {
             }
         });
     };
+    AgiIntranetAboutMain.prototype.renderScripts = function () {
+        var reacthandler = this;
+        jquery__WEBPACK_IMPORTED_MODULE_4__(document).on('click', '.cardItem', function () {
+            debugger;
+            var element = jquery__WEBPACK_IMPORTED_MODULE_4__(this);
+            var id = element.attr('data-id');
+            // get leader details
+            var selectedItem = reacthandler.state.leadershipTeamItems.filter(function (item) { return item.ID == id; })[0];
+            reacthandler.setState({
+                selectedItem: selectedItem,
+                showVideo: true
+            });
+        });
+    };
     AgiIntranetAboutMain.prototype.render = function () {
+        var _this = this;
         var selectedItem = this.state.selectedItem;
         var leadershipImgVal = this.getImageUrl(selectedItem.LeadershipImage);
         return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _AgiIntranetAboutMain_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].agiIntranetAboutMain },
             this.renderFindOutMoreSection(),
-            this.fnInitiate(),
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "modal fade", id: "viewProfileModal", "aria-labelledby": "exampleModalLabel", "aria-hidden": "true", style: { display: this.state.showVideo ? 'block' : 'none' } },
-                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "modal-dialog modal-dialog-centered modal-lg" },
-                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "modal-content" },
-                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "modal-header" },
-                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { type: "button", className: "btn-close", "data-bs-dismiss": "modal", "aria-label": "Close" })),
-                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "modal-body" },
-                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "row profile-wrapper m-0" },
-                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "profile-img col-lg-4" },
-                                    " ",
-                                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("img", { src: leadershipImgVal, className: "w-100" }),
-                                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", { className: "profile-content text-center mt-3" },
-                                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("b", null, selectedItem.Name),
-                                        " ",
-                                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("br", null),
-                                        selectedItem.Designation,
-                                        " ",
-                                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("br", null),
-                                        selectedItem.Business)),
-                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "view-profile-content col-lg-8", dangerouslySetInnerHTML: { __html: selectedItem.About } }))))))));
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: this.state.showVideo ? "modal show overlay" : "modal fade overlay", id: "viewProfileModal", "aria-labelledby": "exampleModalLabel", "aria-hidden": "true", style: { display: this.state.showVideo ? 'block' : 'none' } },
+                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: this.state.showVideo ? "modal show" : "modal fade", id: "viewProfileModal", "aria-labelledby": "exampleModalLabel", "aria-hidden": "true", style: { display: this.state.showVideo ? 'block' : 'none' } },
+                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "modal-dialog modal-dialog-centered modal-lg" },
+                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "modal-content" },
+                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "modal-header" },
+                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("input", { type: "button", className: "btn-close", "data-bs-dismiss": "modal", "aria-label": "Close", onClick: function () { return _this.closeLeaderModal(); } })),
+                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "modal-body" },
+                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "row profile-wrapper m-0" },
+                                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "profile-img col-lg-4" },
+                                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("img", { id: "leadershipImage", src: leadershipImgVal, className: "w-100" }),
+                                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", { className: "profile-content text-center mt-3" },
+                                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("b", { id: "leadershipName" }, selectedItem.Name),
+                                            " ",
+                                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("br", null),
+                                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { id: "leadershipDesignation" }, selectedItem.Designation),
+                                            " ",
+                                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("br", null),
+                                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { id: "leadershipBusiness" }, selectedItem.Business))),
+                                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "view-profile-content col-lg-8", id: "leadershipDetail", dangerouslySetInnerHTML: { __html: selectedItem.About } })))))))));
     };
     return AgiIntranetAboutMain;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));

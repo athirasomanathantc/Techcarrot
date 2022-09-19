@@ -43,11 +43,11 @@
       },
       "jqueryui": {
         "type": "path",
-        "path": "jqueryui.js"
+        "path": "jqueryui_dfe3ecf96456f8cafc12a7f48de6b8c8.js"
       },
       "AGIAbout": {
         "type": "path",
-        "path": "AGIAbout.js",
+        "path": "AGIAbout_ccbca0ad70d64710e3aa835e4298326b.js",
         "globalName": "AGIAbout"
       },
       "@microsoft/sp-loader": {
@@ -81,7 +81,7 @@
       },
       "jquery": {
         "type": "path",
-        "path": "jquery.js"
+        "path": "jquery_00727d1d5d9c90f7de826f1a4a9cc632.js"
       }
     }
   }
