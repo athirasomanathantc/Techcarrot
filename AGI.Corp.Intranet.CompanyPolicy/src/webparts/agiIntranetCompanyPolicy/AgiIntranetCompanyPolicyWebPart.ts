@@ -40,8 +40,7 @@ export default class AgiIntranetCompanyPolicyWebPart extends BaseClientSideWebPa
 
   protected onInit(): Promise<void> {
     this._environmentMessage = this._getEnvironmentMessage();
-    const randomNumber = Math.floor(Math.random() * 90000) + 10000;
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/policies.css?${randomNumber}`);
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/policies.css`);
     return Promise.resolve();
 
     return super.onInit();

@@ -1,6 +1,7 @@
 import { sp } from "@pnp/sp";
 import { IAgiIntranetHomeMainProps } from "../components/IAgiIntranetHomeMainProps";
 import { IAnnouncement } from "../models/IAnnouncement";
+import { IConfigItem } from "../models/IConfigItem";
 import { IEvent } from "../models/IEvent";
 import { ILatestNews } from "../models/ILatestNews";
 import { IMyApp } from "../models/IMyApp";
@@ -111,12 +112,13 @@ export class SPService {
             });
     }
 
-    public async getSurveyQuestions(): Promise<ISurveyQuestion[]> {
-        return await sp.web.lists.getByTitle('SurveyQuestions').items.select("Id,Title,SortOrder")
-            .top(this._props.topSurveyQuestions)
-            .orderBy("SortOrder", true)()
-            .then((items: ISurveyQuestion[]) => {
-                return items;
+    public async getConfigItems(): Promise<IConfigItem> {
+        return await sp.web.lists.getByTitle('IntranetConfig').items
+            .select('Id,Title,Detail,Link,Image')
+            .get()
+            .then((items: IConfigItem[]) => {
+                const _surveyItems = items.filter((item) => item.Title == 'EmployeeSurvey');
+                return _surveyItems[0];
             })
             .catch((exception) => {
                 throw new Error(exception);

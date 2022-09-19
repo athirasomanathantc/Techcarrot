@@ -48,8 +48,13 @@
     padding: 30px;
     border: 1px solid #DFDFE1;
     border-radius: 5px;
+    max-height: 210px;
+    overflow: hidden;
+    position: relative;
+}
 
-
+.policy-content-wrapper .row.align-items-center {
+    height: 100%;
 }
 
 .policy-content-wrapper .policy-content h4.title {
@@ -77,13 +82,34 @@
     margin-bottom: 0;
 }
 
+.policy-content-wrapper .policy-content p.description span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.policy-content-wrapper .policy-content .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.policy-icon-section ul {
+    margin-bottom: 0;
+}
+
 .policy-icon-section ul li {
     margin-bottom: 20px;
     list-style: none;
     text-align: center;
 }
 
-.policy-icon-section ul li a {
+.policy-icon-section ul li a,
+.policy-icon-section ul li div {
     text-decoration: none;
     font-family: 'Gill Sans';
     font-size: 16px;
@@ -95,6 +121,7 @@
     border-radius: 5px;
     display: block;
     padding: 8px 15px;
+    cursor: pointer;
 }
 
 .policy-icon-section ul li i img {

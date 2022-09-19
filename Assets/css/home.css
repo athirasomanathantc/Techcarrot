@@ -206,9 +206,29 @@ h2.chart-heading {
 #qbox-container {
     position: relative;
     /*padding: 20px;*/
-
+    text-align: center;
 }
-
+#qbox-container img{
+    padding: 20px 0;
+}
+#qbox-container h5{
+    font: normal normal 600 20px/28px Gill Sans;
+    letter-spacing: 0px;
+    color: #880D6C;
+    opacity: 1;
+    padding: 15px 0 20px 0;
+}
+@media (max-width:991px){
+    #qbpx-container h5{
+        font: normal normal 600 14px/20 px Gill Sans;
+    }
+    #qbox-container img{
+        max-width: 170px;
+    }
+}
+#qbox-container .btn{
+    margin-bottom: 15px;
+}
 #steps-container {
     margin: auto;
     width: 100%;
@@ -779,7 +799,7 @@ input[type="radio"]:checked+label::after {
 .DayPicker {
     font-family: 'Proxima Nova Rg', Helvetica, sans-serif;
     width: 100%;
-    max-width: 400px;
+    /* max-width: 400px; */
     font-size: 1.2rem !important;
 }
 
@@ -787,6 +807,8 @@ input[type="radio"]:checked+label::after {
     background: #9D0E7105 0% 0% no-repeat padding-box;
     border: 1px solid #EBEBEB;
     opacity: 1;
+    padding-bottom: 60px;
+    border-radius:5px;
 }
 
 .DayPicker-Weekday {
@@ -1045,7 +1067,7 @@ input[type="radio"]:checked+label::after {
 
 .legend {
     position: relative;
-    top: -40px;
+    top: -60px;
     padding: 10px;
 }
 
@@ -1149,3 +1171,21 @@ input[type="radio"]:checked+label::after {
 }
 
 /* Additional Styles End*/
+
+
+/* css from 15-09-2022 */
+/* @media (min-width:1800px){
+    .container{
+        max-width: 1566px;
+    }
+}
+@media (min-width:1660px){
+    .container{
+        max-width: 1600px;
+    }
+} */
+
+#carouselLatestNews{
+    border-radius:8px!important;    
+    overflow:hidden;
+}

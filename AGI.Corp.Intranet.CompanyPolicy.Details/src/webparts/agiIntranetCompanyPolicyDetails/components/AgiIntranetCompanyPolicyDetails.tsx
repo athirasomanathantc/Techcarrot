@@ -21,19 +21,9 @@ export default class AgiIntranetCompanyPolicyDetails extends React.Component<IAg
     return (
       <section className={`${styles.agiIntranetCompanyPolicyDetails} ${hasTeamsContext ? styles.teams : ''}`}>
         <div className="main-content">
-          <div className="content-wrapper">
-            <div className="privacy-terms-section">
-              <div className="container terms-privacy-wrapper">
-                <div className="row">
-                  <div className="content-sec pt-3">
-                    <ErrorBoundary>
-                      <PolicyDetail {...this.props} />
-                    </ErrorBoundary>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ErrorBoundary>
+            <PolicyDetail {...this.props} />
+          </ErrorBoundary>
         </div>
       </section>
     );
