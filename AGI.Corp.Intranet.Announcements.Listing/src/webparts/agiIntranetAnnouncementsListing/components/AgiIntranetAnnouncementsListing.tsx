@@ -31,7 +31,10 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       businessData: [],
       functionData: [],
       itemsPerPage: 0,
-      showBusinessData: true
+      showBusinessData: true,
+      selectedOption: {
+        ID: 0
+      }
     }
   }
   async componentDidMount(): Promise<void> {
@@ -143,8 +146,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
 
   }
 
-  private filterAnnouncementByBusiness(e: any) {
-    debugger;
+  private filterAnnouncement(e: any) {
     const value = parseInt(e.target.value);
     if (value == 0) {
       const result: IAnnouncementData[] = this.state.totalAnnouncementData;
@@ -166,17 +168,28 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
         //this.getFirstPageAnnouncements();
       });
     }
+    this.setState({
+      selectedOption: {
+        ID: value
+      }
+    })
   }
 
   private onSelectFilterBy(filterBy: string) {
     if (filterBy === "Business") {
       this.setState({
-        showBusinessData: true
+        showBusinessData: true,
+        selectedOption: {
+          ID: 0
+        }
       })
     }
     else {
       this.setState({
-        showBusinessData: false
+        showBusinessData: false,
+        selectedOption: {
+          ID: 0
+        }
       })
     }
   }
@@ -195,7 +208,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       throw new Error('Something went wrong');
     }
 
-    const options = this.state.showBusinessData ? this.state.businessData : this.state.functionData;
+    const options: IBusinessData[] | IFunctionData[] = this.state.showBusinessData ? this.state.businessData : this.state.functionData;
 
     return (
       <div className="main-content" id='announcementContent'>
@@ -224,12 +237,12 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
                     </div>
                     <div className="col-8">
                       <div className={'form-select custom-select w-100 '}>
-                        <select onChange={(e) => this.filterAnnouncementByBusiness(e)}>
+                        <select onChange={(e) => this.filterAnnouncement(e)}>
                           <option value="0">Filter By</option>
                           {
-                            options.map((business) => {
+                            options.map((option: IBusinessData | IFunctionData, index: number) => {
                               return (
-                                <option value={business.ID}>{business.Title}</option>
+                                <option selected={this.state.selectedOption.ID == option.ID} key={`optionkey${index}`} value={option.ID}>{option.Title}</option>
                               )
                             })
                           }
@@ -291,7 +304,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
             </div>
           </div>
         </div>
-      </div>
+      </div >
     );
   }
 }

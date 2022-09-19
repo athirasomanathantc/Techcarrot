@@ -16,4 +16,7 @@ export interface IAgiIntranetEventsStates {
   }[];
   itemsPerPage: number;
   showBusinessData: boolean;
+  selectedOption: {
+    ID: number;
+  }
 }
