@@ -11,7 +11,9 @@ export class SPService {
 
     public async getAnnouncements(): Promise<IAnnouncementData[]> {
         const listName = 'Announcements';
-        return await sp.web.lists.getByTitle(listName).items.select("ID,Title,Description,Summary,AnnouncementImage,AnnouncementThumbnail,PublishedDate,Business/ID,Business/Title,Location").expand("Business")
+        return await sp.web.lists.getByTitle(listName).items
+            .select("ID,Title,Description,Summary,AnnouncementImage,AnnouncementThumbnail,PublishedDate,Business/ID,Business/Title,Location,Functions/ID,Functions/Title")
+            .expand("Business,Functions")
             .getAll(5000).then((items: IAnnouncementData[]) => {
                 return items;
             });
@@ -23,7 +25,7 @@ export class SPService {
             .getAll(5000).then((items: IBusinessData[]) => {
                 return items;
             });
-    }    
+    }
 
     public async getFunctionData(): Promise<IFunctionData[]> {
         const listName = 'Functions';

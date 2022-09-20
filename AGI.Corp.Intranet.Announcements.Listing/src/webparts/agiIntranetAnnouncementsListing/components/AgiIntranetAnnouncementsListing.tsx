@@ -159,7 +159,8 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
 
     } else {
       const result = this.state.totalAnnouncementData.filter((obj) => {
-        return obj.Business.ID == value;
+        const itemId = this.state.showBusinessData ? obj.Business.ID : obj.Functions.ID;
+        return itemId == value;
       })
       this.setState({
         filteredAnnouncementData: result
@@ -261,13 +262,14 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
                   {
                     this.state.currentPageAnnouncementData.length > 0 ?
                       this.state.currentPageAnnouncementData.map((announcement) => {
+                        const category = this.state.showBusinessData ? announcement.Business : announcement.Functions;
                         return (
                           <div className="col-lg-3 mb-4 d-flex align-items-stretch">
                             <div className="card news-card">
                               <img src={this.getImageUrl(announcement)} className="card-img-top" alt="Card Image" />
                               <div className="card-body d-flex flex-column">
                                 <div className={'category'}>
-                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {announcement.Business ? announcement.Business.Title : ""}</span>
+                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {category ? category.Title : ""}</span>
                                 </div>
                                 <div className="mb-2 mt-2 card-content-header">
                                   <h5 className="card-title">{announcement.Title}</h5>
