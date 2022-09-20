@@ -14,7 +14,7 @@
     "scriptResources": {
       "agi-intranet-custom-branding-application-customizer": {
         "type": "path",
-        "path": "agi-intranet-custom-branding-application-customizer.js"
+        "path": "agi-intranet-custom-branding-application-customizer_51f8a50c546caa42cfa5.js"
       },
       "@microsoft/sp-application-base": {
         "type": "component",
@@ -23,7 +23,7 @@
       },
       "AGIIntranet": {
         "type": "path",
-        "path": "AGIIntranet.js",
+        "path": "AGIIntranet_8c159bcbd9d8c8a3315c2c7168f10f4b.js",
         "globalName": "AGIIntranet"
       },
       "@microsoft/sp-loader": {
@@ -33,7 +33,7 @@
       },
       "AgiIntranetCustomBrandingApplicationCustomizerStrings": {
         "type": "path",
-        "path": "AgiIntranetCustomBrandingApplicationCustomizerStrings_en-us.js"
+        "path": "AgiIntranetCustomBrandingApplicationCustomizerStrings_en-us_033c3be901ae205b7edd771de1e36781.js"
       },
       "@microsoft/sp-core-library": {
         "type": "component",
