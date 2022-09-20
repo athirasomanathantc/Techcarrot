@@ -1,15 +1,22 @@
-import {IBlogData} from '../Model/IBlogData'
+import { IBlogData } from '../Model/IBlogData'
 export interface IAgiCorpIntranetBlogsState {
   blogData: IBlogData[];
-  filterData:IBlogData[];
-  filterValues:{
-    ID:number,
-    Title:string
+  filterData: IBlogData[];
+  filterValuesBusiness: {
+    ID: number,
+    Title: string
+  }[];
+  filterValuesFunctions: {
+    ID: number,
+    Title: string
   }[];
   currentPage: number;
   totalPages: number;
-  pageData:IBlogData[];
-  pageSize:number;
+  pageData: IBlogData[];
+  pageSize: number;
   isDataLoaded: boolean;
-  
+  showBusinessData: boolean;
+  selectedOption: {
+    ID: number;
+  }
 }
