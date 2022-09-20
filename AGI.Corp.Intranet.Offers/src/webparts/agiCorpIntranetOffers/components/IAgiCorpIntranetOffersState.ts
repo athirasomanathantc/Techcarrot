@@ -1,13 +1,21 @@
-import { IOfferData} from '../Model/IOffers'
+import { IOfferData } from '../Model/IOffers'
 export interface IAgiCorpIntranetOffersState {
   offerData: IOfferData[];
-  filterData:IOfferData[];
-  filterValues:{
-    ID:number,
-    Title:string
+  filterData: IOfferData[];
+  filterValuesBusiness: {
+    ID: number,
+    Title: string
+  }[];
+  filterValuesFunctions: {
+    ID: number,
+    Title: string
   }[];
   currentPage: number;
   totalPages: number;
-  pageData:IOfferData[];
-  pageSize:number;
+  pageData: IOfferData[];
+  pageSize: number;
+  showBusinessData: boolean;
+  selectedOption: {
+    ID: number;
+  }
 }
