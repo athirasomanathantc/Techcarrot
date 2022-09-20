@@ -146,8 +146,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
 
   }
 
-  private filterAnnouncement(e: any) {
-    const value = parseInt(e.target.value);
+  private filterAnnouncement(value: number) {
     if (value == 0) {
       const result: IAnnouncementData[] = this.state.totalAnnouncementData;
       this.setState({
@@ -193,6 +192,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
         }
       })
     }
+    this.filterAnnouncement(0);
   }
 
 
@@ -238,7 +238,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
                     </div>
                     <div className="col-8">
                       <div className={'form-select custom-select w-100 '}>
-                        <select onChange={(e) => this.filterAnnouncement(e)}>
+                        <select onChange={(e) => this.filterAnnouncement(parseInt(e.target.value))}>
                           <option value="0">Filter By</option>
                           {
                             options.map((option: IBusinessData | IFunctionData, index: number) => {
