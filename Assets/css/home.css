@@ -803,11 +803,11 @@ input[type="radio"]:checked+label::after {
     font-size: 1.2rem !important;
 }
 
-.DayPicker .DayPicker-wrapper {
+.home-page .calendar .card-body .app{
     background: #9D0E7105 0% 0% no-repeat padding-box;
     border: 1px solid #EBEBEB;
     opacity: 1;
-    padding-bottom: 60px;
+    padding-bottom: 20px;
     border-radius:5px;
 }
 
@@ -1067,7 +1067,7 @@ input[type="radio"]:checked+label::after {
 
 .legend {
     position: relative;
-    top: -60px;
+    top: 0;
     padding: 10px;
 }
 
