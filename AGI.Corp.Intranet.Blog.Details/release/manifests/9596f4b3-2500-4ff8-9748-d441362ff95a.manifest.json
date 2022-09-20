@@ -34,7 +34,7 @@
     "scriptResources": {
       "agi-intranet-blog-details-web-part": {
         "type": "path",
-        "path": "agi-intranet-blog-details-web-part_4725b274c20f98ecaf95.js"
+        "path": "agi-intranet-blog-details-web-part_e89ec448210712590c2e.js"
       },
       "@microsoft/sp-property-pane": {
         "type": "component",

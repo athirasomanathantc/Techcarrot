@@ -38,4 +38,5 @@ export interface IAgiCorpIntranetImageVideoGalleryState {
   pageVideoSize:number;
   totalVideoPage:number;
   curFilterValue: number;
+  
 }

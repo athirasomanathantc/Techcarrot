@@ -39,7 +39,7 @@ export default class AgiIntranetHomeMain extends React.Component<IAgiIntranetHom
             <div className="container">
               <div className="row home-page">
                 <div className="col-xl-8 col-sm-12  ">
-                  <div className="row">
+                  <div className="row h-100">
                     <ErrorBoundary>
                       <LatestNews {...this.props}></LatestNews>
                     </ErrorBoundary>
@@ -49,7 +49,7 @@ export default class AgiIntranetHomeMain extends React.Component<IAgiIntranetHom
                     <ErrorBoundary>
                       <SnapShare  {...this.props}></SnapShare>
                     </ErrorBoundary>
-                    <div className=" row p-0 me-0 ms-0 mb-3">
+                    <div className=" row p-0 me-0 ms-0">
                       <ErrorBoundary>
                         <SocialMedia {...this.props}></SocialMedia>
                       </ErrorBoundary>

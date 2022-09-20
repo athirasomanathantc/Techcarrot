@@ -59,7 +59,9 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       totalPage: 1,
       pageVideoSize: 0,
       totalVideoPage: 1,
-      curFilterValue: 0
+      curFilterValue: 0,
+      
+
     }
     // this.getImages = this.getImages.bind(this);
   }
@@ -122,6 +124,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         this.setState({
           filterData: result
         }, () => {
+          console.log("filter data",this.state.filterData);
            this.paging();
         });
 
@@ -220,6 +223,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         totalPages: pageCount,
         totalPage: pageCount,
         currentPage: 1
+      },()=>{
+        console.log("imagedata",this.state.pageData);
       });
     }
     else if (this.state.currentTabName == "video") {
@@ -230,6 +235,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         totalPages: pageCount,
         totalPage: pageCount,
         currentPage: 1
+      },()=>{
+        console.log("videodata",this.state.videoData);
       });
     }
     else {
@@ -393,7 +400,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     //debugger;
     // sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(subFolderName).files.select('*, FileRef, FileLeafRef').get().then((allItems) => {
     const libraryPath = `${this.props.context.pageContext.web.serverRelativeUrl}/Image Gallery/${subFolderName}`;
-    sp.web.getFolderByServerRelativePath(libraryPath).files.select('*, FileRef, FileLeafRef, ID').expand("ListItemAllFields").get().then((allItems) => {
+    sp.web.getFolderByServerRelativePath(libraryPath).files.select('*, FileRef, FileLeafRef, ID, Author/Title').expand("ListItemAllFields,Author").get().then((allItems) => {
       // sp.web.lists.getByTitle("Image Gallery").items
       // .select("*, FileRef, FileLeafRef, Created, File, ID, Title, Author/Title")
       // .expand("File, Author").get().then((allItems) => {
@@ -423,7 +430,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
 
   private async getVideoItems(): Promise<void> {
 
-    sp.web.lists.getByTitle(LIBRARY_VIDEO_GALLERY).items.select('*, FileRef, FileLeafRef').filter('FSObjType eq 0').get().then((items: IImageItem[]) => {
+    sp.web.lists.getByTitle(LIBRARY_VIDEO_GALLERY).items.select('*, FileRef, FileLeafRef,Author/Title').expand("Author").filter('FSObjType eq 0').get().then((items: IImageItem[]) => {
       this.setState({
         videoItems: items,
         videoData: items,
@@ -434,11 +441,13 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     });
   }
 
-  private openVideo(id) {
-    // //debugger;
+  private openVideo(id) {//debugger
+    debugger;
     const selectedItem = this.state.videoItems.filter(item => item.ID == id)[0];
     this.setState({
       selectedItem
+    },()=>{
+      console.log("videoitem",this.state.selectedItem.Author.Title);
     });
     this.setState({
       showVideo: true
@@ -449,6 +458,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   private closePreview(): void {
     this.setState({
       showVideo: false,
+      selectedItem:NULL_SELECTED_ITEM,
       selectedVideoUrl: '',
       preview: false
     });
@@ -457,21 +467,27 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   private closeVideoPreview(): void {
     this.setState({
       showVideo: false,
-      selectedVideoUrl: ''
+      selectedVideoUrl: '',
+      selectedItem:NULL_SELECTED_ITEM
     });
   }
 
-  private previewImage(e: any): void { debugger;
+  private previewImage(e: any): void { 
     const src = e.target.attributes["data-src"].value;
     const id = e.target.attributes["data-id"].value;
     const index = id ? parseInt(id) : -1;
     const _imageItem = this.state.imageItems.filter((image) => image.ListItemAllFields.ID == id);
+    console.log("imageitem",_imageItem);
     const imageItem = _imageItem && _imageItem.length > 0 ? _imageItem[0] : NULL_IMAGE_ITEM;
     this.setState({
       preview: true,
       currentImageUrl: src,
-    //  currentImageTitle: imageItem.File.Name,
+      currentImageTitle: imageItem.Name,
+      currentImageDescription: imageItem.ImageDescription,
+      currentImageAuthorName: imageItem.Author.Title,
       currentIndex: index
+    }, ()=>{
+      console.log("image title",this.state.currentImageTitle);
     })
   }
 
@@ -574,6 +590,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   }
 
   public render(): React.ReactElement<IAgiCorpIntranetImageVideoGalleryProps> {
+    debugger;
     const tab = this.getQueryStringValue('tab');
     const libraryPath = this.props.libraryPath;
     const imageUrl = this.state.currentImageUrl;
@@ -646,6 +663,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                     <div className={tab == "image" ? `tab-pane fade show active` : `tab-pane fade `} id="image-gallery" role="tabpanel" aria-labelledby="image-gallery-tab">
                       <div className="row">
                         {
+                          this.state.pageData.length>0?
                           this.state.pageData.map((folder) => {
                             const targetUrl = `${this.props.siteUrl}/SitePages/Photos.aspx?folderName=${folder.Name}&libraryPath=${libraryPath}`
                             return (
@@ -663,6 +681,10 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                               </div>
                             )
                           })
+                          :
+                          <div  className={'invalidTxt'}>
+                            NO IMAGES
+                          </div>
                         }
                       </div>
                       <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
@@ -677,6 +699,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                       <div className="row">
                         {
                           //this.state.videoItems.map((item, i) => {
+                            this.state.videoData.length>0?
                           this.state.videoData.map((item, i) => {
                             const imageUrl = this.getImageUrl(item.VideoThumbnail);
                             //  const navUrl = item.NavigationUrl ? item.NavigationUrl.Url : '';
@@ -695,6 +718,10 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                               </div>
                             )
                           })
+                          :
+                          <div  className={'invalidTxt'}>
+                            NO VIDEOS
+                          </div>
                         }
 
                       </div>
@@ -790,6 +817,18 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                   Your browser does not support the video tag.
                 </video>
               </div>
+              <div className="imagePreviewCaption">
+              <h2>{this.state.selectedItem.FileLeafRef}</h2>
+
+              <ul>
+                <li>
+                  <i className="icon user-icon"><img src={`${this.props.siteUrl}/Assets/icons/icon-avatar.svg`} /></i>
+                  <span className='userName'>
+                     {this.state.selectedItem.Author.Title}
+                  </span>
+                </li>
+              </ul>
+            </div>
             </div>
           </div>
         </div>

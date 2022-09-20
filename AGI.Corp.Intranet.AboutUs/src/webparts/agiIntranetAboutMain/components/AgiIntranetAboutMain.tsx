@@ -63,6 +63,9 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
     sp.web.lists.getByTitle(LIST_ABOUT_LEADERSHIPTEAM).items.get().then((items: ILeadershipTeamItem[]) => {
       this.setState({
         leadershipTeamItems: items
+      }, () => {
+        this.fnInitiate();
+        this.renderScripts();
       });
     });
   }
@@ -94,17 +97,9 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
     const cultureContentItems = this.state.purposeCultureVisionItems.filter(item => item.Title == TEXT_ABOUT_CULTURE_NAVIGATION);
     const leadershipTeamHeading = this.state.leadershipTeamItems.filter(item => item.Category == TEXT_ABOUT_LEADERSHIP_HEADING_CONTENT);
     const leadershipTeamHeadingItem = leadershipTeamHeading.length > 0 ? leadershipTeamHeading[0] : null;
-    console.log("Leadership Team " + leadershipTeamHeadingItem);
-
     const leadershipTeamItems = this.state.leadershipTeamItems.filter(item => item.Category == TEXT_ABOUT_LEADERSHIP_TEAM_CONTENT);
 
-    const test12 = $.fn.jquery;
-    console.log("test " + test12);
-
-    console.log('leadershipteamitems', leadershipTeamItems);
-
     return (
-
 
       //
       <div className="main-content about-us-wrapper">
@@ -213,16 +208,13 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
               <div id="leadershipCarousel" className="carousel js-carousel slide leadership-carousel"
                 data-bs-ride="carousel">
                 <div className="carousel-inner" role="listbox">
-                  <div className={`carousel-item js-carousel-item`} >
-                    <div className="col-md-3 d-flex align-items-stretch">
-                      {
-                        leadershipTeamItems.map((item, i) => {
-
-                          const leadershipMessageImgVal = item.LeadershipImage && item.LeadershipImage ? this.getImageUrl(item.LeadershipImage) : '';
-
-                          return (
-
-                            <div className="team-card" onClick={() => this.showLeaderDetail(item.ID)} key={i}  >
+                  {
+                    leadershipTeamItems.map((item, i) => {
+                      const leadershipMessageImgVal = item.LeadershipImage && item.LeadershipImage ? this.getImageUrl(item.LeadershipImage) : '';
+                      return (
+                        <div className={i == 0 ? `carousel-item js-carousel-item active` : `carousel-item js-carousel-item`} >
+                          <div className="col-md-3 d-flex align-items-stretch">
+                            <div className="team-card cardItem" key={i} data-id={item.ID}  >
                               <div className="team-img" >
                                 <img src={leadershipMessageImgVal} alt="Card Design" className="w-100" />
                               </div>
@@ -233,18 +225,19 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                                 data-bs-target="#viewProfileModal" onClick={() => this.openVideo(item.ID)}>
                                 Read More
                               </button> */}
-                                <input type="button" className="view-profile" onClick={() => this.showLeaderDetail(item.ID)} value='Read More' />
+                                <input type="button" className="view-profile" onClick={() => this.showLeaderDetail(item.ID)} value='View Profile' />
 
                                 {/* <a href="javascript:void(0)" className="view-profile" data-bs-toggle="modal" >View
                                   Profile <span><img src={`${this.props.siteUrl}/Assets/images/icon-view-more.svg`} alt="" /></span></a> */}
                               </div>
                             </div>
+                          </div>
+                        </div>
 
-                          )
-                        })
-                      }
-                    </div>
-                  </div>
+                      )
+                    })
+                  }
+
                 </div>
               </div>
             </div>
@@ -258,8 +251,6 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
 
 
   private showLeaderDetail(id: number) {
-    console.log("ID" + id);
-    debugger;
     const selectedItem = this.state.leadershipTeamItems.filter(item => item.ID == id)[0];
     this.setState({
       selectedItem,
@@ -267,17 +258,10 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
     });
   }
 
-  private openVideo(id) {
-    console.log("ID" + id);
-    debugger;
-    const selectedItem = this.state.leadershipTeamItems.filter(item => item.ID == id)[0];
+  private closeLeaderModal() {
     this.setState({
-      selectedItem,
-      showVideo: true
+      showVideo: false
     });
-    // this.setState({
-    //   showVideo: true
-    // });
   }
 
   private closePreview() {
@@ -305,30 +289,48 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
     });
   }
 
+  private renderScripts(): void {
+    const reacthandler = this;
+    $(document).on('click', '.cardItem', function () {
+      debugger;
+      const element = $(this);
+      const id = element.attr('data-id');
+      // get leader details
+      const selectedItem = reacthandler.state.leadershipTeamItems.filter((item: any) => item.ID == id)[0];
+      reacthandler.setState({
+        selectedItem,
+        showVideo: true
+      });
+    })
+  }
+
   public render(): React.ReactElement<IAgiIntranetAboutMainProps> {
     const { selectedItem } = this.state;
     const leadershipImgVal = this.getImageUrl(selectedItem.LeadershipImage);
     return (
       <div className={styles.agiIntranetAboutMain}>
         {this.renderFindOutMoreSection()}
-        {this.fnInitiate()}
-        {/* <div className={this.state.showVideo ? "modal fade show overlay" : "modal fade overlay"} id="viewProfileModal" aria-labelledby="exampleModalLabel"
-          aria-hidden="true"> */}
-        <div className="modal fade" id="viewProfileModal" aria-labelledby="exampleModalLabel" aria-hidden="true" style={{ display: this.state.showVideo ? 'block' : 'none' }}>
-          <div className="modal-dialog modal-dialog-centered modal-lg">
-            <div className="modal-content">
-              <div className="modal-header">
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
-                <div className="row profile-wrapper m-0">
-                  <div className="profile-img col-lg-4"> <img src={leadershipImgVal} className="w-100" />
-                    <p className="profile-content text-center mt-3">
-                      <b>{selectedItem.Name}</b> <br />
-                      {selectedItem.Designation} <br />{selectedItem.Business}
-                    </p>
+        {/* {this.fnInitiate()} */}
+        <div className={this.state.showVideo ? "modal show overlay" : "modal fade overlay"} id="viewProfileModal" aria-labelledby="exampleModalLabel"
+          aria-hidden="true" style={{ display: this.state.showVideo ? 'block' : 'none' }}>
+          <div className={this.state.showVideo ? "modal show" : "modal fade"} id="viewProfileModal" aria-labelledby="exampleModalLabel" aria-hidden="true" style={{ display: this.state.showVideo ? 'block' : 'none' }} >
+            <div className="modal-dialog modal-dialog-centered modal-lg">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <input type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => this.closeLeaderModal()} />
+                </div>
+                <div className="modal-body">
+                  <div className="row profile-wrapper m-0">
+                    <div className="profile-img col-lg-4">
+                      <img id="leadershipImage" src={leadershipImgVal} className="w-100" />
+                      <p className="profile-content text-center mt-3">
+                        <b id="leadershipName">{selectedItem.Name}</b> <br />
+                        <span id="leadershipDesignation">{selectedItem.Designation}</span> <br />
+                        <span id="leadershipBusiness">{selectedItem.Business}</span>
+                      </p>
+                    </div>
+                    <div className="view-profile-content col-lg-8" id="leadershipDetail" dangerouslySetInnerHTML={{ __html: selectedItem.About }}></div>
                   </div>
-                  <div className="view-profile-content col-lg-8" dangerouslySetInnerHTML={{ __html: selectedItem.About }}></div>
                 </div>
               </div>
             </div>

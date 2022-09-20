@@ -34,7 +34,7 @@
     "scriptResources": {
       "agi-intranet-extra-navigation-web-part": {
         "type": "path",
-        "path": "agi-intranet-extra-navigation-web-part_72c9f371fcdbd5f137d7.js"
+        "path": "agi-intranet-extra-navigation-web-part_827a42966713cab5c92d.js"
       },
       "@microsoft/sp-property-pane": {
         "type": "component",

@@ -4,14 +4,14 @@ export interface IImageItem {
     Title?: string;
     FileLeafRef?: string;
     FileRef?: string;
-    VideoThumbnail?:string;
-    isCoverPhoto?:string;
+    VideoThumbnail?: string;
+    isCoverPhoto?: string;
     showVideo?: boolean;
     selectedVideoUrl?: string;
     BusinessId?: number;
-    Business?:{
-        ID:number;
-        Title:string;
+    Business?: {
+        ID: number;
+        Title: string;
     },
     ListItemAllFields?: {
         ID: number
@@ -19,4 +19,5 @@ export interface IImageItem {
     File?: { ServerRelativeUrl: string, Name: string };
     ImageDescription?: string;
     Author?: { Title: string, ID: number };
+    Name?: string;
 }

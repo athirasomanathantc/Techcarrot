@@ -10,7 +10,9 @@ export const PROP_DEFAULT_ORDERBY = 'TimeLastModified';
 
 export const NULL_SELECTED_ITEM = { 
     FileLeafRef: '',
-    FileRef: '' }
+    FileRef: '' ,
+    Author: { Title: '', ID: 0 }
+}
 
     export const NULL_IMAGE_ITEM: IImageItem = { 
         ID: 0,
