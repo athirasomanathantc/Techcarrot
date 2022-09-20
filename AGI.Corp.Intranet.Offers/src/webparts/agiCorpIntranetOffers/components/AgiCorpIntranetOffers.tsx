@@ -127,7 +127,7 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
 
     } else {
       const result = this.state.offerData.filter((obj) => {
-        const itemId = this.state.showBusinessData ? obj.Business.ID : obj.Functions.ID;
+        const itemId = this.state.showBusinessData ? obj.Business?.ID : obj.Functions?.ID;
         return itemId == value;
       })
 

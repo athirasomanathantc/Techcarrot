@@ -57,7 +57,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
 
     } else {
       const result = this.state.newsData.filter((obj) => {
-        const itemId = this.state.showBusinessData ? obj.Business.ID : obj.Functions.ID;
+        const itemId = this.state.showBusinessData ? obj.Business?.ID : obj.Functions?.ID;
         return itemId == value;
       })
 

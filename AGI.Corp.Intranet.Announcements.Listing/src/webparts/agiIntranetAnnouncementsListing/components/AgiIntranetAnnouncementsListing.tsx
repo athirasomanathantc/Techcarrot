@@ -158,7 +158,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
 
     } else {
       const result = this.state.totalAnnouncementData.filter((obj) => {
-        const itemId = this.state.showBusinessData ? obj.Business.ID : obj.Functions.ID;
+        const itemId = this.state.showBusinessData ? obj.Business?.ID : obj.Functions?.ID;
         return itemId == value;
       })
       this.setState({

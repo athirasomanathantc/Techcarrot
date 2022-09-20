@@ -132,7 +132,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
 
     } else {
       const result = this.state.blogData.filter((obj) => {
-        const itemId = this.state.showBusinessData ? obj.Business.ID : obj.Functions.ID;
+        const itemId = this.state.showBusinessData ? obj.Business?.ID : obj.Functions?.ID;
         return itemId == value;
       })
 
