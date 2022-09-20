@@ -1,19 +1,27 @@
-import { IEventData }from '../Model/IEventData';
-export interface IAgiIntranetEventsStates {  
-  eventsData:IEventData[];
-  currentPage:number;
-  totalPage:number;
-  pageSize:number;
-  pageData:IEventData[];
-  filterValues:{
-    ID:number;
-    Title:string;
+import { IEventData } from '../Model/IEventData';
+export interface IAgiIntranetEventsStates {
+  eventsData: IEventData[];
+  currentPage: number;
+  totalPage: number;
+  pageSize: number;
+  pageData: IEventData[];
+  filterValuesBusiness: {
+    ID: number;
+    Title: string;
   }[];
-  selectedFilter:number;
-  selectedTabValues:IEventData[];
-  selectedTab:string;
-  filterData:IEventData[];
-  ongoingEvents:IEventData[];
-  upcomingEvents:IEventData[];
-  pastEvents:IEventData[];
+  filterValuesFunctions: {
+    ID: number;
+    Title: string;
+  }[];
+  selectedFilter: number;
+  selectedTabValues: IEventData[];
+  selectedTab: string;
+  filterData: IEventData[];
+  ongoingEvents: IEventData[];
+  upcomingEvents: IEventData[];
+  pastEvents: IEventData[];
+  showBusinessData: boolean;
+  selectedOption: {
+    ID: number;
+  }
 }
