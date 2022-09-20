@@ -213,7 +213,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                       const leadershipMessageImgVal = item.LeadershipImage && item.LeadershipImage ? this.getImageUrl(item.LeadershipImage) : '';
                       return (
                         <div className={i == 0 ? `carousel-item js-carousel-item active` : `carousel-item js-carousel-item`} >
-                          <div className="col-md-3 d-flex align-items-stretch">
+                          <div className="col-md-3 d-md-flex align-items-stretch">
                             <div className="team-card cardItem" key={i} data-id={item.ID}  >
                               <div className="team-img" >
                                 <img src={leadershipMessageImgVal} alt="Card Design" className="w-100" />

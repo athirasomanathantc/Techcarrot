@@ -34,7 +34,7 @@
     "scriptResources": {
       "agi-intranet-about-main-web-part": {
         "type": "path",
-        "path": "agi-intranet-about-main-web-part.js"
+        "path": "agi-intranet-about-main-web-part_22b6211c662cdf952137.js"
       },
       "@microsoft/sp-property-pane": {
         "type": "component",
@@ -77,7 +77,7 @@
       },
       "AgiIntranetAboutMainWebPartStrings": {
         "type": "path",
-        "path": "AgiIntranetAboutMainWebPartStrings_en-us.js"
+        "path": "AgiIntranetAboutMainWebPartStrings_en-us_536e65149b0acf4d52c0043073b9fc59.js"
       },
       "jquery": {
         "type": "path",
