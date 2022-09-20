@@ -75,18 +75,6 @@
           "isDirectDependency": false
         },
         {
-          "componentId": "0d910c1c-13b9-4e1c-9aa4-b008c5e42d7d",
-          "componentName": "react",
-          "componentVersion": "16.13.1",
-          "isDirectDependency": false
-        },
-        {
-          "componentId": "aa0a46ec-1505-43cd-a44a-93f3a5aa460a",
-          "componentName": "react-dom",
-          "componentVersion": "16.13.1",
-          "isDirectDependency": false
-        },
-        {
           "componentId": "974a7777-0990-4136-8fa6-95d80114c2e0",
           "componentName": "@microsoft/sp-webpart-base",
           "componentVersion": "1.15.2",
@@ -103,6 +91,30 @@
           "componentName": "@ms/sp-edit-customer-promise",
           "componentVersion": "0.1.0",
           "isDirectDependency": false
+        },
+        {
+          "componentId": "0d910c1c-13b9-4e1c-9aa4-b008c5e42d7d",
+          "componentName": "react",
+          "componentVersion": "16.13.1",
+          "isDirectDependency": false
+        },
+        {
+          "componentId": "0d910c1c-13b9-4e1c-9aa4-b008c5e42d7d",
+          "componentName": "react",
+          "componentVersion": "16.8.5",
+          "isDirectDependency": true
+        },
+        {
+          "componentId": "aa0a46ec-1505-43cd-a44a-93f3a5aa460a",
+          "componentName": "react-dom",
+          "componentVersion": "16.13.1",
+          "isDirectDependency": false
+        },
+        {
+          "componentId": "aa0a46ec-1505-43cd-a44a-93f3a5aa460a",
+          "componentName": "react-dom",
+          "componentVersion": "16.8.5",
+          "isDirectDependency": true
         }
       ]
     }

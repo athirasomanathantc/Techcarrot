@@ -34,7 +34,7 @@
     "scriptResources": {
       "agi-intranet-blog-details-web-part": {
         "type": "path",
-        "path": "agi-intranet-blog-details-web-part_e89ec448210712590c2e.js"
+        "path": "agi-intranet-blog-details-web-part_0214ccc53495e35b4fa0.js"
       },
       "@microsoft/sp-property-pane": {
         "type": "component",
@@ -59,12 +59,12 @@
       "react": {
         "type": "component",
         "id": "0d910c1c-13b9-4e1c-9aa4-b008c5e42d7d",
-        "version": "16.13.1"
+        "version": "16.8.5"
       },
       "react-dom": {
         "type": "component",
         "id": "aa0a46ec-1505-43cd-a44a-93f3a5aa460a",
-        "version": "16.13.1"
+        "version": "16.8.5"
       },
       "AgiIntranetBlogDetailsWebPartStrings": {
         "type": "path",

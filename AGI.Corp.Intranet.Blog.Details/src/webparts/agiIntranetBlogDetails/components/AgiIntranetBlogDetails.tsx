@@ -66,6 +66,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
         }
         const id = parseInt(blogID);
         const _blogItem = items.filter((item) => item.ID == id);
+        console.log("item",_blogItem)
         let blogItem = BLOG_NULL_ITEM;
         if (_blogItem && _blogItem.length > 0) {
           blogItem = _blogItem && _blogItem.length > 0 ? _blogItem[0] : BLOG_NULL_ITEM;
@@ -522,7 +523,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
             </div>
           </div>
         </section>
-        <footer className="news-detail-footer" style={{ display: 'display' }}>
+        <footer className="news-detail-footer" style={{ display: 'none' }}>
           <div className="row">
             <div className="col-6 col-md-6">
               <nav className="nav">
