@@ -58,7 +58,7 @@ export const SocialMedia = (props: IAgiIntranetHomeMainProps) => {
                 <div data-bs-target="#socialOffer" data-bs-toggle="collapse">
                     <div className="card-header d-flex align-items-center justify-content-between" >
                         <h4 className="card-title mb-0">Social Media</h4>
-                        <div className="d-md-none "><div className="float-right navbar-toggler d-md-none"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><g id="Dropdown-Logo" transform="translate(-84 -7.544)"><path id="Path_73662" data-name="Path 73662" d="M15.739,7.87,8.525.656,7.868,0,0,7.87" transform="translate(100.366 20.883) rotate(180)" fill="none" stroke="#dccede" stroke-width="1.5"></path><rect id="Rectangle_7537" data-name="Rectangle 7537" width="18" height="18" transform="translate(84 7.544)" fill="none"></rect></g></svg></div></div>
+                        <div className="d-md-none me-0 ms-auto"><div className="float-right navbar-toggler d-md-none"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><g id="Dropdown-Logo" transform="translate(-84 -7.544)"><path id="Path_73662" data-name="Path 73662" d="M15.739,7.87,8.525.656,7.868,0,0,7.87" transform="translate(100.366 20.883) rotate(180)" fill="none" stroke="#dccede" stroke-width="1.5"></path><rect id="Rectangle_7537" data-name="Rectangle 7537" width="18" height="18" transform="translate(84 7.544)" fill="none"></rect></g></svg></div></div>
                         <div className="p-0 position-relative d-none d-md-block">
                             <button className="carousel-control-prev" type="button"
                                 data-bs-target="#socialMediaControls"
