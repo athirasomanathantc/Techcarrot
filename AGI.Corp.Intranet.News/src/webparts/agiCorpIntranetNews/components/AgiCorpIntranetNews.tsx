@@ -99,41 +99,42 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
       });
     }
   }
-  
+
   private async getNewsItems(): Promise<void> {
-    const list = 'News';
-    const counturl = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/ItemCount`;
-    const count = await this.props.context.spHttpClient.get(counturl, SPHttpClient.configurations.v1)
-      .then((resp: SPHttpClientResponse) => {
-        return resp.json();
-      }).then((resp) => {
-        return resp.value;
-      });
-
-    await sp.web.lists
-      .getByTitle(list).items
-      .select("ID,Title,PublishedDate,Description,NewsThumbnail,NewsImage,Business/ID,Business/Title,Functions/ID,Functions/Title")
-      .orderBy("PublishedDate", false)
-      .expand("Business,Functions").top(count)()
-      //this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
-      .then((response: INewsData[]) => {
-        const items: INewsData[] = response;
-        console.log('Data', items);
-        const pageCount: number = Math.ceil(items.length / this.state.pageSize);
-
-        this.setState({
-          newsData: items,
-          filterData: items,
-          pageData: items.slice(0, this.state.pageSize),
-          totalPages: pageCount
+    return new Promise<void>(async (resolve) => {
+      const list = 'News';
+      const counturl = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/ItemCount`;
+      const count = await this.props.context.spHttpClient.get(counturl, SPHttpClient.configurations.v1)
+        .then((resp: SPHttpClientResponse) => {
+          return resp.json();
+        }).then((resp) => {
+          return resp.value;
         });
-      })
-      .catch((error) => {
-        console.log('Error:', error);
-      })
-    this.paging();
 
+      await sp.web.lists
+        .getByTitle(list).items
+        .select("ID,Title,PublishedDate,Description,NewsThumbnail,NewsImage,Business/ID,Business/Title,Functions/ID,Functions/Title")
+        .orderBy("PublishedDate", false)
+        .expand("Business,Functions").top(count)()
+        //this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+        .then((response: INewsData[]) => {
+          const items: INewsData[] = response;
+          console.log('Data', items);
+          const pageCount: number = Math.ceil(items.length / this.state.pageSize);
 
+          this.setState({
+            newsData: items,
+            filterData: items,
+            pageData: items.slice(0, this.state.pageSize),
+            totalPages: pageCount
+          });
+        })
+        .catch((error) => {
+          console.log('Error:', error);
+        })
+      this.paging();
+      resolve();
+    });
   }
 
 
