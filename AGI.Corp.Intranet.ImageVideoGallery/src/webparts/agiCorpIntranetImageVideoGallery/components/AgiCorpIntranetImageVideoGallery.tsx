@@ -73,9 +73,27 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     await this.getBusinessItems();
     await this.getFunctionItems();
     await this.getGalleryItems();
-    await this.getVideoItems();
+    await this.getVideoItems().then(() => {
+      this.setDefaultFilter();
+    });
   }
 
+  private setDefaultFilter() {
+    const params = new URLSearchParams(window.location.search);
+    const programId = parseInt(params.get('programId'));
+    const program = params.get('program');
+    if (program) {
+      this.setState({
+        showBusinessData: program?.toLowerCase() === "business",
+        selectedOption: {
+          ID: programId
+        }
+      }, () => {
+        programId && this.handleFilter(programId);
+      });
+    }
+  }
+  
   private async getBusinessItems(): Promise<void> {
 
     const url1 = `${this.props.siteUrl}/_api/web/lists/getbytitle('Business')/items`;

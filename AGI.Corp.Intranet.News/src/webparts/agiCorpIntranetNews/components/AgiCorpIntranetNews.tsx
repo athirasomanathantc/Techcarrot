@@ -79,9 +79,27 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
-    await this.getNewsItems();
+    await this.getNewsItems().then(() => {
+      this.setDefaultFilter();
+    });
   }
 
+  private setDefaultFilter() {
+    const params = new URLSearchParams(window.location.search);
+    const programId = parseInt(params.get('programId'));
+    const program = params.get('program');
+    if (program) {
+      this.setState({
+        showBusinessData: program?.toLowerCase() === "business",
+        selectedOption: {
+          ID: programId
+        }
+      }, () => {
+        programId && this.handleFilter(programId);
+      });
+    }
+  }
+  
   private async getNewsItems(): Promise<void> {
     const list = 'News';
     const counturl = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/ItemCount`;
@@ -92,7 +110,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
         return resp.value;
       });
 
-    sp.web.lists
+    await sp.web.lists
       .getByTitle(list).items
       .select("ID,Title,PublishedDate,Description,NewsThumbnail,NewsImage,Business/ID,Business/Title,Functions/ID,Functions/Title")
       .orderBy("PublishedDate", false)

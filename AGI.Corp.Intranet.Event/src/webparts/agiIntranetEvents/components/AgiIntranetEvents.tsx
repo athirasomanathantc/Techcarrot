@@ -49,7 +49,25 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
-    await this.getNewsItems();
+    await this.getNewsItems().then(() => {
+      this.setDefaultFilter();
+    });
+  }
+
+  private setDefaultFilter() {
+    const params = new URLSearchParams(window.location.search);
+    const programId = parseInt(params.get('programId'));
+    const program = params.get('program');
+    if (program) {
+      this.setState({
+        showBusinessData: program?.toLowerCase() === "business",
+        selectedOption: {
+          ID: programId
+        }
+      }, () => {
+        programId && this.handleFilter(programId);
+      });
+    }
   }
 
   private async getBusinessItems(): Promise<void> {
@@ -334,7 +352,8 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
     } else {
       const result = selectedTabValues.filter((obj) => {
-        return obj.Business && obj.Business.ID == this.state.selectedFilter;
+        const itemId = this.state.showBusinessData ? obj.Business?.ID : obj.Functions?.ID;
+        return itemId == this.state.selectedFilter;
       })
       this.setState({
         selectedTabValues,

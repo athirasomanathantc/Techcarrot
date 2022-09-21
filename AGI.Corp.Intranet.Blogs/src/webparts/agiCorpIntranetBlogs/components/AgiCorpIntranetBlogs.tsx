@@ -42,9 +42,27 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
-    await this.getblog();
-
+    await this.getblog().then(() => {
+      this.setDefaultFilter();
+    });
   }
+
+  private setDefaultFilter() {
+    const params = new URLSearchParams(window.location.search);
+    const programId = parseInt(params.get('programId'));
+    const program = params.get('program');
+    if (program) {
+      this.setState({
+        showBusinessData: program?.toLowerCase() === "business",
+        selectedOption: {
+          ID: programId
+        }
+      }, () => {
+        programId && this.handleFilter(programId);
+      });
+    }
+  }
+
   private async getBusinessItems(): Promise<void> {
     const listName = "Business";
     sp.web.lists.getByTitle(listName).items.select('ID,Title').get()

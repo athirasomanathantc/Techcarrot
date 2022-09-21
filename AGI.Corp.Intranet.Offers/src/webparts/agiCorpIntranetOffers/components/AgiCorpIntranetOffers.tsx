@@ -32,11 +32,29 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
   public async componentDidMount(): Promise<void> {
     this.fetch()
   }
+
+  private setDefaultFilter() {
+    const params = new URLSearchParams(window.location.search);
+    const programId = parseInt(params.get('programId'));
+    const program = params.get('program');
+    if (program) {
+      this.setState({
+        showBusinessData: program?.toLowerCase() === "business",
+        selectedOption: {
+          ID: programId
+        }
+      }, () => {
+        programId && this.handleFilter(programId);
+      });
+    }
+  }
+
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
-    await this.getOffer();
-
+    await this.getOffer().then(() => {
+      this.setDefaultFilter();
+    });
   }
   private async getBusinessItems(): Promise<void> {
     const listName = "Business";
