@@ -45,5 +45,6 @@ export interface IAgiCorpIntranetImageVideoGalleryState {
   showBusinessData: boolean;
   selectedOption: {
     ID: number;
-  }
+  },
+  isDataLoaded: boolean;
 }
