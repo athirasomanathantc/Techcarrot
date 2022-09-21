@@ -48,7 +48,8 @@
     padding: 30px;
     border: 1px solid #DFDFE1;
     border-radius: 5px;
-    max-height: 210px;
+    /*max-height: 210px;*/
+    max-height: max-content;
     overflow: hidden;
     position: relative;
 }
@@ -213,7 +214,7 @@
     background: #dbdbdb;
     position: absolute;
     bottom: 0;
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
     left: 0;
     right: 0;
