@@ -13,6 +13,11 @@ export interface IImageItem {
         ID: number;
         Title: string;
     },
+    FunctionsId?: number;
+    Function?: {
+        ID: number;
+        Title: string;
+    },
     ListItemAllFields?: {
         ID: number
     };

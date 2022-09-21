@@ -34,11 +34,11 @@
     "scriptResources": {
       "agi-corp-intranet-image-video-gallery-web-part": {
         "type": "path",
-        "path": "agi-corp-intranet-image-video-gallery-web-part_3cc67b9a727dce765205.js"
+        "path": "agi-corp-intranet-image-video-gallery-web-part.js"
       },
       "AgiCorpIntranetImageVideoGalleryWebPartStrings": {
         "type": "path",
-        "path": "AgiCorpIntranetImageVideoGalleryWebPartStrings_en-us_ea417eef73f2143e91987949ddd36842.js"
+        "path": "AgiCorpIntranetImageVideoGalleryWebPartStrings_en-us.js"
       },
       "@microsoft/sp-property-pane": {
         "type": "component",

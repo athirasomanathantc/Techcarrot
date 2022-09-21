@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-corp-intranet-business-functions-content-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiCorpIntBusFuncContent/AgiCorpIntranetBusinessFunctionsContentWebPart.js",
+          "manifest": "./src/webparts/agiCorpIntBusFuncContent/AgiCorpIntranetBusinessFunctionsContentWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiCorpIntranetBusinessFunctionsContentWebPartStrings": "lib/webparts/agiCorpIntBusFuncContent/loc/{locale}.js"
+  }
+}

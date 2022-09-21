@@ -32,11 +32,29 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
   public async componentDidMount(): Promise<void> {
     this.fetch()
   }
+
+  private setDefaultFilter() {
+    const params = new URLSearchParams(window.location.search);
+    const programId = parseInt(params.get('programId'));
+    const program = params.get('program');
+    if (program) {
+      this.setState({
+        showBusinessData: program?.toLowerCase() === "business",
+        selectedOption: {
+          ID: programId
+        }
+      }, () => {
+        programId && this.handleFilter(programId);
+      });
+    }
+  }
+
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
-    await this.getOffer();
-
+    await this.getOffer().then(() => {
+      this.setDefaultFilter();
+    });
   }
   private async getBusinessItems(): Promise<void> {
     const listName = "Business";
@@ -149,25 +167,28 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
   }
 
   private async getOffer(): Promise<void> {
-    const listName = "Offers";
-    sp.web.lists
-      .getByTitle(listName).items
-      .select('ID,Title,Description,OfferThumbnail,OfferImage,Business/ID,Business/Title,Functions/ID,Functions/Title')
-      .expand('Business,Functions').getAll().then((resp: IOfferData[]) => {
-        const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
-        this.setState({
-          offerData: resp,
-          filterData: resp,
-          pageData: resp.slice(0, this.state.pageSize),
-          totalPages: pageCount
+    return new Promise<void>(async (resolve) => {
+      const listName = "Offers";
+      await sp.web.lists
+        .getByTitle(listName).items
+        .select('ID,Title,Description,OfferThumbnail,OfferImage,Business/ID,Business/Title,Functions/ID,Functions/Title')
+        .expand('Business,Functions').getAll().then((resp: IOfferData[]) => {
+          const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
+          this.setState({
+            offerData: resp,
+            filterData: resp,
+            pageData: resp.slice(0, this.state.pageSize),
+            totalPages: pageCount
 
-        }, () => {
-          //console.log(this.state.blogData)
-        });
-      }).catch((error) => {
-        console.log('error in fetching news items', error);
-      })
-    this.paging();
+          }, () => {
+            //console.log(this.state.blogData)
+          });
+        }).catch((error) => {
+          console.log('error in fetching news items', error);
+        })
+      this.paging();
+      resolve()
+    });
   }
   private _getPage(page: number) {
     // round a number up to the next largest integer.

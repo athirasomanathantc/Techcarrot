@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-int-bus-func-content-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiIntBusFuncContent/AgiIntBusFuncContentWebPart.js",
+          "manifest": "./src/webparts/agiIntBusFuncContent/AgiIntBusFuncContentWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiIntBusFuncContentWebPartStrings": "lib/webparts/agiIntBusFuncContent/loc/{locale}.js"
+  }
+}
