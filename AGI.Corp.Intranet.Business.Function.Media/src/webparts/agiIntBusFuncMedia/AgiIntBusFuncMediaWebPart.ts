@@ -10,18 +10,26 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import * as strings from 'AgiIntBusFuncMediaWebPartStrings';
 import AgiIntBusFuncMedia from './components/AgiIntBusFuncMedia';
 import { IAgiIntBusFuncMediaProps } from './components/IAgiIntBusFuncMediaProps';
-
+import { SPComponentLoader } from '@microsoft/sp-loader';
 export interface IAgiIntBusFuncMediaWebPartProps {
   description: string;
 }
 
 export default class AgiIntBusFuncMediaWebPart extends BaseClientSideWebPart<IAgiIntBusFuncMediaWebPartProps> {
 
+  protected onInit(): Promise<void> {
+    const randomNumber = Math.floor(Math.random() * 90000) + 10000;
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/business.css?${randomNumber}`);
+    return Promise.resolve();
+  }
+
   public render(): void {
     const element: React.ReactElement<IAgiIntBusFuncMediaProps> = React.createElement(
       AgiIntBusFuncMedia,
       {
-        description: this.properties.description
+        description: this.properties.description,
+        siteUrl: this.context.pageContext.web.absoluteUrl,
+        context: this.context
       }
     );
 

@@ -1,4 +1,4 @@
-export interface IAgiIntBusFuncMediaProps {
+export interface IAgiIntBusFuncLeaderShipProps {
   description: string;
   siteUrl: string;
   context: any 
