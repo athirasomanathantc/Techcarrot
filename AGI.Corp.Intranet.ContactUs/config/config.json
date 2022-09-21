@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-intranet-contact-us-main-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiIntranetContactUsMain/AgiIntranetContactUsMainWebPart.js",
+          "manifest": "./src/webparts/agiIntranetContactUsMain/AgiIntranetContactUsMainWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiIntranetContactUsMainWebPartStrings": "lib/webparts/agiIntranetContactUsMain/loc/{locale}.js"
+  }
+}
