@@ -927,6 +927,7 @@ nav.navbar.topnav-menu {
   font: 18px/34px Gill Sans;
   letter-spacing: 0px;
   font-weight: 500;
+  text-decoration: underline;
 }
 
 .main-content .content-wrapper  .home-page .card-header {
@@ -4553,6 +4554,157 @@ ul.pagination {
 .main-content .content-wrapper .home-page .announcement-section .card-header{
     padding-top:0;
 }
+
+/*Chatbox*/
+
+
+
+.chatbox-wrapper {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1;
+        }
+
+
+
+       .chatbox-wrapper .chat-toggler {
+            z-index: 2;
+            position: relative;
+        }
+
+
+
+       .chatbox-wrapper .chat-toggler button {
+            width: 90px;
+            height: 90px;
+            border: 0;
+            background: transparent linear-gradient(146deg, #9D0E71 0%, var(--unnamed-color-300b55) 100%) 0% 0% no-repeat padding-box;
+            background: transparent linear-gradient(146deg, #9D0E71 0%, #300B55 100%) 0% 0% no-repeat padding-box;
+            box-shadow: 0px 3px 6px #00000029;
+            border-radius: 180px;
+            color: #fff;
+        }
+
+
+
+       .chatbox-wrapper .chatbox {
+            background: #FFFFFF 0% 0% no-repeat padding-box;
+            box-shadow: 0px 15px 12px #00000029;
+            border-radius: 8px;
+            padding: 50px 30px;
+            position: absolute;
+            opacity: 0;
+            transition: all 300ms ease-in-out;
+            bottom: 50px;
+            right: 50px;
+            z-index: 1;
+            width: 400px;
+            display: none;
+        }
+        .chatbox.showChatBox {
+            opacity: 1;
+            display: block;
+        }
+        .chatbox-header {}
+
+
+
+       .chatbox-header h4 {
+            font-size: 20px;
+            color: #000;
+            margin: 0 0 10px 0;
+        }
+
+
+
+       .chatbox-header p {
+            font-size: 16px;
+            color: #000;
+            margin: 0 0 20px 0;
+        }
+
+         .close-btn {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+
+
+
+       .close-btn .btn {
+            border: 0;
+            background: transparent;
+            padding: 0;
+        }
+        .chatbox-body {}
+
+
+
+       .chatbox-body .form-control {
+            background: #f6f6f6;
+            border-color: #E0E0E0;
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #000;
+            border-radius: 5px;
+        }
+
+
+
+       .chatbox-body .btn {
+            width: 100%;
+            font-size: 18px;
+            font-weight: 600;
+            background: transparent linear-gradient(90deg, var(--unnamed-color-300b55) 0%, #9D0E71 100%) 0% 0% no-repeat padding-box;
+            background: transparent linear-gradient(90deg, #300B55 0%, #9D0E71 100%) 0% 0% no-repeat padding-box;
+            border-radius: 5px;
+        }
+        .modal-backdrop.show {
+            opacity: .8;
+        }
+        .btn-close {
+            right: 15px;
+            position: absolute;
+        }
+        .dropdown-username {
+            margin-left: 10px;
+        }
+
+
+
+       .dropdown-username p {
+            margin: 0;
+            font-size: 18px;
+            color: #6E5F49;
+            line-height: 18px;
+        }
+        .dropdown-username h5 {
+            margin: 0;
+            font-size: 20px;
+            color: #630C62;
+            line-height: 20px;
+            font-weight: 500;
+        }
+        .user-dropdown.dropdown .dropdown-toggle::after {
+            content: '';
+            display: block;
+            background: url('images/icon-caret-dropdown.svg');
+            width: 18px;
+            height: 18px;
+            border: 0;
+            background-position: center;
+            background-size: 32px;
+            margin-left: 10px;
+        }
+        @media (min-width: 991px) {
+            .collapse.dont-collapse-sm {
+                display: block;
+                height: auto !important;
+                visibility: visible;
+            }
+        }
+
 @media (max-width:1440px){
     .main-content .content-wrapper .home-page .announcement-section .icon-announcement.text-dark{
         max-width:180px;
@@ -4604,7 +4756,6 @@ ul.pagination {
 #socialMediaControls{
     width:100%;
 }
-
 .filter-section input[type="radio"] {
     display: block;
 }
@@ -4626,6 +4777,52 @@ ul.pagination {
 .filter-section .form-check,
 .filter-section .form-check label {
     cursor: pointer;
+}
+.filter-section .col-4{
+        width: 44.6667% !important;;
+}
+.filter-section .col-8{
+        width: 55.333333%!important;
+}
+.tab-header .filter-section .form-select select {
+    width:100%!important;
+}
+.home-page .calendar .eventDetail{
+    padding: 15px 15px 0 15px;
+}
+.home-page .calendar .DayPicker-NavButton{
+    color:#000;
+}
+.home-page .snap-share-section.mobile{
+    display: none;
+}
+.home-page .snap-share-section.desktop{
+    display: block;
+}
+@media (max-width: 991px){
+    .home-page .snap-share-section.desktop{
+        display: none;
+    }
+    .home-page .snap-share-section.mobile{
+        display: block;
+    }
+    .snap-share-section .img-with-text{
+        width:100%;
+    }
+}
+@media (max-width:576px){
+    .filter-section .row{
+        display:block;       
+    }
+    .filter-section .justify-content-around{
+        padding:15px 0px;
+    }
+    .filter-section .col-8{
+        width: 100%!important;
+    }
+    .filter-section .col-4{
+        width: 100%!important;
+    }
 }
 @media (min-width:1800px){
     .container{
