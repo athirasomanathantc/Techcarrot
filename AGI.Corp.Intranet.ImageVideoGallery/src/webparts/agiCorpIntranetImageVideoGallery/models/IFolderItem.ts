@@ -3,8 +3,13 @@ export interface IFolderItem {
     Name?: string;
     Count?: number;
     BusinessId?: number;
-    Business?:{
-        ID:number;
-        Title:string;
+    Business?: {
+        ID: number;
+        Title: string;
+    }
+    FunctionsId?: number;
+    Function?: {
+        ID: number;
+        Title: string;
     }
 }

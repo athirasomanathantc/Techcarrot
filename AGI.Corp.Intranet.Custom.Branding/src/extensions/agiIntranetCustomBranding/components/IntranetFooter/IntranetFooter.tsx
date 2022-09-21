@@ -119,8 +119,8 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
     }
 
     private validateEmailFormat(e) {
-           //let input = document.getElementById("subscribeFormEmail").value;
-           //let val = input.value.replace(/\s/g, "");
+        //let input = document.getElementById("subscribeFormEmail").value;
+        //let val = input.value.replace(/\s/g, "");
     }
 
     private handleEmailChange(e: any) {
@@ -406,7 +406,14 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                             const link = sl.Link && sl.Link.Url ? sl.Link.Url : '';
                                             const iconUrl = this.getImageUrl(sl.Icon);
                                             return (
-                                                <li><a href={link} target="_blank" data-interception="off"><img src={iconUrl} alt="" className="me-2" />{sl.Title}</a></li>
+                                                <li>
+                                                    <a href={link} target="_blank" data-interception="off">
+                                                        <span>
+                                                            <img src={iconUrl} alt="" className="me-2" />
+                                                        </span>
+                                                        {sl.Title}
+                                                    </a>
+                                                </li>
                                             )
                                         })
                                     }

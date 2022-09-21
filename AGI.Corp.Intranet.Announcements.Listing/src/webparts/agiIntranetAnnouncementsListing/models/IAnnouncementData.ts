@@ -6,9 +6,13 @@ export interface IAnnouncementData {
     AnnouncementImage: string;
     AnnouncementThumbnail: string;
     PublishedDate: Date;
-    Business:{
-        ID:number;
-        Title:String;
+    Functions: {
+        ID: number;
+        Title: String;
     };
-    Location:string;
+    Business: {
+        ID: number;
+        Title: String;
+    };
+    Location: string;
 }

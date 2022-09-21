@@ -22,18 +22,23 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
 
   constructor(props) {
     super(props),
-    sp.setup({
-      spfxContext: this.props.context
-    });
-      this.state = {
-        newsData: [],
-        filterData: [],
-        filterValues: [],
-        pageData: [],
-        totalPages: 0,
-        currentPage: 1,
-        pageSize:0
+      sp.setup({
+        spfxContext: this.props.context
+      });
+    this.state = {
+      newsData: [],
+      filterData: [],
+      filterValuesBusiness: [],
+      filterValuesFunctions: [],
+      pageData: [],
+      totalPages: 0,
+      currentPage: 1,
+      pageSize: 0,
+      showBusinessData: true,
+      selectedOption: {
+        ID: 0
       }
+    }
   }
 
   public async componentDidMount(): Promise<void> {
@@ -41,52 +46,61 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
   }
 
 
-  private handleFilter(e: any) {
-    const value = parseInt(e.target.value);
+  private handleFilter(value: number) {
     if (value == 0) {
       const result: INewsData[] = this.state.newsData;
       this.setState({
         filterData: result
-      },()=>{
+      }, () => {
         this.paging();
       });
 
     } else {
       const result = this.state.newsData.filter((obj) => {
-        return obj.Business.ID == value;
+        const itemId = this.state.showBusinessData ? obj.Business?.ID : obj.Functions?.ID;
+        return itemId == value;
       })
-      
+
       this.setState({
         filterData: result
-      },()=>{
+      }, () => {
         this.paging();
       });
-      
-      
-    }
 
+
+    }
+    this.setState({
+      selectedOption: {
+        ID: value
+      }
+    })
   }
 
   private async fetch() {
     await this.getBusinessItems();
+    await this.getFunctionItems();
     await this.getNewsItems();
   }
 
   private async getNewsItems(): Promise<void> {
-    const list='News';
+    const list = 'News';
     const counturl = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/ItemCount`;
-    const count = await this.props.context.spHttpClient.get(counturl,SPHttpClient.configurations.v1)
-    .then((resp:SPHttpClientResponse)=>{
-      return resp.json();
-    }).then((resp)=>{
-      return resp.value;
-    });
-    sp.web.lists.getByTitle(list).items.select("ID,Title,PublishedDate,Description,NewsThumbnail,NewsImage,Business/ID,Business/Title").orderBy("PublishedDate",false)
-    .expand("Business").top(count)()
-    //this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
-      .then((response:INewsData[]) => {
+    const count = await this.props.context.spHttpClient.get(counturl, SPHttpClient.configurations.v1)
+      .then((resp: SPHttpClientResponse) => {
+        return resp.json();
+      }).then((resp) => {
+        return resp.value;
+      });
+
+    sp.web.lists
+      .getByTitle(list).items
+      .select("ID,Title,PublishedDate,Description,NewsThumbnail,NewsImage,Business/ID,Business/Title,Functions/ID,Functions/Title")
+      .orderBy("PublishedDate", false)
+      .expand("Business,Functions").top(count)()
+      //this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+      .then((response: INewsData[]) => {
         const items: INewsData[] = response;
-        console.log('Data',items);
+        console.log('Data', items);
         const pageCount: number = Math.ceil(items.length / this.state.pageSize);
 
         this.setState({
@@ -114,23 +128,23 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
       })
       .then((response) => {
         const items = response.value;
-       console.log('choices', items);
-       this.setState({
-        filterValues:items
-       });
-       
-    })
-    .catch((error) => {
-      console.log('Error:', error);
-    })
-    if (window.innerWidth<=767){
+        console.log('choices', items);
+        this.setState({
+          filterValuesBusiness: items
+        });
+
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
+    if (window.innerWidth <= 767) {
       this.setState({
-        pageSize:6
+        pageSize: 6
       });
 
-    }else{
+    } else {
       this.setState({
-        pageSize:12
+        pageSize: 12
       });
 
     }
@@ -143,6 +157,36 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
     //     })
     //   }
 
+  }
+
+  private async getFunctionItems(): Promise<void> {
+    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('Functions')/items`;
+    this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+      .then((response: SPHttpClientResponse) => {
+        return response.json();
+      })
+      .then((response) => {
+        const items = response.value;
+        console.log('choices', items);
+        this.setState({
+          filterValuesFunctions: items
+        });
+
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
+    if (window.innerWidth <= 767) {
+      this.setState({
+        pageSize: 6
+      });
+
+    } else {
+      this.setState({
+        pageSize: 12
+      });
+
+    }
   }
 
   private paging() {
@@ -179,44 +223,80 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
     this.setState({
       pageData,
       currentPage: page
-    },()=>{
+    }, () => {
       this.scrollToTop();
 
     });
   }
 
+  private onSelectFilterBy(filterBy: string) {
+    if (filterBy === "Business") {
+      this.setState({
+        showBusinessData: true,
+        selectedOption: {
+          ID: 0
+        }
+      })
+    }
+    else {
+      this.setState({
+        showBusinessData: false,
+        selectedOption: {
+          ID: 0
+        }
+      })
+    }
+    this.handleFilter(0);
+  }
+
 
   public render(): React.ReactElement<IAgiCorpIntranetNewsProps> {
 
+    const filterValues = this.state.showBusinessData ? this.state.filterValuesBusiness : this.state.filterValuesFunctions;
 
-    console.log('page count',  this.state.totalPages);
     return (
       <div>
-        <div className={'main-content' } id='newsTop'>
+        <div className={'main-content'} id='newsTop'>
           <div className={'content-wrapper'}>
             <div className={'container'}>
-              <div className={'main-header-section' }>
+              <div className={'main-header-section'}>
                 <div className={'row'} >
                   <div className={'col-12 col-md-6 heading-section'} >
                     <h3>Latest News</h3>
                   </div>
                   <div className={'col-12 col-md-6 filter-section text-end'}>
-                    <div className={'form-select custom-select '}>
-                      <select onChange={(e) => this.handleFilter(e)}>
+                    <div className="row">
+                      <div className="col-4 d-flex align-items-center justify-content-around">
+                        <div className="form-check">
+                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business') }} />
+                          <label className="form-check-label" htmlFor="flexRadioDefault1">
+                            Business
+                          </label>
+                        </div>
+                        <div className="form-check">
+                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
+                          <label className="form-check-label" htmlFor="flexRadioDefault2">
+                            Function
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-8">
+                        <div className={'form-select custom-select w-100 '}>
+                          <select onChange={(e) => this.handleFilter(parseInt(e.target.value))}>
 
-                        <option value="0">Filter By</option>
-                        {
-                          this.state.filterValues.map((business) => {
-                            return (
-                              <option value={business.ID}>{business.Title}</option>
-                            )
-                          })
-                        }
+                            <option value="0">Filter By</option>
+                            {
+                              filterValues.map((option) => {
+                                return (
+                                  <option selected={this.state.selectedOption.ID == option.ID} value={option.ID}>{option.Title}</option>
+                                )
+                              })
+                            }
 
-                      </select>
-
+                          </select>
+                        </div>
+                      </div>
                     </div>
-
                   </div>
 
                 </div>
@@ -228,42 +308,43 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                     {
                       this.state.pageData.length > 0 ?
 
-                      this.state.pageData.map((item) => {
-                        let imageJSON = { serverRelativeUrl: "" };
-                        if (item.NewsThumbnail != null) {
-                          imageJSON = JSON.parse(item.NewsThumbnail);
-                        }
+                        this.state.pageData.map((item) => {
+                          let imageJSON = { serverRelativeUrl: "" };
+                          if (item.NewsThumbnail != null) {
+                            imageJSON = JSON.parse(item.NewsThumbnail);
+                          }
 
-                        return (
-                          <div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
-                            <div className='card news-card'>
-                              <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Image" />
-                              <div className="card-body d-flex flex-column">
-                              <div className={'category'}>
-                              <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i>{item.Business.Title}</span>
-                                </div>
+                          const category = this.state.showBusinessData ? item.Business.Title : item.Functions.Title;
+                          return (
+                            <div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
+                              <div className='card news-card'>
+                                <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Image" />
+                                <div className="card-body d-flex flex-column">
+                                  <div className={'category'}>
+                                    <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i>{category}</span>
+                                  </div>
 
-                                <div className={'mb-2 mt-2 card-content-header'}>
-                                  <h5 className="card-title">{item.Title}</h5>
+                                  <div className={'mb-2 mt-2 card-content-header'}>
+                                    <h5 className="card-title">{item.Title}</h5>
+                                  </div>
+                                  <div className={'date'}>
+                                    <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i>{moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
+                                  </div>
+                                  <p className={'card-text mt-2'}>{item.Description}</p>
+                                  <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">Read more</a>
                                 </div>
-                                <div className={'date'}>
-                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i>{moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
-                                </div>
-                                <p className={'card-text mt-2'}>{item.Description}</p>
-                                <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">Read more</a>
                               </div>
                             </div>
-                          </div>
-                        )
-                      })
-                      :
-                      <div className={'invalidTxt'}>
-                        
+                          )
+                        })
+                        :
+                        <div className={'invalidTxt'}>
+
                           NO NEWS
-                        
-                      </div>
+
+                        </div>
                     }
-                    
+
 
                   </div>
 
@@ -271,19 +352,19 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
 
               </article>
               <div className={'pagination-wrapper'} style={{ display: this.state.totalPages > 0 ? 'block' : 'none' }} >
-              {/* <Pagination
+                {/* <Pagination
                   currentPage={this.state.currentPage}
                   totalPages={this.state.totalPages}
                   onChange={(page) => this._getPage(page)}
                   limiter={5}
                 /> */}
                 <Paging currentPage={this.state.currentPage}
-                totalItems={this.state.filterData.length}
-                itemsCountPerPage={this.state.pageSize}
-                onPageUpdate={(page) => this._getPage(page)} 
+                  totalItems={this.state.filterData.length}
+                  itemsCountPerPage={this.state.pageSize}
+                  onPageUpdate={(page) => this._getPage(page)}
                 />
-                
-                
+
+
               </div>
             </div>
           </div>

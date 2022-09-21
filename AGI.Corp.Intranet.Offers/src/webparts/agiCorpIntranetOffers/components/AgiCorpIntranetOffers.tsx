@@ -15,12 +15,16 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
     this.state = {
       offerData: [],
       filterData: [],
-      filterValues: [],
+      filterValuesBusiness: [],
+      filterValuesFunctions: [],
       pageData: [],
       totalPages: 0,
       currentPage: 1,
-      pageSize: 0
-
+      pageSize: 0,
+      showBusinessData: true,
+      selectedOption: {
+        ID: 0
+      }
 
     }
   }
@@ -30,7 +34,7 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
   }
   private async fetch() {
     await this.getBusinessItems();
-
+    await this.getFunctionItems();
     await this.getOffer();
 
   }
@@ -42,10 +46,8 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
         console.log(response);
 
         this.setState({
-          filterValues: response
-        }, () => {
-          console.log("filter", this.state.filterValues);
-        });
+          filterValuesBusiness: response
+        }, () => { });
 
       })
       .catch((error) => {
@@ -73,6 +75,30 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
 
   }
 
+  private async getFunctionItems(): Promise<void> {
+    const listName = "Functions";
+    sp.web.lists.getByTitle(listName).items.select('ID,Title').get()
+      .then((response: []) => {
+        this.setState({
+          filterValuesFunctions: response
+        }, () => { });
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
+    if (window.innerWidth <= 767) {
+      this.setState({
+        pageSize: 6
+      });
+
+    } else {
+      this.setState({
+        pageSize: 12
+      });
+
+    }
+  }
+
   private paging() {
 
     const pageCount: number = Math.ceil(this.state.filterData.length / this.state.pageSize);
@@ -90,8 +116,7 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
   }
 
 
-  private handleFilter(e: any) {
-    const value = parseInt(e.target.value);
+  private handleFilter(value: number) {
     if (value == 0) {
       const result: IOfferData[] = this.state.offerData;
       this.setState({
@@ -102,7 +127,8 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
 
     } else {
       const result = this.state.offerData.filter((obj) => {
-        return obj.Business.ID == value;
+        const itemId = this.state.showBusinessData ? obj.Business?.ID : obj.Functions?.ID;
+        return itemId == value;
       })
 
       this.setState({
@@ -114,14 +140,20 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
 
     }
 
-
+    this.setState({
+      selectedOption: {
+        ID: value
+      }
+    })
 
   }
 
   private async getOffer(): Promise<void> {
     const listName = "Offers";
-    sp.web.lists.getByTitle(listName).items.select('ID,Title,Description,OfferThumbnail,OfferImage,Business/ID,Business/Title')
-      .expand('Business').getAll().then((resp: IOfferData[]) => {
+    sp.web.lists
+      .getByTitle(listName).items
+      .select('ID,Title,Description,OfferThumbnail,OfferImage,Business/ID,Business/Title,Functions/ID,Functions/Title')
+      .expand('Business,Functions').getAll().then((resp: IOfferData[]) => {
         const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
         this.setState({
           offerData: resp,
@@ -162,8 +194,30 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
 
   }
 
+  private onSelectFilterBy(filterBy: string) {
+    if (filterBy === "Business") {
+      this.setState({
+        showBusinessData: true,
+        selectedOption: {
+          ID: 0
+        }
+      })
+    }
+    else {
+      this.setState({
+        showBusinessData: false,
+        selectedOption: {
+          ID: 0
+        }
+      })
+    }
+    this.handleFilter(0);
+  }
+
 
   public render(): React.ReactElement<IAgiCorpIntranetOffersProps> {
+
+    const filterValues = this.state.showBusinessData ? this.state.filterValuesBusiness : this.state.filterValuesFunctions;
 
     return (
       <div className={'main-content'} id="offerTop">
@@ -176,26 +230,38 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
                   <h3>Rewards</h3>
                 </div>
                 <div className={'col-12 col-md-6 filter-section text-end'}>
-                  <div className={'form-select custom-select '}>
-                    <select onChange={(e) => this.handleFilter(e)}>
-
-                      <option value="0">Filter By</option>
-                      {
-                        this.state.filterValues.map((business) => {
-                          return (
-                            <option value={business.ID}>{business.Title}</option>
-                          )
-                        })
-                      }
-
-                    </select>
-
+                  <div className="row">
+                    <div className="col-4 d-flex align-items-center justify-content-around">
+                      <div className="form-check">
+                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business') }} />
+                        <label className="form-check-label" htmlFor="flexRadioDefault1">
+                          Business
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
+                        <label className="form-check-label" htmlFor="flexRadioDefault2">
+                          Function
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-8">
+                      <div className={'form-select custom-select w-100 '}>
+                        <select onChange={(e) => this.handleFilter(parseInt(e.target.value))}>
+                          <option value="0">Filter By</option>
+                          {
+                            filterValues.map((option) => {
+                              return (
+                                <option selected={this.state.selectedOption.ID == option.ID} value={option.ID}>{option.Title}</option>
+                              )
+                            })
+                          }
+                        </select>
+                      </div>
+                    </div>
                   </div>
-
                 </div>
-
               </div>
-
             </div>
 
             <article className={'row gx-5 mb-5'}>
@@ -212,20 +278,20 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
                           <div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
                             <div className={'card news-card'}>
                               <a href={`${this.props.siteURL}/SitePages/Reward Details.aspx?rewardID=${item.ID}`}>
-                              <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Card Image" />
+                                <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Card Image" />
                               </a>
-                              
+
                               <div className={'card-body d-flex flex-column'}>
                                 <div className={'mb-3 card-content-header'}>
-                                <a href={`${this.props.siteURL}/SitePages/Reward Details.aspx?rewardID=${item.ID}`}>
-                                  <h5 className={'card-title'}>{item.Title}</h5>
+                                  <a href={`${this.props.siteURL}/SitePages/Reward Details.aspx?rewardID=${item.ID}`}>
+                                    <h5 className={'card-title'}>{item.Title}</h5>
                                   </a>
                                 </div>
                                 <a href={`${this.props.siteURL}/SitePages/Reward Details.aspx?rewardID=${item.ID}`}>
 
-                                <p className={'card-text'}>{item.Description}</p>
+                                  <p className={'card-text'}>{item.Description}</p>
                                 </a>
-                                
+
                                 <a href={`${this.props.siteURL}/SitePages/Rewards/Reward Details.aspx?rewardID=${item.ID}`} className={'read-more  align-self-start'}>Read more</a>
                                 {/* <!--<a href='{'} className={'btn read-more mt-auto align-self-start'}>View Full Article</a>--> */}
                               </div>

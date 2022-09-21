@@ -171,6 +171,28 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
 
     }
 
+    renderDay(day, modifiers) {
+        const date = day.getDate();
+        if (date === new Date().getDate()) {
+            return (
+                <div className="date-wrap">
+                    <span>{date}</span>
+                    <span>
+                        {moment(date)
+                            .format('dddd')
+                            .substring(0, 3)
+                            .toUpperCase()}
+                    </span>
+                </div>
+            );
+        }
+        else {
+            return (
+                <div>{date}</div>
+            );
+        }
+    }
+
     handleMonthChange(month) {
         //console.log('month changed');
         //console.log(month);
@@ -244,6 +266,7 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
                                         onDayClick={(day, modifiers, e) => this.handleDayClick(day, modifiers, e)}
                                         onMonthChange={(month) => this.handleMonthChange(month)}
                                         weekdaysShort={WEEK_DAYS}
+                                        renderDay={(day, modifiers) => this.renderDay(day, modifiers)}
                                     />
                                     <div className="legend calendar-legend">
                                         <span>Today</span>

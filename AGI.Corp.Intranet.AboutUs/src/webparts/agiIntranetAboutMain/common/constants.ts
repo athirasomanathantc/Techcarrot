@@ -53,7 +53,7 @@ export const TEXT_ABOUT_PURPOSE_CONTENT = 'Our Purpose';
 
 export const TEXT_ABOUT_CULTURE_NAVIGATION = 'Our Culture';
 
-export const TEXT_ABOUT_VISION_CONTENT = 'OUR VISION';
+export const TEXT_ABOUT_VISION_CONTENT = 'Our Vision';
 
 export const TEXT_ABOUT_LEADERSHIP_TEAM_CONTENT = 'Slide';
 

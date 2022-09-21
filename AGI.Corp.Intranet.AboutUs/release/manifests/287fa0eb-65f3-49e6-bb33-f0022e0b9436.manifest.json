@@ -1,0 +1,88 @@
+{
+  "id": "287fa0eb-65f3-49e6-bb33-f0022e0b9436",
+  "alias": "AgiIntranetAboutMainWebPart",
+  "componentType": "WebPart",
+  "version": "0.0.1",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "agiIntranetAboutMain"
+      },
+      "description": {
+        "default": "agiIntranetAboutMain description"
+      },
+      "officeFabricIconFontName": "Page",
+      "properties": {
+        "description": "agiIntranetAboutMain"
+      }
+    }
+  ],
+  "loaderConfig": {
+    "internalModuleBaseUrls": [
+      "<!-- PATH TO CDN -->"
+    ],
+    "entryModuleId": "agi-intranet-about-main-web-part",
+    "scriptResources": {
+      "agi-intranet-about-main-web-part": {
+        "type": "path",
+        "path": "agi-intranet-about-main-web-part_22b6211c662cdf952137.js"
+      },
+      "@microsoft/sp-property-pane": {
+        "type": "component",
+        "id": "f9e737b7-f0df-4597-ba8c-3060f82380db",
+        "version": "1.15.2"
+      },
+      "jqueryui": {
+        "type": "path",
+        "path": "jqueryui_dfe3ecf96456f8cafc12a7f48de6b8c8.js"
+      },
+      "AGIAbout": {
+        "type": "path",
+        "path": "AGIAbout_ccbca0ad70d64710e3aa835e4298326b.js",
+        "globalName": "AGIAbout"
+      },
+      "@microsoft/sp-loader": {
+        "type": "component",
+        "id": "1c6c9123-7aac-41f3-a376-3caea41ed83f",
+        "version": "1.15.2"
+      },
+      "@microsoft/sp-core-library": {
+        "type": "component",
+        "id": "7263c7d0-1d6a-45ec-8d85-d4d1d234171b",
+        "version": "1.15.2"
+      },
+      "@microsoft/sp-webpart-base": {
+        "type": "component",
+        "id": "974a7777-0990-4136-8fa6-95d80114c2e0",
+        "version": "1.15.2"
+      },
+      "react": {
+        "type": "component",
+        "id": "0d910c1c-13b9-4e1c-9aa4-b008c5e42d7d",
+        "version": "16.13.1"
+      },
+      "react-dom": {
+        "type": "component",
+        "id": "aa0a46ec-1505-43cd-a44a-93f3a5aa460a",
+        "version": "16.13.1"
+      },
+      "AgiIntranetAboutMainWebPartStrings": {
+        "type": "path",
+        "path": "AgiIntranetAboutMainWebPartStrings_en-us_536e65149b0acf4d52c0043073b9fc59.js"
+      },
+      "jquery": {
+        "type": "path",
+        "path": "jquery_00727d1d5d9c90f7de826f1a4a9cc632.js"
+      }
+    }
+  }
+}

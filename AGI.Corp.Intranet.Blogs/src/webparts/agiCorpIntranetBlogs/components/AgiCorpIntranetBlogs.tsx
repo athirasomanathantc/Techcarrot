@@ -21,13 +21,17 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
     this.state = {
       blogData: [],
       filterData: [],
-      filterValues: [],
+      filterValuesBusiness: [],
+      filterValuesFunctions: [],
       pageData: [],
       totalPages: 0,
       currentPage: 1,
       pageSize: 0,
-      isDataLoaded: false
-
+      isDataLoaded: false,
+      showBusinessData: true,
+      selectedOption: {
+        ID: 0
+      }
 
     }
   }
@@ -37,7 +41,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   }
   private async fetch() {
     await this.getBusinessItems();
-
+    await this.getFunctionItems();
     await this.getblog();
 
   }
@@ -46,12 +50,8 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
     sp.web.lists.getByTitle(listName).items.select('ID,Title').get()
 
       .then((response: []) => {
-        console.log(response);
-
         this.setState({
-          filterValues: response
-        }, () => {
-          console.log("filter", this.state.filterValues);
+          filterValuesBusiness: response
         });
 
       })
@@ -80,6 +80,30 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
 
   }
 
+  private async getFunctionItems(): Promise<void> {
+    const listName = "Functions";
+    sp.web.lists.getByTitle(listName).items.select('ID,Title').get()
+      .then((response: []) => {
+        this.setState({
+          filterValuesFunctions: response
+        }, () => { });
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
+    if (window.innerWidth <= 767) {
+      this.setState({
+        pageSize: 6
+      });
+
+    } else {
+      this.setState({
+        pageSize: 12
+      });
+
+    }
+  }
+
   private paging() {
 
     const pageCount: number = Math.ceil(this.state.filterData.length / this.state.pageSize);
@@ -97,8 +121,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   }
 
 
-  private handleFilter(e: any) {
-    const value = parseInt(e.target.value);
+  private handleFilter(value: number) {
     if (value == 0) {
       const result: IBlogData[] = this.state.blogData;
       this.setState({
@@ -109,7 +132,8 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
 
     } else {
       const result = this.state.blogData.filter((obj) => {
-        return obj.Business.ID == value;
+        const itemId = this.state.showBusinessData ? obj.Business?.ID : obj.Functions?.ID;
+        return itemId == value;
       })
 
       this.setState({
@@ -120,7 +144,11 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
 
 
     }
-
+    this.setState({
+      selectedOption: {
+        ID: value
+      }
+    })
 
 
   }
@@ -128,8 +156,12 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   private async getblog(): Promise<void> {
 
     const listName = "Blogs";
-    sp.web.lists.getByTitle(listName).items.select('ID,Title,PublishedDate,BlogThumbnail,BlogImage,Author/ID,Author/Title,Business/ID,Business/Title').orderBy('PublishedDate',false)
-      .expand('Author,Business').top(5000)().then((resp: IBlogData[]) => {
+    sp.web.lists
+      .getByTitle(listName).items
+      .select('ID,Title,PublishedDate,BlogThumbnail,BlogImage,Author/ID,Author/Title,Business/ID,Business/Title,Functions/ID,Functions/Title')
+      .orderBy('PublishedDate', false)
+      .expand('Author,Business,Functions')
+      .top(5000)().then((resp: IBlogData[]) => {
         const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
         console.log(resp.length);
         setTimeout(() => {
@@ -176,9 +208,30 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
 
   }
 
+  private onSelectFilterBy(filterBy: string) {
+    if (filterBy === "Business") {
+      this.setState({
+        showBusinessData: true,
+        selectedOption: {
+          ID: 0
+        }
+      })
+    }
+    else {
+      this.setState({
+        showBusinessData: false,
+        selectedOption: {
+          ID: 0
+        }
+      })
+    }
+    this.handleFilter(0);
+  }
+
   public render(): React.ReactElement<IAgiCorpIntranetBlogsProps> {
 
-    debugger;
+    const filterValues = this.state.showBusinessData ? this.state.filterValuesBusiness : this.state.filterValuesFunctions;
+
     return (
       <div className={'main-content'} id='blogTop'>
         <div className={'content-wrapper'}>
@@ -190,22 +243,38 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                   <h3>Blogs</h3>
                 </div>
                 <div className={'col-12 col-md-6 filter-section text-end'}>
-                  <div className={'form-select custom-select '}>
-                    <select onChange={(e) => this.handleFilter(e)}>
+                  <div className="row">
+                    <div className="col-4 d-flex align-items-center justify-content-around">
+                      <div className="form-check">
+                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business') }} />
+                        <label className="form-check-label" htmlFor="flexRadioDefault1">
+                          Business
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
+                        <label className="form-check-label" htmlFor="flexRadioDefault2">
+                          Function
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-8">
+                      <div className={'form-select custom-select w-100 '}>
+                        <select onChange={(e) => this.handleFilter(parseInt(e.target.value))}>
 
-                      <option value="0">Filter By</option>
-                      {
-                        this.state.filterValues.map((business) => {
-                          return (
-                            <option value={business.ID}>{business.Title}</option>
-                          )
-                        })
-                      }
+                          <option value="0">Filter By</option>
+                          {
+                            filterValues.map((option) => {
+                              return (
+                                <option selected={this.state.selectedOption.ID == option.ID} value={option.ID}>{option.Title}</option>
+                              )
+                            })
+                          }
 
-                    </select>
-
+                        </select>
+                      </div>
+                    </div>
                   </div>
-
                 </div>
 
               </div>
@@ -223,6 +292,9 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                         if (item.BlogThumbnail != null) {
                           imageJSON = JSON.parse(item.BlogThumbnail);
                         }
+
+                        const category = this.state.showBusinessData ? item.Business.Title : item.Functions.Title;
+
                         return (
 
                           < div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
@@ -232,7 +304,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                               </a>
                               <div className={'card-body d-flex flex-column'}>
                                 <div className={'category'}>
-                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {item.Business.Title}</span>
+                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {category}</span>
                                 </div>
                                 <a href={`${this.props.siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">
                                   <div className={'mb-2 mt-2 card-content-header'}>

@@ -25,7 +25,8 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
       currentPage: 1,
       totalPage: 0,
       pageData: [],
-      filterValues: [],
+      filterValuesBusiness: [],
+      filterValuesFunctions: [],
       selectedTab: "",
       filterData: [],
       ongoingEvents: [],
@@ -33,7 +34,11 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
       pastEvents: [],
       selectedTabValues: [],
       selectedFilter: 0,
-      pageSize:0
+      pageSize: 0,
+      showBusinessData: true,
+      selectedOption: {
+        ID: 0
+      }
     }
   }
 
@@ -43,6 +48,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
   private async fetch() {
     await this.getBusinessItems();
+    await this.getFunctionItems();
     await this.getNewsItems();
   }
 
@@ -57,7 +63,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
         console.log('choices', items);
         this.setState({
-          filterValues: items,
+          filterValuesBusiness: items,
           selectedFilter: 0
         });
 
@@ -65,30 +71,30 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
       .catch((error) => {
         console.log('Error:', error);
       })
-      //console.log('screen width',window.innerWidth);
-      if (window.innerWidth<=767){
-        this.setState({
-          pageSize:6
-        });
+    //console.log('screen width',window.innerWidth);
+    if (window.innerWidth <= 767) {
+      this.setState({
+        pageSize: 6
+      });
 
-      }else{
-        this.setState({
-          pageSize:12
-        });
+    } else {
+      this.setState({
+        pageSize: 12
+      });
 
-      }
+    }
 
-      /*if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
-        //document.write("mobile");
-        this.setState({
-          pageSize:6
-        });
-      }else{
-        //document.write("not mobile");
-        this.setState({
-          pageSize:12
-        });
-      }*/
+    /*if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+      //document.write("mobile");
+      this.setState({
+        pageSize:6
+      });
+    }else{
+      //document.write("not mobile");
+      this.setState({
+        pageSize:12
+      });
+    }*/
     // const select= this.getQueryStringValue('tab');
     //     console.log('current tab', select);
     //     //const selectedTab = select || this.state.selectedTab;
@@ -100,17 +106,50 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
   }
 
-  private async getNewsItems(): Promise<void> {
-    const list='EventDetails';
-    const counturl = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/ItemCount`;
-    const count = await this.props.context.spHttpClient.get(counturl,SPHttpClient.configurations.v1)
-    .then((resp:SPHttpClientResponse)=>{
-      return resp.json();
-    }).then((resp)=>{
-      return resp.value;
-    });
+  private async getFunctionItems(): Promise<void> {
+    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('Functions')/items`;
+    this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+      .then((response: SPHttpClientResponse) => {
+        return response.json();
+      })
+      .then((response) => {
+        const items = response.value;
 
-    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=ID,Title,Description,StartDate,EndDate,EventThumbnail,Country,City,Business/ID,Business/Title&$expand=Business&$top=${count}`;
+        this.setState({
+          filterValuesFunctions: items,
+          selectedFilter: 0
+        });
+
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
+
+    if (window.innerWidth <= 767) {
+      this.setState({
+        pageSize: 6
+      });
+
+    } else {
+      this.setState({
+        pageSize: 12
+      });
+
+    }
+
+  }
+
+  private async getNewsItems(): Promise<void> {
+    const list = 'EventDetails';
+    const counturl = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/ItemCount`;
+    const count = await this.props.context.spHttpClient.get(counturl, SPHttpClient.configurations.v1)
+      .then((resp: SPHttpClientResponse) => {
+        return resp.json();
+      }).then((resp) => {
+        return resp.value;
+      });
+
+    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=ID,Title,Description,StartDate,EndDate,EventThumbnail,Country,City,Business/ID,Business/Title,Functions/ID,Functions/Title&$expand=Business,Functions&$top=${count}`;
     this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
       .then((response: SPHttpClientResponse) => {
         return response.json();
@@ -186,10 +225,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
 
   }
-  private handleFilter(e: any) {
-    const value = parseInt(e.target.value);
-
-
+  private handleFilter(value: number) {
     if (value == 0) {
       const result: IEventData[] = this.state.selectedTabValues;
       console.log('filter', result);
@@ -202,7 +238,8 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
     } else {
       const result = this.state.selectedTabValues.filter((obj) => {
-        return obj.Business && obj.Business.ID == value;
+        const itemId = this.state.showBusinessData ? obj.Business?.ID : obj.Functions?.ID;
+        return itemId == value;
       })
 
       this.setState({
@@ -214,6 +251,12 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
 
     }
+
+    this.setState({
+      selectedOption: {
+        ID: value
+      }
+    })
   }
 
   private handleTab(e: any) {
@@ -350,11 +393,33 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
   //   return value;
   // }
 
+  private onSelectFilterBy(filterBy: string) {
+    if (filterBy === "Business") {
+      this.setState({
+        showBusinessData: true,
+        selectedOption: {
+          ID: 0
+        }
+      })
+    }
+    else {
+      this.setState({
+        showBusinessData: false,
+        selectedOption: {
+          ID: 0
+        }
+      })
+    }
+    this.handleFilter(0);
+  }
 
   public render(): React.ReactElement<IAgiIntranetEventsProps> {
     const tabs = TABS;
     //console.log('selected tab', this.state.selectedTab);
     //console.log(this.state.pageData);
+
+    const filterValues = this.state.showBusinessData ? this.state.filterValuesBusiness : this.state.filterValuesFunctions;
+
     return (
       <div className={'main-content'} id='eventsTab'>
         <div className={'content-wrapper'}>
@@ -394,17 +459,35 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
                     </select>
                   </div>
                   <div className={'col-12 col-md-6 filter-section text-end'}>
-                    <div className={'form-select custom-select '}>
-                      <select onChange={(e) => this.handleFilter(e)}>
-                        <option value='0'>Filter By</option>
-                        {
-                          this.state.filterValues.map((business) => {
-                            return (
-                              <option value={business.ID}>{business.Title}</option>
-                            )
-                          })
-                        }
-                      </select>
+                    <div className="row">
+                      <div className="col-4 d-flex align-items-center justify-content-around">
+                        <div className="form-check">
+                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business') }} />
+                          <label className="form-check-label" htmlFor="flexRadioDefault1">
+                            Business
+                          </label>
+                        </div>
+                        <div className="form-check">
+                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
+                          <label className="form-check-label" htmlFor="flexRadioDefault2">
+                            Function
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-8">
+                        <div className={'form-select custom-select w-100 '}>
+                          <select onChange={(e) => this.handleFilter(parseInt(e.target.value))}>
+                            <option value='0'>Filter By</option>
+                            {
+                              filterValues.map((option) => {
+                                return (
+                                  <option selected={this.state.selectedOption.ID == option.ID} value={option.ID}>{option.Title}</option>
+                                )
+                              })
+                            }
+                          </select>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -413,64 +496,64 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
                 <div className={'tab-pane fade show active'}>
                   <div className={'row'}>
                     {
-                      this.state.pageData.length>0?
-                      this.state.pageData.map((item) => {
-                        let imageJSON = { serverRelativeUrl: "" }
-                        if (item.EventThumbnail != null) {
-                          imageJSON = JSON.parse(item.EventThumbnail);
-                        }
-                        //console.log("END DATE " + item.EndDate);
-                        return (
+                      this.state.pageData.length > 0 ?
+                        this.state.pageData.map((item) => {
+                          let imageJSON = { serverRelativeUrl: "" }
+                          if (item.EventThumbnail != null) {
+                            imageJSON = JSON.parse(item.EventThumbnail);
+                          }
+                          //console.log("END DATE " + item.EndDate);
+                          return (
 
-                          <div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
-                            <div className={'card news-card'}>
-                              <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Card Image" />
-                              <div className={'card-body d-flex flex-column'}>
-                                <div className={'event-date-wrapper'}>
-                                  <div className={'event-date'} style={{ display: item.StartDate === null ? "none" : "display" }}>
-                                    <p className={'notification-date'} >
-                                      {moment(item.StartDate).format('DD')}
-                                    </p>
-                                    <p className={'notification-month'} >
-                                      {moment(item.StartDate).format('MMM')}
-                                    </p>
+                            <div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
+                              <div className={'card news-card'}>
+                                <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Card Image" />
+                                <div className={'card-body d-flex flex-column'}>
+                                  <div className={'event-date-wrapper'}>
+                                    <div className={'event-date'} style={{ display: item.StartDate === null ? "none" : "display" }}>
+                                      <p className={'notification-date'} >
+                                        {moment(item.StartDate).format('DD')}
+                                      </p>
+                                      <p className={'notification-month'} >
+                                        {moment(item.StartDate).format('MMM')}
+                                      </p>
+                                    </div>
+                                    {
+                                      item.EndDate &&
+                                      <>
+                                        <div className={'divider'} style={{ display: item.StartDate == item.EndDate ? "none" : "display" }}></div>
+                                        <div className={'event-date'} style={{ display: item.StartDate == item.EndDate ? "none" : "display" }} >
+                                          <p className={'notification-date'} >
+                                            {moment(item.EndDate).format('DD')}
+                                          </p>
+                                          <p className={'notification-month'} >
+                                            {moment(item.EndDate).format('MMM')}
+                                          </p>
+                                        </div>
+                                      </>
+                                    }
                                   </div>
-                                  {
-                                    item.EndDate &&
-                                    <>
-                                      <div className={'divider'} style={{ display: item.StartDate == item.EndDate ? "none" : "display" }}></div>
-                                      <div className={'event-date'} style={{ display: item.StartDate == item.EndDate ? "none" : "display" }} >
-                                        <p className={'notification-date'} >
-                                          {moment(item.EndDate).format('DD')}
-                                        </p>
-                                        <p className={'notification-month'} >
-                                          {moment(item.EndDate).format('MMM')}
-                                        </p>
-                                      </div>
-                                    </>
-                                  }
-                                </div>
 
-                                <div className={'mb-3 card-content-header'}>
-                                  <h5 className={'card-title'}>{item.Title}</h5>
-                                </div>
-                                <div className={'news-details'}>
-                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/icon-location.png`} alt="" /></i> {item.City},{item.Country}</span>
+                                  <div className={'mb-3 card-content-header'}>
+                                    <h5 className={'card-title'}>{item.Title}</h5>
+                                  </div>
+                                  <div className={'news-details'}>
+                                    <span><i><img src={`${this.props.siteUrl}/Assets/icons/icon-location.png`} alt="" /></i> {item.City},{item.Country}</span>
 
+                                  </div>
+                                  <p className={'card-text'}>{item.Description}</p>
+                                  <a href={`${this.props.siteUrl}/SitePages/News/Events/Event Details.aspx?eventID=${item.ID}&tab=${this.state.selectedTab}`}
+                                    className={'news-read-more  align-self-start'} data-interception="off">Read more</a>
                                 </div>
-                                <p className={'card-text'}>{item.Description}</p>
-                                <a href={`${this.props.siteUrl}/SitePages/News/Events/Event Details.aspx?eventID=${item.ID}&tab=${this.state.selectedTab}`}
-                                  className={'news-read-more  align-self-start'} data-interception="off">Read more</a>
                               </div>
                             </div>
-                          </div>
-                          
-                        )
-                      })
-                      :
-                          <div className={'invalidTxt'}>
+
+                          )
+                        })
+                        :
+                        <div className={'invalidTxt'}>
                           <p>NO EVENTS</p>
-                          </div>
+                        </div>
 
                     }
                   </div>
