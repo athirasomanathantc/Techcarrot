@@ -172,34 +172,30 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   }
 
   private async getblog(): Promise<void> {
-
-    const listName = "Blogs";
-    sp.web.lists
-      .getByTitle(listName).items
-      .select('ID,Title,PublishedDate,BlogThumbnail,BlogImage,Author/ID,Author/Title,Business/ID,Business/Title,Functions/ID,Functions/Title')
-      .orderBy('PublishedDate', false)
-      .expand('Author,Business,Functions')
-      .top(5000)().then((resp: IBlogData[]) => {
-        const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
-        console.log(resp.length);
-        setTimeout(() => {
+    return new Promise(async resolve => {
+      const listName = "Blogs";
+      await sp.web.lists
+        .getByTitle(listName).items
+        .select('ID,Title,PublishedDate,BlogThumbnail,BlogImage,Author/ID,Author/Title,Business/ID,Business/Title,Functions/ID,Functions/Title')
+        .orderBy('PublishedDate', false)
+        .expand('Author,Business,Functions')
+        .top(5000)().then((resp: IBlogData[]) => {
+          const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
+          console.log(resp.length);
           this.setState({
             blogData: resp,
             filterData: resp,
             pageData: resp.slice(0, this.state.pageSize),
             totalPages: pageCount,
             isDataLoaded: true
-
-          }, () => {
-            //console.log(this.state.blogData)
           });
 
-        }, 3000);
-
-      }).catch((error) => {
-        console.log('error in fetching news items', error);
-      })
-    this.paging();
+        }).catch((error) => {
+          console.log('error in fetching news items', error);
+        })
+      this.paging();
+      resolve();
+    });
   }
   private _getPage(page: number) {
     // round a number up to the next largest integer.
