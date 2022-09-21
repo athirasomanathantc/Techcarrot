@@ -21,7 +21,9 @@ export default class AgiCorpIntranetBusinessFunctionsContentWebPart extends Base
     const element: React.ReactElement<IAgiCorpIntranetBusinessFunctionsContentProps> = React.createElement(
       AgiCorpIntranetBusinessFunctionsContent,
       {
-        description: this.properties.description
+        description: this.properties.description,
+        siteUrl: this.context.pageContext.web.absoluteUrl,
+        context: this.context
       }
     );
 
