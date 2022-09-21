@@ -49,7 +49,25 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
-    await this.getNewsItems();
+    await this.getNewsItems().then(() => {
+      this.setDefaultFilter();
+    });
+  }
+
+  private setDefaultFilter() {
+    const params = new URLSearchParams(window.location.search);
+    const programId = parseInt(params.get('programId'));
+    const program = params.get('program');
+    if (program) {
+      this.setState({
+        showBusinessData: program?.toLowerCase() === "business",
+        selectedOption: {
+          ID: programId
+        }
+      }, () => {
+        programId && this.handleFilter(programId);
+      });
+    }
   }
 
   private async getBusinessItems(): Promise<void> {
@@ -140,90 +158,69 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
   }
 
   private async getNewsItems(): Promise<void> {
-    const list = 'EventDetails';
-    const counturl = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/ItemCount`;
-    const count = await this.props.context.spHttpClient.get(counturl, SPHttpClient.configurations.v1)
-      .then((resp: SPHttpClientResponse) => {
-        return resp.json();
-      }).then((resp) => {
-        return resp.value;
-      });
+    return new Promise<void>(async (resolve) => {
+      const list = 'EventDetails';
+      const counturl = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/ItemCount`;
+      const count = await this.props.context.spHttpClient.get(counturl, SPHttpClient.configurations.v1)
+        .then((resp: SPHttpClientResponse) => {
+          return resp.json();
+        }).then((resp) => {
+          return resp.value;
+        });
 
-    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=ID,Title,Description,StartDate,EndDate,EventThumbnail,Country,City,Business/ID,Business/Title,Functions/ID,Functions/Title&$expand=Business,Functions&$top=${count}`;
-    this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
-      .then((response: SPHttpClientResponse) => {
-        return response.json();
-      })
-      .then((response) => {
-        const items: IEventData[] = response.value;
-        // console.log("data",this.state.eventsData);
-        //const select= this.getQueryStringValue('tab');
-        //const categories = this.state.filterValues;
-        //const selectedTab = select || this.state.selectedTab;
-        console.log("data", items);
-
-        const ongoing: IEventData[] = items.filter((item) => {
-
-          if (moment().isSame(item.StartDate) && item.EndDate == null || moment().isSameOrAfter(item.StartDate) && moment().isSameOrBefore(item.EndDate)) {
-            return (item);
-          }
+      const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=ID,Title,Description,StartDate,EndDate,EventThumbnail,Country,City,Business/ID,Business/Title,Functions/ID,Functions/Title&$expand=Business,Functions&$top=${count}`;
+      await this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+        .then((response: SPHttpClientResponse) => {
+          return response.json();
         })
-        const upcoming: IEventData[] = items.filter((item) => {
-          if (moment().isBefore(item.StartDate)) {
-            return (item);
-          }
+        .then((response) => {
+          const items: IEventData[] = response.value;
+          // console.log("data",this.state.eventsData);
+          //const select= this.getQueryStringValue('tab');
+          //const categories = this.state.filterValues;
+          //const selectedTab = select || this.state.selectedTab;
+          console.log("data", items);
+
+          const ongoing: IEventData[] = items.filter((item) => {
+
+            if (moment().isSame(item.StartDate) && item.EndDate == null || moment().isSameOrAfter(item.StartDate) && moment().isSameOrBefore(item.EndDate)) {
+              return (item);
+            }
+          })
+          const upcoming: IEventData[] = items.filter((item) => {
+            if (moment().isBefore(item.StartDate)) {
+              return (item);
+            }
+          })
+          const past: IEventData[] = items.filter((item) => {
+
+            if (moment().isAfter(item.StartDate) && item.EndDate == null || moment().isAfter(item.EndDate)) {
+              console.log('entering past');
+              return (item);
+            }
+          })
+
+          this.setState({
+            eventsData: items,
+            filterData: ongoing,
+            selectedTab: "Ongoing Events",
+            ongoingEvents: ongoing,
+            upcomingEvents: upcoming,
+            pastEvents: past,
+            selectedTabValues: ongoing
+
+          })
+
+          this.paging();
+
+
         })
-        const past: IEventData[] = items.filter((item) => {
-
-          if (moment().isAfter(item.StartDate) && item.EndDate == null || moment().isAfter(item.EndDate)) {
-            console.log('entering past');
-            return (item);
-          }
+        .catch((error) => {
+          console.log('Error:', error);
         })
 
-        this.setState({
-          eventsData: items,
-          filterData: ongoing,
-          selectedTab: "Ongoing Events",
-          ongoingEvents: ongoing,
-          upcomingEvents: upcoming,
-          pastEvents: past,
-          selectedTabValues: ongoing
-
-        })
-
-        this.paging();
-
-
-        // const pageCount: number = Math.ceil(items.length / pageSize);
-
-        // // this.setState({
-        // //   eventsData: items,
-        // //   //filterData: items,
-        // //   //pageData: items.slice(0, pageSize),
-        // //   //totalPages: pageCount
-        // // }, () => {
-        // //   console.log("data",this.state.eventsData);
-        // //   const result: IEventData[] = this.state.eventsData.filter((obj) => {
-        // //     return obj.Category === this.state.selectedTab;
-
-        // //   })
-        // //   this.setState({
-        // //     filterData: result,
-
-
-        // //   }, () => {
-        // //     this.paging();
-        // //   });
-        // // });
-      })
-      .catch((error) => {
-        console.log('Error:', error);
-      })
-    //this.paging();
-
-
-
+      resolve();
+    });
   }
   private handleFilter(value: number) {
     if (value == 0) {
@@ -334,7 +331,8 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
     } else {
       const result = selectedTabValues.filter((obj) => {
-        return obj.Business && obj.Business.ID == this.state.selectedFilter;
+        const itemId = this.state.showBusinessData ? obj.Business?.ID : obj.Functions?.ID;
+        return itemId == this.state.selectedFilter;
       })
       this.setState({
         selectedTabValues,

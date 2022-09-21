@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-corp-intranet-carousel-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiCorpIntranetCarousel/AgiCorpIntranetCarouselWebPart.js",
+          "manifest": "./src/webparts/agiCorpIntranetCarousel/AgiCorpIntranetCarouselWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiCorpIntranetCarouselWebPartStrings": "lib/webparts/agiCorpIntranetCarousel/loc/{locale}.js"
+  }
+}

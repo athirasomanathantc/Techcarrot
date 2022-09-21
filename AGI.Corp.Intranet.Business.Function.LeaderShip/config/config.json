@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-int-bus-func-leader-ship-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiIntBusFuncLeaderShip/AgiIntBusFuncLeaderShipWebPart.js",
+          "manifest": "./src/webparts/agiIntBusFuncLeaderShip/AgiIntBusFuncLeaderShipWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiIntBusFuncLeaderShipWebPartStrings": "lib/webparts/agiIntBusFuncLeaderShip/loc/{locale}.js"
+  }
+}

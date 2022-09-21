@@ -49,22 +49,40 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
         functionData: functions
       });
       this.getFirstPageAnnouncements();
+
+      if (window.innerWidth <= 767) {
+        this.setState({
+          itemsPerPage: 6
+        });
+
+      } else {
+        this.setState({
+          itemsPerPage: 12
+        });
+      }
+
+      this.setDefaultFilter();
     }
     catch (exception) {
       this.setState({
         exceptionOccured: true
       });
     }
-    if (window.innerWidth <= 767) {
-      this.setState({
-        itemsPerPage: 6
-      });
+  }
 
-    } else {
+  private setDefaultFilter() {
+    const params = new URLSearchParams(window.location.search);
+    const programId = parseInt(params.get('programId'));
+    const program = params.get('program');
+    if (program) {
       this.setState({
-        itemsPerPage: 12
+        showBusinessData: program?.toLowerCase() === "business",
+        selectedOption: {
+          ID: programId
+        }
+      }, () => {
+        programId && this.handleFilter(programId);
       });
-
     }
   }
 
@@ -146,7 +164,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
 
   }
 
-  private filterAnnouncement(value: number) {
+  private handleFilter(value: number) {
     if (value == 0) {
       const result: IAnnouncementData[] = this.state.totalAnnouncementData;
       this.setState({
@@ -192,7 +210,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
         }
       })
     }
-    this.filterAnnouncement(0);
+    this.handleFilter(0);
   }
 
 
@@ -238,7 +256,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
                     </div>
                     <div className="col-8">
                       <div className={'form-select custom-select w-100 '}>
-                        <select onChange={(e) => this.filterAnnouncement(parseInt(e.target.value))}>
+                        <select onChange={(e) => this.handleFilter(parseInt(e.target.value))}>
                           <option value="0">Filter By</option>
                           {
                             options.map((option: IBusinessData | IFunctionData, index: number) => {
