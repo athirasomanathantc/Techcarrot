@@ -64,7 +64,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       showBusinessData: true,
       selectedOption: {
         ID: 0
-      }
+      },
+      isDataLoaded: false
     }
     // this.getImages = this.getImages.bind(this);
   }
@@ -91,6 +92,9 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       }, () => {
         programId && this.handleFilter(programId);
       });
+    }
+    else {
+      this.setState({ isDataLoaded: true });
     }
   }
 
@@ -163,7 +167,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       curFilterValue: value,
       selectedOption: {
         ID: value
-      }
+      },
+      isDataLoaded: true
     }, () => {
       this.setData();
     });
@@ -667,7 +672,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         {this.props.libraryName && this.props.libraryPath ?
 
           <div className="main-content" style={{ display: this.state.selectedImageFolder ? 'none' : 'block' }}>
-            <div className="content-wrapper">
+            <div className="content-wrapper" style={{ display: this.state.isDataLoaded ? 'block' : 'none' }}>
               <div className="container">
                 <div className="tabs">
                   <div className="tab-header">
@@ -831,6 +836,10 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div className='loaderContainer' style={{ display: this.state.isDataLoaded ? 'none' : 'flex' }}>
+              <div className="loader">
               </div>
             </div>
           </div>
