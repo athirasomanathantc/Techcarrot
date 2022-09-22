@@ -29,7 +29,6 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
       filterValuesFunctions: [],
       selectedTab: "",
       filterData: [],
-      ongoingEvents: [],
       upcomingEvents: [],
       pastEvents: [],
       selectedTabValues: [],
@@ -181,12 +180,6 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
           //const selectedTab = select || this.state.selectedTab;
           console.log("data", items);
 
-          const ongoing: IEventData[] = items.filter((item) => {
-
-            if (moment().isSame(item.StartDate) && item.EndDate == null || moment().isSameOrAfter(item.StartDate) && moment().isSameOrBefore(item.EndDate)) {
-              return (item);
-            }
-          })
           const upcoming: IEventData[] = items.filter((item) => {
             if (moment().isBefore(item.StartDate)) {
               return (item);
@@ -202,12 +195,11 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
           this.setState({
             eventsData: items,
-            filterData: ongoing,
-            selectedTab: "Ongoing Events",
-            ongoingEvents: ongoing,
+            filterData: upcoming,
+            selectedTab: "Upcoming Events",
             upcomingEvents: upcoming,
             pastEvents: past,
-            selectedTabValues: ongoing
+            selectedTabValues: upcoming
 
           })
 
@@ -309,10 +301,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
   private setTabData(tabName: string) {
     let selectedTabValues = [];
 
-    if (tabName == EVENTS.ONGOING) {
-      selectedTabValues = this.state.ongoingEvents
-    }
-    else if (tabName == EVENTS.UPCOMING) {
+    if (tabName == EVENTS.UPCOMING) {
       selectedTabValues = this.state.upcomingEvents
     }
     else if (tabName == EVENTS.PAST) {
