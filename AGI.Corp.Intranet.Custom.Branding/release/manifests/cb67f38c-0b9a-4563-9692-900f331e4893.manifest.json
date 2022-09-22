@@ -14,7 +14,7 @@
     "scriptResources": {
       "agi-intranet-custom-branding-application-customizer": {
         "type": "path",
-        "path": "agi-intranet-custom-branding-application-customizer_51f8a50c546caa42cfa5.js"
+        "path": "agi-intranet-custom-branding-application-customizer_1ff9f3afdb73cacdce3a.js"
       },
       "@microsoft/sp-application-base": {
         "type": "component",

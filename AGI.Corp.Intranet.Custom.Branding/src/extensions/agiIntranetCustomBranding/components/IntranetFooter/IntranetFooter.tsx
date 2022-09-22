@@ -11,6 +11,7 @@ import { IConfigItem } from "../../models/IConfigItem";
 import { INavigationItem } from "../../models/INavigationItem";
 import { ISocialLink } from "../../models/ISocialLinkItem";
 import { ISubscribeItem } from "../../models/ISubscribeItem";
+import IntranetChatbox from "../Chatbox/IntranetChatbox";
 
 const menuIcon: IIconProps = { iconName: 'GlobalNavButton' };
 const closeIcon: IIconProps = { iconName: 'Cancel' };
@@ -426,6 +427,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                         </div>
                     </div>
                 </div>
+                <IntranetChatbox siteUrl={this.props.siteUrl} context={this.props.context}></IntranetChatbox>
             </footer>
 
 

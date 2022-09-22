@@ -22,3 +22,8 @@ export const TEXT_BUSINESS = 'Business';
 export const TEXT_NEWSMISC = 'News';
 export const TEXT_GALLERY = 'Gallery';
 export const TEXT_OTHER = 'Other Links';
+export const NULL_CONTACTUS_TALK2US_ITEM = {
+    FullName:"",
+    Email: "",
+    Feedback: ""
+}
