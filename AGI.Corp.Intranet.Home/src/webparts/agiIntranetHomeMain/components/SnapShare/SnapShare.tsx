@@ -114,41 +114,41 @@ export const SnapShare = (props: IAgiIntranetHomeMainProps) => {
 
             {
                 <div className="col-md-12 snap-share-section mt-4 mb-4 stretch-card mobile">
-                <div className="card snap-share ">
-                    <div className="card-body">
-                        <div id="carouselExampleCaptions4" className="carousel slide"
-                            data-bs-ride="carousel">
-                            <div className="d-flex align-items-center justify-content-between flex-wrap card-header snap-share-header px-0">
+                    <div className="card snap-share ">
+                        <div className="card-body">
+                            <div id="carouselExampleCaptions4" className="carousel slide"
+                                data-bs-ride="carousel">
+                                <div className="d-flex align-items-center justify-content-between flex-wrap card-header snap-share-header px-0">
 
-                                <h4>Snap Share</h4>
-                                <div className="d-flex align-items-center">
-                                    <a href={`${props.siteUrl}/SitePages/Snap and Share.aspx`} className="viewall-link">View All</a>
-                                    <div className="p-0 ms-3 position-relative">
-                                        <button className="carousel-control-prev" type="button"
-                                            data-bs-target="#carouselExampleCaptions4" data-bs-slide="prev">
-                                            <span className="carousel-control-prev-icon"
-                                                aria-hidden="true"></span>
-                                            <span className="visually-hidden">Previous</span>
-                                        </button>
-                                        <button className="carousel-control-next" type="button"
-                                            data-bs-target="#carouselExampleCaptions4" data-bs-slide="next">
-                                            <span className="carousel-control-next-icon"
-                                                aria-hidden="true"></span>
-                                            <span className="visually-hidden">Next</span>
-                                        </button>
+                                    <h4>Snap Share</h4>
+                                    <div className="d-flex align-items-center">
+                                        <a href={`${props.siteUrl}/SitePages/Snap and Share.aspx`} className="viewall-link">View All</a>
+                                        <div className="p-0 ms-3 position-relative">
+                                            <button className="carousel-control-prev" type="button"
+                                                data-bs-target="#carouselExampleCaptions4" data-bs-slide="prev">
+                                                <span className="carousel-control-prev-icon"
+                                                    aria-hidden="true"></span>
+                                                <span className="visually-hidden">Previous</span>
+                                            </button>
+                                            <button className="carousel-control-next" type="button"
+                                                data-bs-target="#carouselExampleCaptions4" data-bs-slide="next">
+                                                <span className="carousel-control-next-icon"
+                                                    aria-hidden="true"></span>
+                                                <span className="visually-hidden">Next</span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="carousel-inner pt-9 mt-3">
-                                {mobsnapCarousel.map((snapCarouselItem: ISnap, index: number) => <SnapCarousel
-                                    index={index}
-                                    key={`key${index}`}
-                                    snapCarouselItem={snapCarouselItem}
-                                ></SnapCarousel>)}
+                                <div className="carousel-inner pt-9 mt-3">
+                                    {mobsnapCarousel.length > 0 && mobsnapCarousel.map((snapCarouselItem: ISnap, index: number) => <SnapCarousel
+                                        index={index}
+                                        key={`key${index}`}
+                                        snapCarouselItem={snapCarouselItem}
+                                    ></SnapCarousel>)}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 </div>
 
             }
