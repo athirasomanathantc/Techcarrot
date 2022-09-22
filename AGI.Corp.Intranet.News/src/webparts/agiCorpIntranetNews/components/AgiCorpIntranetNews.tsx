@@ -333,7 +333,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                             imageJSON = JSON.parse(item.NewsThumbnail);
                           }
 
-                          const category = this.state.showBusinessData ? item.Business.Title : item.Functions.Title;
+                          const category = this.state.showBusinessData ? item.Business?.Title : item.Functions?.Title;
                           return (
                             <div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
                               <div className='card news-card'>

@@ -307,7 +307,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                           imageJSON = JSON.parse(item.BlogThumbnail);
                         }
 
-                        const category = this.state.showBusinessData ? item.Business.Title : item.Functions.Title;
+                        const category = this.state.showBusinessData ? item.Business?.Title : item.Functions?.Title;
 
                         return (
 
