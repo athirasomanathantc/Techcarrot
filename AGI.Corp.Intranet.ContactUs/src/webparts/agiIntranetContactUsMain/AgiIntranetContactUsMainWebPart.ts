@@ -20,16 +20,16 @@ export default class AgiIntranetContactUsMainWebPart extends BaseClientSideWebPa
 
   private graphClient: MSGraphClient;
 
-  public onInit(): Promise<void> {
-    return new Promise<void>((resolve: () => void, reject: (error: any) => void): void => {
-      this.context.msGraphClientFactory
-        .getClient()
-        .then((client: MSGraphClient): void => {
-          this.graphClient = client;
-          resolve();
-        }, err => reject(err));
-    });
-  }
+  // public onInit(): Promise<void> {
+  //   return new Promise<void>((resolve: () => void, reject: (error: any) => void): void => {
+  //     this.context.msGraphClientFactory
+  //      // .getClient()
+  //       .then((client: MSGraphClient): void => {
+  //         this.graphClient = client;
+  //         resolve();
+  //       }, err => reject(err));
+  //   });
+  // }
 
   public render(): void {
     const element: React.ReactElement<IAgiIntranetContactUsMainProps> = React.createElement(
@@ -49,9 +49,7 @@ export default class AgiIntranetContactUsMainWebPart extends BaseClientSideWebPa
     ReactDom.unmountComponentAtNode(this.domElement);
   }
 
-  protected get dataVersion(): Version {
-    return Version.parse('1.0');
-  }
+  
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
