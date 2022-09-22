@@ -7,7 +7,8 @@ export const NULL_CONTENT_ITEM = {
     NavigationText: '',
     Business: '',
     Function: '',
-    MediaImage: ''
+    MediaIcon: '',
+    SitePages: {ID: 0, Title: '', NavigationComponent: ''}
 }
 
 //export const TEXT_FDP_CAROUSEL_HOME = 'Home';

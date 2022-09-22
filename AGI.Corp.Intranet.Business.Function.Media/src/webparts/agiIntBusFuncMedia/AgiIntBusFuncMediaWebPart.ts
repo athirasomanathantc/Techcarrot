@@ -13,6 +13,7 @@ import { IAgiIntBusFuncMediaProps } from './components/IAgiIntBusFuncMediaProps'
 import { SPComponentLoader } from '@microsoft/sp-loader';
 export interface IAgiIntBusFuncMediaWebPartProps {
   description: string;
+  listName: string;
 }
 
 export default class AgiIntBusFuncMediaWebPart extends BaseClientSideWebPart<IAgiIntBusFuncMediaWebPartProps> {
@@ -29,7 +30,8 @@ export default class AgiIntBusFuncMediaWebPart extends BaseClientSideWebPart<IAg
       {
         description: this.properties.description,
         siteUrl: this.context.pageContext.web.absoluteUrl,
-        context: this.context
+        context: this.context,
+        listName: this.properties.listName
       }
     );
 
@@ -57,7 +59,10 @@ export default class AgiIntBusFuncMediaWebPart extends BaseClientSideWebPart<IAg
               groupFields: [
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
-                })
+                }),
+                PropertyPaneTextField('listName', {
+                  label: strings.ListNameFieldLabel
+                }),
               ]
             }
           ]
