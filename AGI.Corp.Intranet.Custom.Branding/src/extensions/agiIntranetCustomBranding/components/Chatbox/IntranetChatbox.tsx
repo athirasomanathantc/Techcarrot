@@ -137,7 +137,7 @@ export default class IntranetChatbox extends React.Component<IIntranetChatboxPro
           </div>
           <div className="chatbox-header">
             <h4>Send us your feedback</h4>
-            <p>Do you have a suggestion or found some bug? let us know in the field bellow.</p>
+            <p>Do you have a suggestion or found some bug? let us know in the field below.</p>
           </div>
           <div className="chatbox-body">
             <form action="">
