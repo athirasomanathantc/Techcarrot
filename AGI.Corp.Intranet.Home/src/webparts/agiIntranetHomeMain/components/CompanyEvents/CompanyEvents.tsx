@@ -8,7 +8,7 @@ import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
 const Events = (props: IEvent) => {
     return (<>
         <li className="list-group-item">
-            <a href={`./News/Events/Event%20Details.aspx?eventID=${props.Id}`}>
+            <a href={`${siteUrl}/SitePages/News/Events/Event%20Details.aspx?eventID=${props.Id}`}>
                 <div className="d-flex align-items-center">
                     <div className="event-date flex-shrink-0 me-3">
                         <p className="notification-date">{moment(props.StartDate).format("DD")}</p>

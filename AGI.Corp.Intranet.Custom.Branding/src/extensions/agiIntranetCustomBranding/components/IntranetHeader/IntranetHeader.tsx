@@ -208,7 +208,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
     const otherContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_OTHER);
 
     return (
-      <header className="header-wrapper">
+      <header className="header-wrapper slim-header">
         <div className="top-nav">
           <nav className="navbar navbar-expand-lg navbar-light">
             <div className="container">

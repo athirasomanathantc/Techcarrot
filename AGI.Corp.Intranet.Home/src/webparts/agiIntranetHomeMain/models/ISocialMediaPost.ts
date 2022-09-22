@@ -5,4 +5,7 @@ export interface ISocialMediaPost {
     Description: string;
     Icon: string;
     PublishedDate: string;
+    PostUrl: {
+        Url: string;
+    };
 }

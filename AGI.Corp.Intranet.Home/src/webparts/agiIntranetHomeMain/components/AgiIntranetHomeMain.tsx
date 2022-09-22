@@ -23,19 +23,23 @@ export default class AgiIntranetHomeMain extends React.Component<IAgiIntranetHom
       spfxContext: this.props.context
     });
     this.state = {
-
+      hideLoader: false
     }
   }
 
   public async componentDidMount(): Promise<void> {
-
+    setTimeout(() => {
+      this.setState({
+        hideLoader: true
+      })
+    }, 2000)
   }
 
   public render(): React.ReactElement<IAgiIntranetHomeMainProps> {
     return (
       <div className={styles.agiIntranetHomeMain}>
         <div className="main-content">
-          <div className="content-wrapper">
+          <div className="content-wrapper" style={{ display: this.state.hideLoader ? 'block' : 'none' }}>
             <div className="container">
               <div className="row home-page">
                 <div className="col-xl-8 col-sm-12  ">
@@ -79,6 +83,10 @@ export default class AgiIntranetHomeMain extends React.Component<IAgiIntranetHom
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          <div className='loaderContainer' style={{ display: this.state.hideLoader ? 'none' : 'flex' }}>
+            <div className="loader">
             </div>
           </div>
         </div>
