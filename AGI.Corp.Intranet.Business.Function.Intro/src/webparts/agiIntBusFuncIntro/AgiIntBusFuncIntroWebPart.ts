@@ -10,6 +10,7 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import * as strings from 'AgiIntBusFuncIntroWebPartStrings';
 import AgiIntBusFuncIntro from './components/AgiIntBusFuncIntro';
 import { IAgiIntBusFuncIntroProps } from './components/IAgiIntBusFuncIntroProps';
+import { SPComponentLoader } from '@microsoft/sp-loader';
 
 export interface IAgiIntBusFuncIntroWebPartProps {
   description: string;
@@ -17,11 +18,19 @@ export interface IAgiIntBusFuncIntroWebPartProps {
 
 export default class AgiIntBusFuncIntroWebPart extends BaseClientSideWebPart<IAgiIntBusFuncIntroWebPartProps> {
 
+  protected onInit(): Promise<void> {
+    const randomNumber = Math.floor(Math.random() * 90000) + 10000;
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/business.css?${randomNumber}`);
+    return Promise.resolve();
+  }
+
   public render(): void {
     const element: React.ReactElement<IAgiIntBusFuncIntroProps> = React.createElement(
       AgiIntBusFuncIntro,
       {
-        description: this.properties.description
+        description: this.properties.description,
+        siteUrl: this.context.pageContext.web.absoluteUrl,
+        context: this.context
       }
     );
 

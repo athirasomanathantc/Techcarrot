@@ -79,43 +79,62 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
-    await this.getNewsItems();
+    await this.getNewsItems().then(() => {
+      this.setDefaultFilter();
+    });
+  }
+
+  private setDefaultFilter() {
+    const params = new URLSearchParams(window.location.search);
+    const programId = parseInt(params.get('programId'));
+    const program = params.get('program');
+    if (program) {
+      this.setState({
+        showBusinessData: program?.toLowerCase() === "business",
+        selectedOption: {
+          ID: programId
+        }
+      }, () => {
+        programId && this.handleFilter(programId);
+      });
+    }
   }
 
   private async getNewsItems(): Promise<void> {
-    const list = 'News';
-    const counturl = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/ItemCount`;
-    const count = await this.props.context.spHttpClient.get(counturl, SPHttpClient.configurations.v1)
-      .then((resp: SPHttpClientResponse) => {
-        return resp.json();
-      }).then((resp) => {
-        return resp.value;
-      });
-
-    sp.web.lists
-      .getByTitle(list).items
-      .select("ID,Title,PublishedDate,Description,NewsThumbnail,NewsImage,Business/ID,Business/Title,Functions/ID,Functions/Title")
-      .orderBy("PublishedDate", false)
-      .expand("Business,Functions").top(count)()
-      //this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
-      .then((response: INewsData[]) => {
-        const items: INewsData[] = response;
-        console.log('Data', items);
-        const pageCount: number = Math.ceil(items.length / this.state.pageSize);
-
-        this.setState({
-          newsData: items,
-          filterData: items,
-          pageData: items.slice(0, this.state.pageSize),
-          totalPages: pageCount
+    return new Promise<void>(async (resolve) => {
+      const list = 'News';
+      const counturl = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/ItemCount`;
+      const count = await this.props.context.spHttpClient.get(counturl, SPHttpClient.configurations.v1)
+        .then((resp: SPHttpClientResponse) => {
+          return resp.json();
+        }).then((resp) => {
+          return resp.value;
         });
-      })
-      .catch((error) => {
-        console.log('Error:', error);
-      })
-    this.paging();
 
+      await sp.web.lists
+        .getByTitle(list).items
+        .select("ID,Title,PublishedDate,Description,NewsThumbnail,NewsImage,Business/ID,Business/Title,Functions/ID,Functions/Title")
+        .orderBy("PublishedDate", false)
+        .expand("Business,Functions").top(count)()
+        //this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+        .then((response: INewsData[]) => {
+          const items: INewsData[] = response;
+          console.log('Data', items);
+          const pageCount: number = Math.ceil(items.length / this.state.pageSize);
 
+          this.setState({
+            newsData: items,
+            filterData: items,
+            pageData: items.slice(0, this.state.pageSize),
+            totalPages: pageCount
+          });
+        })
+        .catch((error) => {
+          console.log('Error:', error);
+        })
+      this.paging();
+      resolve();
+    });
   }
 
 
@@ -314,7 +333,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                             imageJSON = JSON.parse(item.NewsThumbnail);
                           }
 
-                          const category = this.state.showBusinessData ? item.Business.Title : item.Functions.Title;
+                          const category = this.state.showBusinessData ? item.Business?.Title : item.Functions?.Title;
                           return (
                             <div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
                               <div className='card news-card'>

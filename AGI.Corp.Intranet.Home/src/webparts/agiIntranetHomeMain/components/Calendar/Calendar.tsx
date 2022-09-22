@@ -173,7 +173,7 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
 
     renderDay(day, modifiers) {
         const date = day.getDate();
-        if (date === new Date().getDate()) {
+        if (day.getTime() == new Date(new Date().setHours(12, 0, 0, 0)).getTime()) {
             return (
                 <div className="date-wrap">
                     <span>{date}</span>

@@ -216,7 +216,11 @@ h2.chart-heading {
     letter-spacing: 0px;
     color: #880D6C;
     opacity: 1;
-    padding: 15px 0 20px 0;
+    margin: 15px 0 20px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  
+     overflow: hidden;
 }
 @media (max-width:991px){
     #qbpx-container h5{
@@ -1189,3 +1193,6 @@ input[type="radio"]:checked+label::after {
     border-radius:8px!important;    
     overflow:hidden;
 }
+
+
+

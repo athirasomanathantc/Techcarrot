@@ -16,7 +16,7 @@ const CarouselItem = (props: ILatestNews) => {
             <div className="carousel-caption">
                 <span className="badge rounded-pill bg-light">{props.Business?.Title}</span>
                 <p title={props.Title}>{props.Title}</p>
-                <h5 className="date">{moment(props.PublishedDate).format("DD MMM YYYY")}</h5>
+                <h5 className="date">{moment(props.PublishedDate).format("DD MMMM YYYY")}</h5>
             </div>
         </div>
     </>)

@@ -13,19 +13,23 @@ const imageStyle = {
     width: '214px'
 }
 
+const goToAnnouncement = (itemId: number) => {
+    window.location.href = `${siteUrl}/SitePages/News/Announcements/Announcement%20Details.aspx?announcementID=${itemId}`;
+}
+
 const Announcement = (props: IAnnouncement) => {
     let imageUrl = JSON.parse(props.AnnouncementThumbnail);
     imageUrl = imageUrl?.serverUrl + imageUrl?.serverRelativeUrl;
     return (<>
         <div className="col-12 col-md-6 mb-4">
-            <div className="d-flex ">
+            <div className="d-flex " onClick={() => { goToAnnouncement(props.Id) }}>
                 <div
                     className="icon-announcement text-dark flex-shrink-0 me-3">
                     <img style={imageStyle} src={imageUrl}
                         width="100%" />
                 </div>
                 <div className="d-flex flex-column flex-wrap">
-                    <p className="announcement-date">{moment(props.PublishedDate).format("MMMM DD, hh.mm A")}
+                    <p className="announcement-date">{moment(props.PublishedDate).format("DD MMMM YYYY")}
                     </p>
                     <p className="announcement-title">{props.Title}</p>
                     <p className="mb-2 text-break text-wrap announcement-desc d-none d-sm-block ">

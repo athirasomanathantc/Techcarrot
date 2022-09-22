@@ -38,12 +38,12 @@ export default class AgiIntranetBrandingApplicationCustomizer
 
   @override
   public onInit(): Promise<void> {
-
+    const randomNumber = Math.floor(Math.random() * 90000) + 10000;
     SPComponentLoader.loadCss(`https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css`);
     SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap.min.css`);
     SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap-icons.min.css`);
     SPComponentLoader.loadScript(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap.bundle.min.js`);
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/style.css`);
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/style.css?${randomNumber}`);
 
     Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
 
@@ -66,7 +66,7 @@ export default class AgiIntranetBrandingApplicationCustomizer
     )
 
     if (flagTop) {
-      SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/style.css`);
+      // SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/style.css`);
       this._renderTopPlaceHolder();
     }
 

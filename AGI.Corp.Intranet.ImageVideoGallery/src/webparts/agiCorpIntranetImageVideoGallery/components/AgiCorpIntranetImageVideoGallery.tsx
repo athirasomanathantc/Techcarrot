@@ -64,7 +64,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       showBusinessData: true,
       selectedOption: {
         ID: 0
-      }
+      },
+      isDataLoaded: false
     }
     // this.getImages = this.getImages.bind(this);
   }
@@ -72,8 +73,29 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   public async componentDidMount(): Promise<void> {
     await this.getBusinessItems();
     await this.getFunctionItems();
-    await this.getGalleryItems();
-    await this.getVideoItems();
+
+    Promise.all([this.getGalleryItems(), this.getVideoItems()]).then(() => {
+      this.setDefaultFilter();
+    });
+  }
+
+  private setDefaultFilter() {
+    const params = new URLSearchParams(window.location.search);
+    const programId = parseInt(params.get('programId'));
+    const program = params.get('program');
+    if (program) {
+      this.setState({
+        showBusinessData: program?.toLowerCase() === "business",
+        selectedOption: {
+          ID: programId
+        }
+      }, () => {
+        programId && this.handleFilter(programId);
+      });
+    }
+    else {
+      this.setState({ isDataLoaded: true });
+    }
   }
 
   private async getBusinessItems(): Promise<void> {
@@ -145,7 +167,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       curFilterValue: value,
       selectedOption: {
         ID: value
-      }
+      },
+      isDataLoaded: true
     }, () => {
       this.setData();
     });
@@ -372,59 +395,48 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   }
 
   private async getGalleryItems(): Promise<void> {
-    const libraryName = this.props.libraryName;
-    const libraryPath = this.props.libraryPath;
-    const library = sp.web.lists.getByTitle(libraryName);
-    // get folders
-    const orderByField = this.props.orderBy || PROP_DEFAULT_ORDERBY;
-    library.rootFolder.folders
-      .filter('ListItemAllFields/Id ne null')
-      .expand('ListItemAllFields')
-      .orderBy(orderByField, false)
-      .get()
-      .then((folders: any) => {
-        // get files
-        library.items.select('*, FileRef, FileLeafRef').filter('FSObjType eq 0').get().then((files: IImageItem[]) => {
-          console.log("test", folders);
-          const _folders = [];
-          folders.map((folder) => {
-            const path = `${this.props.context.pageContext.web.serverRelativeUrl}/${libraryPath}/${folder.Name}`;
-            console.log('path', path);
-            //   const _coverPhoto = sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(folder.Name).files.select('FileLeafRef').filter("isCoverPhoto eq 1").get().then((allItems) => {
-            //     const test1 = allItems
-            //   });;
-
-            //  // sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(folder.Name).files.select('Id').filter(`FSObjType ne 1 and isCoverPhoto eq 1`).get().then((allItems) => {
-            //     // const test12 = allItems
-            //     sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(folder.Name).files.select('*, FileRef, FileLeafRef').get().then((allItems) => {             
-            //     for (var i = 0; i < files.length; i++) {
-            //       var _ServerRelativeUrl = files[i].FileRef;
-            //       sp.web.getFileByServerRelativeUrl(_ServerRelativeUrl).getItem().then(item => {
-            //         console.log(item);
-            //       });
-            //     }
-            //   });;
-
-            const _files = files.filter((file) => {
-              const folderPath = file.FileRef.replace(`/${file.FileLeafRef}`, '');
-              return folderPath == path;
-            });
-            //console.log(folder.Name, _files);
-            const count = _files.length;
-            _folders.push({ ID: folder.ListItemAllFields.ID, Name: folder.Name, Count: count, BusinessId: folder.ListItemAllFields.BusinessId, FunctionsId: folder.ListItemAllFields.FunctionsId })
-          });
-          this.setState({
-            folders: _folders,
-            filterData: _folders
-          }, () => {
-            this.paging();
-          });
+    return new Promise<void>(async (resolve) => {
+      const libraryName = this.props.libraryName;
+      const libraryPath = this.props.libraryPath;
+      const library = sp.web.lists.getByTitle(libraryName);
+      // get folders
+      const orderByField = this.props.orderBy || PROP_DEFAULT_ORDERBY;
+      await library.rootFolder.folders
+        .filter('ListItemAllFields/Id ne null')
+        .expand('ListItemAllFields')
+        .orderBy(orderByField, false)
+        .get()
+        .then(async (folders: any) => {
+          // get files
+          await library.items
+            .select('*, FileRef, FileLeafRef')
+            .filter('FSObjType eq 0')
+            .get()
+            .then((files: IImageItem[]) => {
+              console.log("test", folders);
+              const _folders = [];
+              folders.map((folder) => {
+                const path = `${this.props.context.pageContext.web.serverRelativeUrl}/${libraryPath}/${folder.Name}`;
+                const _files = files.filter((file) => {
+                  const folderPath = file.FileRef.replace(`/${file.FileLeafRef}`, '');
+                  return folderPath == path;
+                });
+                const count = _files.length;
+                _folders.push({ ID: folder.ListItemAllFields.ID, Name: folder.Name, Count: count, BusinessId: folder.ListItemAllFields.BusinessId, FunctionsId: folder.ListItemAllFields.FunctionsId })
+              });
+              this.setState({
+                folders: _folders,
+                filterData: _folders
+              }, () => {
+                this.paging();
+              });
+            })
         })
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
+        .catch((error) => {
+          console.log(error);
+        });
+      resolve();
+    });
   }
 
   private getImageUrl(imageContent: string): string {
@@ -468,15 +480,17 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   }
 
   private async getVideoItems(): Promise<void> {
-
-    sp.web.lists.getByTitle(LIBRARY_VIDEO_GALLERY).items.select('*, FileRef, FileLeafRef,Author/Title').expand("Author").filter('FSObjType eq 0').get().then((items: IImageItem[]) => {
-      this.setState({
-        videoItems: items,
-        videoData: items,
-        filterVideoData: items
-      }, () => {
-        this.paging();
+    return new Promise<void>(async (resolve) => {
+      await sp.web.lists.getByTitle(LIBRARY_VIDEO_GALLERY).items.select('*, FileRef, FileLeafRef,Author/Title').expand("Author").filter('FSObjType eq 0').get().then((items: IImageItem[]) => {
+        this.setState({
+          videoItems: items,
+          videoData: items,
+          filterVideoData: items
+        }, () => {
+          this.paging();
+        });
       });
+      resolve();
     });
   }
 
@@ -658,7 +672,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         {this.props.libraryName && this.props.libraryPath ?
 
           <div className="main-content" style={{ display: this.state.selectedImageFolder ? 'none' : 'block' }}>
-            <div className="content-wrapper">
+            <div className="content-wrapper" style={{ display: this.state.isDataLoaded ? 'block' : 'none' }}>
               <div className="container">
                 <div className="tabs">
                   <div className="tab-header">
@@ -822,6 +836,10 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div className='loaderContainer' style={{ display: this.state.isDataLoaded ? 'none' : 'flex' }}>
+              <div className="loader">
               </div>
             </div>
           </div>
