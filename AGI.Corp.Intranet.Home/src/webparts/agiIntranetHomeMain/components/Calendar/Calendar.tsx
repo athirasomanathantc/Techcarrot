@@ -197,7 +197,8 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
         //console.log('month changed');
         //console.log(month);
         this.setState({
-            isDayEvent: false
+            isDayEvent: false,
+            dailyEvents: []
         })
         if (month != undefined || month != null || month != '') {
             this.getMonthlyEvents(new Date(month));
