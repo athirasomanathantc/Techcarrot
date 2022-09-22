@@ -33,6 +33,7 @@
 .imgOverlay i {
     color: #fff;
     cursor: pointer;
+    font-size : 30px;
 }
 
 
@@ -41,7 +42,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: 80%;
 }
 
 
@@ -67,6 +68,10 @@
     left: 20px;
 }
 
+.imgOverlay .arrowContainer{
+        z-index: 1;
+}
+
 
 
 .arrowContainer i {
@@ -75,6 +80,12 @@
     height: 40px;
     width: 40px;
     text-align: center;
+    border-radius :50%;
+    display : flex;
+    justify-content : center;
+    align-items : center;
+    font-size : 25px;
+    border: 2px solid #fff;
 }
 
 
@@ -255,6 +266,67 @@
 img.gallery-item--img {
     border-radius: 5px;
 }
+.imagePreviewCaption {
+  color: #fff;
+  max-width: 50%;
+  margin-top: 30px;
+  font-family: 'Gill Sans';
+}
+.imagePreviewCaption h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.imagePreviewCaption p {
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.imagePreviewCaption ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.imagePreviewCaption ul li {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+  position: relative;
+  padding: 3px 10px 3px 20px;
+  font: normal normal medium 34px/41px Gill Sans;
+}
+.imagePreviewCaption ul li .userName{
+    padding-right:25px;
+}
+.imagePreviewCaption ul li span{
+    font-weight:300;
+}
+.imagePreviewCaption ul li .createdDate span{
+    padding-right:4px;
+}
+.imagePreviewCaption ul li i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  line-height: 0;
+    vertical-align: middle;
+    margin-right: 5px;
+    margin-top: 5px;
+    width: 13px;
+    height: 16px
+}
+
+.imagePreviewCaption ul li i img {
+  height: 16px;
+}
+
+.video-wrapper{
+    height: calc(100% - 60px);
+    width: 90%;
+    align-content: center;
+    margin: 30px auto;
+}
 
 @media (max-width: 767px){
 		.tab-header .form-select select{
@@ -286,13 +358,24 @@ img.gallery-item--img {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    flex-direction: column;
   }
 
   .video-container video {
     width: 90%;
   }
+   .imagePreviewCaption {
+            color: #fff;
+            max-width: 100%;
+            text-align: left;
+            width: 90%;
+        }
   
 }
+
+
+
 
 
 
