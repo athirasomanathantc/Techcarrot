@@ -197,7 +197,8 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
         //console.log('month changed');
         //console.log(month);
         this.setState({
-            isDayEvent: false
+            isDayEvent: false,
+            dailyEvents: []
         })
         if (month != undefined || month != null || month != '') {
             this.getMonthlyEvents(new Date(month));
@@ -254,7 +255,7 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
 
     public render(): React.ReactElement<ICalendarProps> {
         return (<>
-            {this.state.eventItems.length > 0 && <div className="col-md-12 mt-4 ">
+            <div className="col-md-12 mt-4 ">
                 <div className="card calendar rounded-0">
                     <div className="card-body rounded-0">
                         <div className="app">
@@ -291,7 +292,7 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
                         </div>
                     </div>
                 </div>
-            </div>}
+            </div>
         </>
         );
     }
