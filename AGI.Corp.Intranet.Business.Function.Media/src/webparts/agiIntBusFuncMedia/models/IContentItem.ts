@@ -5,5 +5,6 @@ export interface IContentItem {
     NavigationText: string;
     Business: string;
     Function: string;
-    MediaImage: string;
+    MediaIcon: string;
+    SitePages: {ID: number, Title: string, NavigationComponent: string};
 }

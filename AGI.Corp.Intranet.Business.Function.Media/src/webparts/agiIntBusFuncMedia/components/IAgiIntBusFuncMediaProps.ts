@@ -1,5 +1,6 @@
 export interface IAgiIntBusFuncMediaProps {
   description: string;
   siteUrl: string;
-  context: any 
+  context: any;
+  listName: string;
 }
