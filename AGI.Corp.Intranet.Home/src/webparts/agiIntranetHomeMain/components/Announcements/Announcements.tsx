@@ -25,7 +25,7 @@ const Announcement = (props: IAnnouncement) => {
                         width="100%" />
                 </div>
                 <div className="d-flex flex-column flex-wrap">
-                    <p className="announcement-date">{moment(props.PublishedDate).format("MMMM DD, hh.mm A")}
+                    <p className="announcement-date">{moment(props.PublishedDate).format("DD MMMM YYYY")}
                     </p>
                     <p className="announcement-title">{props.Title}</p>
                     <p className="mb-2 text-break text-wrap announcement-desc d-none d-sm-block ">

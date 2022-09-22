@@ -79,7 +79,7 @@ export class SPService {
     }
 
     public async getSocialMediaPosts(): Promise<ISocialMediaPost[]> {
-        return await sp.web.lists.getByTitle('SocialMediaPosts').items.select("Id,Title,Thumbnail,Description,Icon")
+        return await sp.web.lists.getByTitle('SocialMediaPosts').items.select("Id,Title,Thumbnail,Description,Icon,PostUrl")
             .top(this._props.topSocialMediaPosts)()
             .then((items: ISocialMediaPost[]) => {
                 return items;

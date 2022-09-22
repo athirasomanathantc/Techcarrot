@@ -7,10 +7,16 @@ import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
 
 let siteUrl: string = '';
 
+const goToPosts = (postUrl: string) => {
+    window.location.href = postUrl;
+}
 const SocialMediaCarousel = (props: ISocialMediaPost) => {
+    let imageUrl = JSON.parse(props.Thumbnail);
+    imageUrl = imageUrl?.serverUrl + imageUrl?.serverRelativeUrl;
+
     return (<>
-        <div className={`carousel-item ${!props.index ? 'active' : ''}`}>
-            <img src={`${siteUrl}/Assets/images/social-media-img-1.png`} className="d-block w-100" alt="..." />
+        <div className={`carousel-item ${!props.index ? 'active' : ''}`} onClick={() => { goToPosts(props.PostUrl?.Url) }}>
+            <img src={`${imageUrl}`} className="d-block w-100" alt="..." />
             <div className={`carousel-caption overlay`}>
 
                 <p>{props.Description}</p>
