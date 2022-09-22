@@ -13,12 +13,16 @@ const imageStyle = {
     width: '214px'
 }
 
+const goToAnnouncement = (itemId: number) => {
+    window.location.href = `${siteUrl}/SitePages/News/Announcements/Announcement%20Details.aspx?announcementID=${itemId}`;
+}
+
 const Announcement = (props: IAnnouncement) => {
     let imageUrl = JSON.parse(props.AnnouncementThumbnail);
     imageUrl = imageUrl?.serverUrl + imageUrl?.serverRelativeUrl;
     return (<>
         <div className="col-12 col-md-6 mb-4">
-            <div className="d-flex ">
+            <div className="d-flex " onClick={() => { goToAnnouncement(props.Id) }}>
                 <div
                     className="icon-announcement text-dark flex-shrink-0 me-3">
                     <img style={imageStyle} src={imageUrl}
