@@ -5,8 +5,10 @@ export const NULL_CONTENT_ITEM = {
     Title: '',
     Designation: '',
     Company: '',
-    LinkedInUrl: '',
-    UserImage: ''
+    LinkedInUrl: {Url: ''},
+    UserImage: '',
+    Business: '',
+    Functions: ''
 }
 
 //export const TEXT_FDP_CAROUSEL_HOME = 'Home';

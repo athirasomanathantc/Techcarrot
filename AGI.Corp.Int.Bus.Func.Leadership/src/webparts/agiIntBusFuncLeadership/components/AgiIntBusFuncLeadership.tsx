@@ -20,7 +20,8 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
     });
     this.state = {
       contentItems: [],
-      lastNavItem: ''
+      lastNavItem: '',
+      programID: ''
     }
   }
 
@@ -30,12 +31,35 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
   }
 
   private async getCarouselItem(): Promise<void> {
+    debugger;
     const catVal = this.getQueryStringValue('categoryId');
     const tempProgramme = `${this.state.lastNavItem}Id eq ${catVal}`;
-    sp.web.lists.getByTitle(LIST_CONTENT).items.filter(tempProgramme).get().then((items: IContentItem[]) => {
+    const currentListName = this.props.listName;
+    sp.web.lists.getByTitle(currentListName).items.filter(tempProgramme).get().then((items: IContentItem[]) => {
       this.setState({
-        contentItems: items
+        contentItems: items,
+        programID: catVal
+      }, () => {
+        this.fnInitiate();
       });
+    });
+  }
+
+  private fnInitiate() {
+    let mediaItems = document.querySelectorAll(".leadership-carousel .carousel-item");
+
+    mediaItems.forEach((el) => {
+      const minPerSlide = 4;
+      let mediaNext = el.nextElementSibling;
+      for (var i = 1; i < minPerSlide; i++) {
+        if (!mediaNext) {
+          // wrap carousel by using first child
+          mediaNext = mediaItems[0];
+        }
+        let cloneChild: any = mediaNext.cloneNode(true);
+        el.appendChild(cloneChild.children[0]);
+        mediaNext = mediaNext.nextElementSibling;
+      }
     });
   }
 
@@ -119,7 +143,7 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
                 this.state.contentItems.map((items, i) => {
                   const imgVal = this.getImageUrl(items.UserImage);
                   return (
-                    <div className="carousel-item js-carousel-item active">
+                    <div className={i == 0 ? "carousel-item js-carousel-item active" : "carousel-item js-carousel-item"}>
                       <div className="col-md-3">
                         <div className="team-card h-100">
                           <div className="team-img">
@@ -190,7 +214,7 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
                     this.state.contentItems.map((items, i) => {
                       const imgVal = this.getImageUrl(items.UserImage);
                       return (
-                        <div className="carousel-item js-carousel-item active">
+                        <div className={i == 0 ? "carousel-item js-carousel-item active" : "carousel-item js-carousel-item"}>
                           <div className="col-md-3">
                             <div className="team-card h-100">
                               <div className="team-img">
@@ -199,12 +223,14 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
                               <div className="team-content mt-3  ">
                                 <div className="profile d-flex justify-content-between">
                                   <h2 className="team-title">{items.Title}</h2>
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="27.47" height="27.47"
-                                    viewBox="0 0 27.47 27.47">
-                                    <path id="linkedin_1_" data-name="linkedin (1)"
-                                      d="M24.985,0H2.485A2.485,2.485,0,0,0,0,2.485v22.5A2.485,2.485,0,0,0,2.485,27.47h22.5a2.485,2.485,0,0,0,2.485-2.485V2.485A2.485,2.485,0,0,0,24.985,0ZM8.5,23.719a.723.723,0,0,1-.723.723H4.7a.723.723,0,0,1-.723-.723v-12.9a.723.723,0,0,1,.723-.723H7.777a.723.723,0,0,1,.723.723ZM6.238,8.876A2.924,2.924,0,1,1,9.162,5.952,2.924,2.924,0,0,1,6.238,8.876Zm18.349,14.9a.665.665,0,0,1-.665.665h-3.3a.665.665,0,0,1-.665-.665V17.725c0-.9.265-3.957-2.36-3.957-2.036,0-2.449,2.09-2.532,3.028v6.981a.665.665,0,0,1-.665.665H11.2a.665.665,0,0,1-.665-.665V10.757a.665.665,0,0,1,.665-.665H14.4a.665.665,0,0,1,.665.665v1.126c.755-1.133,1.877-2.007,4.265-2.007,5.289,0,5.259,4.941,5.259,7.656v6.245Z"
-                                      fill="#0077b7" />
-                                  </svg>
+                                  <a href={items.LinkedInUrl.Url} target='_blank' data-interception="off">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="27.47" height="27.47"
+                                      viewBox="0 0 27.47 27.47">
+                                      <path id="linkedin_1_" data-name="linkedin (1)"
+                                        d="M24.985,0H2.485A2.485,2.485,0,0,0,0,2.485v22.5A2.485,2.485,0,0,0,2.485,27.47h22.5a2.485,2.485,0,0,0,2.485-2.485V2.485A2.485,2.485,0,0,0,24.985,0ZM8.5,23.719a.723.723,0,0,1-.723.723H4.7a.723.723,0,0,1-.723-.723v-12.9a.723.723,0,0,1,.723-.723H7.777a.723.723,0,0,1,.723.723ZM6.238,8.876A2.924,2.924,0,1,1,9.162,5.952,2.924,2.924,0,0,1,6.238,8.876Zm18.349,14.9a.665.665,0,0,1-.665.665h-3.3a.665.665,0,0,1-.665-.665V17.725c0-.9.265-3.957-2.36-3.957-2.036,0-2.449,2.09-2.532,3.028v6.981a.665.665,0,0,1-.665.665H11.2a.665.665,0,0,1-.665-.665V10.757a.665.665,0,0,1,.665-.665H14.4a.665.665,0,0,1,.665.665v1.126c.755-1.133,1.877-2.007,4.265-2.007,5.289,0,5.259,4.941,5.259,7.656v6.245Z"
+                                        fill="#0077b7" />
+                                    </svg>
+                                  </a>
                                 </div>
                                 <h3 className="team-subtitle">{items.Designation}, {items.Company}</h3>
                               </div>

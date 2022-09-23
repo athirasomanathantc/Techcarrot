@@ -3,6 +3,8 @@ export interface IContentItem {
     Title: string;
     Designation: string;
     Company: string;
-    LinkedInUrl: string;
+    LinkedInUrl: {Url: string};
     UserImage: string;
+    Business: string;
+    Functions: string;
 }
