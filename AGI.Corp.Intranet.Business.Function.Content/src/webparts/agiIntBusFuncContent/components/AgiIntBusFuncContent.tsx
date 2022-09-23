@@ -19,19 +19,50 @@ export default class AgiIntBusFuncContent extends React.Component<IAgiIntBusFunc
       spfxContext: this.props.context
     });
     this.state = {
-      contentItems: []
+      contentItems: [],
+      lastNavItem: '',
+      programID: ''
     }
   }
 
   public async componentDidMount(): Promise<void> {
-    this.getCarouselItem();
+    await this.getCurrentNavInfo();
+    await this.getCarouselItem();
   }
 
-  private async getCarouselItem(): Promise<void> {debugger;
-    const catVal = this.getQueryStringValue('category');
-    sp.web.lists.getByTitle(LIST_CONTENT).items.filter('FSObjType eq 0').get().then((items: IContentItem[]) => {
+  private getCurrentNavInfo() {
+    try {
+      const currentWindowUrl = window.location.href;
+      const currentSitePages = currentWindowUrl.split("SitePages");
+      const currentSitePagesNav: any = currentSitePages[1].split("/");
+
+      const currentArray: any = [];
+      let i: any;
+      for (i = 0; i < currentSitePagesNav.length; i++) {
+        const isLastPage = currentSitePagesNav[i].includes(".aspx");
+        if (isLastPage == true) {
+          var newItem = currentSitePagesNav[i].split(".aspx")[0];
+          var re = /%20/gi
+          const tempItem = newItem.replace(re, " ");
+          this.setState({
+            lastNavItem: tempItem
+          })
+        }
+      }
+    }
+    catch (e) {
+      console.log(e);
+    }
+  }
+
+
+  private async getCarouselItem(): Promise<void> {
+    const catVal = this.getQueryStringValue('categoryId');
+    const tempProgramme = `${this.state.lastNavItem}Id eq ${catVal}`;
+    sp.web.lists.getByTitle(LIST_CONTENT).items.select('*').filter(tempProgramme).get().then((items: IContentItem[]) => {
       this.setState({
-        contentItems: items
+        contentItems: items,
+        programID: catVal
       });
     });
   }

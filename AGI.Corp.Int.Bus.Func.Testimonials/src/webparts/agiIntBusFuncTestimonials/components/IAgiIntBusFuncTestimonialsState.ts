@@ -1,8 +1,7 @@
 import { IContentItem } from "../models/IContentItem";
 
 
-export interface IAgiIntBusFuncContentState {
+export interface IAgiIntBusFuncTestimonialsState {
   contentItems : IContentItem[];
   lastNavItem: string;
-  programID: string;
 }

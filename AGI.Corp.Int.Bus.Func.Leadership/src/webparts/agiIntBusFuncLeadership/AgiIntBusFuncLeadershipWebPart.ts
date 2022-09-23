@@ -6,17 +6,17 @@ import {
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-
-import * as strings from 'AgiIntBusFuncMediaWebPartStrings';
-import AgiIntBusFuncMedia from './components/AgiIntBusFuncMedia';
-import { IAgiIntBusFuncMediaProps } from './components/IAgiIntBusFuncMediaProps';
 import { SPComponentLoader } from '@microsoft/sp-loader';
-export interface IAgiIntBusFuncMediaWebPartProps {
+import * as strings from 'AgiIntBusFuncLeadershipWebPartStrings';
+import AgiIntBusFuncLeadership from './components/AgiIntBusFuncLeadership';
+import { IAgiIntBusFuncLeadershipProps } from './components/IAgiIntBusFuncLeadershipProps';
+
+export interface IAgiIntBusFuncLeadershipWebPartProps {
   description: string;
   listName: string;
 }
 
-export default class AgiIntBusFuncMediaWebPart extends BaseClientSideWebPart<IAgiIntBusFuncMediaWebPartProps> {
+export default class AgiIntBusFuncLeadershipWebPart extends BaseClientSideWebPart<IAgiIntBusFuncLeadershipWebPartProps> {
 
   protected onInit(): Promise<void> {
     const randomNumber = Math.floor(Math.random() * 90000) + 10000;
@@ -25,8 +25,8 @@ export default class AgiIntBusFuncMediaWebPart extends BaseClientSideWebPart<IAg
   }
 
   public render(): void {
-    const element: React.ReactElement<IAgiIntBusFuncMediaProps> = React.createElement(
-      AgiIntBusFuncMedia,
+    const element: React.ReactElement<IAgiIntBusFuncLeadershipProps> = React.createElement(
+      AgiIntBusFuncLeadership,
       {
         description: this.properties.description,
         siteUrl: this.context.pageContext.web.absoluteUrl,

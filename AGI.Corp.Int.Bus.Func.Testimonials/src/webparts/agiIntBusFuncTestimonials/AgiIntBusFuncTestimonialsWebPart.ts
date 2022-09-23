@@ -6,17 +6,16 @@ import {
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-
-import * as strings from 'AgiIntBusFuncMediaWebPartStrings';
-import AgiIntBusFuncMedia from './components/AgiIntBusFuncMedia';
-import { IAgiIntBusFuncMediaProps } from './components/IAgiIntBusFuncMediaProps';
+import * as strings from 'AgiIntBusFuncTestimonialsWebPartStrings';
+import AgiIntBusFuncTestimonials from './components/AgiIntBusFuncTestimonials';
+import { IAgiIntBusFuncTestimonialsProps } from './components/IAgiIntBusFuncTestimonialsProps';
 import { SPComponentLoader } from '@microsoft/sp-loader';
-export interface IAgiIntBusFuncMediaWebPartProps {
+export interface IAgiIntBusFuncTestimonialsWebPartProps {
   description: string;
   listName: string;
 }
 
-export default class AgiIntBusFuncMediaWebPart extends BaseClientSideWebPart<IAgiIntBusFuncMediaWebPartProps> {
+export default class AgiIntBusFuncTestimonialsWebPart extends BaseClientSideWebPart<IAgiIntBusFuncTestimonialsWebPartProps> {
 
   protected onInit(): Promise<void> {
     const randomNumber = Math.floor(Math.random() * 90000) + 10000;
@@ -25,8 +24,8 @@ export default class AgiIntBusFuncMediaWebPart extends BaseClientSideWebPart<IAg
   }
 
   public render(): void {
-    const element: React.ReactElement<IAgiIntBusFuncMediaProps> = React.createElement(
-      AgiIntBusFuncMedia,
+    const element: React.ReactElement<IAgiIntBusFuncTestimonialsProps> = React.createElement(
+      AgiIntBusFuncTestimonials,
       {
         description: this.properties.description,
         siteUrl: this.context.pageContext.web.absoluteUrl,
