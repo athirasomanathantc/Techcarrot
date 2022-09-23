@@ -81,21 +81,16 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
 
   private setDefaultFilter() {
     const params = new URLSearchParams(window.location.search);
-    const programId = parseInt(params.get('programId'));
+    const programId = parseInt(params.get('programId')) || 0;
     const program = params.get('program');
-    if (program) {
-      this.setState({
-        showBusinessData: program?.toLowerCase() === "business",
-        selectedOption: {
-          ID: programId
-        }
-      }, () => {
-        programId && this.handleFilter(programId);
-      });
-    }
-    else {
-      this.setState({ isDataLoaded: true });
-    }
+    this.setState({
+      showBusinessData: !(program?.toLowerCase() === "function"),
+      selectedOption: {
+        ID: programId
+      }
+    }, () => {
+      this.handleFilter(programId);
+    });
   }
 
   private async getBusinessItems(): Promise<void> {
@@ -180,7 +175,10 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     if (this.state.currentTabName == "image") {
 
       if (value == 0) {
-        const result: IImageItem[] = this.state.folders;
+        const result: IImageItem[] = this.state.folders.filter((obj) => {
+          const itemId = this.state.showBusinessData ? obj.BusinessId : obj.FunctionsId;
+          return itemId !== null;
+        });
         this.setState({
           filterData: result
         }, () => {
@@ -205,7 +203,10 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     else if (this.state.currentTabName == "video") {
 
       if (value == 0) {
-        const result: IImageItem[] = this.state.videoItems;
+        const result: IImageItem[] = this.state.videoItems.filter((obj) => {
+          const itemId = this.state.showBusinessData ? obj.BusinessId : obj.FunctionsId;
+          return itemId !== null;
+        });
         this.setState({
           filterVideoData: result
         }, () => {
@@ -231,7 +232,10 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
 
       if (tab == "image") {
         if (value == 0) {
-          const result: IImageItem[] = this.state.folders;
+          const result: IImageItem[] = this.state.folders.filter((obj) => {
+            const itemId = this.state.showBusinessData ? obj.BusinessId : obj.FunctionsId;
+            return itemId !== null;
+          });
           this.setState({
             filterData: result
           }, () => {
@@ -254,7 +258,10 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       }
       else if (tab == "video") {
         if (value == 0) {
-          const result: IImageItem[] = this.state.videoItems;
+          const result: IImageItem[] = this.state.videoItems.filter((obj) => {
+            const itemId = this.state.showBusinessData ? obj.BusinessId : obj.FunctionsId;
+            return itemId !== null;
+          });
           this.setState({
             filterVideoData: result
           }, () => {
@@ -642,23 +649,14 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   }
 
   private onSelectFilterBy(filterBy: string) {
-    if (filterBy === "Business") {
-      this.setState({
-        showBusinessData: true,
-        selectedOption: {
-          ID: 0
-        }
-      })
-    }
-    else {
-      this.setState({
-        showBusinessData: false,
-        selectedOption: {
-          ID: 0
-        }
-      })
-    }
-    this.handleFilter(0);
+    this.setState({
+      showBusinessData: (filterBy === "Business"),
+      selectedOption: {
+        ID: 0
+      }
+    }, () => {
+      this.handleFilter(0);
+    })
   }
 
   public render(): React.ReactElement<IAgiCorpIntranetImageVideoGalleryProps> {
