@@ -60,7 +60,7 @@ export const MyApps = (props: IAgiIntranetHomeMainProps) => {
     return (<>
         {myAppsCarousel.length > 0 && <div className="col-md-12 my-app ">
             <div className="card carousel slide" id="myApps">
-                <div className="card-header d-flex align-items-center justify-content-between border-bottom-0">
+                <div className="card-header d-flex align-items-center justify-content-between">
                     <h4 className="card-title m-2 me-2">My Apps</h4>
                     <div className="p-0 ms-3 position-relative">
                         <button className="carousel-control-prev" style={{ borderRadius: '60px' }} type="button"

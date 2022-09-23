@@ -245,13 +245,13 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
                 <div className={'col-12 col-md-6 filter-section text-end'}>
                   <div className="row">
                     <div className="col-4 d-flex align-items-center justify-content-around">
-                      <div className="form-check">
+                      <div className="form-check q-box__question">
                         <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business') }} />
                         <label className="form-check-label" htmlFor="flexRadioDefault1">
                           Business
                         </label>
                       </div>
-                      <div className="form-check">
+                      <div className="form-check q-box__question">
                         <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
                         <label className="form-check-label" htmlFor="flexRadioDefault2">
                           Function

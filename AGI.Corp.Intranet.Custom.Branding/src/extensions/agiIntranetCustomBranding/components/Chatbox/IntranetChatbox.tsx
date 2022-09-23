@@ -149,7 +149,7 @@ export default class IntranetChatbox extends React.Component<IIntranetChatboxPro
                         <p id="emailErrorMsg" className="errorMsgClass" style={{ display: this.state.showErrorEmailMsg ? "block" : "none" }}>Email id is not valid</p>
               </div>
               <div>
-                <textarea name="" id="contactFormMessage" cols={30} className="form-control" rows={10} placeholder="Write your feedback here" value={this.state.Feedback} onChange={(e) => this.handleMsgChange(e)}></textarea>
+                <textarea name="" id="contactFormMessage" cols={30} className="form-control" rows={5} placeholder="Write your feedback here" value={this.state.Feedback} onChange={(e) => this.handleMsgChange(e)}></textarea>
               </div>
               <div>
                 <button type="submit" className="btn btn-primary" onClick={(e) => this.handleRegister(e)}>Send Feedback</button>
