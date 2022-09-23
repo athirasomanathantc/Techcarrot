@@ -265,7 +265,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           this.setState({
             filterVideoData: result
           }, () => {
-            // this.paging();
+            this.paging();
           });
 
         } else {
