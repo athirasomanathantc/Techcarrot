@@ -178,7 +178,7 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
                 <div className="date-wrap">
                     <span>{date}</span>
                     <span>
-                        {moment(date)
+                        {moment(day)
                             .format('dddd')
                             .substring(0, 3)
                             .toUpperCase()}
