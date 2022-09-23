@@ -5,4 +5,5 @@ export interface IAgiCorpIntranetCarouselProps {
   siteUrl: string;
   context: any;
   spHttpClient: SPHttpClient; 
+  listName: string;
 }

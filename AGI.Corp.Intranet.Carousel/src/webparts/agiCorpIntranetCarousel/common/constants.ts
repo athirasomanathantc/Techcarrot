@@ -9,7 +9,8 @@ export const NULL_CAROUSEL_ITEM = {
     Business: '',
     Function: '',
     ImageorVideo: '',
-    AttachmentFiles: {ServerRelativeUrl: ''}
+    AttachmentFiles: {ServerRelativeUrl: ''},
+    VideoThumbnail: ''
 }
 
 //export const TEXT_FDP_CAROUSEL_HOME = 'Home';

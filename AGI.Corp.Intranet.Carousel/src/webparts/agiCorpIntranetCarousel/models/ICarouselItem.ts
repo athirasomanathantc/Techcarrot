@@ -7,5 +7,6 @@ export interface ICarouselItem {
     Business: string;
     Function: string;
     ImageorVideo: string;
-    AttachmentFiles:{ServerRelativeUrl: string}
+    AttachmentFiles:{ServerRelativeUrl: string};
+    VideoThumbnail: string;
 }
