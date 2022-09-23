@@ -17,7 +17,6 @@ export interface IAgiIntranetEventsStates {
   selectedTabValues: IEventData[];
   selectedTab: string;
   filterData: IEventData[];
-  ongoingEvents: IEventData[];
   upcomingEvents: IEventData[];
   pastEvents: IEventData[];
   showBusinessData: boolean;

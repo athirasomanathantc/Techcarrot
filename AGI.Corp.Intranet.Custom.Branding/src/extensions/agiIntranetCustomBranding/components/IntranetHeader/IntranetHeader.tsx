@@ -36,7 +36,8 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
       showMobileMenu: false,
       logoURL: '',
       notificationsURL: '',
-      displayOrgChart: false
+      displayOrgChart: false,
+      showSlimHeader: false
     }
   }
 
@@ -45,6 +46,23 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
     await this.getNavigationItems();
     await this.getSocialLinkItems();
     await this.getConfigItems();
+
+    const scrollable = document.querySelector("[data-is-scrollable]");
+    if (typeof scrollable !== "undefined") {
+      scrollable.addEventListener("scroll", () => {
+        if (scrollable.scrollTop > 50) {
+          this.setState({
+            showSlimHeader: true
+          });
+        }
+        else {
+          this.setState({
+            showSlimHeader: false
+          });
+        }
+      });
+    }
+
   }
 
   private async getNavigationItems(): Promise<void> {
@@ -208,7 +226,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
     const otherContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_OTHER);
 
     return (
-      <header className="header-wrapper slim-header">
+      <header className={`header-wrapper ${this.state.showSlimHeader ? 'slim-header' : ''}`}>
         <div className="top-nav">
           <nav className="navbar navbar-expand-lg navbar-light">
             <div className="container">

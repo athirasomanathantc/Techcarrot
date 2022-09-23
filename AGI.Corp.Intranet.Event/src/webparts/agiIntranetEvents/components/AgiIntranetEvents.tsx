@@ -29,7 +29,6 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
       filterValuesFunctions: [],
       selectedTab: "",
       filterData: [],
-      ongoingEvents: [],
       upcomingEvents: [],
       pastEvents: [],
       selectedTabValues: [],
@@ -56,18 +55,16 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
   private setDefaultFilter() {
     const params = new URLSearchParams(window.location.search);
-    const programId = parseInt(params.get('programId'));
+    const programId = parseInt(params.get('programId')) || 0;
     const program = params.get('program');
-    if (program) {
-      this.setState({
-        showBusinessData: program?.toLowerCase() === "business",
-        selectedOption: {
-          ID: programId
-        }
-      }, () => {
-        programId && this.handleFilter(programId);
-      });
-    }
+    this.setState({
+      showBusinessData: !(program?.toLowerCase() === "function"),
+      selectedOption: {
+        ID: programId
+      }
+    }, () => {
+      this.handleFilter(programId);
+    });
   }
 
   private async getBusinessItems(): Promise<void> {
@@ -181,12 +178,6 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
           //const selectedTab = select || this.state.selectedTab;
           console.log("data", items);
 
-          const ongoing: IEventData[] = items.filter((item) => {
-
-            if (moment().isSame(item.StartDate) && item.EndDate == null || moment().isSameOrAfter(item.StartDate) && moment().isSameOrBefore(item.EndDate)) {
-              return (item);
-            }
-          })
           const upcoming: IEventData[] = items.filter((item) => {
             if (moment().isBefore(item.StartDate)) {
               return (item);
@@ -202,12 +193,11 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
           this.setState({
             eventsData: items,
-            filterData: ongoing,
-            selectedTab: "Ongoing Events",
-            ongoingEvents: ongoing,
+            filterData: upcoming,
+            selectedTab: "Upcoming Events",
             upcomingEvents: upcoming,
             pastEvents: past,
-            selectedTabValues: ongoing
+            selectedTabValues: upcoming
 
           })
 
@@ -224,7 +214,11 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
   }
   private handleFilter(value: number) {
     if (value == 0) {
-      const result: IEventData[] = this.state.selectedTabValues;
+      const result: IEventData[] = this.state.selectedTabValues.filter((obj) => {
+        const itemId = this.state.showBusinessData ? obj.Business?.ID : obj.Functions?.ID;
+        return typeof itemId !== "undefined";
+      });
+
       console.log('filter', result);
       this.setState({
         filterData: result,
@@ -309,10 +303,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
   private setTabData(tabName: string) {
     let selectedTabValues = [];
 
-    if (tabName == EVENTS.ONGOING) {
-      selectedTabValues = this.state.ongoingEvents
-    }
-    else if (tabName == EVENTS.UPCOMING) {
+    if (tabName == EVENTS.UPCOMING) {
       selectedTabValues = this.state.upcomingEvents
     }
     else if (tabName == EVENTS.PAST) {
@@ -392,23 +383,14 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
   // }
 
   private onSelectFilterBy(filterBy: string) {
-    if (filterBy === "Business") {
-      this.setState({
-        showBusinessData: true,
-        selectedOption: {
-          ID: 0
-        }
-      })
-    }
-    else {
-      this.setState({
-        showBusinessData: false,
-        selectedOption: {
-          ID: 0
-        }
-      })
-    }
-    this.handleFilter(0);
+    this.setState({
+      showBusinessData: (filterBy === "Business"),
+      selectedOption: {
+        ID: 0
+      }
+    }, () => {
+      this.handleFilter(0);
+    })
   }
 
   public render(): React.ReactElement<IAgiIntranetEventsProps> {

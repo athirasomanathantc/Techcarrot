@@ -4,4 +4,4 @@ export enum EVENTS {
     PAST = 'Past Events'
   };
 
-  export const TABS = ["Ongoing Events", "Upcoming Events", "Past Events"];
+  export const TABS = ["Upcoming Events", "Past Events"];

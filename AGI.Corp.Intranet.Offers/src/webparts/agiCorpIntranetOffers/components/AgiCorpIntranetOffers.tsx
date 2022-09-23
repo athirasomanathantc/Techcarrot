@@ -35,18 +35,16 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
 
   private setDefaultFilter() {
     const params = new URLSearchParams(window.location.search);
-    const programId = parseInt(params.get('programId'));
+    const programId = parseInt(params.get('programId')) || 0;
     const program = params.get('program');
-    if (program) {
-      this.setState({
-        showBusinessData: program?.toLowerCase() === "business",
-        selectedOption: {
-          ID: programId
-        }
-      }, () => {
-        programId && this.handleFilter(programId);
-      });
-    }
+    this.setState({
+      showBusinessData: !(program?.toLowerCase() === "function"),
+      selectedOption: {
+        ID: programId
+      }
+    }, () => {
+      this.handleFilter(programId);
+    });
   }
 
   private async fetch() {
@@ -136,7 +134,10 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
 
   private handleFilter(value: number) {
     if (value == 0) {
-      const result: IOfferData[] = this.state.offerData;
+      const result: IOfferData[] = this.state.offerData.filter((obj) => {
+        const itemId = this.state.showBusinessData ? obj.Business?.ID : obj.Functions?.ID;
+        return typeof itemId !== "undefined";
+      });
       this.setState({
         filterData: result
       }, () => {
@@ -216,23 +217,14 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
   }
 
   private onSelectFilterBy(filterBy: string) {
-    if (filterBy === "Business") {
-      this.setState({
-        showBusinessData: true,
-        selectedOption: {
-          ID: 0
-        }
-      })
-    }
-    else {
-      this.setState({
-        showBusinessData: false,
-        selectedOption: {
-          ID: 0
-        }
-      })
-    }
-    this.handleFilter(0);
+    this.setState({
+      showBusinessData: (filterBy === "Business"),
+      selectedOption: {
+        ID: 0
+      }
+    }, () => {
+      this.handleFilter(0);
+    })
   }
 
 
@@ -298,17 +290,17 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
                         return (
                           <div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
                             <div className={'card news-card'}>
-                              <a href={`${this.props.siteURL}/SitePages/Reward Details.aspx?rewardID=${item.ID}`}>
+                              <a href={`${this.props.siteURL}/SitePages/Rewards/Reward Details.aspx?rewardID=${item.ID}`}>
                                 <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Card Image" />
                               </a>
 
                               <div className={'card-body d-flex flex-column'}>
                                 <div className={'mb-3 card-content-header'}>
-                                  <a href={`${this.props.siteURL}/SitePages/Reward Details.aspx?rewardID=${item.ID}`}>
+                                  <a href={`${this.props.siteURL}/SitePages/Rewards/Reward Details.aspx?rewardID=${item.ID}`}>
                                     <h5 className={'card-title'}>{item.Title}</h5>
                                   </a>
                                 </div>
-                                <a href={`${this.props.siteURL}/SitePages/Reward Details.aspx?rewardID=${item.ID}`}>
+                                <a href={`${this.props.siteURL}/SitePages/Rewards/Reward Details.aspx?rewardID=${item.ID}`}>
 
                                   <p className={'card-text'}>{item.Description}</p>
                                 </a>

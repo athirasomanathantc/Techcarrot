@@ -1379,9 +1379,9 @@ nav.navbar.topnav-menu {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 40px;
   width: 100%;
-  justify-content: space-between;
+  justify-content: inherit;
 }
 
 .snap-share-section .img-with-text {
@@ -4800,6 +4800,11 @@ ul.pagination {
 }
 .home-page .calendar .DayPicker .date-wrap {
     display:block;
+    background: #800D69;
+    border-radius:50%;
+    padding-top: 8px;
+    height:53px;
+    color: #fff;
 }
 .home-page .calendar .DayPicker .date-wrap span{
     display: block;
@@ -4865,6 +4870,15 @@ ul.pagination {
 }
 .home-page .snap-share-section.desktop{
     display: block;
+}
+.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover{
+    background:none !important;
+}
+.header-wrapper .main-nav{
+    transition: all 0.4s;
+}
+.header-wrapper.slim-header .main-nav{
+    height:0px;
 }
 
 @media (max-width: 991px){

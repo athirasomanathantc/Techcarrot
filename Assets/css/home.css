@@ -925,7 +925,7 @@ input[type="radio"]:checked+label::after {
 }
 
 .DayPicker-Day--today:hover {
-    background-color: #9D0D71 !important;
+    background-color: none !important;
 }
 
 .DayPicker-Day--today,
@@ -936,9 +936,9 @@ input[type="radio"]:checked+label::after {
 
 
 .DayPicker-Day--today:not(.DayPicker-Day--outside) {
-    background-color: #9D0D71;
-    color: #fff !important;
-    border: 2px solid #9D0D71;
+    /* background-color: #9D0D71; */
+    /* color: #fff !important; */
+    /* border: 2px solid #9D0D71; */
 }
 
 .DayPicker-Day--event:not(.DayPicker-Day--outside):after {
@@ -959,14 +959,14 @@ input[type="radio"]:checked+label::after {
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
     position: relative;
-    color: #ffffff;
-    background: #9d0e719c;
-    border: 2px solid #9D0D71;
+    /* color: #ffffff; */
+    background: none;
+    /* border: 2px solid #9D0D71; */
 }
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
-    opacity: 50%;
-    background-color: #9D0D71;
+    /* opacity: 50%;
+    background-color: #9D0D71; */
     color: #fff;
 }
 

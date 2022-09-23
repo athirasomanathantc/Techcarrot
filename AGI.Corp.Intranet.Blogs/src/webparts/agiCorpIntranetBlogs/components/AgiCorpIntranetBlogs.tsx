@@ -49,18 +49,16 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
 
   private setDefaultFilter() {
     const params = new URLSearchParams(window.location.search);
-    const programId = parseInt(params.get('programId'));
+    const programId = parseInt(params.get('programId')) || 0;
     const program = params.get('program');
-    if (program) {
-      this.setState({
-        showBusinessData: program?.toLowerCase() === "business",
-        selectedOption: {
-          ID: programId
-        }
-      }, () => {
-        programId && this.handleFilter(programId);
-      });
-    }
+    this.setState({
+      showBusinessData: !(program?.toLowerCase() === "function"),
+      selectedOption: {
+        ID: programId
+      }
+    }, () => {
+      this.handleFilter(programId);
+    });
   }
 
   private async getBusinessItems(): Promise<void> {
@@ -141,7 +139,10 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
 
   private handleFilter(value: number) {
     if (value == 0) {
-      const result: IBlogData[] = this.state.blogData;
+      const result: IBlogData[] = this.state.blogData.filter((obj) => {
+        const itemId = this.state.showBusinessData ? obj.Business?.ID : obj.Functions?.ID;
+        return typeof itemId !== "undefined";
+      });;
       this.setState({
         filterData: result
       }, () => {
@@ -223,23 +224,14 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   }
 
   private onSelectFilterBy(filterBy: string) {
-    if (filterBy === "Business") {
-      this.setState({
-        showBusinessData: true,
-        selectedOption: {
-          ID: 0
-        }
-      })
-    }
-    else {
-      this.setState({
-        showBusinessData: false,
-        selectedOption: {
-          ID: 0
-        }
-      })
-    }
-    this.handleFilter(0);
+    this.setState({
+      showBusinessData: (filterBy === "Business"),
+      selectedOption: {
+        ID: 0
+      }
+    }, () => {
+      this.handleFilter(0);
+    })
   }
 
   public render(): React.ReactElement<IAgiCorpIntranetBlogsProps> {

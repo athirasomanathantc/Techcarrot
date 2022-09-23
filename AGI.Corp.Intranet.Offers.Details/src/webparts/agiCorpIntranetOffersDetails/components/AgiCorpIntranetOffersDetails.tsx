@@ -65,7 +65,7 @@ export default class AgiCorpIntranetOffersDetails extends React.Component<IAgiCo
     }
 
   }
-  getImageUrl(imageContent: string) {
+  private getImageUrl(imageContent: string) {
     if (!imageContent) {
       return;
     }
@@ -76,6 +76,7 @@ export default class AgiCorpIntranetOffersDetails extends React.Component<IAgiCo
   private renderData(): JSX.Element {
     const offer = this.state.offerData;
     const imageUrl = this.getImageUrl(offer.OfferImage);
+    console.log('Imageurl',imageUrl);
     const imagebet=this.getImageUrl(offer.MiddleImage);
     console.log("Offer Image", offer.OfferImage);
     console.log("small", offer.MiddleImage)
@@ -87,7 +88,7 @@ export default class AgiCorpIntranetOffersDetails extends React.Component<IAgiCo
           </header>
           <div className={'full-width-img mt-5'} style={{ display: offer.OfferImage === null ? "none" : "display" }}>
             <img src={imageUrl} className={'d-block w-100'} alt="..." />
-          </div>
+          </div> 
           <div className={'detail-text mt-5'} style={{ display: offer.OfferImage === null ? "none" : "display" }} dangerouslySetInnerHTML={{ __html: offer.Content1 }}>
 
           </div>
@@ -99,7 +100,7 @@ export default class AgiCorpIntranetOffersDetails extends React.Component<IAgiCo
                   <div className={'image-container'} >
                     <img className={'w-100  mb-4 mb-md-0'} src={imagebet} alt="" />
                   </div>
-                </div>
+                </div> 
                 <div className={'col-lg-7'}>
                   <div className={'text-container'} dangerouslySetInnerHTML={{ __html: offer.Content2 }}>
                     
