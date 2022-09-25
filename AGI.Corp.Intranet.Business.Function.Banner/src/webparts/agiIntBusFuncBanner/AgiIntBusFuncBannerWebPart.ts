@@ -6,22 +6,32 @@ import {
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-
+import { SPComponentLoader } from '@microsoft/sp-loader';
 import * as strings from 'AgiIntBusFuncBannerWebPartStrings';
 import AgiIntBusFuncBanner from './components/AgiIntBusFuncBanner';
 import { IAgiIntBusFuncBannerProps } from './components/IAgiIntBusFuncBannerProps';
 
 export interface IAgiIntBusFuncBannerWebPartProps {
   description: string;
+  listName: string;
 }
 
 export default class AgiIntBusFuncBannerWebPart extends BaseClientSideWebPart<IAgiIntBusFuncBannerWebPartProps> {
+
+  protected onInit(): Promise<void> {
+    const randomNumber = Math.floor(Math.random() * 90000) + 10000;
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/business.css?${randomNumber}`);
+    return Promise.resolve();
+  }
 
   public render(): void {
     const element: React.ReactElement<IAgiIntBusFuncBannerProps> = React.createElement(
       AgiIntBusFuncBanner,
       {
-        description: this.properties.description
+        description: this.properties.description,
+        siteUrl: this.context.pageContext.web.absoluteUrl,
+        context: this.context,
+        listName: this.properties.listName
       }
     );
 
@@ -49,6 +59,9 @@ export default class AgiIntBusFuncBannerWebPart extends BaseClientSideWebPart<IA
               groupFields: [
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
+                }),
+                PropertyPaneTextField('listName', {
+                  label: strings.ListNameFieldLabel
                 })
               ]
             }
