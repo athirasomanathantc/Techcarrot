@@ -19,4 +19,5 @@ export interface IIntranetHeaderState {
     notificationsURL: string;
     displayOrgChart: boolean;
     showSlimHeader: boolean;
+    headerLoaded: boolean;
 }

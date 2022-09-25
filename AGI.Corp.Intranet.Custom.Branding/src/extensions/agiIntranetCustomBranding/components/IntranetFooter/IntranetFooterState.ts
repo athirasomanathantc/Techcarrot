@@ -14,4 +14,5 @@ export interface IIntranetFooterState {
     validationText: string;
     isSubscribed: boolean;
     subscribeItem: ISubscribeItem;
+    footerLoaded: boolean;
 }
