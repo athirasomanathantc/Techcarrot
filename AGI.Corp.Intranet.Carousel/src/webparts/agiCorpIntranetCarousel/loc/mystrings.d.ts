@@ -3,6 +3,7 @@ declare interface IAgiCorpIntranetCarouselWebPartStrings {
   BasicGroupName: string;
   DescriptionFieldLabel: string;
   ListNameFieldLabel: string;
+  PageFieldLabel: string;
 }
 
 declare module 'AgiCorpIntranetCarouselWebPartStrings' {

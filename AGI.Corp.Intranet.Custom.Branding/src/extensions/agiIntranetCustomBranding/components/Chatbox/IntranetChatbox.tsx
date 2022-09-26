@@ -22,10 +22,10 @@ export default class IntranetChatbox extends React.Component<IIntranetChatboxPro
       FullName: "",
       Email: "",
       Feedback: "",
-      enable:false,
-      showErrorEmailMsg:false,
-      showSuccessMsg:false,
-      
+      enable: false,
+      showErrorEmailMsg: false,
+      showSuccessMsg: false,
+      feedbackError: false
 
     }
   }
@@ -52,13 +52,13 @@ export default class IntranetChatbox extends React.Component<IIntranetChatboxPro
   }
   private toggleclassName() {
     this.setState({
-      enable:true
+      enable: true
 
     })
   }
   private removeClass() {
     this.setState({
-      enable:false
+      enable: false
 
     })
   }
@@ -82,58 +82,53 @@ export default class IntranetChatbox extends React.Component<IIntranetChatboxPro
   }
   private successResetForm() {
     this.setState({
-      enable:false,
-      Feedback:"",
-      showErrorEmailMsg:false,
-      showSuccessMsg:false
+      enable: false,
+      Feedback: "",
+      showErrorEmailMsg: false,
+      showSuccessMsg: false
     });
   }
 
-  private handleRegister(e:any) {
-    debugger;
+  private handleRegister(e: any) {
     e.preventDefault();
 
-    // const isErrors= this.validate(phone, email);
-
-    // if(!isErrors) {
-    //   return false;
-    // }
-
-  //  const isFormValid = this.validateForm();
-
-    // if (!isFormValid) {
-    //   return false;
-    // }
-
-    const body = {
-
-      Title: this.state.FullName,
-      Email: this.state.Email,
-      Feedback: this.state.Feedback,
-    }
-
-    //const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${LIST_REGISTRATION}')/items`;
-
-    sp.web.lists.getByTitle('Feedback').items.add(body).then((data) => {
-      console.log('Feedback completed');
+    if (!this.state.Feedback.trim().length) {
       this.setState({
-        showSuccessMsg: true
+        feedbackError: true
       });
-      this.successResetForm();
-    }).catch((error) => {
-      console.log('Feedback Submitted', error);
-    });
+    }
+    else {
+      const body = {
+
+        Title: this.state.FullName,
+        Email: this.state.Email,
+        Feedback: this.state.Feedback,
+      }
+
+      //const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${LIST_REGISTRATION}')/items`;
+
+      sp.web.lists.getByTitle('Feedback').items.add(body).then((data) => {
+        console.log('Feedback completed');
+        this.setState({
+          showSuccessMsg: true,
+          feedbackError: false
+        });
+        this.successResetForm();
+      }).catch((error) => {
+        console.log('Feedback Submitted', error);
+      });
+    }
   }
 
   public render(): React.ReactElement<IIntranetChatboxProps> {
     return (<>
       <div className="chatbox-wrapper">
         <div className="chat-toggler">
-          <button  onClick={this.state.enable?() => {this.removeClass() }:() => {this.toggleclassName() }}><i><img src={`${this.props.siteUrl}/Assets/icons/Chat_feedback.svg`}  /></i></button>
+          <button onClick={this.state.enable ? () => { this.removeClass() } : () => { this.toggleclassName() }}><i><img src={`${this.props.siteUrl}/Assets/icons/Chat_feedback.svg`} /></i></button>
         </div>
-        <div className={`${this.state.enable ?'chatbox showChatBox':'chatbox'}`} id="chatBox">
+        <div className={`${this.state.enable ? 'chatbox showChatBox' : 'chatbox'}`} id="chatBox">
           <div className="close-btn">
-            <button type="button" onClick={() => {this.removeClass() }} className="btn btn-primary"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-close.svg`}  alt="" /></i></button>
+            <button type="button" onClick={() => { this.removeClass() }} className="btn btn-primary"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-close.svg`} alt="" /></i></button>
           </div>
           <div className="chatbox-header">
             <h4>Send us your feedback</h4>
@@ -145,11 +140,12 @@ export default class IntranetChatbox extends React.Component<IIntranetChatboxPro
                 <input type="text" name="" id="contactFormName" className="form-control" disabled value={this.state.FullName} onChange={(e) => this.handleNameChange(e)} />
               </div>
               <div>
-              <input type="email" className="form-control" disabled id="contactFormEmail" value={this.state.Email} onChange={(e) => this.handleEmailChange(e)} />
-                        <p id="emailErrorMsg" className="errorMsgClass" style={{ display: this.state.showErrorEmailMsg ? "block" : "none" }}>Email id is not valid</p>
+                <input type="email" className="form-control" disabled id="contactFormEmail" value={this.state.Email} onChange={(e) => this.handleEmailChange(e)} />
+                <p id="emailErrorMsg" className="errorMsgClass" style={{ display: this.state.showErrorEmailMsg ? "block" : "none" }}>Email id is not valid</p>
               </div>
               <div>
                 <textarea name="" id="contactFormMessage" cols={30} className="form-control" rows={5} placeholder="Write your feedback here" value={this.state.Feedback} onChange={(e) => this.handleMsgChange(e)}></textarea>
+                {this.state.feedbackError && <label htmlFor="contactFormMessage" style={{ color: "red", marginBottom: "20px" }}>Feedback cannot be empty</label>}
               </div>
               <div>
                 <button type="submit" className="btn btn-primary" onClick={(e) => this.handleRegister(e)}>Send Feedback</button>
