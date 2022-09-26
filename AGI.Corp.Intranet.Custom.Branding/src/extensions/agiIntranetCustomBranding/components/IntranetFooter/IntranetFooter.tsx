@@ -306,10 +306,11 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                 <form className="newsletter-form">
                                     <input type="text" placeholder="name@al-gurair.com" id="subscribeFormEmail" value={this.state.selectedUserEmail} onKeyPress={(e) => this.validateEmailFormat(e)} onChange={(e) => this.handleEmailChange(e)} />
                                     <p id="emailErrorMsg" className="errorMsgClass" style={{ display: this.state.showErrorEmailMsg ? "block" : "none" }}>Email id is not valid</p>
-                                    <input type='button' className="btn btn-lg btn-gradient" value={'Subscribe'} onClick={(e) => this.handleRegister()} />
+                                    <input type='button' className="btn btn-lg btn-gradient" value={'Subscribe'} onClick={(e) => this.handleRegister()} disabled={this.state.showSuccessMsg} />
                                     {/* <button type="submit" name="" className="btn btn-lg btn-gradient" onClick={(e) => this.handleRegister()}>Subscribe</button> */}
                                 </form>
                             </div>
+                            {this.state.showSuccessMsg && <p className="success" style={{ display: "block", color: "green", fontSize: "1rem", marginTop: "10px" }}>{TEXT_REGISTRATION_SUCCESS}</p>}
                             <div className="subscription-txt subscription-success" style={{ display: this.state.isSubscribed ? 'block' : 'none' }}>You have already subscribed to the Newsletter.</div>
                         </div>
                     </div>
@@ -616,9 +617,6 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
         return (
             <div className={styles.intranetFooter}>
                 {this.renderFooter()}
-                <div style={{ display: this.state.showSuccessMsg ? 'block' : 'none' }}>
-                    {this.renderSuccessForm()}
-                </div>
             </div>
         );
     }
