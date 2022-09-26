@@ -47,6 +47,8 @@ export class SPService {
     public async getSnaps(): Promise<ISnap[]> {
         return await sp.web.lists.getByTitle('SnapAndShare').items.select("ID,Title,File,ImageDescription,Author/Title")
             .expand('Author,File')
+            .filter(`ApprovalStatus eq 'Approved'`)
+            .orderBy('Created', false)
             .top(this._props.topSnaps)()
             .then((items: ISnap[]) => {
                 return items;
