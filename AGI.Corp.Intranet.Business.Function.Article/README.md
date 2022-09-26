@@ -1,4 +1,4 @@
-# agi-corp-int-bus-func-service
+# agi-corp-int-bus-func-article
 
 ## Summary
 

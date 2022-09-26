@@ -3,8 +3,8 @@
     "isCreatingSolution": true,
     "environment": "spo",
     "version": "1.11.0",
-    "libraryName": "agi-corp-int-bus-func-service",
-    "libraryId": "22c19db1-fdb4-4240-89f0-cfeaaa2160d2",
+    "libraryName": "agi-corp-int-bus-func-article",
+    "libraryId": "b2c1a6bc-159a-4657-9c63-e7184eb8ced7",
     "packageManager": "npm",
     "isDomainIsolated": false,
     "componentType": "webpart"

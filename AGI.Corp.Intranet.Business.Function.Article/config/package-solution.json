@@ -1,8 +1,8 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "agi-corp-int-bus-func-service-client-side-solution",
-    "id": "22c19db1-fdb4-4240-89f0-cfeaaa2160d2",
+    "name": "agi-corp-int-bus-func-article-client-side-solution",
+    "id": "b2c1a6bc-159a-4657-9c63-e7184eb8ced7",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
@@ -15,6 +15,6 @@
     }
   },
   "paths": {
-    "zippedPackage": "solution/agi-corp-int-bus-func-service.sppkg"
+    "zippedPackage": "solution/agi-corp-int-bus-func-article.sppkg"
   }
 }

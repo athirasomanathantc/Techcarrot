@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "f69764a7-ac66-490e-9fcf-7b23ff60ab60",
-  "alias": "AgiIntBusFuncServiceWebPart",
+  "id": "c432629a-34b5-42c5-b8fe-6f056b96ddd9",
+  "alias": "AgiIntBusFuncArticleWebPart",
   "componentType": "WebPart",
 
   // The "*" signifies that the version should be taken from the package.json
@@ -17,11 +17,11 @@
   "preconfiguredEntries": [{
     "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Other
     "group": { "default": "Other" },
-    "title": { "default": "agiIntBusFuncService" },
-    "description": { "default": "agiIntBusFuncService description" },
+    "title": { "default": "agiIntBusFuncArticle" },
+    "description": { "default": "agiIntBusFuncArticle description" },
     "officeFabricIconFontName": "Page",
     "properties": {
-      "description": "agiIntBusFuncService"
+      "description": "agiIntBusFuncArticle"
     }
   }]
 }

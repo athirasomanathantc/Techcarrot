@@ -7,31 +7,29 @@ import {
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { SPComponentLoader } from '@microsoft/sp-loader';
-import * as strings from 'AgiIntBusFuncServiceWebPartStrings';
-import AgiIntBusFuncService from './components/AgiIntBusFuncService';
-import { IAgiIntBusFuncServiceProps } from './components/IAgiIntBusFuncServiceProps';
+import * as strings from 'AgiIntBusFuncArticleWebPartStrings';
+import AgiIntBusFuncArticle from './components/AgiIntBusFuncArticle';
+import { IAgiIntBusFuncArticleProps } from './components/IAgiIntBusFuncArticleProps';
 
-export interface IAgiIntBusFuncServiceWebPartProps {
+export interface IAgiIntBusFuncArticleWebPartProps {
   description: string;
-  listName: string;
 }
 
-export default class AgiIntBusFuncServiceWebPart extends BaseClientSideWebPart<IAgiIntBusFuncServiceWebPartProps> {
+export default class AgiIntBusFuncArticleWebPart extends BaseClientSideWebPart<IAgiIntBusFuncArticleWebPartProps> {
 
   protected onInit(): Promise<void> {
     const randomNumber = Math.floor(Math.random() * 90000) + 10000;
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/business.css?${randomNumber}`);
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/articles.css?${randomNumber}`);
     return Promise.resolve();
   }
 
   public render(): void {
-    const element: React.ReactElement<IAgiIntBusFuncServiceProps> = React.createElement(
-      AgiIntBusFuncService,
+    const element: React.ReactElement<IAgiIntBusFuncArticleProps> = React.createElement(
+      AgiIntBusFuncArticle,
       {
         description: this.properties.description,
         siteUrl: this.context.pageContext.web.absoluteUrl,
-        context: this.context,
-        listName: this.properties.listName
+        context: this.context
       }
     );
 
@@ -59,9 +57,6 @@ export default class AgiIntBusFuncServiceWebPart extends BaseClientSideWebPart<I
               groupFields: [
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
-                }),
-                PropertyPaneTextField('listName', {
-                  label: strings.ListNameFieldLabel
                 })
               ]
             }

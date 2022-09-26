@@ -3,11 +3,12 @@ export const LIST_CONTENT = 'Business-Function-Content';
 export const NULL_CONTENT_ITEM = {
     ID: 0,
     Title: '',
-    PrimaryDescription: '',
-    SecondaryDescription: '',
+    Description: '',
+    NavigationText: '',
+    NavigationUrl: {Url: ''},
+    ServiceIcon: '',
     Business: '',
-    Function: '',
-    ContentImage: ''
+    Function: ''
 }
 
 //export const TEXT_FDP_CAROUSEL_HOME = 'Home';
