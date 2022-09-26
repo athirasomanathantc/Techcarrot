@@ -273,7 +273,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
           <div className="top-nav">
             <nav className="navbar navbar-expand-lg navbar-light">
               <div className="container">
-                <div className="align-items-center d-flex" onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { this.gotoHome(e) }}>
+                <div className="align-items-center d-flex">
                   <button className="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -281,7 +281,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                   </button>
                   <a href="" className="topnav-logo">
                     <span className="topnav-logo-lg">
-                      <img src={this.state.logoURL} alt="" />{/*  {`${this.props.siteUrl}/Assets/images/logo.svg`} */}
+                      <img src={this.state.logoURL} alt="" onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { this.gotoHome(e) }} />{/*  {`${this.props.siteUrl}/Assets/images/logo.svg`} */}
                     </span>
                   </a>
                 </div>

@@ -38,7 +38,7 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
     const programId = parseInt(params.get('programId')) || 0;
     const program = params.get('program');
     this.setState({
-      showBusinessData: !(program?.toLowerCase() === "function"),
+      showBusinessData: !(program?.toLowerCase() === "functions"),
       selectedOption: {
         ID: programId
       }
@@ -254,7 +254,7 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
                       <div className="form-check q-box__question">
                         <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
                         <label className="form-check-label" htmlFor="flexRadioDefault2">
-                          Function
+                          Functions
                         </label>
                       </div>
                     </div>
