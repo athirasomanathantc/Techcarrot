@@ -14,6 +14,7 @@ import { IAgiCorpIntranetCarouselProps } from './components/IAgiCorpIntranetCaro
 export interface IAgiCorpIntranetCarouselWebPartProps {
   description: string;
   listName: string;
+  page: string;
 }
 
 export default class AgiCorpIntranetCarouselWebPart extends BaseClientSideWebPart<IAgiCorpIntranetCarouselWebPartProps> {
@@ -28,11 +29,10 @@ export default class AgiCorpIntranetCarouselWebPart extends BaseClientSideWebPar
     const element: React.ReactElement<IAgiCorpIntranetCarouselProps> = React.createElement(
       AgiCorpIntranetCarousel,
       {
-        description: this.properties.description,
+        ...this.properties,
         siteUrl: this.context.pageContext.web.absoluteUrl,
         context: this.context,
         spHttpClient: this.context.spHttpClient,
-        listName: this.properties.listName
       }
     );
 
@@ -63,6 +63,9 @@ export default class AgiCorpIntranetCarouselWebPart extends BaseClientSideWebPar
                 }),
                 PropertyPaneTextField('listName', {
                   label: strings.ListNameFieldLabel
+                }),
+                PropertyPaneTextField('page', {
+                  label: strings.PageFieldLabel
                 })
               ]
             }

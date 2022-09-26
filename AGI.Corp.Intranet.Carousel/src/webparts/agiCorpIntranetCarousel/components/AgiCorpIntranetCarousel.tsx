@@ -34,7 +34,7 @@ export default class AgiCorpIntranetCarousel extends React.Component<IAgiCorpInt
     const currentListName = this.props.listName;
     let filter = '';
     if (!catVal.length) {
-      filter = `OtherPage eq 'About'`;
+      filter = `OtherPage eq '${this.props.page}'`;
     }
     else {
       filter = `${this.state.lastNavItem}Id eq ${catVal}`;

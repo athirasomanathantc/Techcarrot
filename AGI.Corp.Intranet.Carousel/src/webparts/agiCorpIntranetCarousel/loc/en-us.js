@@ -1,8 +1,9 @@
-define([], function() {
+define([], function () {
   return {
     "PropertyPaneDescription": "Description",
     "BasicGroupName": "Group Name",
     "DescriptionFieldLabel": "Description Field",
-    "ListNameFieldLabel": "List Name"
+    "ListNameFieldLabel": "List Name",
+    "PageFieldLabel": "Page"
   }
 });
