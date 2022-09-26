@@ -197,6 +197,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
             this.setState({
                 showErrorEmailMsg: true
             });
+            isEmailValid = false;
             // return;
         }
         else {
