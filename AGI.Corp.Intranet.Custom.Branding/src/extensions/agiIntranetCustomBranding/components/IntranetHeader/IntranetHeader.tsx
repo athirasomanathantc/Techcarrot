@@ -226,6 +226,11 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
     })
   }
 
+  private gotoHome(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    e.preventDefault();
+    window.location.href = this.props.siteUrl;
+  }
+
   private renderHeader(): JSX.Element {
 
     const companyContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_COMPANY);
@@ -240,7 +245,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
           <div className="top-nav">
             <nav className="navbar navbar-expand-lg navbar-light">
               <div className="container">
-                <div className="align-items-center d-flex">
+                <div className="align-items-center d-flex" onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { this.gotoHome(e) }}>
                   <button className="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
                     aria-label="Toggle navigation">
