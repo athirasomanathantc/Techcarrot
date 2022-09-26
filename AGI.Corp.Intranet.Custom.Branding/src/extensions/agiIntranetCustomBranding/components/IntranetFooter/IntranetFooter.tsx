@@ -5,16 +5,20 @@ import { IIntranetFooterState } from "./IntranetFooterState";
 import SPService from "../../services/spservice";
 import { escape } from '@microsoft/sp-lodash-subset';
 import { Item, sp } from '@pnp/sp/presets/all';
-import { ASSET_LIBRARY, CONFIG_LIST, LIST_SUBSCRIBE, NAVIGATION_LIST, NULL_COPYRIGHT_ITEM, NULL_SUBSCRIBE_ITEM, SOCIALLINK_LIST, TEXT_BUSINESS, TEXT_COMPANY, TEXT_GALLERY, TEXT_NEWSMISC, TEXT_OTHER, TEXT_REGISTRATION_SUCCESS } from "../../common/constants";
+import { ASSET_LIBRARY, BUSINESS_LIST, CONFIG_LIST, FUNCTION_LIST, LIST_SUBSCRIBE, NAVIGATION_LIST, NULL_COPYRIGHT_ITEM, NULL_SUBSCRIBE_ITEM, SOCIALLINK_LIST, TEXT_BUSINESS, TEXT_COMPANY, TEXT_FUNCTIONS, TEXT_GALLERY, TEXT_NEWSMISC, TEXT_OTHER, TEXT_REGISTRATION_SUCCESS } from "../../common/constants";
 import { FontIcon, Icon, Modal, IconButton, IIconProps } from 'office-ui-fabric-react';
 import { IConfigItem } from "../../models/IConfigItem";
 import { INavigationItem } from "../../models/INavigationItem";
 import { ISocialLink } from "../../models/ISocialLinkItem";
 import { ISubscribeItem } from "../../models/ISubscribeItem";
 import IntranetChatbox from "../Chatbox/IntranetChatbox";
+import { IBusinessItem } from "../../models/IBusinessItem";
+import { IFunctionItem } from "../../models";
 
 const menuIcon: IIconProps = { iconName: 'GlobalNavButton' };
 const closeIcon: IIconProps = { iconName: 'Cancel' };
+
+const toggleStyle = { color: "#DF009B !important", cursor: "pointer" };
 
 export default class IntranetFooter extends React.Component<IIntranetFooterProps, IIntranetFooterState> {
     constructor(props: IIntranetFooterProps) {
@@ -22,6 +26,8 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
         this.state = {
             subscribeItem: NULL_SUBSCRIBE_ITEM,
             navigationItems: [],
+            businessItems: [],
+            functionItems: [],
             socialLinks: [],
             configDetails: [],
             copyright: NULL_COPYRIGHT_ITEM,
@@ -30,6 +36,8 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
             showErrorEmailMsg: false,
             validationText: '',
             isSubscribed: false,
+            showAllBusiness: false,
+            showAllFunctions: false,
             footerLoaded: false
         }
     }
@@ -38,6 +46,8 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
         Promise.all([
             await this.getUserProfile(),
             await this.getSubscribedItem(),
+            await this.getBusinessItems(),
+            await this.getFunctionItems(),
             await this.getNavigationItems(),
             await this.getSocialLinkItems(),
             await this.getConfigDetailsItems()
@@ -55,6 +65,28 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
             const navigationItems: INavigationItem[] = data;
             this.setState({
                 navigationItems
+            });
+        })
+    }
+
+    private async getBusinessItems(): Promise<void> {
+        const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${BUSINESS_LIST}')/items`
+        SPService.getItemsByRestApi(url, this.props.spHttpClient).then((data) => {
+            const businessItems: IBusinessItem[] = data;
+            ////const showAllBusiness = businessItems.length > 4;
+            this.setState({
+                businessItems,
+                // showAllBusiness
+            });
+        })
+    }
+
+    private async getFunctionItems(): Promise<void> {
+        const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${FUNCTION_LIST}')/items`
+        SPService.getItemsByRestApi(url, this.props.spHttpClient).then((data) => {
+            const functionItems: IFunctionItem[] = data;
+            this.setState({
+                functionItems,
             });
         })
     }
@@ -202,6 +234,31 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
         });
     }
 
+    private showAllBusiness() {
+        this.setState({
+            showAllBusiness: true
+        });
+    }
+
+    private showLessBusiness() {
+        this.setState({
+            showAllBusiness: false
+        });
+    }
+
+    private showAllFunctions() {
+        this.setState({
+            showAllFunctions: true
+        });
+    }
+
+    private showLessFunctions() {
+        this.setState({
+            showAllFunctions: false
+        });
+    }
+
+
     private renderSuccessForm(): JSX.Element {
         return (
             <>
@@ -224,10 +281,12 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
     private renderFooter(): JSX.Element {
 
         const companyContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_COMPANY);
-        const businessContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_BUSINESS);
+        //const businessContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_BUSINESS);
         const newsMiscContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_NEWSMISC);
         const galleryContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_GALLERY);
         const otherContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_OTHER);
+
+        const { businessItems, functionItems } = this.state;
 
         return (
             <>
@@ -303,14 +362,118 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                     </div>
                                     <ul className="list-unstyled collapse" id="Business">
                                         {
-                                            businessContentItems.map((bus) => {
-                                                const link = bus.Link && bus.Link.Url ? bus.Link.Url : '';
-                                                return (
-                                                    <li>
-                                                        <a href={link} target="_blank" data-interception="off">- {bus.Title}</a>
-                                                    </li>
-                                                )
-                                            })
+                                            businessItems.length > 4 ?
+
+                                                <>
+                                                    {
+                                                        businessItems.map((bus, i) => {
+                                                            const link = '';
+                                                            return (
+                                                                i < 4 &&
+                                                                <li>
+                                                                    <a href={link} data-interception="off">- {bus.Title}</a>
+                                                                </li>
+                                                            )
+                                                        })
+                                                    }
+                                                    <li className="all" style={{ display: this.state.showAllBusiness ? 'none' : 'block' }} onClick={() => this.showAllBusiness()}>+ Show All</li>
+                                                    {
+                                                        businessItems.map((bus, i) => {
+                                                            const link = '';
+                                                            return (
+                                                                i >= 4 &&
+                                                                <li style={{ display: this.state.showAllBusiness ? 'block' : 'none' }}>
+                                                                    <a href={link} data-interception="off">- {bus.Title}</a>
+                                                                </li>
+                                                            )
+                                                        })
+                                                    }
+                                                    <li className="all" style={{ display: this.state.showAllBusiness ? 'block' : 'none' }} onClick={() => this.showLessBusiness()}>- Show Less</li>
+                                                </>
+
+                                                :
+
+                                                <>
+                                                    {
+                                                        businessItems.map((bus) => {
+                                                            const link = `${this.props.siteUrl}/SitePages/Business.aspx?categoryId=${bus.ID}`;
+                                                            return (
+                                                                <li>
+                                                                    <a href={link} data-interception="off">- {bus.Title}</a>
+                                                                </li>
+                                                            )
+                                                        })
+                                                    }
+
+                                                </>
+
+                                        }
+                                    </ul>
+                                    {/** Functions */}
+                                    <h5 className="my-2 font-weight-bold d-none d-md-block">{TEXT_FUNCTIONS}</h5>
+                                    <div className="d-md-none title" data-bs-toggle="collapse" data-bs-target="#Business">
+                                        <div className="mt-3 font-weight-bold title-wrapper">{TEXT_FUNCTIONS}
+                                            <div className="float-right navbar-toggler">
+                                                <svg xmlns="http:www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                                                    <g id="Dropdown-Logo" transform="translate(-84 -7.544)">
+                                                        <path id="Path_73662" data-name="Path 73662"
+                                                            d="M15.739,7.87,8.525.656,7.868,0,0,7.87"
+                                                            transform="translate(100.366 20.883) rotate(180)" fill="none"
+                                                            stroke="#dccede" stroke-width="1.5" />
+                                                        <rect id="Rectangle_7537" data-name="Rectangle 7537" width="18" height="18"
+                                                            transform="translate(84 7.544)" fill="none" />
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ul className="list-unstyled collapse" id="Functions">
+                                        {
+                                            functionItems.length > 4 ?
+
+                                                <>
+                                                    {
+                                                        functionItems.map((func, i) => {
+                                                            const link = `${this.props.siteUrl}/SitePages/Functions.aspx?categoryId=${func.ID}`;
+                                                            return (
+                                                                i < 4 &&
+                                                                <li>
+                                                                    <a href={link} data-interception="off">- {func.Title}</a>
+                                                                </li>
+                                                            )
+                                                        })
+                                                    }
+                                                    <li className="all" style={{ display: this.state.showAllFunctions ? 'none' : 'block' }} onClick={() => this.showAllFunctions()}>+ Show All</li>
+                                                    {
+                                                        functionItems.map((func, i) => {
+                                                            const link = `${this.props.siteUrl}/SitePages/Functions.aspx?categoryId=${func.ID}`;
+                                                            return (
+                                                                i >= 4 &&
+                                                                <li style={{ display: this.state.showAllFunctions ? 'block' : 'none' }}>
+                                                                    <a href={link} data-interception="off">- {func.Title}</a>
+                                                                </li>
+                                                            )
+                                                        })
+                                                    }
+                                                    <li className="all" style={{ display: this.state.showAllFunctions ? 'block' : 'none' }} onClick={() => this.showLessFunctions()}>- Show Less</li>
+                                                </>
+
+                                                :
+
+                                                <>
+                                                    {
+                                                        functionItems.map((func) => {
+                                                            const link = `${this.props.siteUrl}/SitePages/Functions.aspx?categoryId=${func.ID}`;
+                                                            return (
+                                                                <li>
+                                                                    <a href={link} data-interception="off">- {func.Title}</a>
+                                                                </li>
+                                                            )
+                                                        })
+                                                    }
+
+                                                </>
+
                                         }
                                     </ul>
                                 </div>
