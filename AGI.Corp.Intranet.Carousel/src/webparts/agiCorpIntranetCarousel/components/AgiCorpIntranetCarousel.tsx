@@ -30,11 +30,16 @@ export default class AgiCorpIntranetCarousel extends React.Component<IAgiCorpInt
   }
 
   private async getCarouselItem(): Promise<void> {
-    debugger;
     const catVal = this.getQueryStringValue('categoryId');
-    const tempProgramme = `${this.state.lastNavItem}Id eq ${catVal}`;
     const currentListName = this.props.listName;
-    sp.web.lists.getByTitle(currentListName).items.select('*, AttachmentFiles').expand("AttachmentFiles").filter(tempProgramme).get().then((items: ICarouselItem[]) => {
+    let filter = '';
+    if (!catVal.length) {
+      filter = `OtherPage eq 'About'`;
+    }
+    else {
+      filter = `${this.state.lastNavItem}Id eq ${catVal}`;
+    }
+    sp.web.lists.getByTitle(currentListName).items.select('*, AttachmentFiles').expand("AttachmentFiles").filter(filter).get().then((items: ICarouselItem[]) => {
       this.setState({
         carouselItems: items,
         programID: catVal
@@ -103,10 +108,10 @@ export default class AgiCorpIntranetCarousel extends React.Component<IAgiCorpInt
                   const videoType = item.ImageorVideo;
 
                   if (videoType === 'Image') {
-                    const imageUrl = item && item.AttachmentFiles[0].ServerRelativeUrl ? item.AttachmentFiles[0].ServerRelativeUrl : '';
+                    const imageUrl = item && item.AttachmentFiles[0]?.ServerRelativeUrl ? item.AttachmentFiles[0]?.ServerRelativeUrl : '';
                     return (
                       <div className={i == 0 ? "carousel-item active" : "carousel-item"}>
-                        <img src={imageUrl} className="d-block w-100" alt="..." />
+                        {imageUrl.length > 0 && <img src={imageUrl} className="d-block w-100" alt="..." />}
                         <div className="carousel-caption ">
                           <h2>{item.Title}</h2>
                           <p>{item.SubTitle}</p>
@@ -115,7 +120,7 @@ export default class AgiCorpIntranetCarousel extends React.Component<IAgiCorpInt
                     )
                   }
                   else if (videoType === 'Video') {
-                    const videoUrl = item && item.AttachmentFiles[0].ServerRelativeUrl ? item.AttachmentFiles[0].ServerRelativeUrl : '';
+                    const videoUrl = item && item.AttachmentFiles[0]?.ServerRelativeUrl ? item.AttachmentFiles[0]?.ServerRelativeUrl : '';
                     const thumbnailUrl = item && item.VideoThumbnail ? this.getImageUrl(item.VideoThumbnail) : '';
                     return (
                       <div className={i == 0 ? "carousel-item active" : "carousel-item"}>
