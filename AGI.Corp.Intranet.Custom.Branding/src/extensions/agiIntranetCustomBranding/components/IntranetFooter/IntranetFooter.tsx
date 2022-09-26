@@ -155,6 +155,14 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
             errorsNew.push("Email should contain '.'");
         }
 
+        if (!email.trim().length) {
+            errorsNew.push("Email should not be empty");
+        }
+
+        else if (!(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g.test(email))) {
+            errorsNew.push("You have entered an invalid email address!");
+        }
+
         return errorsNew;
     }
 
@@ -296,7 +304,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                             <div className="subscription-txt">Subscribe to our newsletter and never miss our latest news</div>
                             <div className="newsletter mt-3" style={{ display: this.state.isSubscribed ? 'none' : 'block' }}>
                                 <form className="newsletter-form">
-                                    <input type="text" placeholder="name@al-gurair.com" id="subscribeFormEmail" onKeyPress={(e) => this.validateEmailFormat(e)} onChange={(e) => this.handleEmailChange(e)} />
+                                    <input type="text" placeholder="name@al-gurair.com" id="subscribeFormEmail" value={this.state.selectedUserEmail} onKeyPress={(e) => this.validateEmailFormat(e)} onChange={(e) => this.handleEmailChange(e)} />
                                     <p id="emailErrorMsg" className="errorMsgClass" style={{ display: this.state.showErrorEmailMsg ? "block" : "none" }}>Email id is not valid</p>
                                     <input type='button' className="btn btn-lg btn-gradient" value={'Subscribe'} onClick={(e) => this.handleRegister()} />
                                     {/* <button type="submit" name="" className="btn btn-lg btn-gradient" onClick={(e) => this.handleRegister()}>Subscribe</button> */}
