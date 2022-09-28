@@ -4,7 +4,7 @@ import { IIntranetHeaderProps } from "./IntranetHeaderProps";
 import { IIntranetHeaderState } from "./IntranetHeaderState";
 import { INavigationItem } from "../../models/INavigationItem";
 import SPService from "../../services/spservice";
-import { ASSET_LIBRARY, BUSINESS_LIST, CONFIG_LIST, FUNCTION_LIST, NAVIGATION_LIST, SOCIALLINK_LIST, TEXT_BUSINESS, TEXT_COMPANY, TEXT_GALLERY, TEXT_NEWSMISC, TEXT_OTHER } from "../../common/constants";
+import { ASSET_LIBRARY, BUSINESS_LIST, CONFIG_LIST, FUNCTION_LIST, NAVIGATION_LIST, SOCIALLINK_LIST, TEXT_BUSINESS, TEXT_COMPANY, TEXT_FUNCTIONS, TEXT_GALLERY, TEXT_NEWSMISC, TEXT_OTHER } from "../../common/constants";
 import { FontIcon, Icon, Modal, IconButton, IIconProps } from 'office-ui-fabric-react';
 import { sp } from '@pnp/sp/presets/all';
 import { IConfigItem } from "../../models/IConfigItem";
@@ -260,7 +260,6 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
   private renderHeader(): JSX.Element {
 
     const companyContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_COMPANY);
-    //const businessContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_BUSINESS);
     const newsMiscContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_NEWSMISC);
     const galleryContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_GALLERY);
     const otherContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_OTHER);
@@ -411,6 +410,21 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                             return (
                               <li>
                                 <a className="dropdown-item" href={link} data-interception="off">{bus.Title}</a>
+                              </li>
+                            )
+                          })
+                        }
+                      </div>
+                    </li>
+                    <li className="nav-item dropdown">
+                      <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">{TEXT_FUNCTIONS}</a>
+                      <div className="dropdown-menu">
+                        {
+                          functionItems.map((func) => {
+                            const link = `${this.props.siteUrl}/SitePages/Functions.aspx?categoryId=${func.ID}`;
+                            return (
+                              <li>
+                                <a className="dropdown-item" href={link} data-interception="off">{func.Title}</a>
                               </li>
                             )
                           })

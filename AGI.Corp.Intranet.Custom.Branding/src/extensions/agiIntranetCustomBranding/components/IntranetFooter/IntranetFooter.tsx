@@ -343,7 +343,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                 const link = comp.Link && comp.Link.Url ? comp.Link.Url : '';
                                                 return (
                                                     <li>
-                                                        <a href={link} target="_blank" data-interception="off">- {comp.Title}</a>
+                                                        <a href={link} data-interception="off">- {comp.Title}</a>
                                                     </li>
                                                 )
                                             })
@@ -377,7 +377,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                 <>
                                                     {
                                                         businessItems.map((bus, i) => {
-                                                            const link = '';
+                                                            const link = `${this.props.siteUrl}/SitePages/Business.aspx?categoryId=${bus.ID}`;
                                                             return (
                                                                 i < 4 &&
                                                                 <li>
@@ -389,7 +389,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                     <li className="all" style={{ display: this.state.showAllBusiness ? 'none' : 'block' }} onClick={() => this.showAllBusiness()}>+ Show All</li>
                                                     {
                                                         businessItems.map((bus, i) => {
-                                                            const link = '';
+                                                            const link = `${this.props.siteUrl}/SitePages/Business.aspx?categoryId=${bus.ID}`;
                                                             return (
                                                                 i >= 4 &&
                                                                 <li style={{ display: this.state.showAllBusiness ? 'block' : 'none' }}>
@@ -421,7 +421,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                     </ul>
                                     {/** Functions */}
                                     <h5 className="my-2 font-weight-bold d-none d-md-block">{TEXT_FUNCTIONS}</h5>
-                                    <div className="d-md-none title" data-bs-toggle="collapse" data-bs-target="#Business">
+                                    <div className="d-md-none title" data-bs-toggle="collapse" data-bs-target="#Functions">
                                         <div className="mt-3 font-weight-bold title-wrapper">{TEXT_FUNCTIONS}
                                             <div className="float-right navbar-toggler">
                                                 <svg xmlns="http:www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
@@ -512,7 +512,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                 const link = news.Link && news.Link.Url ? news.Link.Url : '';
                                                 return (
                                                     <li>
-                                                        <a href={link} target="_blank" data-interception="off">- {news.Title}</a>
+                                                        <a href={link} data-interception="off">- {news.Title}</a>
                                                     </li>
                                                 )
                                             })
@@ -542,7 +542,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                 const link = gallery.Link && gallery.Link.Url ? gallery.Link.Url : '';
                                                 return (
                                                     <li>
-                                                        <a href={link} target="_blank" data-interception="off">- {gallery.Title}</a>
+                                                        <a href={link} data-interception="off">- {gallery.Title}</a>
                                                     </li>
                                                 )
                                             })
@@ -573,7 +573,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                 const link = other.Link && other.Link.Url ? other.Link.Url : '';
                                                 return (
                                                     <li>
-                                                        <a href={link} target="_blank" data-interception="off">- {other.Title}</a>
+                                                        <a href={link}  data-interception="off">- {other.Title}</a>
                                                     </li>
                                                 )
                                             })
