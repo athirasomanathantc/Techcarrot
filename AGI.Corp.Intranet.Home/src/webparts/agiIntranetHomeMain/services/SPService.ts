@@ -80,17 +80,6 @@ export class SPService {
             });
     }
 
-    public async getSocialMediaPosts(): Promise<ISocialMediaPost[]> {
-        return await sp.web.lists.getByTitle('SocialMediaPosts').items.select("Id,Title,Thumbnail,Description,Icon,PostUrl")
-            .top(this._props.topSocialMediaPosts)()
-            .then((items: ISocialMediaPost[]) => {
-                return items;
-            })
-            .catch((exception) => {
-                throw new Error(exception);
-            });
-    }
-
     public async getRewards(): Promise<IReward[]> {
         return await sp.web.lists.getByTitle('Offers').items.select("Id,Title,Description,OfferImage")
             .top(this._props.topRewards)()
