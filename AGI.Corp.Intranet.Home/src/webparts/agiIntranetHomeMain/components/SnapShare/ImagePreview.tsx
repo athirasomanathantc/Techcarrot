@@ -2,6 +2,7 @@ import * as React from "react";
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ISnap } from "../../models/ISnap";
 import { useEffect, useState } from "react";
+import * as moment from "moment";
 
 interface IImagePreview {
     itemId: number;
@@ -52,6 +53,9 @@ export const ImagePreview = (props: IImagePreview) => {
                                 <i className="icon user-icon"><img src={`${props.siteUrl}/Assets/icons/icon-avatar.svg`} /></i>
                                 <span className='userName'>
                                     {imageDetails.Author.Title}
+                                </span>
+                                <span className='createdDate'>
+                                    <span> Date Taken:</span> {moment(imageDetails.Created).format('DD MMMM YYYY')}
                                 </span>
                             </li>
                         </ul>

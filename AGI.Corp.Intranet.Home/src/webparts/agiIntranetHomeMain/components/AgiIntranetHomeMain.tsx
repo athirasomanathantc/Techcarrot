@@ -32,7 +32,7 @@ export default class AgiIntranetHomeMain extends React.Component<IAgiIntranetHom
       this.setState({
         hideLoader: true
       })
-    }, 2000)
+    }, 1000)
   }
 
   public render(): React.ReactElement<IAgiIntranetHomeMainProps> {

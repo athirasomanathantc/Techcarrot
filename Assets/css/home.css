@@ -208,10 +208,12 @@ h2.chart-heading {
     /*padding: 20px;*/
     text-align: center;
 }
-#qbox-container img{
+
+#qbox-container img {
     padding: 20px 0;
 }
-#qbox-container h5{
+
+#qbox-container h5 {
     font: normal normal 600 20px/28px Gill Sans;
     letter-spacing: 0px;
     color: #880D6C;
@@ -219,20 +221,24 @@ h2.chart-heading {
     margin: 15px 0 20px 0;
     display: -webkit-box;
     -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;  
-     overflow: hidden;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
-@media (max-width:991px){
-    #qbpx-container h5{
+
+@media (max-width:991px) {
+    #qbpx-container h5 {
         font: normal normal 600 14px/20 px Gill Sans;
     }
-    #qbox-container img{
+
+    #qbox-container img {
         max-width: 170px;
     }
 }
-#qbox-container .btn{
+
+#qbox-container .btn {
     margin-bottom: 15px;
 }
+
 #steps-container {
     margin: auto;
     width: 100%;
@@ -452,6 +458,16 @@ transition: all 0.15s ease-in-out;
     box-shadow: 0px 3px 6px #00000029;
     border-radius: 180px;
     color: #fff;
+    transform: scale 0.7;
+}
+
+@media (max-width: 991px) {
+    .chatbox-wrapper .chat-toggler button {
+        transform: scale(0.7);
+    }
+
+    width:60px;
+    height: 60px;
 }
 
 .chatbox-wrapper .chatbox {
@@ -807,12 +823,12 @@ input[type="radio"]:checked+label::after {
     font-size: 1.2rem !important;
 }
 
-.home-page .calendar .card-body .app{
+.home-page .calendar .card-body .app {
     background: #9D0E7105 0% 0% no-repeat padding-box;
     border: 1px solid #EBEBEB;
     opacity: 1;
     padding-bottom: 20px;
-    border-radius:5px;
+    border-radius: 5px;
 }
 
 .DayPicker-Weekday {
@@ -967,7 +983,7 @@ input[type="radio"]:checked+label::after {
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
     /* opacity: 50%;
     background-color: #9D0D71; */
-    color: #fff;
+    /* color: #fff; */
 }
 
 .datebox.Event {
@@ -1189,10 +1205,23 @@ input[type="radio"]:checked+label::after {
     }
 } */
 
-#carouselLatestNews{
-    border-radius:8px!important;    
-    overflow:hidden;
+#carouselLatestNews {
+    border-radius: 8px !important;
+    overflow: hidden;
 }
 
+@media (max-width:991px) {
+    #carouselLatestNews .carousel-inner .carousel-item img.d-block {
+        min-height: 300px;
+        object-fit: cover;
+        object-position: center;
+    }
 
+    #carouselLatestNews .carousel-indicators {
+        display: none;
+    }
+}
 
+.snap-share-section .carousel-inner .carousel-item {
+    cursor: inherit !important;
+}

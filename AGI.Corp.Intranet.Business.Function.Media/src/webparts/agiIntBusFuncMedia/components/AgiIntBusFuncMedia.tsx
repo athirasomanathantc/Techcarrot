@@ -142,8 +142,12 @@ export default class AgiIntBusFuncMedia extends React.Component<IAgiIntBusFuncMe
               data-bs-ride="carousel">
               <div className="carousel-inner w-100">
                 {
-                  this.state.contentItems.map((items, i) => {
+                  this.state.contentItems.map((items, i) => {debugger;
                     const imgVal = this.getImageUrl(items.MediaIcon);
+                    const isGallery = items[i].SitePages.NavigationComponent.includes("Gallery");
+                    console.log("Gallery",isGallery);
+                  //  items.SitePages.NavigationComponent.includes("Gallery");
+
                     const tempNav = `${this.props.siteUrl}/SitePages/${items.SitePages.NavigationComponent}?program=${this.state.lastNavItem}&programId=${this.state.programID}`;
                     // const finalNavUrl = {tempNav}`?program=Function&programId=2`
                     return (
@@ -202,10 +206,20 @@ export default class AgiIntBusFuncMedia extends React.Component<IAgiIntBusFuncMe
                   data-bs-ride="carousel">
                   <div className="carousel-inner w-100">
                     {
-                      this.state.contentItems.map((items, i) => {
+                      this.state.contentItems.map((items, i) => {debugger;
+                        let tempVal :any = '';let tempNav;
                         const imgVal = this.getImageUrl(items.MediaIcon);
-                        const tempNav = `${this.props.siteUrl}/SitePages/${items.SitePages.NavigationComponent}?program=${this.state.lastNavItem}&programId=${this.state.programID}`;
-                        // const finalNavUrl = {tempNav}`?program=Function&programId=2`
+                        const isGallery = items.SitePages.NavigationComponent.includes("Gallery");
+                        //{isGallery == true ? const tempNav = `${this.props.siteUrl}/SitePages/${items.SitePages.NavigationComponent}&program=${this.state.lastNavItem}&programId=${this.state.programID}` : const tempNav = `${this.props.siteUrl}/SitePages/${items.SitePages.NavigationComponent}?program=${this.state.lastNavItem}&programId=${this.state.programID}` }
+                        if(isGallery == true)
+                        {
+                          tempNav = `${this.props.siteUrl}/SitePages/${items.SitePages.NavigationComponent}&program=${this.state.lastNavItem}&programId=${this.state.programID}`;
+                        }
+                        else
+                        {
+                          tempNav = `${this.props.siteUrl}/SitePages/${items.SitePages.NavigationComponent}?program=${this.state.lastNavItem}&programId=${this.state.programID}`;
+                        }
+
                         return (
                           <div className={i == 0 ? "carousel-item active" : "carousel-item"}>
                             <div className="col-md-3 m-2 ">

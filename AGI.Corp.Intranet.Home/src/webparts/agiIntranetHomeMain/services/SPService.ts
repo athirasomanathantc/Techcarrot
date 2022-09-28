@@ -45,7 +45,7 @@ export class SPService {
     }
 
     public async getSnaps(): Promise<ISnap[]> {
-        return await sp.web.lists.getByTitle('SnapAndShare').items.select("ID,Title,File,ImageDescription,Author/Title")
+        return await sp.web.lists.getByTitle('SnapAndShare').items.select("ID,Title,File,ImageDescription,Author/Title,Created")
             .expand('Author,File')
             .filter(`ApprovalStatus eq 'Approved'`)
             .orderBy('Created', false)
@@ -73,17 +73,6 @@ export class SPService {
         return await sp.web.lists.getByTitle('MyApps').items.select("Id,Title,AppIcon,NavigationUrl")
             .top(this._props.topMyApps)()
             .then((items: IMyApp[]) => {
-                return items;
-            })
-            .catch((exception) => {
-                throw new Error(exception);
-            });
-    }
-
-    public async getSocialMediaPosts(): Promise<ISocialMediaPost[]> {
-        return await sp.web.lists.getByTitle('SocialMediaPosts').items.select("Id,Title,Thumbnail,Description,Icon,PostUrl")
-            .top(this._props.topSocialMediaPosts)()
-            .then((items: ISocialMediaPost[]) => {
                 return items;
             })
             .catch((exception) => {

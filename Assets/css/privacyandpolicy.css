@@ -5,7 +5,7 @@ div[class^="ExternalClass"] p,
 div[class^="ExternalClass"] b {
     font-size: 16px !important;
     font-family: 'Gill Sans' !important;
-    line-height:24px
+    line-height: 24px
 }
 
 .content-section .search-wrapper {
@@ -369,18 +369,26 @@ div[class^="ExternalClass"] b {
 
 .privacy-terms-section .container.terms-privacy-wrapper .content-sec p span {
     font: normal normal normal 16px/22px Gill Sans;
+    color: #9d0e71;
+}
+
+.privacy-terms-section .container.terms-privacy-wrapper .content-sec p {
+    color: #9d0e71 !important;
+}
+
+.privacy-terms-section .container.terms-privacy-wrapper .content-sec b span {
+    font-weight: bold !important;
+}
+
+.privacy-terms-section .container.terms-privacy-wrapper .content-sec span {
+    font-family: Gill Sans !important;
     color: #666666;
 }
-.privacy-terms-section .container.terms-privacy-wrapper .content-sec b span{
-    font-weight:bold!important;
+
+.privacy-terms-section .container.terms-privacy-wrapper .content-sec * {
+    font-family: Gill Sans !important;
 }
-.privacy-terms-section .container.terms-privacy-wrapper .content-sec span{
-    font-family: Gill Sans!important;
-    color: #666666;
-}
-.privacy-terms-section .container.terms-privacy-wrapper .content-sec *{
-    font-family: Gill Sans!important;
-}
+
 .privacy-terms-section .container.terms-privacy-wrapper .content-sec a {
     color: var(--bs-secondary);
     transition: all 0.4s;

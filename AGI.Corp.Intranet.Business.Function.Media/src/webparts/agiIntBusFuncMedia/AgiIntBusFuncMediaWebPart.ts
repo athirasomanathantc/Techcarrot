@@ -20,7 +20,7 @@ export default class AgiIntBusFuncMediaWebPart extends BaseClientSideWebPart<IAg
 
   protected onInit(): Promise<void> {
     const randomNumber = Math.floor(Math.random() * 90000) + 10000;
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/business.css?${randomNumber}`);
+   // SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/business.css?${randomNumber}`);
     return Promise.resolve();
   }
 

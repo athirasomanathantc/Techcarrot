@@ -10,4 +10,5 @@ export interface ISnap {
         Name: string;
         ServerRelativeUrl: string;
     };
+    Created: string;
 }

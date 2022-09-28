@@ -355,7 +355,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                                 <p className="text-left user-name"><strong>{this.state.userName}</strong></p>
                                 <p className="text-left small user-email">{this.state.emailID}</p>
                                 <p className="text-left">
-                                  <a href="#viewOrganizationChart" className="organizational-chart-link" data-bs-toggle="modal" onClick={(e) => this.displayOrgChart(e)}>Organizational Chart</a>
+                                  <a href="#viewOrganizationChart" className="organizational-chart-link" data-bs-toggle="modal" onClick={(e) => this.displayOrgChart(e)}>Organisational Chart</a>
 
                                 </p>
                               </div>
