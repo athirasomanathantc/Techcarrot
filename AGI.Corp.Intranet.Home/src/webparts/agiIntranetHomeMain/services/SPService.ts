@@ -45,7 +45,7 @@ export class SPService {
     }
 
     public async getSnaps(): Promise<ISnap[]> {
-        return await sp.web.lists.getByTitle('SnapAndShare').items.select("ID,Title,File,ImageDescription,Author/Title")
+        return await sp.web.lists.getByTitle('SnapAndShare').items.select("ID,Title,File,ImageDescription,Author/Title,Created")
             .expand('Author,File')
             .filter(`ApprovalStatus eq 'Approved'`)
             .orderBy('Created', false)
