@@ -856,3 +856,8 @@ footer.news-detail-footer nav.nav.justify-content-md-end {
     transform: rotate(360deg);
   }
 }
+
+.comment-warning {
+  padding-top: 10px;
+  color: red;
+}
