@@ -25,8 +25,7 @@
     "lib": [
       "es5",
       "dom",
-      "es2015.collection",
-      "es2017"
+      "es2015.collection"
     ]
   },
   "include": [
