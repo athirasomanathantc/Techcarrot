@@ -30,7 +30,8 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       viewsCount: 0,
       showReplySection: false,
       userPicture: '',
-      userId: 0
+      userId: 0,
+      showMoreComments: false
     }
   }
 
@@ -41,7 +42,8 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     const profilePictureUrl = `${this.props.siteUrl}/_layouts/15/userphoto.aspx?size=L&username=${userEmail}`;
     this.setState({
       userPicture: profilePictureUrl,
-      userId
+      userId,
+      showMoreComments: window.innerWidth <= 767
     });
 
     const newsID = this.getQueryStringValue('newsID');
@@ -96,7 +98,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
           return obj;
         });
         this.updateViews(parseInt(newsID), JSON.stringify(updatedViews));
-        console.log("items",item);
+        console.log("items", item);
         this.setState({
           news: item,
           viewsCount: viewsCount
@@ -117,13 +119,13 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     });
 
     await sp.web.lists.getByTitle(listName).items.getById(id)
-    .select('*,Business/Title,Business/ID')
-    .expand('Business')
-    .get().then((item: INewsItem) => {
-      this.setState({
-        news: item,
+      .select('*,Business/Title,Business/ID')
+      .expand('Business')
+      .get().then((item: INewsItem) => {
+        this.setState({
+          news: item,
+        });
       });
-    });
 
   }
 
@@ -269,9 +271,9 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       NewsLikedBy: likedBy
     };
     console.log(body);
-    console.log("Business",this.state.news.Business.Title);
+    console.log("Business", this.state.news.Business.Title);
     this.updateNewsItem(body, id);
-   
+
 
   }
 
@@ -286,7 +288,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       NewsLikedBy: likedBy
     };
     console.log(body);
-    console.log("Business",this.state.news.Business.Title);
+    console.log("Business", this.state.news.Business.Title);
     this.updateNewsItem(body, id);
   }
 
@@ -354,6 +356,12 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     return imageObj.serverUrl + imageObj.serverRelativeUrl;
   }
 
+  private showMore() {
+    this.setState({
+      showMoreComments: false
+    })
+  }
+
   private renderNewsDetail(): JSX.Element {
     const news = this.state.news;
     const userId = this.state.userId;
@@ -361,6 +369,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     const isLikedByCurrentUser = news.NewsLikedBy && news.NewsLikedBy.split(';').includes(userId.toString());
     const commentsCount = this.state.commentsCount;
     //const newsSource = this.state.attachmentUrl;
+    const comments = this.state.showMoreComments ? this.state.comments.slice(0, 3) : this.state.comments;
     return (
       <>
         <article className="news-detail-wrapper">
@@ -377,7 +386,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
             <div className="row">
               <div className="col-md-12">
                 <ul className="justify-content-start ps-0">
-                  <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.png`} /></i> {news.Business? news.Business.Title:""}</li>
+                  <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.png`} /></i> {news.Business ? news.Business.Title : ""}</li>
                 </ul>
               </div>
               {/* <div className="col-md-6">
@@ -487,27 +496,16 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
               </div>
               <div className='commentsContainer'>
                 {
-                  this.state.comments.map((comment) => {
+                  comments.map((comment) => {
                     return this.renderCommentRow(comment)
                   })
                 }
               </div>
-              <div className="comment" style={{ display: 'none' }}>
-                <div className="col d-flex">
-                  <img src="images/icon-user.png" alt="" className="flex-shrink-0 me-3" width="60px" height="60px" />
-                  <div className="comment-detail" >
-                    <h4 className="comment-username">Michael Montgomery</h4>
-                    <p className="comment-time">An hour ago</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    <div className="comment-controls">
-                      <nav className="nav">
-                        <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/comment.svg`} alt="" /></i> Reply</a>
-                        <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" /></i> Like</a>
-                      </nav>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {this.state.showMoreComments && <div className='more-comments-container mobile'>
+                <a className='more-comments' onClick={() => { this.showMore() }} >
+                  More comments
+                </a>
+              </div>}
             </div>
           </div>
         </article>

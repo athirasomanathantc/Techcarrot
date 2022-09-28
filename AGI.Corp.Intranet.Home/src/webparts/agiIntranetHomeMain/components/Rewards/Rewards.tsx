@@ -96,7 +96,7 @@ export const Rewards = (props: IAgiIntranetHomeMainProps) => {
 
 
                     </div>
-                    <div className="text-center mt-0 mb-3"><a href="#" className="viewall-link  d-md-none">View All</a></div>
+                    <div className="text-center mt-0 mb-3"><a href={`${props.siteUrl}/SitePages/Rewards.aspx`} className="viewall-link  d-md-none">View All</a></div>
                 </div>
             </div>
         </div>}

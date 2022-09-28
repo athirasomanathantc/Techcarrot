@@ -359,7 +359,7 @@
 
 .privacy-terms-section .container.terms-privacy-wrapper .content-sec p {
     font: normal normal normal 16px/22px Gill Sans;
-    color: #666666;
+    color: #9d0e71;
 }
 
 .privacy-terms-section .container.terms-privacy-wrapper .content-sec a {
@@ -393,7 +393,8 @@
     display: flex;
     align-items: center;
 }
-.top-switch .col.text-end .sec-btn{
+
+.top-switch .col.text-end .sec-btn {
     margin-left: 15px;
 }
 
@@ -421,7 +422,8 @@
     .top-switch .sec-btn:first-child {
         margin-bottom: 15px;
     }
-    .top-switch .col.text-end .sec-btn{
+
+    .top-switch .col.text-end .sec-btn {
         margin-left: 0;
     }
 }

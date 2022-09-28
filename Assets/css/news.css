@@ -2,38 +2,45 @@
 
 /* news listing */
 .add-comment .form-control {
-    min-width:500px;
+    min-width: 500px;
     font-family: 'Gill Sans';
 }
 
-.main-header-section .filter-section .form-select select{
-        color:#000;
-        font-family:'Gill Sans' !important;
+.main-header-section .filter-section .form-select select {
+    color: #000;
+    font-family: 'Gill Sans' !important;
+}
+
+.more-comments-container.mobile {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .more-comments-container.mobile {
+        display: block;
     }
 
-
-
-@media (max-width: 767px){
-    .main-header-section .heading-section{
+    .main-header-section .heading-section {
         padding: 0px 20px;
     }
-    
-    .main-header-section .filter-section .form-select{
-            border-top: 1px solid #E0E0E0;
-            border-radius: 0px;
+
+    .main-header-section .filter-section .form-select {
+        border-top: 1px solid #E0E0E0;
+        border-radius: 0px;
     }
-    
-    .main-header-section .filter-section .form-select select{
+
+    .main-header-section .filter-section .form-select select {
         background-color: #FFF;
         border-color: #FFF;
-        color:#000;
-        
+        color: #000;
+
     }
+
     ul.pagination {
-      display: flex;
-      justify-content:center !important;
-      padding: 16px 7px;
-      margin: 0;
+        display: flex;
+        justify-content: center !important;
+        padding: 16px 7px;
+        margin: 0;
 
     }
 }
@@ -175,8 +182,9 @@
     border-bottom: none;
     margin-bottom: 15px;
 }
+
 .custom-select select:focus-visible {
-     outline: #000
+    outline: #000
 }
 
 .news-details span {
@@ -222,7 +230,8 @@
 .news-details {
     align-items: flex-start;
 }
-.news-details>span + span {
+
+.news-details>span+span {
     white-space: normal;
     width: auto;
     overflow: inherit;
@@ -237,21 +246,22 @@
 
 
 #newsTop h3 {
-  
-  letter-spacing: 0px;
-  color: #666666;
-  font-family: 'Gill Sans';
-  padding: 0px 20px;
-  margin-top: 0;
-  margin-bottom: 0;
-  line-height: 40px;
-  font-size: 20px;
+
+    letter-spacing: 0px;
+    color: #666666;
+    font-family: 'Gill Sans';
+    padding: 0px 20px;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 40px;
+    font-size: 20px;
 }
+
 @media (max-width: 767px) {
     #newsTop h3 {
-        
+
         font-size: 16px;
-            padding: 0px 0px;
+        padding: 0px 0px;
     }
 }
 
@@ -274,7 +284,7 @@ article.news-detail-wrapper {
     font: normal normal normal 16px/19px Gill Sans;
     letter-spacing: 0px;
     color: #300B55;
-    margin-bottom:20px;
+    margin-bottom: 20px;
 }
 
 .news-detail-wrapper .news-detail-header h1 {
@@ -398,6 +408,7 @@ footer.news-detail-footer .nav-link:hover {
 .comment .comment-detail {
     font-family: 'Gill Sans' !important;
 }
+
 .comment .comment-detail p {
     word-break: break-all;
 }
@@ -420,6 +431,7 @@ footer.news-detail-footer .nav-link:hover {
 p.comment-time {
     color: var(--bs-secondary);
 }
+
 .news-details>span i {
     position: absolute;
     left: 0;
@@ -430,10 +442,11 @@ p.comment-time {
 
 
 
-.news-details span + span > i {
+.news-details span+span>i {
     position: relative;
     top: 0;
 }
+
 .news-details span i img {
     margin-top: 0px !important;
 }
@@ -491,11 +504,13 @@ p.comment-time {
 
 /* news comments */
 .comment {
-  padding: 5px 0;
+    padding: 5px 0;
 }
 
 .commentsContainer .comment {
     margin-top: 50px;
+    border-bottom: 1px solid #e2e2e2;
+    padding-bottom: 30px;
 }
 
 .userImage {
@@ -510,83 +525,83 @@ p.comment-time {
 
 .pagination-button_first,
 .pagination-button_last {
-  border-radius: 50% !important;
-  width: 30px !important;
-  height: 30px !important;
-  background-color: transparent;
-  border: 1px solid #777 !important;
-  padding: 0px !important;
+    border-radius: 50% !important;
+    width: 30px !important;
+    height: 30px !important;
+    background-color: transparent;
+    border: 1px solid #777 !important;
+    padding: 0px !important;
 }
 
 .pagination-button_first i,
 .pagination-button_last i {
-  padding: 0;
-  font-size: 14px;
+    padding: 0;
+    font-size: 14px;
 }
 
 
 .pagination-wrapper ul {
-  justify-content: center;
-  padding: 4px 20px;
-  /* background: #fff; */
-  display: flex;
-  list-style: none;
-  /* border-radius: 0.25rem; */
-  width: 100%;
+    justify-content: center;
+    padding: 4px 20px;
+    /* background: #fff; */
+    display: flex;
+    list-style: none;
+    /* border-radius: 0.25rem; */
+    width: 100%;
 }
 
 .pagination li {
-  cursor: pointer;
-  width: 30px ;
-  height: 30px ;
-  font-size: 16px;
-  font-family: 'Gill Sans' !important;
-  border: none;
-  border-radius: 3px;
-  /*  margin: 0px 5px !important; */
-  outline: transparent !important;
-  position: relative !important;
-  /* font-weight: 400 !important; */
-  box-sizing: border-box !important;
-  display: inline-block;
-  text-align: center !important;
-  padding: 3px 0;
-  background-color: rgb(255, 255, 255) !important;
-  color: rgb(50, 49, 48) !important;
-  user-select: none !important;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    font-family: 'Gill Sans' !important;
+    border: none;
+    border-radius: 3px;
+    /*  margin: 0px 5px !important; */
+    outline: transparent !important;
+    position: relative !important;
+    /* font-weight: 400 !important; */
+    box-sizing: border-box !important;
+    display: inline-block;
+    text-align: center !important;
+    padding: 3px 0;
+    background-color: rgb(255, 255, 255) !important;
+    color: rgb(50, 49, 48) !important;
+    user-select: none !important;
 
 
 }
 
 .pagination li:hover {
-  background-color: #6F1D69 !important;
-  color: #fff !important;
+    background-color: #6F1D69 !important;
+    color: #fff !important;
 }
 
 .pagination li:hover a {
-  /*  background-color: #6F1D69 !important; */
-  color: #fff !important;
+    /*  background-color: #6F1D69 !important; */
+    color: #fff !important;
 }
 
 .pagination ul li a {
-  font-size: 18px !important;
-  line-height: 23px !important;
-  padding: 10px !important;
-  color: #005BAA !important;
-  border: none !important;
-  cursor: pointer !important;
-  color: rgb(50, 49, 48);
+    font-size: 18px !important;
+    line-height: 23px !important;
+    padding: 10px !important;
+    color: #005BAA !important;
+    border: none !important;
+    cursor: pointer !important;
+    color: rgb(50, 49, 48);
 
 
 }
 
 .pagination ul li a i {
-  font-size: 16px
+    font-size: 16px
 }
 
 .pagination [class *="disabled"] {
 
-  /* border: 1px solid #777 !important;
+    /* border: 1px solid #777 !important;
     border-radius: 30px !important;
     width: 30px !important;
     height: 30px !important;
@@ -597,95 +612,95 @@ p.comment-time {
 }
 
 .pagination [class *="disabled"]:hover {
-  background-color: #6F1D69 !important;
-  color: white !important;
+    background-color: #6F1D69 !important;
+    color: white !important;
 
 }
 
 .pagination [class *="active"] {
 
-  background-color: #6F1D69 !important;
-  color: white !important;
-  /* margin: 0px 5px !important; */
-  border-radius: 3px !important;
-  font-size: 16px !important;
-  /*  color: #666666 !important; */
-  font-family: 'Gill Sans' !important;
-  width: 32px !important;
-  height: 32px !important;
-  border: none !important;
-  /*  text-align: center !important; */
+    background-color: #6F1D69 !important;
+    color: white !important;
+    /* margin: 0px 5px !important; */
+    border-radius: 3px !important;
+    font-size: 16px !important;
+    /*  color: #666666 !important; */
+    font-family: 'Gill Sans' !important;
+    width: 32px !important;
+    height: 32px !important;
+    border: none !important;
+    /*  text-align: center !important; */
 }
 
 .pagination ul[class *="pagination"] [class *="active"] a,
 .pagination ul[class *="pagination"] [class *="disabled"] a {
-  font-size: 18px;
-  line-height: 23px;
-  padding: 10px;
-  color: rgba(50, 49, 49, 0.5) !important;
-  text-decoration: none;
-  text-align: center;
+    font-size: 18px;
+    line-height: 23px;
+    padding: 10px;
+    color: rgba(50, 49, 49, 0.5) !important;
+    text-decoration: none;
+    text-align: center;
 }
 
 ul.pagination {
-  justify-content: right;
-  padding: 16px 0px;
-  margin: 0;
+    justify-content: right;
+    padding: 16px 0px;
+    margin: 0;
 
 }
 
 .pagination {
-  display: inline-block;
-  padding-left: 0;
-  margin: 20px 0;
-  border-radius: 4px;
+    display: inline-block;
+    padding-left: 0;
+    margin: 20px 0;
+    border-radius: 4px;
 }
 
 .pagination-Container {
-  text-align: right;
+    text-align: right;
 }
 
 .site-pagination {
-  position: relative;
-  flex: 0 0 100%;
-  max-width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: right;
-  text-align: right;
-  /* background: #fff; */
+    position: relative;
+    flex: 0 0 100%;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    text-align: right;
+    /* background: #fff; */
 }
 
 .site-pagination a {
-  text-decoration: none;
-  color: rgb(50, 49, 48) !important;
-  font-weight: 500;
+    text-decoration: none;
+    color: rgb(50, 49, 48) !important;
+    font-weight: 500;
 }
 
 .fa-angle-double-left,
 .fa-angle-double-right {
-  animation: none !important;
+    animation: none !important;
 }
 
 .navButtonFirst,
 .navButtonPrev,
 .navButtonNext,
 .navButtonLast {
-  border: 1px solid #777 !important;
-  border-radius: 50% !important;
-  width: 25px !important;
-  height: 25px !important;
-  background-color: transparent;
-  padding: 2px !important;
-  margin-top: 2px;
-  font-size: 14px !important;
-  /*font-weight:400px !important;*/
-  /* padding: 7px 0 !important; */
+    border: 1px solid #777 !important;
+    border-radius: 50% !important;
+    width: 25px !important;
+    height: 25px !important;
+    background-color: transparent;
+    padding: 2px !important;
+    margin-top: 2px;
+    font-size: 14px !important;
+    /*font-weight:400px !important;*/
+    /* padding: 7px 0 !important; */
 }
 
 .navButtonFirst,
 .navButtonLast {
-  display: none !important;
+    display: none !important;
 }
 
 /* news details page */
@@ -714,7 +729,7 @@ header.news-detail-header h1 {
     margin: 0;
     font-size: 34px;
     color: #000;
-    
+
 }
 
 section.news-detail-content {
@@ -812,8 +827,9 @@ footer.news-detail-footer .nav-link:hover {
 .post-analytics a:first-child {
     width: 62px;
 }
+
 @media (max-width: 991px) {
-    .post-analytics a:first-child{
+    .post-analytics a:first-child {
         font-size: 0;
         padding-top: 7px;
     }
@@ -906,7 +922,7 @@ header.news-detail-header p {
         background: #FFFFFF 0% 0% no-repeat padding-box;
         border: 1px solid #DEDEDE;
         border-radius: 5px;
-        padding: 47px 20px !important;
+        padding: 47px 20px 0px 20px !important
     }
 
     .add-comment .form-control {
@@ -958,8 +974,18 @@ header.news-detail-header p {
     }
 }
 
-
 article.mb-5 {
     margin-bottom: 0 !important;
 }
 
+.more-comments-container {
+    margin: auto;
+    text-align: center;
+    padding: 20px;
+}
+
+.more-comments {
+    color: #9D0D71;
+    font-size: 12pt;
+    font-weight: 500;
+}

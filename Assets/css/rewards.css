@@ -2,82 +2,85 @@
 
 /* news listing */
 .add-comment .form-control {
-    min-width:500px;
-    font-family: 'Gill Sans';
+  min-width: 500px;
+  font-family: 'Gill Sans';
 }
 
-.main-header-section .filter-section .form-select select{
-        color:#000;
-        font-family:'Gill Sans' !important;
-    }
+.main-header-section .filter-section .form-select select {
+  color: #000;
+  font-family: 'Gill Sans' !important;
+}
 
 
 
-@media (max-width: 767px){
-    .main-header-section .heading-section{
-        padding: 0px 20px;
-        font font-family :"Gill Sans" !important;
-    }
-    
-    .main-header-section .filter-section .form-select{
-            border-top: 1px solid #E0E0E0;
-            border-radius: 0px;
-    }
-    
-    .main-header-section .filter-section .form-select select{
-        background-color: #FFF;
-        border-color: #FFF;
-        color:#000;
-        
-    }
-    ul.pagination {
-      display: flex;
-      justify-content:center !important;
-      padding: 16px 7px;
-      margin: 0;
+@media (max-width: 767px) {
+  .main-header-section .heading-section {
+    padding: 0px 20px;
+    font font-family: "Gill Sans" !important;
+  }
 
-    }
-    #offerTop h3{
-      font-size: 16px !important;
-      padding: 0px 0px !important;
-    }
-    .filter-section .form-select select{
-      background-color: #fff;
-      border-color: #fff;
-      color: #000;
-      width: 100%;
-      padding: 10px 0px;
-    }
-    
-    .main-header-section .form-select select {
+  .main-header-section .filter-section .form-select {
+    border-top: 1px solid #E0E0E0;
+    border-radius: 0px;
+  }
 
-        width: 100% !important;
-    }
+  .main-header-section .filter-section .form-select select {
+    background-color: #FFF;
+    border-color: #FFF;
+    color: #000;
+
+  }
+
+  ul.pagination {
+    display: flex;
+    justify-content: center !important;
+    padding: 16px 7px;
+    margin: 0;
+
+  }
+
+  #offerTop h3 {
+    font-size: 16px !important;
+    padding: 0px 0px !important;
+  }
+
+  .filter-section .form-select select {
+    background-color: #fff;
+    border-color: #fff;
+    color: #000;
+    width: 100%;
+    padding: 10px 0px;
+  }
+
+  .main-header-section .form-select select {
+
+    width: 100% !important;
+  }
 }
 
 
 
 .main-header-section {
-    border: 1px solid #DFDFE1;
-    background-color: #fff;
-    border-radius: 5px;
-    margin-bottom: 45px;
-    padding: 15px 13px;
+  border: 1px solid #DFDFE1;
+  background-color: #fff;
+  border-radius: 5px;
+  margin-bottom: 45px;
+  padding: 15px 13px;
 }
 
 .main-header-section .form-select {
-    border: none;
-    background-image: none;
-    padding: 0px;
+  border: none;
+  background-image: none;
+  padding: 0px;
 }
 
 .main-header-section .form-select select {
-    border-radius: 9px;
-    background-color: #E0E0E0;
-    border-color: #E0E0E0;
-    color: #666666;
-    padding: 10px 10px;
-    width: 46%;
+  border-radius: 9px;
+  background-color: #E0E0E0;
+  border-color: #E0E0E0;
+  color: #666666;
+  padding: 10px 10px;
+  width: 46%;
 }
 
 .main-content {
@@ -85,23 +88,28 @@
   width: 100%;
   min-height: 730px;
 }
+
 .main-content .content-wrapper {
   width: 100%;
   margin: auto;
   padding: 22px 0.937rem;
   min-height: calc(100vh - 161px);
 }
+
 .main-content .content-wrapper .card-header h4 {
   font: 24px/29px Gill Sans;
   letter-spacing: 0px;
   color: #000000;
 }
+
 .main-content .content-wrapper .viewall-link {
   color: #9D0D71;
   font: 18px/34px Gill Sans;
   letter-spacing: 0px;
   font-weight: 500;
-}.main-content .content-wrapper .latest-news-section .card-body {
+}
+
+.main-content .content-wrapper .latest-news-section .card-body {
   /* padding:30px; */
 }
 
@@ -131,10 +139,12 @@
   overflow: hidden;
   border-radius: 5px;
 }
+
 .main-content .content-wrapper .card.news-card a {
   display: block;
   text-decoration: none;
 }
+
 .main-content .content-wrapper .card.news-card .card-content-header {}
 
 .main-content .content-wrapper .card.news-card .card-content-header .card-title {
@@ -144,6 +154,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .main-content .content-wrapper .card.news-card .card-text {
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -151,19 +162,21 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
- .custom-select select:focus-visible {
-       outline: #000
-   }
+
+.custom-select select:focus-visible {
+  outline: #000
+}
+
 .read-more {
-    color: #9C0D70 !important;
-    font-weight: bold !important;
-    font-size: 15px !important;
-    font-family: 'Gill Sans' !important;
-    padding: 10px 0px !important;
-    background: url(../icons/button-arrow.svg);
-    background-position: right center !important;
-    background-repeat: no-repeat !important;
-    padding-right: 25px !important;
+  color: #9C0D70 !important;
+  font-weight: bold !important;
+  font-size: 15px !important;
+  font-family: 'Gill Sans' !important;
+  padding: 10px 0px !important;
+  background: url(../icons/button-arrow.svg);
+  background-position: right center !important;
+  background-repeat: no-repeat !important;
+  padding-right: 25px !important;
 }
 
 /*.read-more {
@@ -181,38 +194,46 @@
   padding: 0px;
 }
 
-.offer-listing-section{
-	font-family:'Gill Sans';
-}
-.offer-listing-section a{
-  color; #fff;
+.offer-listing-section {
+  font-family: 'Gill Sans';
 }
 
-.offer-listing-section .card-content-header .card-title{
-	display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-	font-size:20px;
-	font-weight:600;
-	letter-spacing: 0px;
-	color: #000000;
-	
+.offer-listing-section a {
+  color;
+  #fff;
 }
 
-.offer-listing-section p.card-text{
-	display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-	font-size:16px;
-	letter-spacing: 0px;
-	color: #666666;
+.offer-listing-section .card-content-header .card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0px;
+  color: #000000;
+
 }
+
+.offer-listing-section p.card-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  letter-spacing: 0px;
+  color: #666666;
+}
+
+.offer-listing-section .card img {
+  height: 295px;
+  object-fit: cover;
+}
+
 #offerTop h3 {
-  
+
   letter-spacing: 0px;
   color: #666666;
   font-family: 'Gill Sans' !important;
@@ -226,149 +247,153 @@
 
 
 .detail-text ul {
-    list-style-position: inside;
+  list-style-position: inside;
 }
+
 .detail-text ul {
-    list-style-type: none;
-    margin: 0px;
-    padding: 0px;
-    list-style-image: url(../Icons/icon-ag.png) !important;
-    font-family: "Gill Sans" !important;
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+  list-style-image: url(../Icons/icon-ag.png) !important;
+  font-family: "Gill Sans" !important;
 }
+
 article.detail-wrapper {
-    background: #FFFFFF 0% 0% no-repeat padding-box;
-    border: 1px solid #DEDEDE;
-    border-radius: 5px;
-    padding: 47px 93px;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #DEDEDE;
+  border-radius: 5px;
+  padding: 47px 93px;
 }
 
 header.detail-header p {
-    color: #666;
-    font-size: 16px;
-    margin: 0;
-	 font-family: "Gill Sans" !important;
+  color: #666;
+  font-size: 16px;
+  margin: 0;
+  font-family: "Gill Sans" !important;
 }
 
 header.detail-header h1 {
-    margin: 0;
-    font-size: 34px;
-    color: #000;
-	 font-family: "Gill Sans" !important;
+  margin: 0;
+  font-size: 34px;
+  color: #000;
+  font-family: "Gill Sans" !important;
 }
 
 .detail-text {
-    font-family: "Gill Sans" !important;
-    color: #666666 !important;
+  font-family: "Gill Sans" !important;
+  color: #666666 !important;
 }
 
 .detail-text p {
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #666666 !important;
-    margin-bottom: 0 !important;
-	 font-family: "Gill Sans" !important;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #666666 !important;
+  margin-bottom: 0 !important;
+  font-family: "Gill Sans" !important;
 }
 
 .detail-text p span {
-    font-size: 16px !important;
-    color: #666666 !important;
-	 font-family: "Gill Sans" !important;
-	
+  font-size: 16px !important;
+  color: #666666 !important;
+  font-family: "Gill Sans" !important;
+
 }
 
 .detail-text table {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .detail-text table td {
-    padding: 0;
-    vertical-align: middle;
+  padding: 0;
+  vertical-align: middle;
 }
 
 .detail-text table td:first-child img {
-    min-height: 100% !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding-right: 14px;
+  min-height: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding-right: 14px;
 }
 
 .detail-text table td:first-child {
-    padding-right: 15px;
+  padding-right: 15px;
 }
+
 .detail-text ul {
-    list-style-type: none !important;
-    list-style-image: none !important;
+  list-style-type: none !important;
+  list-style-image: none !important;
 }
 
 
 
 .detail-text ul li {
-    line-height: normal;
-    position: relative;
-    padding-left: 30px;
+  line-height: normal;
+  position: relative;
+  padding-left: 30px;
 }
 
 
 
 .detail-text ul li:before {
-    content: '';
-    background: url(../Icons/icon-ag.png) center center no-repeat !important;
-    width: 20px;
-    height: 20px;
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 2px;
+  content: '';
+  background: url(../Icons/icon-ag.png) center center no-repeat !important;
+  width: 20px;
+  height: 20px;
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 2px;
 }
+
 .detail-text table td {
-    width: 50% !important;
+  width: 50% !important;
 }
 
 
 @media (max-width: 991px) {
-    article.detail-wrapper {
-        padding: 10px;
-    }
+  article.detail-wrapper {
+    padding: 10px;
+  }
 
-    header.detail-header h1 {
-        font-size: 20px;
-        margin-bottom: 0;
-        line-height: 35px;
-    }
+  header.detail-header h1 {
+    font-size: 20px;
+    margin-bottom: 0;
+    line-height: 35px;
+  }
 
-    .full-width-img.mt-5 {
-        margin-top: 10px !important;
-    }
+  .full-width-img.mt-5 {
+    margin-top: 10px !important;
+  }
 
-    .detail-text.mt-5 {
-        margin-top: 10px !important;
-    }
+  .detail-text.mt-5 {
+    margin-top: 10px !important;
+  }
 
-    .detail-text table tr {
-        display: flex;
-        flex-direction: column;
-    }
+  .detail-text table tr {
+    display: flex;
+    flex-direction: column;
+  }
 
-    .detail-text table tr td {
-        width: 100% !important;
-        height: auto !important;
-        padding: 0 !important;
-    }
+  .detail-text table tr td {
+    width: 100% !important;
+    height: auto !important;
+    padding: 0 !important;
+  }
 
-    .detail-text table td:first-child img {
-        padding: 0 !important;
-        height: auto !important;
-        margin-bottom: 10px !important;
-    }
+  .detail-text table td:first-child img {
+    padding: 0 !important;
+    height: auto !important;
+    margin-bottom: 10px !important;
+  }
 
-    .detail-text table tr td h3.title {
-        font-size: 20px !important;
-    }
+  .detail-text table tr td h3.title {
+    font-size: 20px !important;
+  }
 
-    .detail-text table tr td p {
-        font-size: 16px !important;
-    }
+  .detail-text table tr td p {
+    font-size: 16px !important;
+  }
 }
 
 /*paging*/
@@ -402,8 +427,8 @@ header.detail-header h1 {
 
 .pagination li {
   cursor: pointer;
-  width: 30px ;
-  height: 30px ;
+  width: 30px;
+  height: 30px;
   font-size: 16px;
   font-family: 'Gill Sans' !important;
   border: none;
@@ -552,5 +577,3 @@ ul.pagination {
 .navButtonLast {
   display: none !important;
 }
-
-

@@ -8,6 +8,13 @@
 
 }
 
+.policy-content-wrapper .policy-content p.description span {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
 .sidebar-menu {
     padding-top: 15px;
     padding-bottom: 0;
@@ -48,10 +55,17 @@
     padding: 30px;
     border: 1px solid #DFDFE1;
     border-radius: 5px;
-    /*max-height: 210px;*/
+    max-height: 210px !important;
+    overflow: hidden;
     max-height: max-content;
     overflow: hidden;
     position: relative;
+}
+
+@media (max-width:991px) {
+    .policy-content-wrapper {
+        max-height: inherit !important;
+    }
 }
 
 .policy-content-wrapper .row.align-items-center {
@@ -87,7 +101,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
 
