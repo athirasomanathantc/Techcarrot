@@ -56,17 +56,19 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const blogID = this.getQueryStringValue('blogID');
     const listName = LIST_BLOG;
     const select = "ID,Title,Summary,BlogImage,Business/ID,Business/Title,Author/ID,Author/Title,PublishedDate,ViewsJSON,BlogLikedBy";
-    sp.web.lists.getByTitle(listName).items.
-      select(select).
-      expand('Business,Author').
-      get().then((items: IBlogItem[]) => {
+    sp.web.lists.getByTitle(listName)
+      .items
+      .select(select)
+      .expand('Business,Author')
+      .filter(`ID eq ${blogID}`)
+      .get()
+      .then((items: IBlogItem[]) => {
         // get blog item
         if (!blogID) {
           return;
         }
         const id = parseInt(blogID);
         const _blogItem = items.filter((item) => item.ID == id);
-        console.log("item",_blogItem)
         let blogItem = BLOG_NULL_ITEM;
         if (_blogItem && _blogItem.length > 0) {
           blogItem = _blogItem && _blogItem.length > 0 ? _blogItem[0] : BLOG_NULL_ITEM;
