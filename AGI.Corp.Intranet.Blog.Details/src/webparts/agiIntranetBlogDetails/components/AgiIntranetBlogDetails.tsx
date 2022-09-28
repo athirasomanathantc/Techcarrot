@@ -5,7 +5,7 @@ import { IAgiIntranetBlogDetailsState } from './IAgiIntranetBlogDetailsState';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { sp } from '@pnp/sp/presets/all';
 import * as moment from 'moment';
-import { BLOG_NULL_ITEM, LIST_BLOG, LIST_COMMENTS, LIST_INTRANETCONFIG } from '../common/constants';
+import { BLOG_NULL_ITEM, LIST_BLOG, LIST_COMMENTS, LIST_INTRANETCONFIG, REGEX_SPEC_CHAR } from '../common/constants';
 import { IBlogItem } from '../models/IBlogItem';
 import { ICommentItem } from '../models/ICommentItem';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -306,7 +306,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
 
   private handleComment(e: any) {
     const comment = e.target.value;
-    var presents = _.intersectionWith(comment.split(' '), this.state.inappropriateWords, _.isEqual);
+    var presents = _.intersectionWith(comment.split(REGEX_SPEC_CHAR), this.state.inappropriateWords, _.isEqual);
     this.setState({
       comment,
       inappropriateComments: presents.length ? presents : []
@@ -315,7 +315,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
 
   private handleReply(e: any) {
     const reply = e.target.value;
-    var presents = _.intersectionWith(reply.split(' '), this.state.inappropriateWords, _.isEqual);
+    var presents = _.intersectionWith(reply.split(REGEX_SPEC_CHAR), this.state.inappropriateWords, _.isEqual);
     this.setState({
       reply,
       inappropriateReply: presents.length ? presents : []
