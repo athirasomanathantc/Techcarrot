@@ -8,6 +8,9 @@ body {
     overflow-x: hidden;
 }
 
+.chatbox textarea {
+    resize: none;
+}
 
 
 .sp-pageLayout-horizontalNav div[class^="headerRow"] {
@@ -340,7 +343,7 @@ nav.navbar.topnav-menu {
     border: 0;
     padding: 0 18px;
     border-radius: 0;
-    min-width: 228px;
+    min-width: 220px;
     left: -50%;
     right: 0;
     /*top: 64px;*/
@@ -370,6 +373,7 @@ nav.navbar.topnav-menu {
     color: #482366;
     font-weight: 400;
     position: relative;
+    white-space: normal;
 }
 
 .main-nav .navbar-nav .dropdown .dropdown-menu li:last-child .dropdown-item {
@@ -4997,8 +5001,8 @@ ul.pagination {
 
 .employee-offer-section .carousel-item img.w-100,
 .social-media-section .carousel-item img.w-100 {
-    min-height: 20em;
-    max-height: 20em;
+    min-height: 28em;
+    max-height: 28em;
     object-fit: cover;
     object-position: center center;
 }
@@ -5171,6 +5175,36 @@ ul.pagination {
     display: none !important;
 }
 
+.testimonial-slider .button-container .carousel-control-prev {
+    /* margin-right:10px!important; */
+}
+
+.testimonial-slider .button-container .carousel-control-next {
+    margin-left: 10px !important;
+}
+
+.leadership-carousel .team-card {
+    cursor: inherit !important;
+}
+
+.fb-page.desktop {
+    display: block;
+}
+
+.fb-page.mobile {
+    display: none;
+}
+
+@media (max-width:991px) {
+    .fb-page.desktop {
+        display: none;
+    }
+
+    .fb-page.mobile {
+        display: block;
+    }
+}
+
 @media (max-width:1440px) {
     #announcementContent .form-select select {
         max-width: 250px !important;
@@ -5242,3 +5276,9 @@ ul.pagination {
         max-width: 1600px !important;
     }
 }
+
+/* @media (min-width: 1200px){
+    .container {
+        max-width: 1310px;
+    }
+} */

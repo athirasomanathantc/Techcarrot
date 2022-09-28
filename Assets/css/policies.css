@@ -56,9 +56,16 @@
     border: 1px solid #DFDFE1;
     border-radius: 5px;
     max-height: 210px !important;
+    overflow: hidden;
     max-height: max-content;
     overflow: hidden;
     position: relative;
+}
+
+@media (max-width:991px) {
+    .policy-content-wrapper {
+        max-height: inherit !important;
+    }
 }
 
 .policy-content-wrapper .row.align-items-center {
