@@ -34,6 +34,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
       userId: 0,
       currentIndex: 0,
       blogs: [],
+      showMoreComments: false,
       errorText: '',
       inappropriateWords: [],
       inappropriateComments: [],
@@ -48,7 +49,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const profilePictureUrl = `${this.props.siteUrl}/_layouts/15/userphoto.aspx?size=L&username=${userEmail}`;
     this.setState({
       userPicture: profilePictureUrl,
-      userId
+      userId,
     });
 
     //const blogID = this.getQueryStringValue('blogID');
@@ -56,6 +57,20 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     //await this.getBlogItem(blogID);
     this.getBlogItems();
     this.getIntranetConfig('Inappropriate Words')
+  }
+
+  public componentDidUpdate(prevProps: Readonly<IAgiIntranetBlogDetailsProps>, prevState: Readonly<IAgiIntranetBlogDetailsState>, snapshot?: any): void {
+    if (this.state.comments !== prevState.comments) {
+      this.setState({
+        showMoreComments: window.innerWidth <= 767 && this.state.comments.length > 0
+      });
+    }
+  }
+
+  private showMore() {
+    this.setState({
+      showMoreComments: false
+    })
   }
 
   private getIntranetConfig(title: string) {
@@ -489,6 +504,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const isLikedByCurrentUser = blog.BlogLikedBy && blog.BlogLikedBy.split(';').includes(userId.toString());
     const commentsCount = this.state.commentsCount;
     const enablePost = this.state.comment && !this.state.inappropriateComments.length;
+    const comments = this.state.showMoreComments ? this.state.comments.slice(0, 3) : this.state.comments;
 
     return (
       <article className="wrapper">
@@ -610,11 +626,16 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
             </div>
             <div className='commentsContainer'>
               {
-                this.state.comments.map((comment) => {
+                comments.map((comment) => {
                   return this.renderCommentRow(comment)
                 })
               }
             </div>
+            {this.state.showMoreComments && <div className='more-comments-container mobile'>
+              <a className='more-comments' onClick={() => { this.showMore() }} >
+                More comments
+              </a>
+            </div>}
             <div className="comment" style={{ display: 'none' }}>
               <div className="col d-flex">
                 <img src="images/icon-user.png" alt="" className="flex-shrink-0 me-3" width="60px" height="60px" />

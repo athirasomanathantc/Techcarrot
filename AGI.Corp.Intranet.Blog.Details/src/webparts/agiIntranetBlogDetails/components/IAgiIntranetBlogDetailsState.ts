@@ -16,6 +16,7 @@ export interface IAgiIntranetBlogDetailsState {
     userId: number;
     currentIndex: number;
     blogs: IBlogItem[];
+    showMoreComments: boolean;
     errorText: string;
     inappropriateWords: string[];
     inappropriateComments: string[];

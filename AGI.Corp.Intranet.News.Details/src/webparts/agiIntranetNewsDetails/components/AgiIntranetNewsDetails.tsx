@@ -47,8 +47,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     const profilePictureUrl = `${this.props.siteUrl}/_layouts/15/userphoto.aspx?size=L&username=${userEmail}`;
     this.setState({
       userPicture: profilePictureUrl,
-      userId,
-      showMoreComments: window.innerWidth <= 767
+      userId
     });
 
     const newsID = this.getQueryStringValue('newsID');
@@ -57,6 +56,14 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     //await this.updateViews(newsID);
     this.getIntranetConfig('Inappropriate Words');
 
+  }
+
+  public componentDidUpdate(prevProps: Readonly<IAgiIntranetNewsDetailsProps>, prevState: Readonly<IAgiIntranetNewsDetailsState>, snapshot?: any): void {
+    if (this.state.comments !== prevState.comments) {
+      this.setState({
+        showMoreComments: window.innerWidth <= 767 && this.state.comments.length > 0
+      });
+    }
   }
 
   private getIntranetConfig(title: string) {
