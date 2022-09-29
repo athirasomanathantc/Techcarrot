@@ -88,8 +88,8 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     });
 
     await sp.web.lists.getByTitle(listName).items.getById(id)
-      .select('*,Business/Title,Business/ID')
-      .expand('Business')
+      .select('*,Business/Title,Business/ID,Functions/Title,Functions/ID')
+      .expand('Business,Functions')
       .get().then((item: INewsItem) => {
         let viewJSON = '';
         if (item.ViewsJSON) {
@@ -416,7 +416,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
             <div className="row">
               <div className="col-md-12">
                 <ul className="justify-content-start ps-0">
-                  <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.png`} /></i> {news.Business ? news.Business.Title : ""}</li>
+                  <li className="ps-0"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-tag.png`} /></i> {news.Business?.Title || (news.Functions?.Title)}</li>
                 </ul>
               </div>
               {/* <div className="col-md-6">

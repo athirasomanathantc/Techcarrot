@@ -21,8 +21,8 @@ export class SPService {
 
     public async getLatestNews(): Promise<ILatestNews[]> {
         return await sp.web.lists.getByTitle('News').items
-            .select("Id,Title,Created,Business/Title,PublishedDate,NewsImage")
-            .expand("Business")
+            .select("Id,Title,Created,Business/Title,Functions/Title,PublishedDate,NewsImage")
+            .expand("Business,Functions")
             .orderBy("PublishedDate", false)
             .top(this._props.topLatestNews)()
             .then((items: ILatestNews[]) => {

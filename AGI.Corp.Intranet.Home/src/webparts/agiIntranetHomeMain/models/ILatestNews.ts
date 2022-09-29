@@ -7,6 +7,9 @@ export interface ILatestNews {
     Business: {
         Title: string;
     };
+    Functions: {
+        Title: string;
+    }
     PublishedDate: Date;
     NewsImage: string;
 }

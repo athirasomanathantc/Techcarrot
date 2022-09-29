@@ -14,7 +14,7 @@ const CarouselItem = (props: ILatestNews) => {
             <img src={imageUrl} className="d-block w-100"
                 alt="..." />
             <div className="carousel-caption">
-                <span className="badge rounded-pill bg-light">{props.Business?.Title}</span>
+                <span className="badge rounded-pill bg-light">{props.Business?.Title || props.Functions?.Title}</span>
                 <p title={props.Title}>{props.Title}</p>
                 <h5 className="date">{moment(props.PublishedDate).format("DD MMMM YYYY")}</h5>
             </div>
