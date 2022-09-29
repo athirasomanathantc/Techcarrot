@@ -309,7 +309,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     var presents = _.intersectionWith(comment.split(REGEX_SPEC_CHAR), this.state.inappropriateWords, _.isEqual);
     this.setState({
       comment,
-      inappropriateComments: presents.length ? presents : []
+      inappropriateComments: presents.length ? presents.filter(n => n) : []
     });
   }
 
@@ -318,7 +318,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     var presents = _.intersectionWith(reply.split(REGEX_SPEC_CHAR), this.state.inappropriateWords, _.isEqual);
     this.setState({
       reply,
-      inappropriateReply: presents.length ? presents : []
+      inappropriateReply: presents.length ? presents.filter(n => n) : []
     });
   }
 

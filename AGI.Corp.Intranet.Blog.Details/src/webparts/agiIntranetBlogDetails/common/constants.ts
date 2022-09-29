@@ -15,4 +15,4 @@ export const BLOG_NULL_ITEM = {
 };
 
 export const ViewsJSON_NULL = JSON.stringify({ "views": [] });
-export const REGEX_SPEC_CHAR = /[^a-zA-Z:]/g;
+export const REGEX_SPEC_CHAR = /[^a-zA-Z]/g;

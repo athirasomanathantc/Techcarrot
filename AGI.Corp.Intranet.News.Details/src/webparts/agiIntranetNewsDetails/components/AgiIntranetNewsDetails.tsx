@@ -5,10 +5,11 @@ import { IAgiIntranetNewsDetailsState } from './IAgiIntranetNewsDetailsState';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { sp } from '@pnp/sp/presets/all';
 import * as moment from 'moment';
-import { LIST_COMMENTS, LIST_NEWS, NEWS_NULL_ITEM, ViewsJSON_NULL } from '../common/constants';
+import { LIST_COMMENTS, LIST_INTRANETCONFIG, LIST_NEWS, NEWS_NULL_ITEM, REGEX_SPEC_CHAR, ViewsJSON_NULL } from '../common/constants';
 import { ICommentItem } from '../models/ICommentItem';
 import { INewsItem } from '../models/INewsItem';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import * as _ from 'lodash';
 
 
 export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranetNewsDetailsProps, IAgiIntranetNewsDetailsState> {
@@ -31,7 +32,11 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       showReplySection: false,
       userPicture: '',
       userId: 0,
-      showMoreComments: false
+      showMoreComments: false,
+      errorText: '',
+      inappropriateWords: [],
+      inappropriateComments: [],
+      inappropriateReply: []
     }
   }
 
@@ -50,7 +55,19 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
 
     await this.getNewsItem(newsID);
     //await this.updateViews(newsID);
+    this.getIntranetConfig('Inappropriate Words');
 
+  }
+
+  private getIntranetConfig(title: string) {
+    sp.web.lists.getByTitle(LIST_INTRANETCONFIG)
+      .items.filter(`Title eq '${title}'`).get()
+      .then((items: any[]) => {
+        this.setState({
+          inappropriateWords: items[0]?.Dictionary?.split(';'),
+          errorText: items[0]?.Detail
+        })
+      });
   }
 
   private async getNewsItem(newsID: string): Promise<void> {
@@ -216,15 +233,19 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
 
   private handleComment(e: any) {
     const comment = e.target.value;
+    var presents = _.intersectionWith(comment.split(REGEX_SPEC_CHAR), this.state.inappropriateWords, _.isEqual);
     this.setState({
-      comment
+      comment,
+      inappropriateComments: presents.length ? presents.filter(n => n) : []
     });
   }
 
   private handleReply(e: any) {
     const reply = e.target.value;
+    var presents = _.intersectionWith(reply.split(REGEX_SPEC_CHAR), this.state.inappropriateWords, _.isEqual);
     this.setState({
-      reply
+      reply,
+      inappropriateReply: presents.length ? presents.filter(n => n) : []
     });
   }
 
@@ -370,6 +391,8 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     const commentsCount = this.state.commentsCount;
     //const newsSource = this.state.attachmentUrl;
     const comments = this.state.showMoreComments ? this.state.comments.slice(0, 3) : this.state.comments;
+    const enablePost = this.state.comment && !this.state.inappropriateComments.length;
+
     return (
       <>
         <article className="news-detail-wrapper">
@@ -483,12 +506,21 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
                         {/* <input type="text" className="form-control" placeholder="Add a comment." value={this.state.comment} onChange={(e) => this.handleComment(e)} /> */}
                         <textarea className="form-control" placeholder="Add a comment." value={this.state.comment} onChange={(e) => this.handleComment(e)} rows={2}>
                         </textarea>
+                        {this.state.inappropriateComments.length > 0 &&
+                          <div className='comment-warning'>
+                            <span>
+                              {this.state.errorText}
+                            </span>
+                            {this.state.inappropriateComments.map((inappropriateComment: string) => {
+                              return <div>'{inappropriateComment}'</div>
+                            })}
+                          </div>}
                       </div>
                       <div>
                         <label />
                       </div>
                       <div>
-                        <input type="button" className={this.state.comment ? "btn btn-gradient" : "btn btn-gradient disabled"} onClick={() => this.addComment()} value='Post' />
+                        <input type="button" className={enablePost ? "btn btn-gradient" : "btn btn-gradient disabled"} onClick={() => enablePost && this.addComment()} value='Post' />
                       </div>
                     </div>
                   </div>
@@ -521,6 +553,8 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     const userId = this.state.userId;
     const likedBy = comment.CommentLikedBy;
     const isLikedByCurrentUser = likedBy && likedBy.split(';').includes(userId.toString());
+    const enableReply = this.state.reply && !this.state.inappropriateReply.length;
+
     return (
       <div className="comment">
         <div className="col d-flex">
@@ -578,12 +612,21 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
                     <div>
                       <label className="visually-hidden" >Add Comment</label>
                       <textarea rows={2} className="form-control" placeholder="Add a comment." value={this.state.reply} onChange={(e) => this.handleReply(e)} />
+                      {this.state.inappropriateReply.length > 0 &&
+                        <div className='comment-warning'>
+                          <span>
+                            {this.state.errorText}
+                          </span>
+                          {this.state.inappropriateReply.map((inappropriateComment: string) => {
+                            return <div>'{inappropriateComment}'</div>
+                          })}
+                        </div>}
                     </div>
                     <div>
                       <label />
                     </div>
                     <div>
-                      <input type="button" className={this.state.reply ? "btn btn-gradient" : "btn btn-gradient disabled"} onClick={(e) => this.addReply(e)} value='Post' data-id={comment.ID} />
+                      <input type="button" className={enableReply ? "btn btn-gradient" : "btn btn-gradient disabled"} onClick={(e) => enableReply && this.addReply(e)} value='Post' data-id={comment.ID} />
                     </div>
                   </div>
                 </div>

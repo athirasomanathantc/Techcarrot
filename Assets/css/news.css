@@ -989,3 +989,8 @@ article.mb-5 {
     font-size: 12pt;
     font-weight: 500;
 }
+
+.comment-warning {
+    padding-top: 10px;
+    color: red;
+}
