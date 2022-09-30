@@ -113,8 +113,8 @@ export default class AgiCorpIntranetCarousel extends React.Component<IAgiCorpInt
                       <div className={i == 0 ? "carousel-item active" : "carousel-item"}>
                         {imageUrl.length > 0 && <img src={imageUrl} className="d-block w-100" alt="..." />}
                         <div className="carousel-caption ">
-                          <h2>{item.Title}</h2>
-                          <p>{item.SubTitle}</p>
+                          <p>{item.Title}</p>
+                          <h1>{item.SubTitle}</h1>
                         </div>
                       </div>
                     )

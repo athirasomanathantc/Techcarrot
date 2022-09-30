@@ -20,8 +20,6 @@ export interface IAgiCorpIntranetCarouselWebPartProps {
 export default class AgiCorpIntranetCarouselWebPart extends BaseClientSideWebPart<IAgiCorpIntranetCarouselWebPartProps> {
 
   protected onInit(): Promise<void> {
-    const randomNumber = Math.floor(Math.random() * 90000) + 10000;
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/business.css?${randomNumber}`);
     return Promise.resolve();
   }
 
