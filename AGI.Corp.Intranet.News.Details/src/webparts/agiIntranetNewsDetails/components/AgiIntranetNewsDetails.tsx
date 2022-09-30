@@ -122,7 +122,6 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
           return obj;
         });
         this.updateViews(parseInt(newsID), JSON.stringify(updatedViews));
-        console.log("items", item);
         this.setState({
           news: item,
           viewsCount: viewsCount
@@ -215,7 +214,6 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       return;
     }
 
-    console.log('comment', comment);
     const userName = this.props.context.pageContext.legacyPageContext.userDisplayName;
     const userId = this.props.context.pageContext.legacyPageContext.userId;
     const body = {
@@ -225,7 +223,6 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     };
 
     sp.web.lists.getByTitle(LIST_COMMENTS).items.add(body).then((data) => {
-      console.log('comments added.');
       this.setState({
         comment: ''
       });
@@ -259,6 +256,12 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
   private replyToComment(e: any) {
     //const newsId = this.state.newsId;
     const id = e.target.attributes["data-id"].value;
+    const replyBoxes: any = document.getElementsByClassName('commentReplyBox');
+
+    for(let i = 0; i < replyBoxes.length; i++) {
+      replyBoxes[i].style.display = 'none';
+    }
+    
     const replySectionId = `replySection${id}`;
     document.getElementById(replySectionId).style.display = 'flex';
   }
@@ -278,7 +281,6 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     }
 
     sp.web.lists.getByTitle(LIST_COMMENTS).items.add(body).then((data) => {
-      console.log('reply added..');
       this.getComments(newsId);
       this.setState({
         reply: ''
@@ -298,11 +300,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     const body = {
       NewsLikedBy: likedBy
     };
-    console.log(body);
-    console.log("Business", this.state.news.Business.Title);
     this.updateNewsItem(body, id);
-
-
   }
 
   private unlikePost(e: any) {
@@ -315,8 +313,6 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     const body = {
       NewsLikedBy: likedBy
     };
-    console.log(body);
-    console.log("Business", this.state.news.Business.Title);
     this.updateNewsItem(body, id);
   }
 
@@ -329,9 +325,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     const body = {
       CommentLikedBy: likedBy
     };
-    console.log(body);
     this.updateNewsCommentItem(body, id);
-
   }
 
   private unlikeComment(e: any) {
@@ -344,14 +338,12 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     const body = {
       CommentLikedBy: likedBy
     };
-    console.log(body);
     this.updateNewsCommentItem(body, id);
   }
 
   private async updateNewsItem(body: any, itemId: number): Promise<void> {
     const listName = LIST_NEWS;
     sp.web.lists.getByTitle(listName).items.getById(itemId).update(body).then((data) => {
-      console.log('news item udpated successfully');
       this.reloadNewsItem(this.state.newsId.toString());
     }).catch((error) => {
       console.log('error in updating news item');
@@ -362,7 +354,6 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
   private async updateNewsCommentItem(body: any, itemId: number): Promise<void> {
     const listName = LIST_COMMENTS;
     sp.web.lists.getByTitle(listName).items.getById(itemId).update(body).then((data) => {
-      console.log('comment item udpated successfully');
       this.getComments(this.state.newsId);
     }).catch((error) => {
       console.log('error in updating comment item');
@@ -602,17 +593,11 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
                   </nav>
 
               }
-              {/** replies section */}
-              <div className="replies">
-                {
-                  replies.map((reply) => {
-                    return this.renderReplyRow(reply, profilePicUrl)
-                  })
-                }
-              </div>
+
+              
 
               {/** reply text box */}
-              <div className="col mt-4 align-items-center" id={`replySection${comment.ID}`} style={{ display: 'none' }}>
+              <div className="col mt-4 align-items-center commentReplyBox" id={`replySection${comment.ID}`} style={{ display: 'none' }}>
                 <img src={profilePicUrl} alt="" className="flex-shrink-0 me-3 userImage comment-user-icon" width="60px" height="60px" />
                 <div>
                   <div className="d-flex gap-3 align-items-center add-comment">
@@ -638,6 +623,16 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
                   </div>
                 </div>
               </div>
+
+              {/** replies section */}
+              <div className="replies">
+                {
+                  replies.map((reply) => {
+                    return this.renderReplyRow(reply, profilePicUrl)
+                  })
+                }
+              </div>
+
             </div>
           </div>
         </div>
