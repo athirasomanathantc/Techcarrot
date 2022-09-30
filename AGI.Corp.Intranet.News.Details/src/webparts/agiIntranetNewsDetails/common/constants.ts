@@ -1,6 +1,7 @@
 
 export const LIST_NEWS = 'News';
 export const LIST_COMMENTS = 'NewsComments';
+export const LIST_INTRANETCONFIG = 'IntranetConfig';
 export const NEWS_NULL_ITEM = {
     ID: 0,
     Title: '',
@@ -10,7 +11,9 @@ export const NEWS_NULL_ITEM = {
     PublishedDate: new Date(),
     ViewsJSON: '',
     NewsLikedBy: '',
-    Business: {Title: '', ID: 0}
+    Business: { Title: '', ID: 0 },
+    Functions: { Title: '', ID: 0 }
 };
 
 export const ViewsJSON_NULL = JSON.stringify({ "views": [] });
+export const REGEX_SPEC_CHAR = /[^a-zA-Z]/g;

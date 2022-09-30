@@ -504,7 +504,7 @@ p.comment-time {
 
 /* news comments */
 .comment {
-    padding: 5px 0;
+    padding: 15px 0;
 }
 
 .commentsContainer .comment {
@@ -988,4 +988,9 @@ article.mb-5 {
     color: #9D0D71;
     font-size: 12pt;
     font-weight: 500;
+}
+
+.comment-warning {
+    padding-top: 10px;
+    color: red;
 }

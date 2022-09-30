@@ -15,4 +15,8 @@ export interface IAgiIntranetNewsDetailsState {
     userPicture: string;
     userId: number;
     showMoreComments: boolean;
+    errorText: string;
+    inappropriateWords: string[];
+    inappropriateComments: string[];
+    inappropriateReply: string[];
 }

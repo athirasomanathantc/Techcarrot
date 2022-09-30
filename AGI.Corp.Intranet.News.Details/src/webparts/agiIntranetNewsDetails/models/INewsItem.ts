@@ -11,4 +11,8 @@ export interface INewsItem {
         Title: string;
         ID: number;
     };
+    Functions: {
+        Title: string;
+        ID: number;
+    };
 }

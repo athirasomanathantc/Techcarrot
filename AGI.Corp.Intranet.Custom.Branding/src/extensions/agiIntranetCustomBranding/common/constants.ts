@@ -16,7 +16,7 @@ export const NULL_SUBSCRIBE_ITEM = {
     ID: 0,
     Email: ''
 }
-export const TEXT_REGISTRATION_SUCCESS = 'Registration completed successfully';
+export const TEXT_REGISTRATION_SUCCESS = 'You have successfully subscribed to our newsletter';
 export const TEXT_REGISTRATION_FAILURE = 'Registration failed';
 
 export const TEXT_COMPANY = 'Company';

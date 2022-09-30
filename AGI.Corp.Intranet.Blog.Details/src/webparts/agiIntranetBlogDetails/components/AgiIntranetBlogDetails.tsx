@@ -5,11 +5,12 @@ import { IAgiIntranetBlogDetailsState } from './IAgiIntranetBlogDetailsState';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { sp } from '@pnp/sp/presets/all';
 import * as moment from 'moment';
-import { BLOG_NULL_ITEM, LIST_BLOG, LIST_COMMENTS } from '../common/constants';
+import { BLOG_NULL_ITEM, LIST_BLOG, LIST_COMMENTS, LIST_INTRANETCONFIG, REGEX_SPEC_CHAR } from '../common/constants';
 import { IBlogItem } from '../models/IBlogItem';
 import { ICommentItem } from '../models/ICommentItem';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link, Text } from 'office-ui-fabric-react';
+import * as _ from 'lodash';
 
 export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranetBlogDetailsProps, IAgiIntranetBlogDetailsState> {
 
@@ -32,7 +33,12 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
       userPicture: '',
       userId: 0,
       currentIndex: 0,
-      blogs: []
+      blogs: [],
+      showMoreComments: false,
+      errorText: '',
+      inappropriateWords: [],
+      inappropriateComments: [],
+      inappropriateReply: []
     }
   }
 
@@ -43,30 +49,58 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const profilePictureUrl = `${this.props.siteUrl}/_layouts/15/userphoto.aspx?size=L&username=${userEmail}`;
     this.setState({
       userPicture: profilePictureUrl,
-      userId
+      userId,
     });
 
     //const blogID = this.getQueryStringValue('blogID');
 
     //await this.getBlogItem(blogID);
     this.getBlogItems();
+    this.getIntranetConfig('Inappropriate Words')
+  }
+
+  public componentDidUpdate(prevProps: Readonly<IAgiIntranetBlogDetailsProps>, prevState: Readonly<IAgiIntranetBlogDetailsState>, snapshot?: any): void {
+    if (this.state.comments !== prevState.comments) {
+      this.setState({
+        showMoreComments: window.innerWidth <= 767 && this.state.comments.length > 0
+      });
+    }
+  }
+
+  private showMore() {
+    this.setState({
+      showMoreComments: false
+    })
+  }
+
+  private getIntranetConfig(title: string) {
+    sp.web.lists.getByTitle(LIST_INTRANETCONFIG)
+      .items.filter(`Title eq '${title}'`).get()
+      .then((items: any[]) => {
+        this.setState({
+          inappropriateWords: items[0]?.Dictionary?.split(';'),
+          errorText: items[0]?.Detail
+        })
+      });
   }
 
   private async getBlogItems(): Promise<void> {
     const blogID = this.getQueryStringValue('blogID');
     const listName = LIST_BLOG;
     const select = "ID,Title,Summary,BlogImage,Business/ID,Business/Title,Author/ID,Author/Title,PublishedDate,ViewsJSON,BlogLikedBy";
-    sp.web.lists.getByTitle(listName).items.
-      select(select).
-      expand('Business,Author').
-      get().then((items: IBlogItem[]) => {
+    sp.web.lists.getByTitle(listName)
+      .items
+      .select(select)
+      .expand('Business,Author')
+      .filter(`ID eq ${blogID}`)
+      .get()
+      .then((items: IBlogItem[]) => {
         // get blog item
         if (!blogID) {
           return;
         }
         const id = parseInt(blogID);
         const _blogItem = items.filter((item) => item.ID == id);
-        console.log("item",_blogItem)
         let blogItem = BLOG_NULL_ITEM;
         if (_blogItem && _blogItem.length > 0) {
           blogItem = _blogItem && _blogItem.length > 0 ? _blogItem[0] : BLOG_NULL_ITEM;
@@ -287,15 +321,19 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
 
   private handleComment(e: any) {
     const comment = e.target.value;
+    var presents = _.intersectionWith(comment.split(REGEX_SPEC_CHAR), this.state.inappropriateWords, _.isEqual);
     this.setState({
-      comment
+      comment,
+      inappropriateComments: presents.length ? presents.filter(n => n) : []
     });
   }
 
   private handleReply(e: any) {
     const reply = e.target.value;
+    var presents = _.intersectionWith(reply.split(REGEX_SPEC_CHAR), this.state.inappropriateWords, _.isEqual);
     this.setState({
-      reply
+      reply,
+      inappropriateReply: presents.length ? presents.filter(n => n) : []
     });
   }
 
@@ -465,7 +503,9 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const imageUrl = this.getImageUrl(blog.BlogImage);
     const isLikedByCurrentUser = blog.BlogLikedBy && blog.BlogLikedBy.split(';').includes(userId.toString());
     const commentsCount = this.state.commentsCount;
-    //const newsSource = this.state.attachmentUrl;
+    const enablePost = this.state.comment && !this.state.inappropriateComments.length;
+    const comments = this.state.showMoreComments ? this.state.comments.slice(0, 3) : this.state.comments;
+
     return (
       <article className="wrapper">
         <header className="news-detail-header header">
@@ -564,12 +604,21 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
                       {/* <input type="text" className="form-control" placeholder="Add a comment." value={this.state.comment} onChange={(e) => this.handleComment(e)} /> */}
                       <textarea className="form-control" placeholder="Add a comment." value={this.state.comment} onChange={(e) => this.handleComment(e)} rows={2}>
                       </textarea>
+                      {this.state.inappropriateComments.length > 0 &&
+                        <div className='comment-warning'>
+                          <span>
+                            {this.state.errorText}
+                          </span>
+                          {this.state.inappropriateComments.map((inappropriateComment: string) => {
+                            return <div>'{inappropriateComment}'</div>
+                          })}
+                        </div>}
                     </div>
                     <div>
                       <label />
                     </div>
                     <div>
-                      <input type="button" className={this.state.comment ? "btn btn-gradient" : "btn btn-gradient disabled"} onClick={() => this.addComment()} value='Post' />
+                      <input type="button" className={enablePost ? "btn btn-gradient" : "btn btn-gradient disabled"} onClick={() => enablePost && this.addComment()} value='Post' />
                     </div>
                   </div>
                 </div>
@@ -577,11 +626,16 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
             </div>
             <div className='commentsContainer'>
               {
-                this.state.comments.map((comment) => {
+                comments.map((comment) => {
                   return this.renderCommentRow(comment)
                 })
               }
             </div>
+            {this.state.showMoreComments && <div className='more-comments-container mobile'>
+              <a className='more-comments' onClick={() => { this.showMore() }} >
+                More comments
+              </a>
+            </div>}
             <div className="comment" style={{ display: 'none' }}>
               <div className="col d-flex">
                 <img src="images/icon-user.png" alt="" className="flex-shrink-0 me-3" width="60px" height="60px" />
@@ -612,6 +666,8 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const userId = this.state.userId;
     const likedBy = comment.CommentLikedBy;
     const isLikedByCurrentUser = likedBy && likedBy.split(';').includes(userId.toString());
+    const enableReply = this.state.reply && !this.state.inappropriateReply.length;
+
     return (
       <div className="comment">
         <div className="col d-flex">
@@ -662,19 +718,28 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
               </div>
 
               {/** reply text box */}
-              <div className="col mt-4 align-items-center" id={`replySection${comment.ID}`} style={{ display: 'none' }}>
+              <div className="col mt-4" id={`replySection${comment.ID}`} style={{ display: 'none' }}>
                 <img src={profilePicUrl} alt="" className="flex-shrink-0 me-3 userImage comment-user-icon" width="60px" height="60px" />
                 <div>
                   <div className="d-flex gap-3 align-items-center add-comment">
                     <div>
                       <label className="visually-hidden" >Add Comment</label>
                       <textarea rows={2} className="form-control" placeholder="Add a comment." value={this.state.reply} onChange={(e) => this.handleReply(e)} />
+                      {this.state.inappropriateReply.length > 0 &&
+                        <div className='comment-warning'>
+                          <span>
+                            {this.state.errorText}
+                          </span>
+                          {this.state.inappropriateReply.map((inappropriateComment: string) => {
+                            return <div>'{inappropriateComment}'</div>
+                          })}
+                        </div>}
                     </div>
                     <div>
                       <label />
                     </div>
                     <div>
-                      <input type="button" className={this.state.reply ? "btn btn-gradient" : "btn btn-gradient disabled"} onClick={(e) => this.addReply(e)} value='Post' data-id={comment.ID} />
+                      <input type="button" className={enableReply ? "btn btn-gradient" : "btn btn-gradient disabled"} onClick={(e) => enableReply && this.addReply(e)} value='Post' data-id={comment.ID} />
                     </div>
                   </div>
                 </div>
