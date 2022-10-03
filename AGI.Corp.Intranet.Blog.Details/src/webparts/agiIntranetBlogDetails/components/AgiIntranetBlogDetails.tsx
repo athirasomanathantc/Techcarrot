@@ -503,7 +503,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const imageUrl = this.getImageUrl(blog.BlogImage);
     const isLikedByCurrentUser = blog.BlogLikedBy && blog.BlogLikedBy.split(';').includes(userId.toString());
     const commentsCount = this.state.commentsCount;
-    const enablePost = this.state.comment && !this.state.inappropriateComments.length;
+    const enablePost = this.state.comment?.trim().length && !this.state.inappropriateComments.length;
     const comments = this.state.showMoreComments ? this.state.comments.slice(0, 3) : this.state.comments;
 
     return (
@@ -665,7 +665,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
     const userId = this.state.userId;
     const likedBy = comment.CommentLikedBy;
     const isLikedByCurrentUser = likedBy && likedBy.split(';').includes(userId.toString());
-    const enableReply = this.state.reply && !this.state.inappropriateReply.length;
+    const enableReply = this.state.reply?.trim().length && !this.state.inappropriateReply.length;
 
     return (
       <div className="comment">

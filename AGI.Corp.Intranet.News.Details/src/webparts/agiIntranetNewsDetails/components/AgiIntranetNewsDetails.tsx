@@ -389,7 +389,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     const commentsCount = this.state.commentsCount;
     //const newsSource = this.state.attachmentUrl;
     const comments = this.state.showMoreComments ? this.state.comments.slice(0, 3) : this.state.comments;
-    const enablePost = this.state.comment && !this.state.inappropriateComments.length;
+    const enablePost = this.state.comment?.trim().length && !this.state.inappropriateComments.length;
 
     return (
       <>
@@ -550,7 +550,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     const userId = this.state.userId;
     const likedBy = comment.CommentLikedBy;
     const isLikedByCurrentUser = likedBy && likedBy.split(';').includes(userId.toString());
-    const enableReply = this.state.reply && !this.state.inappropriateReply.length;
+    const enableReply = this.state.reply?.trim().length && !this.state.inappropriateReply.length;
 
     return (
       <div className="comment">
