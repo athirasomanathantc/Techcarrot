@@ -656,6 +656,7 @@ ul.news-list-style li i {
 
 .commentsContainer .comment {
   margin-top: 50px;
+  border-bottom: 1px solid #e2e2e2;
 }
 
 .comment-detail p {
@@ -855,6 +856,19 @@ footer.news-detail-footer nav.nav.justify-content-md-end {
   100% {
     transform: rotate(360deg);
   }
+}
+
+
+.more-comments-container {
+  margin: auto;
+  text-align: center;
+  padding: 20px;
+}
+
+.more-comments {
+  color: #9D0D71;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .comment-warning {
