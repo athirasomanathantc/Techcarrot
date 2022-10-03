@@ -211,6 +211,9 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                   {
                     leadershipTeamItems.map((item, i) => {
                       const leadershipMessageImgVal = item.LeadershipImage && item.LeadershipImage ? this.getImageUrl(item.LeadershipImage) : '';
+                      const subTitle = `${item.Designation},${item.Business}`
+                        .split(',')
+                        .join(', ');
                       return (
                         <div className={i == 0 ? `carousel-item js-carousel-item active` : `carousel-item js-carousel-item`} >
                           <div className="col-md-3 d-md-flex align-items-stretch">
@@ -220,7 +223,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                               </div>
                               <div className="team-content mt-3 mb-3">
                                 <h2 className="team-title">{item.Name}</h2>
-                                <h2 className="team-subtitle">{item.Designation}</h2>
+                                <h2 className="team-subtitle">{subTitle}</h2>
                                 {/* <button type="button" className="view-profile" data-bs-toggle="modal"
                                 data-bs-target="#viewProfileModal" onClick={() => this.openVideo(item.ID)}>
                                 Read More
