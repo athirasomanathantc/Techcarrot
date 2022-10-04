@@ -275,7 +275,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
   }
 
   private fnInitiate() {
-    let items = document.querySelectorAll(".carousel .carousel-item");
+    let items = document.querySelectorAll("#leadershipCarousel .carousel-item");
     // console.log(items);
     items.forEach((el) => {
       const minPerSlide = 4;
@@ -295,7 +295,6 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
   private renderScripts(): void {
     const reacthandler = this;
     $(document).on('click', '.cardItem', function () {
-      debugger;
       const element = $(this);
       const id = element.attr('data-id');
       // get leader details
