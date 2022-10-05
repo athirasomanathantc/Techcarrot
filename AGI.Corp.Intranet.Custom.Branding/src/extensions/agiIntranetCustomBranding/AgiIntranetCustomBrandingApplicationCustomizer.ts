@@ -60,8 +60,8 @@ export default class AgiIntranetBrandingApplicationCustomizer
       location.href.indexOf(`${this.context.pageContext.web.absoluteUrl}/Lists`) == -1)
       ||
       (
-        location.href == `${this.context.pageContext.web.absoluteUrl}` ||
-        location.href == `${this.context.pageContext.web.absoluteUrl}/`
+        location.href.toLowerCase() == `${this.context.pageContext.web.absoluteUrl.toLowerCase()}` ||
+        location.href.toLowerCase() == `${this.context.pageContext.web.absoluteUrl.toLowerCase()}/`
       )
     )
 
@@ -80,8 +80,8 @@ export default class AgiIntranetBrandingApplicationCustomizer
         )
         ||
         (
-          location.href == `${this.context.pageContext.web.absoluteUrl}` ||
-          location.href == `${this.context.pageContext.web.absoluteUrl}/`
+          location.href.toLowerCase() == `${this.context.pageContext.web.absoluteUrl.toLowerCase()}` ||
+          location.href.toLowerCase() == `${this.context.pageContext.web.absoluteUrl.toLowerCase()}/`
         )
       );
 
