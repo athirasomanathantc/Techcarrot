@@ -4,11 +4,16 @@ import { ILeadershipTeamItem } from "../models/ILeadershipTeamItem";
 import { IPurposeCultureVisionItem } from "../models/IPurposeCultureVisionItem";
 
 export interface IAgiIntranetAboutMainState {
-   aboutUsItem : IAboutUsItem;
-   leadershipMessageItem : ILeadershipMessageItem;
-   leadershipTeamItems : ILeadershipTeamItem[];
-   purposeCultureVisionItems : IPurposeCultureVisionItem[];
+   aboutUsItem: IAboutUsItem;
+   leadershipMessageItem: ILeadershipMessageItem;
+   leadershipTeamItems: ILeadershipTeamItem[];
+   purposeCultureVisionItems: IPurposeCultureVisionItem[];
    selectedItem: ILeadershipTeamItem;
    showVideo: boolean;
    selectedVideoUrl: string;
+   readMore: {
+      leadershipContent: boolean;
+      aboutContent: boolean;
+      ourCultureContent: boolean;
+   }
 }
