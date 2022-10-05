@@ -43,7 +43,7 @@ export default class AgiCorpIntranetEventsDetails extends React.Component<IAgiCo
           console.log('value', item);
         });
       })
-      const userId: string = this.props.context.pageContext.legacyPageContent.userId;
+      const userId: string = this.props.context.pageContext.legacyPageContext.userId;
       let readBy = this.state.eventsData.ReadBy;
       const userIDColl = readBy ? readBy.split(';') : [];
       const isIdExists = userIDColl.includes(userId.toString());
