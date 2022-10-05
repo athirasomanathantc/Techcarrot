@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.2",
+    "libraryName": "careers",
+    "libraryId": "7a7ce8cf-558f-4eda-aa5c-eaeda56bc048",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "Careers",
+    "solutionShortDescription": "Careers description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
