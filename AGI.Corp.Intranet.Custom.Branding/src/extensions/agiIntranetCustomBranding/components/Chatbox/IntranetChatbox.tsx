@@ -58,8 +58,9 @@ export default class IntranetChatbox extends React.Component<IIntranetChatboxPro
   }
   private removeClass() {
     this.setState({
-      enable: false
-
+      enable: false,
+      feedbackError: false,
+      Feedback: ''
     })
   }
   private handleEmailChange(e: any) {
