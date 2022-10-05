@@ -601,7 +601,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
                   <div className="d-flex gap-3 align-items-center add-comment">
                     <div>
                       <label className="visually-hidden" >Add Comment</label>
-                      <textarea className="form-control" placeholder="Add a comment .Type @ to mention someone" value={this.state.comment} onChange={(e) => this.handleComment(e)} rows={2}>
+                      <textarea className="form-control" placeholder="Add a comment." value={this.state.comment} onChange={(e) => this.handleComment(e)} rows={2}>
                       </textarea>
                       {this.state.inappropriateComments.length > 0 &&
                         <div className='comment-warning'>
@@ -723,7 +723,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
                   <div className="d-flex gap-3 align-items-center add-comment">
                     <div>
                       <label className="visually-hidden" >Add Comment</label>
-                      <textarea rows={2} className="form-control" placeholder="Add a comment .Type @ to mention someone" value={this.state.reply} onChange={(e) => this.handleReply(e)} />
+                      <textarea rows={2} className="form-control" placeholder="Add a comment." value={this.state.reply} onChange={(e) => this.handleReply(e)} />
                       {this.state.inappropriateReply.length > 0 &&
                         <div className='comment-warning'>
                           <span>
