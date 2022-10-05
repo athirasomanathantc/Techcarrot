@@ -7,20 +7,22 @@ import { sp } from '@pnp/sp/presets/all';
 import { IAgiCorpIntranetCarouselState } from './IAgiCorpIntranetCarouselState';
 import { ICarouselItem } from '../models/ICarouselItem';
 import { LIST_CAROUSEL, NULL_CAROUSEL_ITEM } from '../common/constants';
+import { VideoCarousel } from './VideoCarousel/VideoCarousel';
 
 export default class AgiCorpIntranetCarousel extends React.Component<IAgiCorpIntranetCarouselProps, IAgiCorpIntranetCarouselState> {
-
-
+  private videoWrapperRef: React.RefObject<HTMLDivElement>;
 
   constructor(props: IAgiCorpIntranetCarouselProps) {
     super(props);
+    this.videoWrapperRef = React.createRef();
     sp.setup({
       spfxContext: this.props.context
     });
     this.state = {
       carouselItems: [],
       lastNavItem: '',
-      programID: ''
+      programID: '',
+      moveCarousel: false
     }
   }
 
@@ -87,6 +89,18 @@ export default class AgiCorpIntranetCarousel extends React.Component<IAgiCorpInt
     return imageObj.serverUrl + imageObj.serverRelativeUrl;
   }
 
+  private handleCarouselPrev() {
+    this.setState({
+      moveCarousel: true,
+    })
+  }
+
+  private handleCarouselNext() {
+    this.setState({
+      moveCarousel: true,
+    })
+  }
+
   private renderCarouselSection(): JSX.Element {
 
     const carouselItem = this.state.carouselItems;
@@ -123,12 +137,9 @@ export default class AgiCorpIntranetCarousel extends React.Component<IAgiCorpInt
                     const videoUrl = item && item.AttachmentFiles[0]?.ServerRelativeUrl ? item.AttachmentFiles[0]?.ServerRelativeUrl : '';
                     const thumbnailUrl = item && item.VideoThumbnail ? this.getImageUrl(item.VideoThumbnail) : '';
                     return (
-                      <div className={i == 0 ? "carousel-item active" : "carousel-item"}>
+                      <div className={i == 0 ? "carousel-item active" : "carousel-item"} ref={this.videoWrapperRef}>
                         <div className="videoWrapper">
-                          <video className="video1" loop controls autoPlay muted poster={thumbnailUrl}>
-                            <source src={videoUrl} type="video/mp4" />
-                            Your browser does not support the video tag.
-                          </video>
+                          <VideoCarousel thumbnailUrl={thumbnailUrl} videoUrl={videoUrl} moveCarousel={this.state.moveCarousel} ></VideoCarousel>
                         </div>
                       </div>
                     )
@@ -136,11 +147,11 @@ export default class AgiCorpIntranetCarousel extends React.Component<IAgiCorpInt
                 })
               }
             </div>
-            <button className="carousel-control-prev" type="button" data-bs-target="#businessBannerCarousel" data-bs-slide="prev">
+            <button className="carousel-control-prev" type="button" data-bs-target="#businessBannerCarousel" data-bs-slide="prev" onClick={() => this.handleCarouselPrev()}>
               <span className="carousel-control-prev-icon" aria-hidden="true"></span>
               <span className="visually-hidden">Previous</span>
             </button>
-            <button className="carousel-control-next" type="button" data-bs-target="#businessBannerCarousel" data-bs-slide="next">
+            <button className="carousel-control-next" type="button" data-bs-target="#businessBannerCarousel" data-bs-slide="next" onClick={() => this.handleCarouselNext()}>
               <span className="carousel-control-next-icon" aria-hidden="true"></span>
               <span className="visually-hidden">Next</span>
             </button>
