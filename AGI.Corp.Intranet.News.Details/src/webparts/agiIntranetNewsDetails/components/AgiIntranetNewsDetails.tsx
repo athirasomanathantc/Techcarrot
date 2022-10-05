@@ -505,7 +505,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
                     <div className="d-flex gap-3 align-items-center add-comment">
                       <div>
                         <label className="visually-hidden" >Add Comment</label>
-                        <textarea className="form-control" placeholder="Add a comment .Type @ to mention someone" value={this.state.comment} onChange={(e) => this.handleComment(e)} rows={2}>
+                        <textarea className="form-control" placeholder="Add a comment." value={this.state.comment} onChange={(e) => this.handleComment(e)} rows={2}>
                         </textarea>
                         {this.state.inappropriateComments.length > 0 &&
                           <div className='comment-warning'>
