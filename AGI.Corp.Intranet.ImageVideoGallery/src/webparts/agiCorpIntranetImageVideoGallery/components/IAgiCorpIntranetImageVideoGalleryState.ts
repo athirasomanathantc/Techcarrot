@@ -1,4 +1,5 @@
 import { IFolder } from "@pnp/sp/folders";
+import { IFileData } from "../models/IFileData";
 import { IFolderItem } from "../models/IFolderItem";
 import { IImageItem } from "../models/IImageItem";
 
@@ -47,4 +48,11 @@ export interface IAgiCorpIntranetImageVideoGalleryState {
     ID: number;
   },
   isDataLoaded: boolean;
+  //paging - images
+  pagedImages: IImageItem[];
+  imagesPerPage: number;
+  totalImages: number;
+  imagesCurrentPage: number;
+
+  fileData: IFileData[];
 }

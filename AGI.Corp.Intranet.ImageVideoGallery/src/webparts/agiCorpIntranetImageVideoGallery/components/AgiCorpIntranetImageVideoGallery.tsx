@@ -19,6 +19,7 @@ import { resultItem } from 'office-ui-fabric-react/lib/components/FloatingPicker
 //import { Pagination } from '@pnp/spfx-controls-react/lib/pagination';
 //import Paging from './Paging/Paging';
 import Paging from './Paging/Paging';
+import { IFileItem } from '../models/IFileItem';
 const CAROUSEL_HEIGHT = '240px';
 export default class AgiCorpIntranetImageVideoGallery extends React.Component<IAgiCorpIntranetImageVideoGalleryProps, IAgiCorpIntranetImageVideoGalleryState> {
 
@@ -65,7 +66,14 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       selectedOption: {
         ID: 0
       },
-      isDataLoaded: false
+      isDataLoaded: false,
+
+      pagedImages: [],
+      imagesPerPage: 4,
+      totalImages: 0,
+      imagesCurrentPage: 1,
+
+      fileData: []
     }
     // this.getImages = this.getImages.bind(this);
   }
@@ -73,6 +81,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   public async componentDidMount(): Promise<void> {
     await this.getBusinessItems();
     await this.getFunctionItems();
+    await this.getCoverPhotos();
 
     Promise.all([this.getGalleryItems(), this.getVideoItems()]).then(() => {
       this.setDefaultFilter();
@@ -102,7 +111,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       })
       .then((response) => {
         const items = response.value;
-        console.log('choices', items);
+        //console.log('choices', items);
         this.setState({
           filterValuesBusiness: items
         });
@@ -134,7 +143,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       })
       .then((response) => {
         const items = response.value;
-        console.log('choices', items);
+        //console.log('choices', items);
         this.setState({
           filterValuesFunctions: items
         });
@@ -182,7 +191,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         this.setState({
           filterData: result
         }, () => {
-          console.log("filter data", this.state.filterData);
+          //console.log("filter data", this.state.filterData);
           this.paging();
         });
 
@@ -191,7 +200,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           const itemId = this.state.showBusinessData ? obj.BusinessId : obj.FunctionsId;
           return itemId == value;
         })
-        console.log(result);
+        //console.log(result);
         this.setState({
           filterData: result
         }, () => {
@@ -218,7 +227,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           const itemId = this.state.showBusinessData ? obj.BusinessId : obj.FunctionsId;
           return itemId == value;
         })
-        console.log(result);
+        //console.log(result);
         this.setState({
           filterVideoData: result
         }, () => {
@@ -247,7 +256,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
             const itemId = this.state.showBusinessData ? obj.BusinessId : obj.FunctionsId;
             return itemId == value;
           })
-          console.log(result);
+          //console.log(result);
           this.setState({
             filterData: result
           }, () => {
@@ -273,7 +282,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
             const itemId = this.state.showBusinessData ? obj.BusinessId : obj.FunctionsId;
             return itemId == value;
           })
-          console.log(result);
+          //console.log(result);
           this.setState({
             filterVideoData: result
           }, () => {
@@ -295,7 +304,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         totalPage: pageCount,
         currentPage: 1
       }, () => {
-        console.log("imagedata", this.state.pageData);
+        //console.log("imagedata", this.state.pageData);
       });
     }
     else if (this.state.currentTabName == "video") {
@@ -307,7 +316,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         totalPage: pageCount,
         currentPage: 1
       }, () => {
-        console.log("videodata", this.state.videoData);
+        //console.log("videodata", this.state.videoData);
       });
     }
     else {
@@ -393,6 +402,21 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       }
     }
   }
+
+  private onPageUpdateImages(page: number) {
+    const skipItems: number = this.state.imagesPerPage * (page - 1);
+    const takeItems: number = skipItems + this.state.imagesPerPage;
+    const roundupPage = Math.ceil(page);
+    const pagedImages = this.state.imageItems.slice(skipItems, takeItems)
+    this.setState({
+      pagedImages,
+      imagesCurrentPage: page
+    }, () => {
+      this.scrollToTop();
+
+    });
+  }
+
   private scrollToTop(): void {
 
     var element = document.getElementById("spPageCanvasContent");
@@ -420,7 +444,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
             .filter('FSObjType eq 0')
             .get()
             .then((files: IImageItem[]) => {
-              console.log("test", folders);
+              //console.log("test", folders);
               const _folders = [];
               folders.map((folder) => {
                 const path = `${this.props.context.pageContext.web.serverRelativeUrl}/${libraryPath}/${folder.Name}`;
@@ -455,6 +479,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     return imageObj.serverUrl + imageObj.serverRelativeUrl;
   }
 
+  /** get images from folder */
+
   private async getImageGalleryItems(subFolderName): Promise<void> {
     // sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(subFolderName).files.select('*, FileRef, FileLeafRef').get().then((allItems) => {
     const libraryPath = `${this.props.context.pageContext.web.serverRelativeUrl}/Image Gallery/${subFolderName}`;
@@ -462,9 +488,16 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       // sp.web.lists.getByTitle("Image Gallery").items
       // .select("*, FileRef, FileLeafRef, Created, File, ID, Title, Author/Title")
       // .expand("File, Author").get().then((allItems) => {
+      const totalImages = allItems.length;
+      const imagesPerPage = 4;
+      const pagedImages = allItems.slice(0, imagesPerPage);
       this.setState({
         imageItems: allItems,
-        selectedImageFolder: subFolderName
+        pagedImages,
+        totalImages,
+        imagesPerPage,
+        selectedImageFolder: subFolderName,
+        imagesCurrentPage: 1
       });
     });
 
@@ -477,6 +510,30 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     //     imageItems: items,
     //     selectedImageFolder: subFolderName
     //   });
+  }
+
+  /** Get cover photos */
+  private async getCoverPhotos(): Promise<void> {
+    const fileData = [];
+    const libraryPath = `${this.props.context.pageContext.web.serverRelativeUrl}/Image Gallery`;
+    sp.web.lists.getByTitle('Image Gallery').items
+      .select('*, File')
+      .expand("File")
+      .filter('FSObjType eq 0 and isCoverPhoto eq 1')
+      .get().then((files: IFileItem[]) => {
+        console.log('getCoverPhotos');
+        files.map((file) => {
+          const fileName = file.File.Name;
+          const fileRelativePath = file.File.ServerRelativeUrl;
+          const filePath = fileRelativePath.replace(fileName, '');
+          const paths =  filePath.split('/').filter(e => e);
+          const folderPath = paths.pop();
+          fileData.push({ID: file.ID, FilePath: fileRelativePath, FolderName: folderPath});
+        });
+        this.setState({
+          fileData
+        });
+      });
   }
 
   private closeImageFolder() {
@@ -506,7 +563,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     this.setState({
       selectedItem
     }, () => {
-      console.log("videoitem", this.state.selectedItem.Author.Title);
+      //console.log("videoitem", this.state.selectedItem.Author.Title);
     });
     this.setState({
       showVideo: true
@@ -536,7 +593,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     const id = e.target.attributes["data-id"].value;
     const index = id ? parseInt(id) : -1;
     const _imageItem = this.state.imageItems.filter((image) => image.ListItemAllFields.ID == id);
-    console.log("imageitem", _imageItem);
+    //console.log("imageitem", _imageItem);
     const imageItem = _imageItem && _imageItem.length > 0 ? _imageItem[0] : NULL_IMAGE_ITEM;
     this.setState({
       preview: true,
@@ -754,13 +811,16 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                         {
                           this.state.pageData.length > 0 ?
                             this.state.pageData.map((folder) => {
-                              const targetUrl = `${this.props.siteUrl}/SitePages/Photos.aspx?folderName=${folder.Name}&libraryPath=${libraryPath}`
+                              const folderName = folder.Name;
+                              const targetUrl = `${this.props.siteUrl}/SitePages/Photos.aspx?folderName=${folder.Name}&libraryPath=${libraryPath}`;
+                              const _folder = this.state.fileData.filter((f) => f.FolderName == folderName);
+                              const coverImage = _folder && _folder.length > 0 ? _folder[0].FilePath : `${this.props.siteUrl}/Assets/images/gallery-item-img.png`;
                               return (
                                 <div className=" col-md-3">
                                   <div className="gallery-item">
                                     <a href="javascript:void(0)" onClick={(e) => this.getImageGalleryItems(folder.Name)}>
                                       <div className="gallery-item--img">
-                                        <img src={`${this.props.siteUrl}/Assets/images/gallery-item-img.png`} alt="" />
+                                        <img src={coverImage} alt="" />
                                       </div>
                                       <div className="gallery-item--text">
                                         <p>{folder.Name}</p>
@@ -780,7 +840,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                         <Paging currentPage={this.state.currentPage}
                           totalItems={this.state.filterData.length}
                           itemsCountPerPage={this.state.pageSize}
-                          onPageUpdate={(page) => this._getPage(page)}
+                          onPageUpdate={(page) => this.onPageUpdateImages(page)}
                         />
                       </div>
                     </div>
@@ -879,7 +939,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                 </div>
                 <div className="row">
                   {
-                    this.state.imageItems.map((items) => {
+                    this.state.pagedImages.map((items) => {
                       const test = items.ServerRelativeUrl;
                       return (
                         // <a href="images/gallery-folder-img-large.png" data-toggle="lightbox" data-gallery="image-gallery" className="col-md-3 gallery-item gallery-folder-item" data-caption="<h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><ul><li><i class='icon user-icon'><img src='images/icon-avatar.svg'></i> Debra Teles</li></ul>">
@@ -892,6 +952,13 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                       )
                     })
                   }
+                </div>
+                <div className={'pagination-wrapper'} style={{ display: this.state.imageItems.length > 0 ? 'block' : 'none' }} >
+                  <Paging currentPage={this.state.imagesCurrentPage}
+                    totalItems={this.state.totalImages}
+                    itemsCountPerPage={this.state.imagesPerPage}
+                    onPageUpdate={(page) => this.onPageUpdateImages(page)}
+                  />
                 </div>
               </div>
             </div>
