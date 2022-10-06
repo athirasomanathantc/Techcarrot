@@ -189,14 +189,14 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
               {
                 leadershipTeamHeading.map((item, i) => {
                   return (
-                    <div className="col-lg-11">
+                    <div className="col-lg-10">
                       <h3 className="leadership-team-heading">{item.HeadingTitle}</h3>
                       <p className="leadership-team-description">{item.HeadingDescription}</p>
                     </div>
                   )
                 })
               }
-              <div className="align-self-end col-lg-1">
+              <div className="align-self-end col-lg-2">
                 <div className="button-container">
                   <button className="carousel-control-prev" type="button" data-bs-target="#leadershipCarousel"
                     data-bs-slide="prev">
