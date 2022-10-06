@@ -23,15 +23,8 @@ export default class AgiCorpIntranetEventsDetailsWebPart extends BaseClientSideW
   private _environmentMessage: string = '';
 
   protected onInit(): Promise<void> {
-    const randomNumber = Math.floor(Math.random()*90000) + 10000;
+    const randomNumber = Math.floor(Math.random() * 90000) + 10000;
     SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/Events.css?${randomNumber}`);
-  SPComponentLoader.loadCss(`https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css`);
-
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap.min.css`);
-
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap-icons.min.css`);
-
-    SPComponentLoader.loadScript(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap.bundle.min.js`);
     return Promise.resolve();
   }
 
@@ -44,8 +37,8 @@ export default class AgiCorpIntranetEventsDetailsWebPart extends BaseClientSideW
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
         userDisplayName: this.context.pageContext.user.displayName,
-        context:this.context,
-        siteUrl:this.context.pageContext.web.absoluteUrl
+        context: this.context,
+        siteUrl: this.context.pageContext.web.absoluteUrl
       }
     );
 
