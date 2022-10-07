@@ -31,11 +31,12 @@ export const PortalNavigation = (props: IAgiIntranetHomeMainProps) => {
                 {navigations.map((navigation: INavigation) => {
                     let imageUrl = JSON.parse(navigation.NavIcon);
                     imageUrl = imageUrl?.serverUrl + imageUrl?.serverRelativeUrl;
-
+                    let url = navigation.NavigationUrl?.Url;
+                    url = url.toLowerCase().indexOf(props.siteUrl?.toLowerCase()) ? `${url}?env=WebView` : url;
                     return (<>
                         <li>
-                            <a href={navigation.NavigationUrl?.Url}>
-                                <img src={`${imageUrl}`} />
+                            <a href={`${url}`}>
+                                <img src={imageUrl} />
                                 <b>{navigation.Title}</b>
                             </a>
                         </li>

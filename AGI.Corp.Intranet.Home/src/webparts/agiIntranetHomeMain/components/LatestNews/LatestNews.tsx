@@ -52,7 +52,7 @@ export const LatestNews = (props: IAgiIntranetHomeMainProps) => {
             <div className="card ">
                 <div className="card-header d-flex align-items-center justify-content-between border-bottom-0 pb-0 pt-3">
                     <h4 className="card-title mb-0">Latest News</h4>
-                    <a href={`${props.siteUrl}/SitePages/News.aspx`} className="viewall-link">View All</a>
+                    <a href={`${props.siteUrl}/SitePages/News.aspx?env=WebView`} className="viewall-link">View All</a>
                 </div>
                 <div className="card-body">
                     <div id="carouselLatestNews" className="carousel slide mb-4" data-bs-ride="carousel">

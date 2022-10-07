@@ -343,7 +343,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                 const link = comp.Link && comp.Link.Url ? comp.Link.Url : '';
                                                 return (
                                                     <li>
-                                                        <a href={link} data-interception="off">- {comp.Title}</a>
+                                                        <a href={`${link}?env=WebView`} data-interception="off">- {comp.Title}</a>
                                                     </li>
                                                 )
                                             })
@@ -381,7 +381,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                             return (
                                                                 i < 4 &&
                                                                 <li>
-                                                                    <a href={link} data-interception="off">- {bus.Title}</a>
+                                                                    <a href={`${link}?env=WebView`} data-interception="off">- {bus.Title}</a>
                                                                 </li>
                                                             )
                                                         })
@@ -393,7 +393,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                             return (
                                                                 i >= 4 &&
                                                                 <li style={{ display: this.state.showAllBusiness ? 'block' : 'none' }}>
-                                                                    <a href={link} data-interception="off">- {bus.Title}</a>
+                                                                    <a href={`${link}?env=WebView`} data-interception="off">- {bus.Title}</a>
                                                                 </li>
                                                             )
                                                         })
@@ -409,7 +409,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                             const link = `${this.props.siteUrl}/SitePages/Business.aspx?categoryId=${bus.ID}`;
                                                             return (
                                                                 <li>
-                                                                    <a href={link} data-interception="off">- {bus.Title}</a>
+                                                                    <a href={`${link}?env=WebView`} data-interception="off">- {bus.Title}</a>
                                                                 </li>
                                                             )
                                                         })
@@ -448,7 +448,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                             return (
                                                                 i < 4 &&
                                                                 <li>
-                                                                    <a href={link} data-interception="off">- {func.Title}</a>
+                                                                    <a href={`${link}?env=WebView`} data-interception="off">- {func.Title}</a>
                                                                 </li>
                                                             )
                                                         })
@@ -460,7 +460,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                             return (
                                                                 i >= 4 &&
                                                                 <li style={{ display: this.state.showAllFunctions ? 'block' : 'none' }}>
-                                                                    <a href={link} data-interception="off">- {func.Title}</a>
+                                                                    <a href={`${link}?env=WebView`} data-interception="off">- {func.Title}</a>
                                                                 </li>
                                                             )
                                                         })
@@ -476,7 +476,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                             const link = `${this.props.siteUrl}/SitePages/Functions.aspx?categoryId=${func.ID}`;
                                                             return (
                                                                 <li>
-                                                                    <a href={link} data-interception="off">- {func.Title}</a>
+                                                                    <a href={`${link}?env=WebView`} data-interception="off">- {func.Title}</a>
                                                                 </li>
                                                             )
                                                         })
@@ -512,7 +512,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                 const link = news.Link && news.Link.Url ? news.Link.Url : '';
                                                 return (
                                                     <li>
-                                                        <a href={link} data-interception="off">- {news.Title}</a>
+                                                        <a href={`${link}?env=WebView`} data-interception="off">- {news.Title}</a>
                                                     </li>
                                                 )
                                             })
@@ -542,7 +542,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                 const link = gallery.Link && gallery.Link.Url ? gallery.Link.Url : '';
                                                 return (
                                                     <li>
-                                                        <a href={link} data-interception="off">- {gallery.Title}</a>
+                                                        <a href={`${link}?env=WebView`} data-interception="off">- {gallery.Title}</a>
                                                     </li>
                                                 )
                                             })
@@ -573,7 +573,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                                 const link = other.Link && other.Link.Url ? other.Link.Url : '';
                                                 return (
                                                     <li>
-                                                        <a href={link}  data-interception="off">- {other.Title}</a>
+                                                        <a href={`${link}?env=WebView`}  data-interception="off">- {other.Title}</a>
                                                     </li>
                                                 )
                                             })
