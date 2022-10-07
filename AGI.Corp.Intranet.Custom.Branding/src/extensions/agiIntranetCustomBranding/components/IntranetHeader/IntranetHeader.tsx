@@ -268,7 +268,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
 
     return (
       <>
-        {this.state.headerLoaded && <header className={`header-wrapper ${this.state.showSlimHeader ? 'slim-header' : ''}`}>
+        <header className={`header-wrapper ${this.state.showSlimHeader ? 'slim-header' : ''}`} style={{ visibility: `${this.state.headerLoaded ? 'visible' : 'hidden'}` }}>
           <div className="top-nav">
             <nav className="navbar navbar-expand-lg navbar-light">
               <div className="container">
@@ -501,7 +501,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
             {...this.props}
             closeModal={() => this.closeModal()}
           ></OrgModal>}
-        </header>}
+        </header>
       </>
     );
   }
