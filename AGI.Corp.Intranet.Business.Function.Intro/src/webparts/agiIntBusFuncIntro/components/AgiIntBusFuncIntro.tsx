@@ -97,7 +97,7 @@ export default class AgiIntBusFuncIntro extends React.Component<IAgiIntBusFuncIn
                 <div className="intro-wrapper text-center">
                   <h2>{items.Title}</h2>
                   <p className="primary-txt" dangerouslySetInnerHTML={{ __html: items.PrimaryDescription }}></p>
-                  <p className="secondary-txt" dangerouslySetInnerHTML={{ __html: items.PrimaryDescription }}></p>
+                  <p className="secondary-txt" dangerouslySetInnerHTML={{ __html: items.SecondaryDescription }}></p>
                 </div>
               )
             })
