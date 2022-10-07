@@ -8,7 +8,7 @@ import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
 const Events = (props: IEvent) => {
     return (<>
         <li className="list-group-item">
-            <a href={`${siteUrl}/SitePages/News/Events/Event%20Details.aspx?eventID=${props.Id}`}>
+            <a href={`${siteUrl}/SitePages/News/Events/Event%20Details.aspx?eventID=${props.Id}&env=WebView`}>
                 <div className="d-flex align-items-center">
                     <div className="event-date flex-shrink-0 me-3">
                         <p className="notification-date">{moment(props.StartDate).format("DD")}</p>
@@ -53,7 +53,7 @@ export const CompanyEvents = (props: IAgiIntranetHomeMainProps) => {
             <div className="card  company-event">
                 <div className="card-header d-flex align-items-center justify-content-between">
                     <h4 className="card-title m-2 me-2">Company Events</h4>
-                    <a href={`${props.siteUrl}/SitePages/News/Events.aspx`} className="viewall-link">View All</a>
+                    <a href={`${props.siteUrl}/SitePages/News/Events.aspx?env=WebView`} className="viewall-link">View All</a>
                 </div>
                 <div className="card-body">
                     <ul className="p-0 m-0 list-group">

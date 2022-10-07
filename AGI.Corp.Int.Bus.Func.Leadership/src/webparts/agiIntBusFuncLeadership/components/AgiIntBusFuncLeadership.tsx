@@ -149,11 +149,11 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
           <section className="section business-leadership-section">
             <div className="container">
               <div className="row">
-                <div className="col-8 col-lg-11 text-let text-lg-center">
+                <div className="col-8 col-lg-10 text-let text-lg-center">
                   <h3 className="leadership-team-heading">{this.props.listName}</h3>
 
                 </div>
-                <div className="align-self-end col-4 col-lg-1">
+                <div className="align-self-end col-4 col-lg-2">
                   <div className="button-container">
                     <button className="carousel-control-prev" type="button" data-bs-target="#leadershipCarousel"
                       data-bs-slide="prev">

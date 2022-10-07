@@ -25,7 +25,12 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
       purposeCultureVisionItems: [],
       selectedItem: NULL_SELECTED_ITEM,
       selectedVideoUrl: '',
-      showVideo: false
+      showVideo: false,
+      readMore: {
+        leadershipContent: false,
+        aboutContent: false,
+        ourCultureContent: false
+      }
     }
   }
 
@@ -117,10 +122,10 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                     <img src={leadershipMessageImg} className="w-100" />
                   </div>
                   <p dangerouslySetInnerHTML={{ __html: this.state.leadershipMessageItem.Description }}></p>
-                  <div className="more">
+                  <div className={`more ${this.state.readMore.leadershipContent ? 'd-block' : ''}`}>
                     <p dangerouslySetInnerHTML={{ __html: this.state.leadershipMessageItem.MoreDescription }}></p>
                   </div>
-                  <button className="toggle">Read More</button>
+                  {!this.state.readMore.leadershipContent && <button className="toggle" onClick={() => { this.showReadMore('leadership') }}>Read More</button>}
                 </div>
               </div>
               <hr className="m-0 mx-5 divider-horizontal" />
@@ -128,8 +133,8 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                 <div className="about-content">
                   <h5>{this.state.aboutUsItem.Title}</h5>
                   <h3>{this.state.aboutUsItem.Heading}</h3>
-                  <p dangerouslySetInnerHTML={{ __html: this.state.aboutUsItem.Description }}></p>
-                  <button className="toggle1">Read More</button>
+                  <p className={`${this.state.readMore.aboutContent ? 'show-more' : ''}`} dangerouslySetInnerHTML={{ __html: this.state.aboutUsItem.Description }}></p>
+                  {!this.state.readMore.aboutContent && <button className="toggle1" onClick={() => { this.showReadMore('about') }}>Read More</button>}
                 </div>
               </div>
             </div>
@@ -170,8 +175,8 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                       <div className="our-culture-section">
                         <div className="our-culture-content">
                           <h3>{item.Title}</h3>
-                          <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
-                          <button className="toggle2">Read More</button>
+                          <p className={`${this.state.readMore.ourCultureContent ? 'show-more' : ''}`} dangerouslySetInnerHTML={{ __html: item.Description }}></p>
+                          {!this.state.readMore.ourCultureContent && <button className="toggle2" onClick={() => { this.showReadMore('ourculture') }}>Read More</button>}
                         </div>
                       </div>
                     )
@@ -184,14 +189,14 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
               {
                 leadershipTeamHeading.map((item, i) => {
                   return (
-                    <div className="col-lg-11">
+                    <div className="col-lg-10">
                       <h3 className="leadership-team-heading">{item.HeadingTitle}</h3>
                       <p className="leadership-team-description">{item.HeadingDescription}</p>
                     </div>
                   )
                 })
               }
-              <div className="align-self-end col-lg-1">
+              <div className="align-self-end col-lg-2">
                 <div className="button-container">
                   <button className="carousel-control-prev" type="button" data-bs-target="#leadershipCarousel"
                     data-bs-slide="prev">
@@ -246,10 +251,37 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
             </div>
           </div>
         </div>
-      </div>
+      </div >
 
     );
 
+  }
+
+  private showReadMore(type: string) {
+    if (type === 'leadership') {
+      this.setState({
+        readMore: {
+          ...this.state.readMore,
+          leadershipContent: true
+        }
+      });
+    }
+    else if (type === 'about') {
+      this.setState({
+        readMore: {
+          ...this.state.readMore,
+          aboutContent: true
+        }
+      });
+    }
+    else if (type === 'ourculture') {
+      this.setState({
+        readMore: {
+          ...this.state.readMore,
+          ourCultureContent: true
+        }
+      });
+    }
   }
 
 

@@ -5,7 +5,7 @@ import { IAgiIntranetBlogDetailsState } from './IAgiIntranetBlogDetailsState';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { sp } from '@pnp/sp/presets/all';
 import * as moment from 'moment';
-import { BLOG_NULL_ITEM, LIST_BLOG, LIST_COMMENTS, LIST_INTRANETCONFIG, REGEX_SPEC_CHAR } from '../common/constants';
+import { BLOG_NULL_ITEM, LIST_BLOG, LIST_COMMENTS, LIST_INTRANETCONFIG, PLACEHOLDER_TEXT_ADD_COMMENT, REGEX_SPEC_CHAR } from '../common/constants';
 import { IBlogItem } from '../models/IBlogItem';
 import { ICommentItem } from '../models/ICommentItem';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -338,9 +338,23 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
   }
 
   private replyToComment(e: any) {
+    // const id = e.target.attributes["data-id"].value;
+    // const replySectionId = `replySection${id}`;
+    // document.getElementById(replySectionId).style.display = 'flex';
+
     const id = e.target.attributes["data-id"].value;
+    const replyBoxes: any = document.getElementsByClassName('commentReplyBox');
+
+    for (let i = 0; i < replyBoxes.length; i++) {
+      replyBoxes[i].style.display = 'none';
+    }
+
     const replySectionId = `replySection${id}`;
     document.getElementById(replySectionId).style.display = 'flex';
+
+    const textBoxId = `replyTextBox${id}`;
+    document.getElementById(textBoxId).focus();
+
   }
 
   private addReply(e: any) {
@@ -601,7 +615,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
                   <div className="d-flex gap-3 align-items-center add-comment">
                     <div>
                       <label className="visually-hidden" >Add Comment</label>
-                      <textarea className="form-control" placeholder="Add a comment." value={this.state.comment} onChange={(e) => this.handleComment(e)} rows={2}>
+                      <textarea className="form-control" placeholder={PLACEHOLDER_TEXT_ADD_COMMENT} value={this.state.comment} onChange={(e) => this.handleComment(e)} rows={2}>
                       </textarea>
                       {this.state.inappropriateComments.length > 0 &&
                         <div className='comment-warning'>
@@ -707,23 +721,20 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
                   </nav>
 
               }
-              {/** replies section */}
-              <div className="replies">
-                {
-                  replies.map((reply) => {
-                    return this.renderReplyRow(reply, profilePicUrl)
-                  })
-                }
-              </div>
+
 
               {/** reply text box */}
-              <div className="col mt-4" id={`replySection${comment.ID}`} style={{ display: 'none' }}>
+              <div className="col mt-4 align-items-center commentReplyBox" id={`replySection${comment.ID}`} style={{ display: 'none' }}>
                 <img src={profilePicUrl} alt="" className="flex-shrink-0 me-3 userImage comment-user-icon" width="60px" height="60px" />
                 <div>
                   <div className="d-flex gap-3 align-items-center add-comment">
                     <div>
                       <label className="visually-hidden" >Add Comment</label>
-                      <textarea rows={2} className="form-control" placeholder="Add a comment." value={this.state.reply} onChange={(e) => this.handleReply(e)} />
+                      <textarea rows={2} className="form-control" 
+                                placeholder={PLACEHOLDER_TEXT_ADD_COMMENT} 
+                                value={this.state.reply} onChange={(e) => this.handleReply(e)} 
+                                id={`replyTextBox${comment.ID}`}
+                                />
                       {this.state.inappropriateReply.length > 0 &&
                         <div className='comment-warning'>
                           <span>
@@ -738,11 +749,26 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
                       <label />
                     </div>
                     <div>
-                      <input type="button" className={enableReply ? "btn btn-gradient" : "btn btn-gradient disabled"} onClick={(e) => enableReply && this.addReply(e)} value='Post' data-id={comment.ID} />
+                      <input type="button" className={enableReply ? "btn btn-gradient" : "btn btn-gradient disabled"} 
+                             onClick={(e) => enableReply && this.addReply(e)} 
+                             value='Post' 
+                             data-id={comment.ID} 
+                             
+                             />
                     </div>
                   </div>
                 </div>
               </div>
+
+              {/** replies section */}
+              <div className="replies">
+                {
+                  replies.map((reply) => {
+                    return this.renderReplyRow(reply, profilePicUrl)
+                  })
+                }
+              </div>
+
             </div>
           </div>
         </div>

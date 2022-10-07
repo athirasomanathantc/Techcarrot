@@ -14,6 +14,7 @@ import { IIntranetHeaderProps } from './components/IntranetHeader/IntranetHeader
 import { IIntranetFooterProps } from './components/IntranetFooter/IntranetFooterProps';
 import IntranetFooter from './components/IntranetFooter/IntranetFooter';
 import IntranetHeader from './components/IntranetHeader/IntranetHeader';
+import * as _ from 'lodash';
 
 require("AGIIntranet");
 
@@ -38,13 +39,16 @@ export default class AgiIntranetBrandingApplicationCustomizer
 
   @override
   public onInit(): Promise<void> {
-    const randomNumber = Math.floor(Math.random() * 90000) + 10000;
-    SPComponentLoader.loadCss(`https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css`);
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap.min.css`);
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap-icons.min.css`);
-    SPComponentLoader.loadScript(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap.bundle.min.js`);
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/style.css?${randomNumber}`);
-    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/business.css?${randomNumber}`);
+    const isSystemPage = this.isSystemPage();
+    if (!isSystemPage) {
+      const randomNumber = Math.floor(Math.random() * 90000) + 10000;
+      SPComponentLoader.loadCss(`https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css`);
+      SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap.min.css`);
+      SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap-icons.min.css`);
+      SPComponentLoader.loadScript(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap.bundle.min.js`);
+      SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/style.css?${randomNumber}`);
+      SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/business.css?${randomNumber}`);
+    }
     Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
 
     let message: string = this.properties.testMessage;
@@ -52,44 +56,13 @@ export default class AgiIntranetBrandingApplicationCustomizer
       message = '(No properties were provided.)';
     }
 
-    //Dialog.alert(`Hello from ${strings.Title}:\n\n${message}`);
-
     // Render header
-    const flagTop = ((location.href.indexOf(`${this.context.pageContext.web.absoluteUrl}/SitePages`) != -1 &&
-      location.href.indexOf(`${this.context.pageContext.web.absoluteUrl}/SitePages/Forms`) == -1 &&
-      location.href.indexOf(`${this.context.pageContext.web.absoluteUrl}/Lists`) == -1)
-      ||
-      (
-        location.href == `${this.context.pageContext.web.absoluteUrl}` ||
-        location.href == `${this.context.pageContext.web.absoluteUrl}/`
-      )
-    )
-
-    if (flagTop) {
-      // SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/style.css`);
+    if (!isSystemPage) {
       this._renderTopPlaceHolder();
     }
 
     // Render footer
-    const flagBottom =
-      (
-        (
-          location.href.indexOf(`${this.context.pageContext.web.absoluteUrl}/SitePages`) != -1 &&
-          location.href.indexOf(`${this.context.pageContext.web.absoluteUrl}/SitePages/Forms`) == -1 &&
-          location.href.indexOf(`${this.context.pageContext.web.absoluteUrl}/Lists`) == -1
-        )
-        ||
-        (
-          location.href == `${this.context.pageContext.web.absoluteUrl}` ||
-          location.href == `${this.context.pageContext.web.absoluteUrl}/`
-        )
-      );
-
-    console.log('konowmore', `${this.context.pageContext.web.absoluteUrl}/SitePages/KnowMore.aspx`);
-    console.log('knowmore', location.href.indexOf(`${this.context.pageContext.web.absoluteUrl}/SitePages/Home.aspx`));
-    console.log('flagbootm', flagBottom);
-
-    if (flagBottom) {
+    if (!isSystemPage) {
       this._renderBottomPlaceHolder();
     }
 
@@ -283,5 +256,9 @@ export default class AgiIntranetBrandingApplicationCustomizer
 
   private _onDispose(): void {
     console.log('[ReactHeaderFooterApplicationCustomizer._onDispose] Disposed custom top and bottom placeholders.');
+  }
+
+  private isSystemPage(): boolean {
+    return _.some(['sitepages/forms/', '/settings.aspx', '/viewlsts.aspx', '/lists/'], (item) => _.includes(location.href.toLowerCase(), item))
   }
 }

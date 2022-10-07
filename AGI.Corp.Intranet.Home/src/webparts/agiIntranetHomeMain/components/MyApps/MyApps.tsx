@@ -10,9 +10,14 @@ let siteUrl: string = '';
 const MyApp = (props: IMyApp) => {
     let imageUrl = JSON.parse(props.AppIcon);
     imageUrl = imageUrl?.serverUrl + imageUrl?.serverRelativeUrl;
+
+    let url = props.NavigationUrl?.Url;
+    url = url.toLowerCase().indexOf(siteUrl?.toLowerCase()) > -1 ? `${url}?env=WebView` : url;
+
+
     return (<>
         <div className="col col-lg-6 col-sm-4">
-            <a className="navlink" href={props.NavigationUrl?.Url}>
+            <a className="navlink" href={url} data-interception="off">
                 <div className="d-flex app-item">
                     <div className="app-item-icon"><img src={imageUrl} /></div>
                     <div className="d-flex flex-column justify-content-around">
