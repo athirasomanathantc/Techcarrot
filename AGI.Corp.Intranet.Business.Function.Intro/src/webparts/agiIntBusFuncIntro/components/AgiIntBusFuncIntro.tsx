@@ -89,7 +89,7 @@ export default class AgiIntBusFuncIntro extends React.Component<IAgiIntBusFuncIn
     }
 
     return (
-      <section className="section intro-section ">
+      <section className="section intro-section" style={{ display: this.state.contentItems.length > 0 ? 'block' : 'none' }}>
         <div className="container">
           {
             this.state.contentItems.map((items, i) => {
