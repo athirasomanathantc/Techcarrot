@@ -146,7 +146,7 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
 
           ?
 
-          <section className="section business-leadership-section">
+          <section className="section business-leadership-section" style={{ display: this.state.contentItems.length > 0 ? 'block' : 'none' }}>
             <div className="container">
               <div className="row">
                 <div className="col-8 col-lg-10 text-let text-lg-center">

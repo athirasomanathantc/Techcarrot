@@ -141,7 +141,7 @@ export default class AgiIntBusFuncTestimonials extends React.Component<IAgiIntBu
       <div className={styles.agiIntBusFuncTestimonials}>
         {this.props.listName && this.props.listName.length > 0
           ?
-          <section id="testimonial-slider" className="section testimonial-slider pb-5">
+          <section id="testimonial-slider" className="section testimonial-slider pb-5" style={{ display: this.state.contentItems.length > 0 ? 'block' : 'none' }}>
             <div className="container">
               <div id="carouselTestimonial" className="carousel  slide" data-bs-ride="carousel">
                 <div className="col-12 text-left text-lg-center">
