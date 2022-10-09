@@ -90,7 +90,7 @@ export default class AgiIntBusFuncContent extends React.Component<IAgiIntBusFunc
     }
 
     return (
-      <section className="section txt-img-section">
+      <section className="section txt-img-section" style={{ display: this.state.contentItems.length > 0 ? 'block' : 'none' }}>
         <div className="container">
           <div className="business-txt-img">
             {
