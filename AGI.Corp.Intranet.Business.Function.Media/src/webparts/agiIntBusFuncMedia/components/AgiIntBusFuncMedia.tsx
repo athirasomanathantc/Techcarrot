@@ -181,7 +181,7 @@ export default class AgiIntBusFuncMedia extends React.Component<IAgiIntBusFuncMe
         {/* {this.renderCarouselSection()} */}
         {this.props.listName && this.props.listName ?
 
-          <section className="section media-section">
+          <section className="section media-section" style={{ display: this.state.contentItems.length > 0 ? 'block' : 'none' }}>
             <div className="container">
               <div className="row">
                 <div className="col-8 col-lg-11 text-let text-lg-center">
