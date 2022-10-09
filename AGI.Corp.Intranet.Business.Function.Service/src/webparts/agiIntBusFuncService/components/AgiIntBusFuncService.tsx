@@ -45,7 +45,7 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
     });
   }
 
-  private fnInitiate() {
+  private fnInitiate() {debugger;
     let serviceItems = document.querySelectorAll(".our-service-carousel .carousel-item");
 
     serviceItems.forEach((el) => {
@@ -110,7 +110,7 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
 
           ?
 
-          <section className="section our-services">
+          <section className="section our-services" style={{ display: this.state.contentItems.length > 0 ? 'block' : 'none' }}>
             <div className="container">
               <div className="row">
                 <div className="col-8 col-lg-11 text-let text-lg-center">
