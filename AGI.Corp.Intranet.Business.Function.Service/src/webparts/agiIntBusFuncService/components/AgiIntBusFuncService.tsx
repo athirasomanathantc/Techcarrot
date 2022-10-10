@@ -137,7 +137,7 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
                     {
                       this.state.contentItems.map((items, i) => {
                         const catVal = this.getQueryStringValue('categoryId');
-                        const navURL = `${this.props.siteUrl}/SitePages/Articles.aspx?progName=${this.state.lastNavItem}&progId=${catVal}`;//items.NavigationUrl.Url;
+                        const navURL = `${this.props.siteUrl}/SitePages/Articles.aspx?serviceId=${items.ID}&env=WebView`;//items.NavigationUrl.Url;
                         const imgVal = this.getImageUrl(items.ServiceIcon);
                         return (
                           <div className={i == 0 ? "carousel-item active" : "carousel-item"}>

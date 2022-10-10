@@ -43,25 +43,27 @@ export default class AgiIntBusFuncArticle extends React.Component<IAgiIntBusFunc
   }
 
   private async getBannerItems(): Promise<void> {
-    const progVal = this.getQueryStringValue('progName');
-    const catVal = this.getQueryStringValue('progId');
-    const tempProgramme = `${progVal}Id eq ${catVal}`;
-    sp.web.lists.getByTitle(LIST_BANNER).items.filter(tempProgramme).get().then((items: IBannerItem[]) => {
+    debugger;
+    //  const progVal = this.getQueryStringValue('progName');
+    //  const catVal = this.getQueryStringValue('progId');
+    const serviceId = this.getQueryStringValue('serviceId');
+    const tempProgramme = `ServiceNameId eq ${serviceId}`;
+    sp.web.lists.getByTitle(LIST_BANNER).items.filter(tempProgramme).select("*,ServiceName/Title,ServiceName/Id").expand("ServiceName").get().then((items: IBannerItem[]) => {
       this.setState({
-        bannerItems: items,
-        programID: catVal
+        bannerItems: items
       });
     });
   }
 
   private async getSlideItems(): Promise<void> {
-    const progVal = this.getQueryStringValue('progName');
-    const catVal = this.getQueryStringValue('progId');
-    const tempProgramme = `${progVal}Id eq ${catVal}`;
-    sp.web.lists.getByTitle(LIST_SLIDE).items.filter(tempProgramme).get().then((items: ISlideItem[]) => {
+    //  const progVal = this.getQueryStringValue('progName');
+    //  const catVal = this.getQueryStringValue('progId');
+    const serviceId = this.getQueryStringValue('serviceId');
+    const tempProgramme = `ServiceNameId eq ${serviceId}`;
+    sp.web.lists.getByTitle(LIST_SLIDE).items.filter(tempProgramme).select("*,ServiceName/Title,ServiceName/Id").expand("ServiceName").get().then((items: ISlideItem[]) => {
       this.setState({
         slideItems: items,
-        programID: catVal
+        //  programID: catVal
       }, () => {
         this.fnInitiate();
       });
@@ -87,38 +89,41 @@ export default class AgiIntBusFuncArticle extends React.Component<IAgiIntBusFunc
   }
 
   private async getContentItems(): Promise<void> {
-    const progVal = this.getQueryStringValue('progName');
-    const catVal = this.getQueryStringValue('progId');
-    const tempProgramme = `${progVal}Id eq ${catVal}`;
-    sp.web.lists.getByTitle(LIST_CONTENT).items.filter(tempProgramme).get().then((items: IContentItem[]) => {
+    //  const progVal = this.getQueryStringValue('progName');
+    //  const catVal = this.getQueryStringValue('progId');
+    const serviceId = this.getQueryStringValue('serviceId');
+    const tempProgramme = `ServiceNameId eq ${serviceId}`;
+    sp.web.lists.getByTitle(LIST_CONTENT).items.filter(tempProgramme).select("*,ServiceName/Title,ServiceName/Id").expand("ServiceName").get().then((items: IContentItem[]) => {
       this.setState({
         contentItems: items,
-        programID: catVal
+        //  programID: catVal
       });
     });
   }
 
 
   private async getContent2Items(): Promise<void> {
-    const progVal = this.getQueryStringValue('progName');
-    const catVal = this.getQueryStringValue('progId');
-    const tempProgramme = `${progVal}Id eq ${catVal}`;
-    sp.web.lists.getByTitle(LIST_CONTENT2).items.filter(tempProgramme).get().then((items: IContent2Item[]) => {
+    //  const progVal = this.getQueryStringValue('progName');
+    //  const catVal = this.getQueryStringValue('progId');
+    const serviceId = this.getQueryStringValue('serviceId');
+    const tempProgramme = `ServiceNameId eq ${serviceId}`;
+    sp.web.lists.getByTitle(LIST_CONTENT2).items.filter(tempProgramme).select("*,ServiceName/Title,ServiceName/Id").expand("ServiceName").get().then((items: IContent2Item[]) => {
       this.setState({
         content2Items: items,
-        programID: catVal
+        // programID: catVal
       });
     });
   }
 
   private async getContent3Items(): Promise<void> {
-    const progVal = this.getQueryStringValue('progName');
-    const catVal = this.getQueryStringValue('progId');
-    const tempProgramme = `${progVal}Id eq ${catVal}`;
-    sp.web.lists.getByTitle(LIST_CONTENT3).items.filter(tempProgramme).get().then((items: IContent3Item[]) => {
+    //  const progVal = this.getQueryStringValue('progName');
+    //  const catVal = this.getQueryStringValue('progId');
+    const serviceId = this.getQueryStringValue('serviceId');
+    const tempProgramme = `ServiceNameId eq ${serviceId}`;
+    sp.web.lists.getByTitle(LIST_CONTENT3).items.filter(tempProgramme).select("*,ServiceName/Title,ServiceName/Id").expand("ServiceName").get().then((items: IContent3Item[]) => {
       this.setState({
         content3Items: items,
-        programID: catVal
+        //  programID: catVal
       });
     });
   }
@@ -177,9 +182,17 @@ export default class AgiIntBusFuncArticle extends React.Component<IAgiIntBusFunc
           <div className="container">
             <article className="wrapper">
               <div className="title text-center mb-4">
-                <h2 className="">Residential</h2>
+                <h2 className="">
+                  {
+                    this.state.bannerItems.map((items, i) => {
+                      return (
+                        items.ServiceName.Title
+                      )
+                    })
+                  }
+                </h2>
               </div>
-              <div className="banner-slider-section">
+              <div className="banner-slider-section" style={{ display: this.state.bannerItems.length > 0 ? 'block' : 'none' }}>
                 <div id="business-details-banner-CarouselControls" className="carousel slide"
                   data-bs-ride="carousel">
                   <div className="carousel-inner">
@@ -216,7 +229,7 @@ export default class AgiIntBusFuncArticle extends React.Component<IAgiIntBusFunc
                   )
                 })
               }
-              <div className="txt-img-section">
+              <div className="txt-img-section" style={{ display: this.state.contentItems.length > 0 ? 'block' : 'none' }}>
                 {
                   this.state.contentItems.map((items, i) => {
                     const imgVal = this.getImageUrl(items.ContentImage);
@@ -231,7 +244,7 @@ export default class AgiIntBusFuncArticle extends React.Component<IAgiIntBusFunc
                 }
               </div>
 
-              <div className="inner-banner-section">
+              <div className="inner-banner-section" style={{ display: this.state.content2Items.length > 0 ? 'block' : 'none' }}>
                 {
                   this.state.content2Items.map((items, i) => {
                     return (
@@ -246,27 +259,96 @@ export default class AgiIntBusFuncArticle extends React.Component<IAgiIntBusFunc
                 }
               </div>
 
-              <div className="row gx-5 mt-5 image-grid-section carousel js-carousel slide leadership-carousel" data-bs-ride="carousel">
-                <div className="carousel-inner" role="listbox">
-                  {
-                    this.state.slideItems.map((items, i) => {
-                      const imgVal = this.getImageUrl(items.ContentImage);
-                      return (
-                        <div className={i == 0 ? "carousel-item js-carousel-item active" : "carousel-item js-carousel-item"}>
-                          <div className="col-md-3">
-                            <div className="team-card h-100">
-                              <div className="team-img">
-                                <img src={imgVal} alt="Card Design" className="w-100" />
+              <div className="row gx-5 mt-5 image-grid-section carousel js-carousel slide leadership-carousel" data-bs-ride="carousel" style={{ display: this.state.slideItems.length > 0 ? 'block' : 'none' }}>
+                <div className="align-self-end col-4 col-lg-1">
+                  <div className="button-container">
+                    <button className="carousel-control-prev" type="button" data-bs-target="#ourServiceCarousel"
+                      data-bs-slide="prev">
+                      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span className="visually-hidden">Previous</span>
+                    </button>
+                    <button className="carousel-control-next" type="button" data-bs-target="#ourServiceCarousel"
+                      data-bs-slide="next">
+                      <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span className="visually-hidden">Next</span>
+                    </button>
+                  </div>
+                </div>
+                <div id="ourServiceCarousel" className="carousel slide container our-service-carousel mt-5"
+                  data-bs-ride="carousel">
+                  <div className="carousel-inner" role="listbox">
+                    {
+                      this.state.slideItems.map((items, i) => {
+                        const imgVal = this.getImageUrl(items.ContentImage);
+                        return (
+                          <div className={i == 0 ? "carousel-item js-carousel-item active" : "carousel-item js-carousel-item"}>
+                            <div className="col-md-3">
+                              <div className="team-card h-100">
+                                <div className="team-img">
+                                  <img src={imgVal} alt="Card Design" className="w-100" />
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      )
-                    })
-                  }
+                        )
+                      })
+                    }
+                  </div>
                 </div>
               </div>
-              <div className="row mt-5 content-txt-section">
+
+              {/* <div className="row">
+                <div className="col-8 col-lg-11 text-let text-lg-center">
+                  <h3 className="section-title">{this.props.listName}</h3>
+
+                </div>
+                <div className="align-self-end col-4 col-lg-1">
+                  <div className="button-container">
+                    <button className="carousel-control-prev" type="button" data-bs-target="#ourServiceCarousel"
+                      data-bs-slide="prev">
+                      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span className="visually-hidden">Previous</span>
+                    </button>
+                    <button className="carousel-control-next" type="button" data-bs-target="#ourServiceCarousel"
+                      data-bs-slide="next">
+                      <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span className="visually-hidden">Next</span>
+                    </button>
+                  </div>
+                </div>
+                <div id="ourServiceCarousel" className="carousel slide container our-service-carousel mt-5"
+                  data-bs-ride="carousel">
+                  <div className="carousel-inner w-100">
+                    {
+                      this.state.contentItems.map((items, i) => {
+                        const catVal = this.getQueryStringValue('categoryId');
+                        const navURL = `${this.props.siteUrl}/SitePages/Articles.aspx?progName=${this.state.lastNavItem}&progId=${catVal}`;//items.NavigationUrl.Url;
+                        const imgVal = this.getImageUrl(items.ServiceIcon);
+                        return (
+                          <div className={i == 0 ? "carousel-item active" : "carousel-item"}>
+                            <div className="col-md-3 m-2">
+                              <div className="card  our-services">
+                                <img className="w-100" src={imgVal} />
+                                <div className="card-body">
+                                  <h4 className="card-title">{items.Title}</h4>
+                                  <p className="card-description mb-4" dangerouslySetInnerHTML={{ __html: items.Description }}></p>
+                                  <a href={navURL} className="btn news-read-more mt-auto align-self-end">{items.NavigationText}</a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )
+
+                      })
+                    }
+                  </div>
+
+                </div>
+              </div> */}
+
+
+
+              <div className="row mt-5 content-txt-section" style={{ display: this.state.content3Items.length > 0 ? 'block' : 'none' }}>
                 {
                   this.state.content3Items.map((items, i) => {
                     return (

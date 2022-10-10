@@ -1,7 +1,6 @@
 export interface ISlideItem {
     ID: number;
     Title: string;
-    Business: string;
-    Function: string;
+    ServiceName: {Title: string, Id: string};
     ContentImage: string;
 }
