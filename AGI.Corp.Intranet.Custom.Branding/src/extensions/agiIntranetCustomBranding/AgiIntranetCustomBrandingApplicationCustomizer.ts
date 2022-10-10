@@ -259,6 +259,10 @@ export default class AgiIntranetBrandingApplicationCustomizer
   }
 
   private isSystemPage(): boolean {
-    return _.some(['sitepages/forms/', '/settings.aspx', '/viewlsts.aspx', '/lists/'], (item) => _.includes(location.href.toLowerCase(), item))
+    return _.some([
+      '/forms/',
+      '/_layouts/',
+      '/lists/'
+    ], (item) => _.includes(location.href.toLowerCase(), item))
   }
 }
