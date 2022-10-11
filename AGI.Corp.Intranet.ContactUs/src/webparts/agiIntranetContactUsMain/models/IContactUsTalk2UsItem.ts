@@ -7,4 +7,5 @@ export interface IContactUsTalk2UsItem {
     Website: string;
     Category: string;
     Detail: string;
+    Icon?: any;
 }
