@@ -26,7 +26,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
       contactUsGoogleMapsItem: NULL_CONTACTUS_GOOGLEMAPS_ITEM,
       selectedUserName: '',
       selectedUserEmail: '',
-      selectedUserExtn: '',
+      selectedUserExtn: '+971',
       selectedUserPhone: '',
       selectedUserSubject: '',
       selectedUserMsg: '',
@@ -86,7 +86,8 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
   private async getSubjectItem(): Promise<void> {
     sp.web.lists.getByTitle(LIST_CONTACTUS_MAIN).items.get().then((items: IContactUsMainItem[]) => {
       this.setState({
-        contactUsMainItems: items
+        contactUsMainItems: items,
+        selectedUserSubject: items[0]?.ID?.toString()
       });
     });
   }
@@ -234,7 +235,12 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
                       <div className="mb-3 col-md-6">
                         <label className="form-label">Subject</label>
                         <select className="form-select form-control" value={this.state.selectedUserSubject} onChange={(e) => this.handleSubjectChange(e)}>
-                          <option >IT Support</option>
+                          {
+                            this.state.contactUsMainItems.map((contactUsMainItem: IContactUsMainItem) => {
+                              return <option value={contactUsMainItem.ID}>{contactUsMainItem.Title}</option>
+                            })
+                          }
+
                         </select>
                       </div>
                       <div className="mb-2 col-md-6">
@@ -340,7 +346,8 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
       Email: this.state.selectedUserEmail,
       Extension: this.state.selectedUserExtn,
       Phone: this.state.selectedUserPhone,
-      Message: this.state.selectedUserMsg
+      Message: this.state.selectedUserMsg,
+      SubjectId: this.state.selectedUserSubject
     }
 
     sp.web.lists.getByTitle(LIST_CONTACTUS_REGISTRATION).items.add(body).then(() => {

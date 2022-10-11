@@ -21,5 +21,5 @@ export interface IAgiIntranetContactUsMainState {
    showErrorExtnMsg: boolean;
    showErrorPhoneMsg: boolean;
    validationText: string;
-   oddEven:boolean;
+   oddEven: boolean;
 }

@@ -11,7 +11,7 @@ export const NULL_CONTACTUS_TALK2US_ITEM = {
     Detail: ''
 }
 
-export const LIST_CONTACTUS_MAIN = 'ContactUsEmailConfig';
+export const LIST_CONTACTUS_MAIN = 'ContactUs-EmailConfig';
 
 export const NULL_CONTACTUS_MAIN_ITEM = {
     ID: 0,
