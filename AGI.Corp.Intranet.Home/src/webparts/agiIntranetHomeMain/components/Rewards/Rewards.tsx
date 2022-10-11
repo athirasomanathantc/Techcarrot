@@ -14,7 +14,7 @@ const RewardCarousel = (props: IReward) => {
             <img src={`${imageUrl}`} className="d-block w-100 rewards-image" alt="..." />
             <div className={`carousel-caption overlay`}>
                 <p>{props.Description}</p>
-                <div className="offer-btn-container"><a href={`${siteUrl}/SitePages/Rewards/Reward%20Details.aspx?rewardID=${props.Id}&env=WebView`} className="btn btn-lg btn-view-offer">View Offer</a></div>
+                <div className="offer-btn-container"><a href={`${siteUrl}/SitePages/Rewards/Reward%20Details.aspx?rewardID=${props.Id}&env=WebView`} className="btn btn-lg btn-view-offer">View Rewards</a></div>
             </div>
         </div>
     </>)
