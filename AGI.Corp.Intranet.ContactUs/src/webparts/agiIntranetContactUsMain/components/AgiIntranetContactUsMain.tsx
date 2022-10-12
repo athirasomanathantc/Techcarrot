@@ -34,6 +34,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
       showErrorEmailMsg: false,
       showErrorExtnMsg: false,
       showErrorPhoneMsg: false,
+      showErrorMessage: false,
       validationText: '',
       oddEven: false
     }
@@ -252,6 +253,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
                       <div className="mb-3 col-md-6 msgBox">
                         <label className="form-label">Message</label>
                         <textarea rows={4} placeholder="Write your message...." className="form-control" id="contactFormMessage" value={this.state.selectedUserMsg} onChange={(e) => this.handleMsgChange(e)}></textarea>
+                        <p id="errorMessage" className="errorMsgClass" style={{ display: this.state.showErrorMessage ? "block" : "none" }}>Message is required</p>
                       </div>
                       <div className="mb-3 col-md-6">
                         <label className="form-label">Phone</label>
@@ -373,9 +375,17 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
     }
 
     let isMsgValid: boolean = true;
-    if (!this.state.selectedUserMsg) {
+    if (!this.state.selectedUserMsg.trim().length) {
       errors.push('User Message');
       isMsgValid = false;
+      this.setState({
+        showErrorMessage: true
+      })
+    }
+    else {
+      this.setState({
+        showErrorMessage: false
+      })
     }
 
     const phoneErrorNew = this.validatePhone(this.state.selectedUserPhone);
@@ -390,6 +400,8 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
         showErrorPhoneMsg: false
       });
     }
+
+    const messageError = this.state.selectedUserMsg
 
     isValid = isPhoneValid && isMsgValid;
     if (!isValid) {
