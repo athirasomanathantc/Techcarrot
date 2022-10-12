@@ -608,7 +608,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
                       <label className="visually-hidden" >Add Comment</label>
                       <textarea rows={2} 
                                 className="form-control" 
-                                placeholder="Add a comment .Type @ to mention someone" 
+                                placeholder="Add a comment." 
                                 value={this.state.reply} onChange={(e) => this.handleReply(e)} 
                                 id={`replyTextBox${comment.ID}`}
                                 />
