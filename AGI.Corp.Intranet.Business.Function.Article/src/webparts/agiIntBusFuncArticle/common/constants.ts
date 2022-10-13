@@ -33,7 +33,9 @@ export const NULL_CONTENT2_ITEM = {
     ID: 0,
     Title: '',
     ServiceName: {Title: '', Id: ''},
-    Description: ''
+    Description: '',
+    Author:'',
+    Location:''
 }
 
 export const NULL_CONTENT3_ITEM = {

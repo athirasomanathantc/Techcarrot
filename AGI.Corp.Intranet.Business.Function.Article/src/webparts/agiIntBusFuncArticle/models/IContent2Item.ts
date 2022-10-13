@@ -3,4 +3,6 @@ export interface IContent2Item {
     Title: string;
     ServiceName: {Title: string, Id: string};
     Description: string;
+    Creator:string;
+    Location:string;
 }

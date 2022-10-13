@@ -108,6 +108,7 @@ export default class AgiIntBusFuncArticle extends React.Component<IAgiIntBusFunc
     const serviceId = this.getQueryStringValue('serviceId');
     const tempProgramme = `ServiceNameId eq ${serviceId}`;
     sp.web.lists.getByTitle(LIST_CONTENT2).items.filter(tempProgramme).select("*,ServiceName/Title,ServiceName/Id").expand("ServiceName").get().then((items: IContent2Item[]) => {
+      console.log(items);
       this.setState({
         content2Items: items,
         // programID: catVal
@@ -250,9 +251,13 @@ export default class AgiIntBusFuncArticle extends React.Component<IAgiIntBusFunc
                     return (
                       <div className="container">
                         <div className="icon-quote">
-                          <img src={`${this.props.siteUrl}/Assets/Images/icon-quote.png`} alt="" />
+                          <img src={`${this.props.siteUrl}/Assets/images/icon-quotes.svg`} alt="" />
                         </div>
                         <p dangerouslySetInnerHTML={{ __html: items.Description }}></p>
+                        <div className="quote-author">
+                          <p className="name">{items.Creator}</p>
+                          <p className="location">{items.Location}</p>
+                        </div>
                       </div>
                     )
                   })
