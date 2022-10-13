@@ -20,6 +20,7 @@ export interface IAgiIntranetContactUsMainState {
    showErrorEmailMsg: boolean;
    showErrorExtnMsg: boolean;
    showErrorPhoneMsg: boolean;
+   showErrorMessage: boolean;
    validationText: string;
-   oddEven:boolean;
+   oddEven: boolean;
 }
