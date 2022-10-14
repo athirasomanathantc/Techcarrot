@@ -24,7 +24,7 @@ const Events = (props: IEvent) => {
             </a>
             <div className="text-end">
                 <img src={`${siteUrl}/Assets/images/calendar-icon.svg`} alt="" />
-                <a target="_blank" style={{ display: 'inline-block' }} data-interception="off" className="news-read-more" href={`${siteUrl}/_vti_bin/owssvr.dll?CS=109&Cmd=Display&List=%7B${props.guid}%7D&CacheControl=1&ID=${props.Id}&Using=event.ics`} download="Event.ics">
+                <a target="_blank" style={{ display: 'inline-block' }} data-interception="off" className="add-to-calendar" href={`${siteUrl}/_vti_bin/owssvr.dll?CS=109&Cmd=Display&List=%7B${props.guid}%7D&CacheControl=1&ID=${props.Id}&Using=event.ics`} download="Event.ics">
                     Add to Calendar
                 </a>
             </div>
