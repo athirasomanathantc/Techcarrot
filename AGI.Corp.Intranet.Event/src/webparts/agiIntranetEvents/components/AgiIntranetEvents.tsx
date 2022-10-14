@@ -5,7 +5,8 @@ import { IEventData } from '../Model/IEventData';
 import { IAgiIntranetEventsStates } from './IAgiIntranetEventsStates';
 import {
   SPHttpClient,
-  SPHttpClientResponse} from '@microsoft/sp-http';
+  SPHttpClientResponse
+} from '@microsoft/sp-http';
 import * as moment from 'moment';
 import Paging from './Paging/Paging';
 import { EVENTS, TABS } from '../common/constants';
@@ -528,7 +529,8 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
                                     }
                                   </div>
                                   <div>
-                                    <a target="_blank" style={{ display: 'inline-block' }} data-interception="off" className="news-read-more" href={`${this.props.siteUrl}/_vti_bin/owssvr.dll?CS=109&Cmd=Display&List=%7B${this.state.guid}%7D&CacheControl=1&ID=${item.ID}&Using=event.ics`} download="Event.ics">
+                                    <img src={`${this.props.siteUrl}/Assets/images/calendar-icon.svg`} alt="" />
+                                    <a target="_blank" style={{ display: 'inline-block' }} data-interception="off" className="add-to-calendar" href={`${this.props.siteUrl}/_vti_bin/owssvr.dll?CS=109&Cmd=Display&List=%7B${this.state.guid}%7D&CacheControl=1&ID=${item.ID}&Using=event.ics`} download="Event.ics">
                                       Add to Calendar
                                     </a>
                                   </div>
