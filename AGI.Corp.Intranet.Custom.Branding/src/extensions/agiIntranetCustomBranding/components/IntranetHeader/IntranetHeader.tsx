@@ -228,8 +228,9 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
 
   private handleSearchResults(e: any) {
     try {
-      const navUrl = `${this.props.siteUrl}/_layouts/15/search.aspx/siteall?q=${this.state.selectedSearchVal}`;
-      window.open(navUrl, '_blank').focus();
+      const navUrl = `${this.props.siteUrl}/sitepages/CustomSearch.aspx?q=${this.state.selectedSearchVal}`;
+      window.open(navUrl,"").focus();
+      //location.replace(navUrl);
     }
     catch (e) {
       console.log(e);
@@ -288,8 +289,8 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                 <form action="" className="d-block d-md-flex mt-3 mt-lg-0 order-4 order-md-1 search-bar">
                   <div className="input-group">
                     <input type="text" className="form-control form-control-lg" placeholder="Search Here" id="txtSeachText" onChange={(e) => this.handleSearchChange(e)} />
-                    <button type="submit" className="input-group-text btn-serach" onClick={(e) => this.handleSearchResults(e)}><i className="bi bi-search">
-                      <img src={`${this.props.siteUrl}/Assets/images/icon-search.svg`} alt="" /></i></button>
+                    <a  className="input-group-text btn-serach" href={`${this.props.siteUrl}/SitePages/CustomSearch.aspx?q=${this.state.selectedSearchVal}`}><i className="bi bi-search">
+                      <img src={`${this.props.siteUrl}/Assets/images/icon-search.svg`} alt="" /></i></a>
                   </div>
                 </form>
                 <ul className="logged-in-user order-2">
