@@ -1,4 +1,5 @@
 import { sp } from "@pnp/sp";
+import { IListInfo } from "@pnp/sp/lists";
 import { IAgiIntranetHomeMainProps } from "../components/IAgiIntranetHomeMainProps";
 import { IAnnouncement } from "../models/IAnnouncement";
 import { IConfigItem } from "../models/IConfigItem";
@@ -122,6 +123,16 @@ export class SPService {
             .expand("Question")()
             .then((items: ISurveyOption[]) => {
                 return items;
+            })
+            .catch((exception) => {
+                throw new Error(exception);
+            });
+    }
+
+    public async getListGuid(listname: string) {
+        return await sp.web.lists.getByTitle(listname)()
+            .then((response: IListInfo) => {
+                return response.Id;
             })
             .catch((exception) => {
                 throw new Error(exception);

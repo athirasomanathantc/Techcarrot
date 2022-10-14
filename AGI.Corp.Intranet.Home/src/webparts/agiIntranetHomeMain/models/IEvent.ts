@@ -4,4 +4,5 @@ export interface IEvent {
     Id: number;
     Title: string;
     StartDate: string;
+    guid: string;
 }
