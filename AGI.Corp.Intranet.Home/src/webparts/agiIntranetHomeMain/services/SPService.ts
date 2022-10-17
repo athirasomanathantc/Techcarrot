@@ -94,8 +94,8 @@ export class SPService {
 
     public async getEvents(): Promise<IEvent[]> {
         return await sp.web.lists.getByTitle('EventDetails').items.select("Id,Title,StartDate")
-            .top(this._props.topEvents)
-            .orderBy("StartDate", false)()
+            .top(5000)
+            .orderBy("StartDate", true)()
             .then((items: IEvent[]) => {
                 return items;
             })
