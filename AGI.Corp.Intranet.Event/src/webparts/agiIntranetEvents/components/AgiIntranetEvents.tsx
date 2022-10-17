@@ -331,8 +331,8 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
         selectedTabValues,
         filterData: selectedTabValues
       }, () => {
-
-        this.paging();
+        this.onSelectFilterBy(this.state.showBusinessData ? 'Business' : 'Functions');
+        // this.paging();
       });
 
     } else {
