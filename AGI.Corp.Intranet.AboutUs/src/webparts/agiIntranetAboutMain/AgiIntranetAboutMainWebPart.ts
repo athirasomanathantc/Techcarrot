@@ -19,6 +19,24 @@ export interface IAgiIntranetAboutMainWebPartProps {
 }
 
 export default class AgiIntranetAboutMainWebPart extends BaseClientSideWebPart<IAgiIntranetAboutMainWebPartProps> {
+  protected onInit(): Promise<void> {
+    const randomNumber = Math.floor(Math.random()*90000) + 10000;
+
+    
+     SPComponentLoader.loadCss(`https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css`);
+   
+       SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap.min.css`);
+   
+       SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap-icons.min.css`);
+   
+       SPComponentLoader.loadScript(`${this.context.pageContext.web.absoluteUrl}/Assets/bootstrap/bootstrap.bundle.min.js`);
+       SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/style.css?${randomNumber}`);
+       SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/aboutAGI.css?${randomNumber}`);
+   
+   
+   
+       return Promise.resolve();
+  }
   
   public constructor() {
     super();

@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.14.0",
+    "libraryName": "agi-corp-intranem-interim",
+    "libraryId": "bccea0db-2fc0-4501-b195-d84d1e02b548",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "AGICorpIntranemInterim",
+    "solutionShortDescription": "AGICorpIntranemInterim description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
