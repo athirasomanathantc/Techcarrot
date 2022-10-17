@@ -46,7 +46,15 @@ export const CompanyEvents = (props: IAgiIntranetHomeMainProps) => {
             const guid = await _spService.getListGuid('EventDetails');
             setGuid(guid);
             let events: IEvent[] = await _spService.getEvents();
-            setEvents(events);
+
+            let upcoming: IEvent[] = events.filter((item, index, arr) => {
+                if (moment().isBefore(item.StartDate)) {
+                    return (item);
+                }
+            });
+            upcoming = upcoming.slice(0, props.topEvents);
+
+            setEvents(upcoming);
         }
         getLatestNews().catch((error) => {
             setError(error);

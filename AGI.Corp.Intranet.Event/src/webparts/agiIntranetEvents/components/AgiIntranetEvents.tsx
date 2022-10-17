@@ -180,7 +180,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
           return resp.value;
         });
 
-      const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=ID,Title,Description,StartDate,EndDate,EventThumbnail,Country,City,Business/ID,Business/Title,Functions/ID,Functions/Title&$expand=Business,Functions&$top=${count}`;
+      const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=ID,Title,Description,StartDate,EndDate,EventThumbnail,Country,City,Business/ID,Business/Title,Functions/ID,Functions/Title&$expand=Business,Functions&$orderby=StartDate asc&$top=${count}`;
       await this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
         .then((response: SPHttpClientResponse) => {
           return response.json();
@@ -331,8 +331,8 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
         selectedTabValues,
         filterData: selectedTabValues
       }, () => {
-
-        this.paging();
+        this.onSelectFilterBy(this.state.showBusinessData ? 'Business' : 'Functions');
+        // this.paging();
       });
 
     } else {
