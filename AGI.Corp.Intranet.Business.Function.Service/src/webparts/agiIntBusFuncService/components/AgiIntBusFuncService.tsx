@@ -6,6 +6,7 @@ import { sp } from '@pnp/sp/presets/all';
 import { IAgiIntBusFuncServiceState } from './IAgiIntBusFuncServiceState';
 import { IContentItem } from '../models/IContentItem';
 import { LIST_CONTENT, NULL_CONTENT_ITEM } from '../common/constants';
+import * as $ from 'jquery';
 
 //require('../css/business.css');
 
@@ -46,21 +47,42 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
   }
 
   private fnInitiate() {debugger;
-    let serviceItems = document.querySelectorAll(".our-service-carousel .carousel-item");
-
-    serviceItems.forEach((el) => {
-      const minPerSlide = 4;
-      let serviceNext = el.nextElementSibling;
-      for (var i = 1; i < minPerSlide; i++) {
-        if (!serviceNext) {
-          // wrap carousel by using first child
-          serviceNext = serviceItems[0];
+    var ourServiceCardCarousel = document.querySelector(
+      "#ourServiceCarousel"
+    );
+    if (window.matchMedia("(min-width: 768px)").matches) {
+      // var carousel = new bootstrap.Carousel(ourServiceCardCarousel, {
+      //   interval: false,
+      // });
+      ourServiceCardCarousel.addEventListener('slide.bs.carousel', function () {
+  
+        interval: false
+      });
+      var carouselWidth = $(".our-services .carousel-inner")[0].scrollWidth;
+      var cardWidth = $(".our-services  .carousel-item").width();
+      var scrollPosition = 0;
+      $(".our-service-control-next").click(function () {
+    
+        if (scrollPosition < carouselWidth - cardWidth * 4) {
+          scrollPosition += cardWidth;
+          $("#ourServiceCarousel .carousel-inner").animate(
+            { scrollLeft: scrollPosition },
+            600
+          );
         }
-        let cloneChild: any = serviceNext.cloneNode(true);
-        el.appendChild(cloneChild.children[0]);
-        serviceNext = serviceNext.nextElementSibling;
-      }
-    });
+      });
+      $(".our-service-control-prev").on("click", function () {
+        if (scrollPosition > 0) {
+          scrollPosition -= cardWidth;
+          $("#ourServiceCarousel .carousel-inner").animate(
+            { scrollLeft: scrollPosition },
+            600
+          );
+        }
+      });
+    } else {
+      $(ourServiceCardCarousel).addClass("slide");
+    }
   }
 
   private getImageUrl(imageContent: string): string {
@@ -119,20 +141,20 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
                 </div>
                 <div className="align-self-end col-4 col-lg-1">
                   <div className="button-container">
-                    <button className="carousel-control-prev" type="button" data-bs-target="#ourServiceCarousel"
+                    <button className="carousel-control-prev our-service-control-prev" type="button" data-bs-target="#ourServiceCarousel"
                       data-bs-slide="prev">
                       <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                       <span className="visually-hidden">Previous</span>
                     </button>
-                    <button className="carousel-control-next" type="button" data-bs-target="#ourServiceCarousel"
+                    <button className="carousel-control-next our-service-control-next" type="button" data-bs-target="#ourServiceCarousel"
                       data-bs-slide="next">
                       <span className="carousel-control-next-icon" aria-hidden="true"></span>
                       <span className="visually-hidden">Next</span>
                     </button>
                   </div>
                 </div>
-                <div id="ourServiceCarousel" className="carousel slide container our-service-carousel mt-5"
-                  data-bs-ride="carousel">
+                <div id="ourServiceCarousel" className="carousel container our-service-carousel mt-5"
+                  data-bs-ride="carousel"  data-bs-interval="false" data-bs-wrap="false">
                   <div className="carousel-inner w-100">
                     {
                       this.state.contentItems.map((items, i) => {
