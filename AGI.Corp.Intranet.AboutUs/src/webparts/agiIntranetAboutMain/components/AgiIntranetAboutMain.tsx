@@ -117,6 +117,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                     const leadershipMessageImg = item.LeadershipImage && item.LeadershipImage ? this.getImageUrl(item.LeadershipImage) : '';
                     return (
                       i == 0 ?
+                      
                         <div className="leadership-content">
                           <div className="leadership-image">
                             <img src={leadershipMessageImg} className="w-100" />
@@ -134,9 +135,14 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                             {!this.state.readMore.leadershipContent && <button className="toggle" onClick={() => { this.showReadMore('leadership') }}>Read More</button>}
                           </div>
                         </div>
+                        
+                        
                         :
+          
                         i == 1 ?
-                          <div className="leadership-content reverse mt-5">
+                        <>
+                        <hr className="mt-5 divider-horizontal" />
+                        <div className="leadership-content reverse mt-5">
                             <div className="leadership-image">
                             <img src={leadershipMessageImg} className="w-100" />
                           </div>
@@ -153,6 +159,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                             {!this.state.readMore.leadershipContent && <button className="toggle" onClick={() => { this.showReadMore('leadership') }}>Read More</button>}
                           </div>
                           </div>
+                        </>                  
                           :
 
                           <></>
@@ -175,8 +182,8 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                 </div>
               </div>
             </div>
-            <div className="row mx-0 vision-container">
-              <div className="col-lg-4  p-0">
+            <div className="row  vision-container">
+              <div className="col-lg-4 ">
                 {
                   visionContentItems.map((item, i) => {
                     const visionImage = item.BackgroundImage && item.BackgroundImage ? this.getImageUrl(item.BackgroundImage) : '';
@@ -194,7 +201,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                   })
                 }
               </div>
-              <div className="col-lg-4  p-lg-0 our-purpose-section">
+              <div className="col-lg-4  our-purpose-section">
                 {
                   purposeContentItems.map((item, i) => {
                     const purposeImage = item.BackgroundImage && item.BackgroundImage ? this.getImageUrl(item.BackgroundImage) : '';
@@ -213,7 +220,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                   })
                 }
               </div>
-              <div className="col-lg-4  p-lg-0">
+              <div className="col-lg-4 ">
                 {
                   cultureContentItems.map((item, i) => {
                     const cultureImage = item.BackgroundImage && item.BackgroundImage ? this.getImageUrl(item.BackgroundImage) : '';
