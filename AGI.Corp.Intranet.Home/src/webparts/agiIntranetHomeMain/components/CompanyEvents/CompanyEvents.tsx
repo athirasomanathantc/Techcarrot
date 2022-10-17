@@ -22,6 +22,12 @@ const Events = (props: IEvent) => {
                     </div>
                 </div>
             </a>
+            <div className="text-end">
+                <img src={`${siteUrl}/Assets/images/calendar-icon.svg`} alt="" />
+                <a target="_blank" style={{ display: 'inline-block' }} data-interception="off" className="add-to-calendar" href={`${siteUrl}/_vti_bin/owssvr.dll?CS=109&Cmd=Display&List=%7B${props.guid}%7D&CacheControl=1&ID=${props.Id}&Using=event.ics`} download="Event.ics">
+                    Add to Calendar
+                </a>
+            </div>
         </li>
     </>)
 }
@@ -31,11 +37,14 @@ let siteUrl: string = '';
 export const CompanyEvents = (props: IAgiIntranetHomeMainProps) => {
     const [error, setError] = useState(null);
     const [events, setEvents] = useState([]);
+    const [guid, setGuid] = useState("");
     const _spService = new SPService(props);
     siteUrl = props.siteUrl;
 
     useEffect(() => {
         const getLatestNews = async () => {
+            const guid = await _spService.getListGuid('EventDetails');
+            setGuid(guid);
             let events: IEvent[] = await _spService.getEvents();
             setEvents(events);
         }
@@ -57,7 +66,7 @@ export const CompanyEvents = (props: IAgiIntranetHomeMainProps) => {
                 </div>
                 <div className="card-body">
                     <ul className="p-0 m-0 list-group">
-                        {events.map((event: IEvent, index: number) => <Events index={index} key={`key${index}`} {...event}></Events>)}
+                        {events.map((event: IEvent, index: number) => <Events index={index} key={`key${index}`} {...event} guid={guid}></Events>)}
                     </ul>
 
 

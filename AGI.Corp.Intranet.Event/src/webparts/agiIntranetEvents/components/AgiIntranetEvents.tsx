@@ -1,20 +1,15 @@
 import * as React from 'react';
-import styles from './AgiIntranetEvents.module.scss';
 import { IAgiIntranetEventsProps } from './IAgiIntranetEventsProps';
-import { escape } from '@microsoft/sp-lodash-subset';
 //require('../CSS/Styles.css');
 import { IEventData } from '../Model/IEventData';
 import { IAgiIntranetEventsStates } from './IAgiIntranetEventsStates';
 import {
   SPHttpClient,
-  SPHttpClientResponse,
-  IHttpClientOptions
+  SPHttpClientResponse
 } from '@microsoft/sp-http';
 import * as moment from 'moment';
-import { Pagination } from '@pnp/spfx-controls-react/lib/pagination';
 import Paging from './Paging/Paging';
 import { EVENTS, TABS } from '../common/constants';
-//const pageSize: number = 12;
 
 
 export default class AgiIntranetEvents extends React.Component<IAgiIntranetEventsProps, IAgiIntranetEventsStates> {
@@ -37,7 +32,8 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
       showBusinessData: true,
       selectedOption: {
         ID: 0
-      }
+      },
+      guid: ""
     }
   }
 
@@ -48,9 +44,28 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
-    await this.getNewsItems().then(() => {
-      this.setDefaultFilter();
-    });
+    await this.getListGuid('EventDetails').then(async (guid: string): Promise<void> => {
+      this.setState({
+        guid
+      });
+      await this.getNewsItems().then(() => {
+        this.setDefaultFilter();
+      })
+    })
+  }
+
+  private async getListGuid(listname: string): Promise<string> {
+    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${listname}')`;
+    return await this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+      .then((response: SPHttpClientResponse) => {
+        return response.json();
+      })
+      .then((response) => {
+        return response.Id;
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
   }
 
   private setDefaultFilter() {
@@ -513,7 +528,12 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
                                       </>
                                     }
                                   </div>
-
+                                  <div>
+                                    <img src={`${this.props.siteUrl}/Assets/images/calendar-icon.svg`} alt="" />
+                                    <a target="_blank" style={{ display: 'inline-block' }} data-interception="off" className="add-to-calendar" href={`${this.props.siteUrl}/_vti_bin/owssvr.dll?CS=109&Cmd=Display&List=%7B${this.state.guid}%7D&CacheControl=1&ID=${item.ID}&Using=event.ics`} download="Event.ics">
+                                      Add to Calendar
+                                    </a>
+                                  </div>
                                   <div className={'mb-3 card-content-header'}>
                                     <h5 className={'card-title'}>{item.Title}</h5>
                                   </div>
