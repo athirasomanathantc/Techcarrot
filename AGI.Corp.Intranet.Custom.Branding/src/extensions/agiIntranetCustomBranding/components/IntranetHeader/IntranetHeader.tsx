@@ -228,8 +228,9 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
 
   private handleSearchResults(e: any) {
     try {
-      const navUrl = `${this.props.siteUrl}/_layouts/15/search.aspx/siteall?q=${this.state.selectedSearchVal}`;
-      window.open(navUrl, '_blank').focus();
+      const navUrl = `${this.props.siteUrl}/sitepages/CustomSearch.aspx?q=${this.state.selectedSearchVal}`;
+      window.open(navUrl,"").focus();
+      //location.replace(navUrl);
     }
     catch (e) {
       console.log(e);
@@ -243,7 +244,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
   }
 
   private gotoNotifications() {
-    window.location.href = `${this.props.siteUrl}${this.state.notificationsURL}`;
+    window.location.href = `${this.props.siteUrl}${this.state.notificationsURL}?env=WebView`;
   }
 
   private closeModal() {
@@ -254,7 +255,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
 
   private gotoHome(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.preventDefault();
-    window.location.href = this.props.siteUrl;
+    window.location.href = `${this.props.siteUrl}?env=WebView`;
   }
 
   private renderHeader(): JSX.Element {
@@ -268,7 +269,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
 
     return (
       <>
-        {this.state.headerLoaded && <header className={`header-wrapper ${this.state.showSlimHeader ? 'slim-header' : ''}`}>
+        <header className={`header-wrapper ${this.state.showSlimHeader ? 'slim-header' : ''}`} style={{ visibility: `${this.state.headerLoaded ? 'visible' : 'hidden'}` }}>
           <div className="top-nav">
             <nav className="navbar navbar-expand-lg navbar-light">
               <div className="container">
@@ -288,8 +289,8 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                 <form action="" className="d-block d-md-flex mt-3 mt-lg-0 order-4 order-md-1 search-bar">
                   <div className="input-group">
                     <input type="text" className="form-control form-control-lg" placeholder="Search Here" id="txtSeachText" onChange={(e) => this.handleSearchChange(e)} />
-                    <button type="submit" className="input-group-text btn-serach" onClick={(e) => this.handleSearchResults(e)}><i className="bi bi-search">
-                      <img src={`${this.props.siteUrl}/Assets/images/icon-search.svg`} alt="" /></i></button>
+                    <a  className="input-group-text btn-serach" href={`${this.props.siteUrl}/SitePages/CustomSearch.aspx?q=${this.state.selectedSearchVal}`}><i className="bi bi-search">
+                      <img src={`${this.props.siteUrl}/Assets/images/icon-search.svg`} alt="" /></i></a>
                   </div>
                 </form>
                 <ul className="logged-in-user order-2">
@@ -375,7 +376,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                 <div className="collapse navbar-collapse" id="navbarCollapse">
                   <ul className="navbar-nav">
                     <li className="nav-item">
-                      <a href={`${this.props.siteUrl}`} className="nav-link home-nav active" data-interception="off">
+                      <a href={`${this.props.siteUrl}?env=WebView`} className="nav-link home-nav active" data-interception="off">
                         <span className="home-text">Home</span>
                         <span className="home-icon">
                           <svg xmlns="http://www.w3.org/2000/svg" width="22.454" height="23.687" viewBox="0 0 22.454 23.687">
@@ -395,7 +396,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                           const link = comp.Link && comp.Link.Url ? comp.Link.Url : '';
                           return (
                             <li className="nav-item">
-                              <a className="nav-link" href={link} data-interception="off">{comp.Title}</a>
+                              <a className="nav-link" href={`${link}?env=WebView`} data-interception="off">{comp.Title}</a>
                             </li>
                           )
                         }
@@ -409,7 +410,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                             const link = `${this.props.siteUrl}/SitePages/Business.aspx?categoryId=${bus.ID}`;
                             return (
                               <li>
-                                <a className="dropdown-item" href={link} data-interception="off">{bus.Title}</a>
+                                <a className="dropdown-item" href={`${link}&env=WebView`} data-interception="off">{bus.Title}</a>
                               </li>
                             )
                           })
@@ -424,7 +425,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                             const link = `${this.props.siteUrl}/SitePages/Functions.aspx?categoryId=${func.ID}`;
                             return (
                               <li>
-                                <a className="dropdown-item" href={link} data-interception="off">{func.Title}</a>
+                                <a className="dropdown-item" href={`${link}&env=WebView`} data-interception="off">{func.Title}</a>
                               </li>
                             )
                           })
@@ -439,7 +440,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                             const link = news.Link && news.Link.Url ? news.Link.Url : '';
                             return (
                               <li>
-                                <a className="dropdown-item" href={link} data-interception="off">{news.Title}</a>
+                                <a className="dropdown-item" href={`${link}?env=WebView`} data-interception="off">{news.Title}</a>
                               </li>
                             )
                           })
@@ -454,7 +455,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                             const link = gallery.Link && gallery.Link.Url ? gallery.Link.Url : '';
                             return (
                               <li>
-                                <a className="dropdown-item" href={link} data-interception="off">{gallery.Title}</a>
+                                <a className="dropdown-item" href={`${link}&env=WebView`} data-interception="off">{gallery.Title}</a>
                               </li>
                             )
                           })
@@ -467,7 +468,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                           const link = comp.Link && comp.Link.Url ? comp.Link.Url : '';
                           return (
                             <li className="nav-item">
-                              <a className="nav-link" href={link} data-interception="off">{comp.Title}</a>
+                              <a className="nav-link" href={`${link}?env=WebView`} data-interception="off">{comp.Title}</a>
                             </li>
                           )
                         }
@@ -501,7 +502,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
             {...this.props}
             closeModal={() => this.closeModal()}
           ></OrgModal>}
-        </header>}
+        </header>
       </>
     );
   }

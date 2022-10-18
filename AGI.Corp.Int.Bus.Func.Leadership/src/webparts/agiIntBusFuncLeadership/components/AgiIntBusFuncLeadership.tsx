@@ -63,21 +63,58 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
   }
 
   private fnInitiate() {
-    let mediaItems = document.querySelectorAll(".leadership-carousel .carousel-item");
+    // let mediaItems = document.querySelectorAll(".leadership-carousel .carousel-item");
 
-    mediaItems.forEach((el) => {
-      const minPerSlide = 4;
-      let mediaNext = el.nextElementSibling;
-      for (var i = 1; i < minPerSlide; i++) {
-        if (!mediaNext) {
-          // wrap carousel by using first child
-          mediaNext = mediaItems[0];
+    // mediaItems.forEach((el) => {
+    //   const minPerSlide = 4;
+    //   let mediaNext = el.nextElementSibling;
+    //   for (var i = 1; i < minPerSlide; i++) {
+    //     if (!mediaNext) {
+    //       // wrap carousel by using first child
+    //       mediaNext = mediaItems[0];
+    //     }
+    //     let cloneChild: any = mediaNext.cloneNode(true);
+    //     el.appendChild(cloneChild.children[0]);
+    //     mediaNext = mediaNext.nextElementSibling;
+    //   }
+    // });
+
+    var ourServiceCardCarousel = document.querySelector(
+      "#leadershipCarousel"
+    );
+    if (window.matchMedia("(min-width: 768px)").matches) {
+      // var carousel = new bootstrap.Carousel(ourServiceCardCarousel, {
+      //   interval: false,
+      // });
+      ourServiceCardCarousel.addEventListener('slide.bs.carousel', function () {
+
+        interval: false
+      });
+      var carouselWidth = $(".business-leadership-section .carousel-inner")[0].scrollWidth;
+      var cardWidth = $(".business-leadership-section  .carousel-item").width();
+      var scrollPosition = 0;
+      $(".business-leadership-control-next").click(function () {
+
+        if (scrollPosition < carouselWidth - cardWidth * 4) {
+          scrollPosition += cardWidth;
+          $("#leadershipCarousel .carousel-inner").animate(
+            { scrollLeft: scrollPosition },
+            600
+          );
         }
-        let cloneChild: any = mediaNext.cloneNode(true);
-        el.appendChild(cloneChild.children[0]);
-        mediaNext = mediaNext.nextElementSibling;
-      }
-    });
+      });
+      $(".business-leadership-control-prev").on("click", function () {
+        if (scrollPosition > 0) {
+          scrollPosition -= cardWidth;
+          $("#leadershipCarousel .carousel-inner").animate(
+            { scrollLeft: scrollPosition },
+            600
+          );
+        }
+      });
+    } else {
+      $(ourServiceCardCarousel).addClass("slide");
+    }
   }
 
   private getImageUrl(imageContent: string): string {
@@ -146,21 +183,21 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
 
           ?
 
-          <section className="section business-leadership-section">
+          <section className="section business-leadership-section" style={{ display: this.state.contentItems.length > 0 ? 'block' : 'none' }}>
             <div className="container">
               <div className="row">
-                <div className="col-8 col-lg-11 text-let text-lg-center">
+                <div className="col-8 col-lg-10 text-let text-lg-center">
                   <h3 className="leadership-team-heading">{this.props.listName}</h3>
 
                 </div>
-                <div className="align-self-end col-4 col-lg-1">
+                <div className="align-self-end col-4 col-lg-2">
                   <div className="button-container">
-                    <button className="carousel-control-prev" type="button" data-bs-target="#leadershipCarousel"
+                    <button className="carousel-control-prev business-leadership-control-prev" type="button" data-bs-target="#leadershipCarousel"
                       data-bs-slide="prev">
                       <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                       <span className="visually-hidden">Previous</span>
                     </button>
-                    <button className="carousel-control-next" type="button" data-bs-target="#leadershipCarousel"
+                    <button className="carousel-control-next business-leadership-control-next" type="button" data-bs-target="#leadershipCarousel"
                       data-bs-slide="next">
                       <span className="carousel-control-next-icon" aria-hidden="true"></span>
                       <span className="visually-hidden">Next</span>
@@ -169,18 +206,16 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
                 </div>
               </div>
 
-              <div id="leadershipCarousel" className="carousel js-carousel slide leadership-carousel"
-                data-bs-ride="carousel">
-
-
+              <div id="leadershipCarousel" className="carousel js-carousel leadership-carousel"
+                data-bs-ride="carousel" data-bs-interval="false" data-bs-wrap="false">
                 <div className="carousel-inner" role="listbox">
                   {
                     this.state.contentItems.map((items, i) => {
                       const imgVal = this.getImageUrl(items.UserImage);
                       return (
                         <div className={i == 0 ? "carousel-item js-carousel-item active" : "carousel-item js-carousel-item"} key={`leadershipcarousel${i}`}>
-                          <div className="col-md-3">
-                            <div className="team-card cardItem h-100" data-id={items.ID} >
+                          <div className="col-md-3 h-100">
+                            <div className="team-card cardItem h-100 business-leadership-section" data-id={items.ID} >
                               <div className="team-img">
                                 <img src={imgVal} alt="Card Design" className="w-100" />
                               </div>

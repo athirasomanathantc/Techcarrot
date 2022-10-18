@@ -40,14 +40,13 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
       const currentWindowUrl = window.location.href;
       const currentSitePages = currentWindowUrl.split("SitePages");
       const currentSitePagesNav: any = currentSitePages[1].split("/");
-      
-      const currentArray:any = [];
-      let i:any;
-      for(i=0;i<currentSitePagesNav.length; i++)
-      {debugger;
+
+      const currentArray: any = [];
+      let i: any;
+      for (i = 0; i < currentSitePagesNav.length; i++) {
+        debugger;
         const isLastPage = currentSitePagesNav[i].includes(".aspx");
-        if(isLastPage == true)
-        {
+        if (isLastPage == true) {
           var newItem = currentSitePagesNav[i].split(".aspx")[0];
           // if (newItem=='Gallery')
           // {
@@ -60,27 +59,26 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
           //   }
           //   console.log("arrayValue",newItem);
           // }
-          
-          var re =/%20/gi
+
+          var re = /%20/gi
           const tempItem = newItem.replace(re, " ");
-          console.log("Tag",tempItem);
+          console.log("Tag", tempItem);
           currentArray.push(tempItem);
           this.setState({
             lastNavItem: tempItem
           })
         }
-        else
-        {
+        else {
           const tempItem = currentSitePagesNav[i].replace("%20", " ");
           currentArray.push(tempItem);
         }
-        
+
       }
-      
+
       this.setState({
         currentSitePagesNavArr: currentArray
-      },()=>{
-       // console.log("arrayValue",this.state.currentSitePagesNavArr);
+      }, () => {
+        // console.log("arrayValue",this.state.currentSitePagesNavArr);
       })
     }
     catch (e) {
@@ -117,24 +115,25 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
               <nav id="extraNav" aria-label="breadcrumb">
                 <ol
                   className="breadcrumb justify-content-center justify-content-md-start mb-3 mt-3 mt-md-0 mb-md-0">
-                  <li className="breadcrumb-item"><a href={`${this.props.siteUrl}`}>Home</a></li>
+                  <li className="breadcrumb-item"><a href={`${this.props.siteUrl}?env=WebView`} data-interception="off">Home</a></li>
                   {
-                     
+
                     this.state.currentSitePagesNavArr.map((item, i) => {
-                    debugger;
+                      debugger;
                       var isLast = /aspx/.test(item);
                       if (item != '') {
                         if (item === lastNavigationVal) {
                           // const str:any = item.splice();//.substring(0, str.length - 1);
-                                                    
-                            return (
-                              <li className="breadcrumb-item active">{item}</li>
-                            )
-                        }
-                        else {debugger;
-                           tempURL = `${tempURL}/${item}`;
+
                           return (
-                            <li className="breadcrumb-item"><a href={`${tempURL}.aspx`}>{item}</a></li>
+                            <li className="breadcrumb-item active">{item}</li>
+                          )
+                        }
+                        else {
+                          debugger;
+                          tempURL = `${tempURL}/${item}`;
+                          return (
+                            <li className="breadcrumb-item"><a href={`${tempURL}.aspx?env=WebView`} data-interception="off">{item}</a></li>
                           )
                         }
                       }

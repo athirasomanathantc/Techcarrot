@@ -22,5 +22,6 @@ export interface IAgiIntranetEventsStates {
   showBusinessData: boolean;
   selectedOption: {
     ID: number;
-  }
+  };
+  guid: string;
 }

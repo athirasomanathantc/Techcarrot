@@ -1,14 +1,15 @@
 import * as React from 'react';
 import styles from './AgiIntranetContactUsMain.module.scss';
 import { IAgiIntranetContactUsMainProps } from './IAgiIntranetContactUsMainProps';
-import { escape } from '@microsoft/sp-lodash-subset';
-import { Item, sp } from '@pnp/sp/presets/all';
+import { sp } from '@pnp/sp/presets/all';
 import { IAgiIntranetContactUsMainState } from './IAgiIntranetContactUsMainState';
 import { IContactUsTalk2UsItem } from '../models/IContactUsTalk2UsItem';
 import { IContactUsGoogleMapsItem } from '../models/IContactUsGoogleMapsItem';
-import { LIST_CONTACTUS_REGISTRATION, LIST_CONTACTUS_TALK2US, NULL_CONTACTUS_TALK2US_ITEM, LIST_CONTACTUS_GOOGLEMAPS, NULL_CONTACTUS_GOOGLEMAPS_ITEM, TEXT_REGISTRATION_SUCCESS, LIST_TALK2US_RIGHT, LIST_TALK2US_LEFT, TEXT_IFRAME_URL, LIST_CONTACTUS_MAIN, NULL_CONTACTUS_MAIN_ITEM } from '../common/constants';
+import { LIST_CONTACTUS_REGISTRATION, LIST_CONTACTUS_TALK2US, NULL_CONTACTUS_TALK2US_ITEM, LIST_CONTACTUS_GOOGLEMAPS, NULL_CONTACTUS_GOOGLEMAPS_ITEM, TEXT_REGISTRATION_SUCCESS, LIST_TALK2US_RIGHT, LIST_TALK2US_LEFT, LIST_CONTACTUS_MAIN, NULL_CONTACTUS_MAIN_ITEM } from '../common/constants';
 import { IContactUsMainItem } from '../models/IContactUsMainItem';
 import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
+import ReactHtmlParser from 'react-html-parser';
+
 export default class AgiIntranetContactUsMain extends React.Component<IAgiIntranetContactUsMainProps, IAgiIntranetContactUsMainState> {
 
 
@@ -25,7 +26,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
       contactUsGoogleMapsItem: NULL_CONTACTUS_GOOGLEMAPS_ITEM,
       selectedUserName: '',
       selectedUserEmail: '',
-      selectedUserExtn: '',
+      selectedUserExtn: '+971',
       selectedUserPhone: '',
       selectedUserSubject: '',
       selectedUserMsg: '',
@@ -33,6 +34,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
       showErrorEmailMsg: false,
       showErrorExtnMsg: false,
       showErrorPhoneMsg: false,
+      showErrorMessage: false,
       validationText: '',
       oddEven: false
     }
@@ -83,19 +85,16 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
   }
 
   private async getSubjectItem(): Promise<void> {
-
     sp.web.lists.getByTitle(LIST_CONTACTUS_MAIN).items.get().then((items: IContactUsMainItem[]) => {
-      const contactUsMainItems = items && items.length > 0 ? items[0] : NULL_CONTACTUS_MAIN_ITEM;
       this.setState({
-        contactUsMainItems: items
+        contactUsMainItems: items,
+        selectedUserSubject: items[0]?.ID?.toString()
       });
     });
   }
 
   private async getTalk2UsItem(): Promise<void> {
-
     sp.web.lists.getByTitle(LIST_CONTACTUS_TALK2US).items.get().then((items: IContactUsTalk2UsItem[]) => {
-      const contactUsTalk2UsItem = items && items.length > 0 ? items[0] : NULL_CONTACTUS_TALK2US_ITEM;
       this.setState({
         contactUsTalk2UsItems: items
       });
@@ -103,11 +102,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
   }
 
   private async getUserProfile(): Promise<void> {
-    //let loginName="i:0#.f|membership|"+user.userPrincipalName;
-    const userPrincipalName = this.props.context.pageContext.legacyPageContext.userLoginName;
-    let loginName = `i:0#.f|membership|${userPrincipalName}`;
     sp.web.currentUser.get().then((userData) => {
-      //console.log('userdeail', data);
       this.setState({
         selectedUserName: userData.Title,
         selectedUserEmail: userData.Email
@@ -116,59 +111,39 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
   }
 
   private async getGoogleMapsItem(): Promise<void> {
-
     sp.web.lists.getByTitle(LIST_CONTACTUS_GOOGLEMAPS).items.get().then((items: IContactUsGoogleMapsItem[]) => {
       const contactUsGoogleMapsItem = items && items.length > 0 ? items[0] : NULL_CONTACTUS_GOOGLEMAPS_ITEM;
       this.setState({
         contactUsGoogleMapsItem
       });
     });
-
   }
 
-  private getImageUrl(imageContent: string): string {
-    if (!imageContent) {
-      return;
+  private generateGroupedItems = (items: any, itemCount: number) => {
+    let itemGroup = [];
+    let itemColl = [];
+    for (let i = 0; i < items.length; i += itemCount) {
+      itemColl = [];
+      for (let j = 0; j < itemCount; j++) {
+        if (items[i + j]) {
+          itemColl.push(items[i + j]);
+        }
+      }
+      if (itemColl.length) {
+        itemGroup.push(itemColl);
+      }
     }
-
-    const imageObj: any = JSON.parse(imageContent);
-    return imageObj.serverUrl + imageObj.serverRelativeUrl;
+    return itemGroup;
   }
 
   private renderContactUsContentSection(): JSX.Element {
+    let leftContentItem: any = this.state.contactUsTalk2UsItems.filter(item => item.Category == LIST_TALK2US_LEFT);
+    leftContentItem = this.generateGroupedItems(leftContentItem, 2);
 
-    // const contactUsTalk2UsItem = this.state.contactUsTalk2UsItem;
-    // if (!contactUsTalk2UsItem) {
-    //   return;
-    // }
-
-    // const contactUsCommChannelItem = this.state.contactUsCommChannelItem;
-    // if (!contactUsCommChannelItem) {
-    //   return;
-    // }
-
-    // const contactUsHyperCareItem = this.state.contactUsHyperCareItem;
-    // if (!contactUsHyperCareItem) {
-    //   return;
-    // }
-
-    // const contactUsWarRoomHotlineItems = this.state.contactUsWarRoomHotlineItems;
-    // if (!contactUsWarRoomHotlineItems) {
-    //   return;
-    // }
-
-    const leftContentItem = this.state.contactUsTalk2UsItems.filter(item => item.Category == LIST_TALK2US_LEFT);
     const headingContent = this.state.contactUsTalk2UsItems.filter(item => item.Category == "Heading");
-    //const leftContentLinkItem = leftContentItem && leftContentItem.length > 0 ? leftContentItem[0] : null;
     const rightContentItems = this.state.contactUsTalk2UsItems.filter(item => item.Category == LIST_TALK2US_RIGHT);
 
-    // const changeAgentNavUrlLink = this.state.changeAgentItems.filter(item => item.ContentTypeName == TEXT_ABOUT_CHANGEAGENT_NAVIGATION);
-    // const changeAgentNavUrlLinkItem = changeAgentNavUrlLink && changeAgentNavUrlLink.length > 0 ? changeAgentNavUrlLink[0] : null;
-    // const changeAgentNavUrlLinkItemUrl = changeAgentNavUrlLinkItem && changeAgentNavUrlLinkItem.NavigationUrl ? changeAgentNavUrlLinkItem.NavigationUrl.Url : '';
-    // const changeAgentNavUrlText = changeAgentNavUrlLinkItem && changeAgentNavUrlLinkItem.NavigationText ? changeAgentNavUrlLinkItem.NavigationText : '';
-
     return (
-
       <div>
         <div className="main-content contact-us-wrapper">
           <div className="content-wrapper">
@@ -179,9 +154,9 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
                     <h2 className="d-block d-lg-flex mb-4 section-title">Talk To Us!</h2>
                     <p>
                       {
-                        headingContent.map((item, i) => {
+                        headingContent.map((item) => {
                           return (
-                            <p>{item.Detail}</p>
+                            <p>{ReactHtmlParser(item.Detail)}</p>
                           )
                         })
                       }
@@ -203,7 +178,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
                         <div className="d-flex align-items-center">
                           <p>
                             {
-                              headingContent.map((item, i) => {
+                              headingContent.map((item) => {
                                 return (
                                   <p>{item.Title}</p>
                                 )
@@ -213,237 +188,36 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
                         </div>
                       </div>
                     </div>
-                    <hr />
                     {
-                      leftContentItem.map((item, i) => {
+                      leftContentItem.map((itemGroup) => {
                         return (
-
                           <div className="row mb-5">
-                            <div className="col-lg-6 d-flex align-items-center">
-                              <div className="icon me-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="37" height="37" viewBox="0 0 37 37">
-                                  <g id="Group_8406" data-name="Group 8406" transform="translate(-341 -1151)">
-                                    <circle id="Ellipse_620" data-name="Ellipse 620" cx="18.5" cy="18.5" r="18.5" transform="translate(341 1151)" fill="#300b55" />
-                                    <g id="Group_8242" data-name="Group 8242" transform="translate(350 1160)">
-                                      <g id="Group_8243" data-name="Group 8243" transform="translate(0 0)">
-                                        <path id="Path_74175" data-name="Path 74175" d="M0,40.5a2.822,2.822,0,0,1,.939-2.213c.447-.406.86-.849,1.288-1.275A1.483,1.483,0,0,1,4.6,36.994c.744.739,1.483,1.483,2.224,2.225.05.05.1.1.147.155A1.409,1.409,0,0,1,6.949,41.5c-.454.488-.931.954-1.415,1.412a.508.508,0,0,0-.118.68,12.476,12.476,0,0,0,2.5,3.361,12.245,12.245,0,0,0,3.423,2.551c.363.174.391.176.67-.1.44-.439.878-.882,1.319-1.32a1.464,1.464,0,0,1,2.344-.015q1.148,1.133,2.284,2.279a1.477,1.477,0,0,1,0,2.349c-.438.442-.888.872-1.312,1.326a2.91,2.91,0,0,1-2.569.874A11.512,11.512,0,0,1,9.5,53.259a20.59,20.59,0,0,1-7.864-7.883A12.564,12.564,0,0,1,.1,41.394c-.054-.3-.069-.6-.1-.9" transform="translate(0 -36.41)" fill="#fff" />
-                                      </g>
-                                    </g>
-                                  </g>
-                                </svg>
-                              </div>
-                              <div className="">
-                                <h6>Landline</h6>
-                                <p>
-                                  <p>
-                                    {
-                                      leftContentItem.map((item, i) => {
-                                        return (
-                                          <p>{item.Landline}</p>
-                                        )
-                                      })
-                                    }
-                                  </p>
-                                </p>
-                              </div>
-                            </div>
+                            {
+                              itemGroup.map((item: IContactUsTalk2UsItem) => {
+                                let icon = JSON.parse(item.Icon);
+                                icon = `${icon?.serverUrl}${icon?.serverRelativeUrl}`
+                                return (
+                                  <div className="col-lg-6 d-flex align-items-center">
+                                    <div className="icon me-3">
+                                      <img src={icon}></img>
+                                    </div>
+                                    <div className="">
+                                      <h6>{item.Title}</h6>
+                                      <p>{ReactHtmlParser(item.Detail)}</p>
+                                    </div>
+                                  </div>
+                                )
+                              })
+                            }
 
-                            <div className="col-lg-6 d-flex align-items-center">
-                              <div className="icon me-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="37" height="37" viewBox="0 0 37 37">
-                                  <g id="Group_9264" data-name="Group 9264" transform="translate(-823 -973)">
-                                    <g id="Group_8640" data-name="Group 8640" transform="translate(482 -178)">
-                                      <circle id="Ellipse_620" data-name="Ellipse 620" cx="18.5" cy="18.5" r="18.5" transform="translate(341 1151)" fill="#300b55" />
-                                    </g>
-                                    <g id="Printer" transform="translate(828 978)">
-                                      <rect id="Rectangle_8276" data-name="Rectangle 8276" width="7" height="6" transform="translate(10 17)" fill="#9d0371" />
-                                      <rect id="Rectangle_8277" data-name="Rectangle 8277" width="5" height="3" transform="translate(18 11)" fill="#9d0371" />
-                                      <path id="Path_81192" data-name="Path 81192" d="M11,19v6.667a.833.833,0,0,0,.833.833H18.5a.833.833,0,0,0,.833-.833V19Zm5.833,5.833H13.5a.833.833,0,1,1,0-1.667h3.333a.833.833,0,1,1,0,1.667Zm0-2.5H13.5a.833.833,0,1,1,0-1.667h3.333a.833.833,0,1,1,0,1.667Z" transform="translate(-1.333 -2.5)" fill="#fff" />
-                                      <path id="Path_81193" data-name="Path 81193" d="M22.167,10H5.5A2.5,2.5,0,0,0,3,12.5v6.667a2.507,2.507,0,0,0,2.5,2.5H8v-5a.836.836,0,0,1,.833-.833h10a.836.836,0,0,1,.833.833v5h2.5a2.507,2.507,0,0,0,2.5-2.5V12.5a2.5,2.5,0,0,0-2.5-2.5ZM20.5,14.167a.824.824,0,0,1-.833-.833.833.833,0,1,1,.833.833Z" transform="translate(0 -1)" fill="#fff" />
-                                      <path id="Path_81194" data-name="Path 81194" d="M20.667,4.833V8.167H9V4.833A.836.836,0,0,1,9.833,4h10A.836.836,0,0,1,20.667,4.833Z" transform="translate(-1)" fill="#fff" />
-                                    </g>
-                                  </g>
-                                </svg>
-                              </div>
-                              <div className="">
-                                <h6>Fax</h6>
-                                <p>
-                                  <p>
-                                    {
-                                      leftContentItem.map((item, i) => {
-                                        return (
-                                          <p>{item.Fax}</p>
-                                        )
-                                      })
-                                    }
-                                  </p>
-                                </p>
-                              </div>
-                            </div>
                           </div>
-
                         )
                       })
                     }
-                    <div className="row mb-5">
-                      <div className="col-lg-6 d-flex align-items-center">
-                        <div className="icon me-3">
-                          <svg id="Group_8245" data-name="Group 8245" xmlns="http://www.w3.org/2000/svg" width="32.302" height="25.843" viewBox="0 0 32.302 25.843">
-                            <g id="Group_8246" data-name="Group 8246" transform="translate(0 0)">
-                              <path id="Path_74178" data-name="Path 74178" d="M0,65.852l2.478,1.6q6.436,4.164,12.868,8.334a1.319,1.319,0,0,0,1.611,0q7.443-4.836,14.9-9.649c.122-.079.249-.149.444-.264v.536q0,7.6,0,15.207a3.978,3.978,0,0,1-4.175,4.167H4.173A3.978,3.978,0,0,1,0,81.616q0-7.6,0-15.207v-.557" transform="translate(0 -59.943)" fill="#300b55" />
-                              <path id="Path_74179" data-name="Path 74179" d="M17.317,0q6.054,0,12.108,0A3.951,3.951,0,0,1,33.22,2.7c.224.636.22.648-.33,1q-7.6,4.92-15.194,9.847a.62.62,0,0,1-.8,0Q9.235,8.568,1.551,3.614a.512.512,0,0,1-.262-.657A3.974,3.974,0,0,1,5.119,0q6.1-.012,12.2,0" transform="translate(-1.145 0)" fill="#9d0371" />
-                            </g>
-                          </svg>
-                        </div>
-                        <div className="">
-                          <h6>Email</h6>
-                          <p>
-                            <p>
-                              {
-                                leftContentItem.map((item, i) => {
-                                  return (
-                                    <p>{item.Email}</p>
-                                  )
-                                })
-                              }
-                            </p>
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="col-lg-6 d-flex">
-                        <div className="icon me-3">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="32.203" height="32.229" viewBox="0 0 32.203 32.229">
-                            <g id="Group_8248" data-name="Group 8248" transform="translate(0 0)">
-                              <g id="Group_8249" data-name="Group 8249" transform="translate(0 0)">
-                                <path id="Path_74180" data-name="Path 74180" d="M31.909,19.064l-2.542-.844.078-.767c-.546,0-1.062.034-1.572-.009a7.161,7.161,0,0,1-1.592-.262c-2.374-.767-4.735-1.573-7.108-2.421h2.5c-.165-1.322-.316-2.565-.484-3.807a.322.322,0,0,0-.235-.207c-1.152.108-2.3.234-3.5.362v1.953c0,.447-.015.9.009,1.341a1.571,1.571,0,0,0,.185.454,3.778,3.778,0,0,0-2.81,2.8c-.1-.074-.179-.195-.263-.2-1.31-.012-2.62-.008-4-.008.1.989.188,1.928.287,2.866.026.25.107.5.115.744.014.389.173.48.554.428.871-.117,1.749-.181,2.623-.267.192-.019.383-.042.6-.065V19.291l.081-.02c.06.183.12.366.181.549.769,2.3,1.543,4.6,2.3,6.912a3.662,3.662,0,0,1,.137.941c.022.426.006.855.006,1.353l.518-.322,1.075,3.216A16.092,16.092,0,1,1,31.909,19.064M7.854,14.735A1.071,1.071,0,0,0,7.9,14.58c.16-1.386.314-2.773.482-4.158.029-.241-.073-.3-.277-.366q-1.5-.514-2.99-1.075c-.235-.089-.366-.061-.464.163C4.162,10.266,3.62,11.369,3.2,12.516a16,16,0,0,0-.488,2.22ZM2.793,17.479a.7.7,0,0,0-.02.147,13.472,13.472,0,0,0,1.912,5.535c.138.226.276.153.455.087.968-.355,1.934-.718,2.914-1.04.289-.095.365-.2.317-.5-.129-.784-.235-1.573-.326-2.362-.072-.619-.11-1.242-.164-1.872ZM29.414,14.73a1.006,1.006,0,0,0,.017-.189,13.592,13.592,0,0,0-1.909-5.45c-.115-.19-.226-.183-.412-.114-.993.369-1.985.741-2.991,1.072-.29.1-.325.216-.284.478.122.785.233,1.573.326,2.362.071.606.109,1.217.163,1.842ZM14.739,11.107c-1.178-.127-2.312-.257-3.449-.358-.09-.008-.264.171-.287.286-.107.533-.194,1.071-.251,1.611-.072.686-.109,1.375-.161,2.071h4.148Zm-3-2.987,2.985.274V3.271c-1,.468-2.385,2.7-2.985,4.849m-.028,16a10.232,10.232,0,0,0,3.015,4.944v-5.22l-3.015.276M17.475,3.177V8.4L20.5,8.119a10.26,10.26,0,0,0-3.021-4.942m4.2.757L23.21,7.552l2.452-.826a13.288,13.288,0,0,0-3.985-2.791M10.523,3.94A13.034,13.034,0,0,0,6.54,6.732L9,7.544l1.527-3.6M6.54,25.513a13.086,13.086,0,0,0,3.982,2.79L8.995,24.7l-2.455.815" transform="translate(0 0)" fill="#300b55" />
-                                <path id="Path_74181" data-name="Path 74181" d="M209.455,208.3c.2.062.518.156.834.262q5.918,1.969,11.835,3.941c.079.026.158.055.236.085a1,1,0,0,1,.719.931.968.968,0,0,1-.657.975c-.972.388-1.952.756-2.928,1.133-.82.316-1.646.62-2.456.961a.88.88,0,0,0-.433.438c-.664,1.673-1.3,3.356-1.952,5.036-.035.091-.07.183-.109.272a1.014,1.014,0,0,1-1.015.723,1,1,0,0,1-.931-.776q-.719-2.121-1.426-4.246-1.372-4.11-2.74-8.221a1.05,1.05,0,0,1,1.022-1.514" transform="translate(-190.877 -190.831)" fill="#9d0371" />
-                              </g>
-                            </g>
-                          </svg>
-                        </div>
-                        <div className="">
-                          <h6>Website</h6>
-                          <p>
-                            <p>
-                              {
-                                leftContentItem.map((item, i) => {
-                                  return (
-                                    <p>{item.Website}</p>
-                                  )
-                                })
-                              }
-                            </p>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-
-
-                    <div className="row mb-5">
-                      <div className="col-lg-6 d-flex align-items-center">
-                        <div className="icon me-3">
-                          <svg id="Ask" xmlns="http://www.w3.org/2000/svg" width="34.285" height="34.285" viewBox="0 0 34.285 34.285">
-                            <g id="Group_10538" data-name="Group 10538" transform="translate(0 11.652)">
-                              <g id="Group_10537" data-name="Group 10537">
-                                <path id="Path_81364" data-name="Path 81364" d="M23.169,183.71a.67.67,0,0,0-.67.67V189a3.352,3.352,0,0,1-3.348,3.348h-7.23a.67.67,0,0,0-.67.669v1.331l-1.6-1.6a.67.67,0,0,0-.614-.4H4.687A3.352,3.352,0,0,1,1.339,189V178.687a3.352,3.352,0,0,1,3.348-3.348h6.763a.67.67,0,1,0,0-1.339H4.687A4.693,4.693,0,0,0,0,178.687V189a4.693,4.693,0,0,0,4.687,4.687H8.7l2.75,2.75a.67.67,0,0,0,1.143-.473l0-2.277h6.561A4.693,4.693,0,0,0,23.839,189v-4.62A.67.67,0,0,0,23.169,183.71Z" transform="translate(0 -174)" fill="#300b55" />
-                              </g>
-                            </g>
-                            <g id="Group_10540" data-name="Group 10540" transform="translate(13.125)">
-                              <g id="Group_10539" data-name="Group 10539">
-                                <path id="Path_81365" data-name="Path 81365" d="M207.428,0h-1.695a9.733,9.733,0,0,0,0,19.466h1.695a9.752,9.752,0,0,0,2.47-.317l2.5,2.5a.67.67,0,0,0,1.143-.474V17.3a9.826,9.826,0,0,0,2.558-3.154,9.628,9.628,0,0,0,1.058-4.416A9.744,9.744,0,0,0,207.428,0Z" transform="translate(-196)" fill="#9d0371" />
-                              </g>
-                            </g>
-                            <g id="Group_10542" data-name="Group 10542" transform="translate(21.057 4.692)">
-                              <g id="Group_10541" data-name="Group 10541">
-                                <path id="Path_81366" data-name="Path 81366" d="M320.125,72.7a2.835,2.835,0,0,0-5.663.2.67.67,0,1,0,1.339,0,1.5,1.5,0,0,1,1.6-1.492,1.5,1.5,0,0,1,.221,2.952,1.267,1.267,0,0,0-1,1.242v1.609a.67.67,0,1,0,1.339,0V75.654A2.82,2.82,0,0,0,320.125,72.7Z" transform="translate(-314.462 -70.063)" fill="#fff" />
-                              </g>
-                            </g>
-                            <g id="Group_10544" data-name="Group 10544" transform="translate(23.223 13.817)">
-                              <g id="Group_10543" data-name="Group 10543">
-                                <path id="Path_81367" data-name="Path 81367" d="M347.943,206.526a.67.67,0,1,0,.2.473A.675.675,0,0,0,347.943,206.526Z" transform="translate(-346.8 -206.33)" fill="#fff" />
-                              </g>
-                            </g>
-                            <g id="Group_10546" data-name="Group 10546" transform="translate(3.616 20.759)">
-                              <g id="Group_10545" data-name="Group 10545">
-                                <path id="Path_81368" data-name="Path 81368" d="M68.8,310H54.67a.67.67,0,1,0,0,1.339H68.8a.67.67,0,1,0,0-1.339Z" transform="translate(-54 -310)" fill="#300b55" />
-                              </g>
-                            </g>
-                            <g id="Group_10548" data-name="Group 10548" transform="translate(17.745 24.509)">
-                              <g id="Group_10547" data-name="Group 10547">
-                                <path id="Path_81369" data-name="Path 81369" d="M266.143,366.2a.669.669,0,1,0,.2.473A.674.674,0,0,0,266.143,366.2Z" transform="translate(-265 -366)" fill="#300b55" />
-                              </g>
-                            </g>
-                            <g id="Group_10550" data-name="Group 10550" transform="translate(3.616 24.509)">
-                              <g id="Group_10549" data-name="Group 10549">
-                                <path id="Path_81370" data-name="Path 81370" d="M66.165,366H54.67a.67.67,0,1,0,0,1.339h11.5a.67.67,0,1,0,0-1.339Z" transform="translate(-54 -366)" fill="#300b55" />
-                              </g>
-                            </g>
-                            <g id="Group_10552" data-name="Group 10552" transform="translate(3.616 17.009)">
-                              <g id="Group_10551" data-name="Group 10551">
-                                <path id="Path_81371" data-name="Path 81371" d="M64.446,254H54.67a.67.67,0,1,0,0,1.339h9.777a.67.67,0,1,0,0-1.339Z" transform="translate(-54 -254)" fill="#300b55" />
-                              </g>
-                            </g>
-                          </svg>
-                        </div>
-                        <div className="">
-                          <h6>Ask John</h6>
-                          <p>
-                            <p>
-                              {
-                                leftContentItem.map((item, i) => {
-                                  return (
-                                    <p>test email</p>
-                                  )
-                                })
-                              }
-                            </p>
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="col-lg-6 d-flex">
-                        <div className="icon me-3">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="32.203" height="32.229" viewBox="0 0 32.203 32.229">
-                            <g id="Group_8248" data-name="Group 8248" transform="translate(0 0)">
-                              <g id="Group_8249" data-name="Group 8249" transform="translate(0 0)">
-                                <path id="Path_74180" data-name="Path 74180" d="M31.909,19.064l-2.542-.844.078-.767c-.546,0-1.062.034-1.572-.009a7.161,7.161,0,0,1-1.592-.262c-2.374-.767-4.735-1.573-7.108-2.421h2.5c-.165-1.322-.316-2.565-.484-3.807a.322.322,0,0,0-.235-.207c-1.152.108-2.3.234-3.5.362v1.953c0,.447-.015.9.009,1.341a1.571,1.571,0,0,0,.185.454,3.778,3.778,0,0,0-2.81,2.8c-.1-.074-.179-.195-.263-.2-1.31-.012-2.62-.008-4-.008.1.989.188,1.928.287,2.866.026.25.107.5.115.744.014.389.173.48.554.428.871-.117,1.749-.181,2.623-.267.192-.019.383-.042.6-.065V19.291l.081-.02c.06.183.12.366.181.549.769,2.3,1.543,4.6,2.3,6.912a3.662,3.662,0,0,1,.137.941c.022.426.006.855.006,1.353l.518-.322,1.075,3.216A16.092,16.092,0,1,1,31.909,19.064M7.854,14.735A1.071,1.071,0,0,0,7.9,14.58c.16-1.386.314-2.773.482-4.158.029-.241-.073-.3-.277-.366q-1.5-.514-2.99-1.075c-.235-.089-.366-.061-.464.163C4.162,10.266,3.62,11.369,3.2,12.516a16,16,0,0,0-.488,2.22ZM2.793,17.479a.7.7,0,0,0-.02.147,13.472,13.472,0,0,0,1.912,5.535c.138.226.276.153.455.087.968-.355,1.934-.718,2.914-1.04.289-.095.365-.2.317-.5-.129-.784-.235-1.573-.326-2.362-.072-.619-.11-1.242-.164-1.872ZM29.414,14.73a1.006,1.006,0,0,0,.017-.189,13.592,13.592,0,0,0-1.909-5.45c-.115-.19-.226-.183-.412-.114-.993.369-1.985.741-2.991,1.072-.29.1-.325.216-.284.478.122.785.233,1.573.326,2.362.071.606.109,1.217.163,1.842ZM14.739,11.107c-1.178-.127-2.312-.257-3.449-.358-.09-.008-.264.171-.287.286-.107.533-.194,1.071-.251,1.611-.072.686-.109,1.375-.161,2.071h4.148Zm-3-2.987,2.985.274V3.271c-1,.468-2.385,2.7-2.985,4.849m-.028,16a10.232,10.232,0,0,0,3.015,4.944v-5.22l-3.015.276M17.475,3.177V8.4L20.5,8.119a10.26,10.26,0,0,0-3.021-4.942m4.2.757L23.21,7.552l2.452-.826a13.288,13.288,0,0,0-3.985-2.791M10.523,3.94A13.034,13.034,0,0,0,6.54,6.732L9,7.544l1.527-3.6M6.54,25.513a13.086,13.086,0,0,0,3.982,2.79L8.995,24.7l-2.455.815" transform="translate(0 0)" fill="#300b55" />
-                                <path id="Path_74181" data-name="Path 74181" d="M209.455,208.3c.2.062.518.156.834.262q5.918,1.969,11.835,3.941c.079.026.158.055.236.085a1,1,0,0,1,.719.931.968.968,0,0,1-.657.975c-.972.388-1.952.756-2.928,1.133-.82.316-1.646.62-2.456.961a.88.88,0,0,0-.433.438c-.664,1.673-1.3,3.356-1.952,5.036-.035.091-.07.183-.109.272a1.014,1.014,0,0,1-1.015.723,1,1,0,0,1-.931-.776q-.719-2.121-1.426-4.246-1.372-4.11-2.74-8.221a1.05,1.05,0,0,1,1.022-1.514" transform="translate(-190.877 -190.831)" fill="#9d0371" />
-                              </g>
-                            </g>
-                          </svg>
-                        </div>
-                        <div className="">
-                          <h6>I Care</h6>
-                          <p>
-                            <p>
-                              {
-                                leftContentItem.map((item, i) => {
-                                  return (
-                                    <p>test data</p>
-                                  )
-                                })
-                              }
-                            </p>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-
-
-
-
-
-
-
-
-
                   </div>
                   <div className="col-lg-6 contact-description-details">
                     {
-                      rightContentItems.map((item, i) => {
+                      rightContentItems.map((item) => {
                         return (
                           <p className="mb-5" dangerouslySetInnerHTML={{ __html: item.Detail }}></p>
                         )
@@ -451,8 +225,6 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
                     }
                   </div>
                 </div>
-
-
                 <div className="row contact-section-form">
                   <h2 className="d-block d-lg-flex mb-4 section-title">Contact Us</h2>
                   <form action="" className="contact-form mt-4">
@@ -464,7 +236,12 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
                       <div className="mb-3 col-md-6">
                         <label className="form-label">Subject</label>
                         <select className="form-select form-control" value={this.state.selectedUserSubject} onChange={(e) => this.handleSubjectChange(e)}>
-                          <option >IT Support</option>
+                          {
+                            this.state.contactUsMainItems.map((contactUsMainItem: IContactUsMainItem) => {
+                              return <option value={contactUsMainItem.ID}>{contactUsMainItem.Title}</option>
+                            })
+                          }
+
                         </select>
                       </div>
                       <div className="mb-2 col-md-6">
@@ -476,6 +253,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
                       <div className="mb-3 col-md-6 msgBox">
                         <label className="form-label">Message</label>
                         <textarea rows={4} placeholder="Write your message...." className="form-control" id="contactFormMessage" value={this.state.selectedUserMsg} onChange={(e) => this.handleMsgChange(e)}></textarea>
+                        <p id="errorMessage" className="errorMsgClass" style={{ display: this.state.showErrorMessage ? "block" : "none" }}>Message is required</p>
                       </div>
                       <div className="mb-3 col-md-6">
                         <label className="form-label">Phone</label>
@@ -491,36 +269,21 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
                           </div>
                         </div>
                       </div>
-
                       <div>
-                        <input type="button" value="Send Message" className="btn btn-gradient btn-lg btn-hover btn-view-more mt-3" onClick={(e) => this.handleRegister()} />
-                        {/* <button className="btn btn-gradient btn-lg btn-hover btn-view-more mt-3" onClick={(e) => this.handleRegister()}>
-                          Send Message
-                        </button> */}
+                        <input type="button" value="Send Message" className="btn btn-gradient btn-lg btn-hover btn-view-more mt-3" onClick={() => this.handleRegister()} />
                       </div>
                     </div>
                   </form>
-
                 </div>
-
-
-
-
-
                 <div className="row">
                   <p className="text-center">We Are Expanding Our Reach Beyond Our Presence In 20 Countries Across The Middle East, Africa And Asia. But You Can Find Us With Ease.</p>
                 </div>
-
-
               </div>
             </div>
           </div>
 
         </div>
         <div className="section map-section">
-
-          {/* <iframe src={TEXT_IFRAME_URL}{this.state.contactUsGoogleMapsItem.Latitude}+",%20"+{this.state.contactUsGoogleMapsItem.Longitude}+"(Al Ghurair Investment LLC)&amp;t=&amp;z=17&amp;ie=UTF8&amp;iwloc=B&amp;output=embed" width="100%" height="650"></iframe> */}
-
           <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3608.0795559534245!2d55.31411281499079!3d25.26790908386334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f5cca59d8bc5b%3A0xf1f6b7c9d88f252c!2sAl%20Ghurair%20Investment%20LLC!5e0!3m2!1sen!2sae!4v1659355607157!5m2!1sen!2sae" width="100%" height="650" ></iframe>
         </div></div>
     );
@@ -530,21 +293,6 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
     return false;
   }
 
-  private isNumberKey(evt) {
-
-    console.log(document.getElementById("myText").clientHeight);
-
-    var charCode = evt.which;
-    if (charCode > 31 && (charCode < 48 || charCode > 57))
-      return false;
-    return true;
-
-    // if (evt.value.length > evt.maxLength)
-    // {
-
-    // evt.value = evt.value.slice(0, evt.maxLength);
-    // }
-  }
 
   private handleNameChange(e: any) {
     const Nm = e.target.value;
@@ -588,14 +336,6 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
   }
 
   private handleRegister() {
-    debugger;
-
-    // const isErrors= this.validate(phone, email);
-
-    // if(!isErrors) {
-    //   return false;
-    // }
-
     const isFormValid = this.validateForm();
 
     if (!isFormValid) {
@@ -608,13 +348,11 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
       Email: this.state.selectedUserEmail,
       Extension: this.state.selectedUserExtn,
       Phone: this.state.selectedUserPhone,
-      /* Subject: this.state.selectedUserSubject, */
-      Message: this.state.selectedUserMsg
+      Message: this.state.selectedUserMsg,
+      SubjectId: this.state.selectedUserSubject
     }
 
-    //const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${LIST_REGISTRATION}')/items`;
-
-    sp.web.lists.getByTitle(LIST_CONTACTUS_REGISTRATION).items.add(body).then((data) => {
+    sp.web.lists.getByTitle(LIST_CONTACTUS_REGISTRATION).items.add(body).then(() => {
       console.log('registration completed');
       this.setState({
         showSuccessMsg: true
@@ -626,7 +364,6 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
   }
 
   private validateForm(): boolean {
-    //console.log('validation');
     let isValid = false;
 
     let errors = [];
@@ -638,9 +375,17 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
     }
 
     let isMsgValid: boolean = true;
-    if (!this.state.selectedUserMsg) {
+    if (!this.state.selectedUserMsg.trim().length) {
       errors.push('User Message');
       isMsgValid = false;
+      this.setState({
+        showErrorMessage: true
+      })
+    }
+    else {
+      this.setState({
+        showErrorMessage: false
+      })
     }
 
     const phoneErrorNew = this.validatePhone(this.state.selectedUserPhone);
@@ -656,6 +401,8 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
       });
     }
 
+    const messageError = this.state.selectedUserMsg
+
     isValid = isPhoneValid && isMsgValid;
     if (!isValid) {
       const _error = errors.length > 1 ? 'Mandatory fields' : 'Mandatory field'
@@ -667,28 +414,10 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
     return isValid;
   }
 
-  private validateEmail(email) {
-
-    const errorsNew = [];
-
-    if (email.split("").filter(x => x === "@").length !== 1) {
-      errorsNew.push("Email should contain '@' ");
-    }
-    if (email.indexOf(".") === -1) {
-      errorsNew.push("Email should contain '.'");
-    }
-
-    return errorsNew;
-  }
 
 
   private validatePhone(phone) {
-    const numbers = /^[0-9]+$/;
     const errorsNew = [];
-
-    // if (phone.match(numbers)) {
-    //   errorsNew.push("Phone Number format is not correct");
-    // }
 
     if ((phone.length < 9) || (phone.length > 9)) {
       errorsNew.push("Phone Number length is not correct");
@@ -698,16 +427,6 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
   }
 
 
-  private resetForm() {
-    this.setState({
-      selectedUserName: '',
-      selectedUserEmail: '',
-      selectedUserExtn: '',
-      selectedUserPhone: '',
-      selectedUserSubject: '',
-      selectedUserMsg: ''
-    });
-  }
 
   private successResetForm() {
     this.setState({
@@ -744,64 +463,25 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
     );
   }
 
-  private fnContactUsContent() {
-    // this.pestaña = this.$('.pestaña');
-    // this.pestaña.on('click', function () {
-    //   this.$(this).addClass('activa');
-    //   this.pestaña.not($(this)).addClass('desactivada');
-    //   this.$(this).parent().addClass("accordion-activa");
-    // });
-
-    // this.$('.cerrar').on('click', function () {
-    //   this.pestaña.removeClass('activa desactivada');
-    //   this.pestaña.parent().removeClass("accordion-activa");
-    //   console.log(this.$(this).parent());
-    // });
-
-    //sticky-div
-    const stickyElem: any = document.querySelector(".sticky-div");
-    const currStickyPos = stickyElem.getBoundingClientRect().top + window.pageYOffset;
-
-    window.onscroll = function () {
-      if (window.pageYOffset > currStickyPos) {
-        stickyElem.style.position = "sticky";
-        stickyElem.style.top = "220px";
-      } else {
-        stickyElem.style.position = "relative";
-        stickyElem.style.top = "initial";
-      }
-    }
-  }
-
-
-
-
-
-
   public render(): React.ReactElement<IAgiIntranetContactUsMainProps> {
     return (
-      <div className={styles.agiIntranetContactUsMain}>
+      <div className={styles.agiIntranetContactUsMain} >
         {
           this.state.loading &&
           <Spinner label="Loading items..." size={SpinnerSize.large} />
         }
-        {this.renderContactUsContentSection()}
-        <div style={{ display: this.state.showSuccessMsg ? 'block' : 'none' }}>
+        {this.renderContactUsContentSection()
+        }
+        < div style={{ display: this.state.showSuccessMsg ? 'block' : 'none' }}>
           {this.renderSuccessForm()}
-        </div>
-      </div>
+        </div >
+      </div >
     );
   }
 }
 
 
-function phone(phone: any, email: any): any {
-  throw new Error('Function not implemented.');
-}
 
-function email(phone: (phone: any, email: any) => any, email: any): any {
-  throw new Error('Function not implemented.');
-}
 
 
 

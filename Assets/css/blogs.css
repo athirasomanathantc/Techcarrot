@@ -757,7 +757,7 @@ section.content ul li a:hover {
 }
 
 section.content ul li:last-child {
-  font-weight: 700;
+  /* font-weight: 700; */
   color: #000;
 }
 

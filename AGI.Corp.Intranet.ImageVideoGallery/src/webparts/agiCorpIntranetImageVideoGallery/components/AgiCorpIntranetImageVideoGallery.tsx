@@ -482,6 +482,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   /** get images from folder */
 
   private async getImageGalleryItems(subFolderName): Promise<void> {
+    this.scrollToTop();
     // sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(subFolderName).files.select('*, FileRef, FileLeafRef').get().then((allItems) => {
     const libraryPath = `${this.props.context.pageContext.web.serverRelativeUrl}/Image Gallery/${subFolderName}`;
     sp.web.getFolderByServerRelativePath(libraryPath).files.select('*, FileRef, FileLeafRef, ID, Author/Title').expand("ListItemAllFields,Author").get().then((allItems) => {
@@ -559,6 +560,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   }
 
   private openVideo(id) {
+    this.scrollToTop();
     const selectedItem = this.state.videoItems.filter(item => item.ID == id)[0];
     this.setState({
       selectedItem
