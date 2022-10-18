@@ -11,7 +11,11 @@ export const LeftNavigation = (props: ILeftNavigation): JSX.Element => {
     const [error, setError] = useState(null);
     const [policyType, setPolicyType] = useState(props.policyType);
     const [policyTypes, setPolicyTypes] = useState([]);
-
+    const type=props.policyType;
+    console.log('selected type',props.policyType)
+    
+    
+   
     const showPolicies = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, policyType: IPolicyType): void => {
         setPolicyType(policyType.Title)
         props.showPolicies(e, policyType.Title)
@@ -46,9 +50,11 @@ export const LeftNavigation = (props: ILeftNavigation): JSX.Element => {
                         <button className="btn btn-secondary dropdown-toggle" type="button" id="sidebarMenuDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">{policyType}</button>
                         <ul className="nav nav-tabs dropdown-menu" id="policiesTab" role="tablist">
                             {policyTypes.map((policyType: IPolicyType, index: number) => {
+                                const selectedType = policyType.Title.toLowerCase()==type.toLowerCase()?true:false;
+                                
                                 return (<>
                                     <li className="nav-item" role="presentation" onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => showPolicies(e, policyType)}>
-                                        <button className={`nav-link ${!index ? 'active' : ''}`} id="general-tab" data-bs-toggle="tab" data-bs-target="#general-tab-content" type="button" role="tab" aria-controls="home" aria-selected="false">{policyType.Title}</button>
+                                        <button className={`nav-link ${selectedType?'active':''}`} id="general-tab" data-bs-toggle="tab" data-bs-target="#general-tab-content" type="button" role="tab" aria-controls="home" aria-selected="false">{policyType.Title}</button>
                                     </li>
                                 </>)
                             })}
