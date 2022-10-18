@@ -5,9 +5,10 @@ import { IAgiCorpIntranemInterimState } from './IAgiCorpIntranemInterimState';
 import { sp } from '@pnp/sp/presets/all';
 import { IBanner } from '../Models/IBanner';
 import { IContent } from '../Models/IContent';
-import { VideoCarousel} from './VideoCarousel/VideoCarousel';
-import {NULL_CONTENT_ITEM} from '../Common/constants';
+import { VideoCarousel } from './VideoCarousel/VideoCarousel';
+import { NULL_CONTENT_ITEM } from '../Common/constants';
 import { escape } from '@microsoft/sp-lodash-subset';
+import * as $ from 'jquery';
 
 export default class AgiCorpIntranemInterim extends React.Component<IAgiCorpIntranemInterimProps, IAgiCorpIntranemInterimState> {
   private videoWrapperRef: React.RefObject<HTMLDivElement>;
@@ -16,9 +17,9 @@ export default class AgiCorpIntranemInterim extends React.Component<IAgiCorpIntr
     sp.setup({
       spfxContext: this.props.context
     });
-    this.state={
-      banner:[],
-      content:[],
+    this.state = {
+      banner: [],
+      content: [],
       moveCarousel: false
     }
 
@@ -35,25 +36,26 @@ export default class AgiCorpIntranemInterim extends React.Component<IAgiCorpIntr
   private async fetchData() {
     debugger;
     const page = this.getQueryStringValue('pageID')
-    const bannerList = 'StaticBanner';
-    const contentList='InterimContent';
-    const filterBanner = `OtherType eq '${page}'`;
-    const filterContent= `Title eq '${page}'`;
+    const bannerList = 'Carousel';
+    const contentList = 'InterimContent';
+    const filterBanner = `OtherPage eq '${page}'`;
+    const filterContent = `Title eq '${page}'`;
     sp.web.lists.getByTitle(bannerList).items.filter(filterBanner).select('*,AttachmentFiles').expand('AttachmentFiles').get()
       .then((item: IBanner[]) => {
+        console.log(item);
         this.setState({
           banner: item
         })
 
       })
-      sp.web.lists.getByTitle(contentList).items.filter(filterContent).select('*,AttachmentFiles').expand('AttachmentFiles').get()
+    sp.web.lists.getByTitle(contentList).items.filter(filterContent).select('*,AttachmentFiles').expand('AttachmentFiles').get()
       .then((item: IContent[]) => {
         this.setState({
           content: item
         })
 
       })
-    
+
 
   }
   private getImageUrl(imageContent: string): string {
@@ -64,6 +66,27 @@ export default class AgiCorpIntranemInterim extends React.Component<IAgiCorpIntr
     const imageObj: any = JSON.parse(imageContent);
     return imageObj.serverUrl + imageObj.serverRelativeUrl;
   }
+
+  private videoPlayer() { 
+    var aboutVideo:any = document.getElementById("aboutVideo");
+      if (aboutVideo.paused)
+      {			
+       aboutVideo.play();
+       $(".playButton").toggle();
+       
+      
+      }
+    else 
+    {
+      aboutVideo.pause();
+       $(".playButton").toggle();
+      
+      
+    }
+    
+       
+  }
+
   private renderData(): JSX.Element {
 
     return (
@@ -94,30 +117,36 @@ export default class AgiCorpIntranemInterim extends React.Component<IAgiCorpIntr
                       this.state.banner.map((item, i) => {
                         const type = item.ImageorVideo;
                         if (type === 'Image') {
-                          const imgVal = item && item.AttachmentFiles[0]?.ServerRelativeUrl ? item.AttachmentFiles[0]?.ServerRelativeUrl : '';
-
+                          const imgVal = item && item.AttachmentFiles[0]?.ServerRelativeUrl ? item.AttachmentFiles[0]?.ServerRelativeUrl : false;
                           return (
-                            <div className={i == 0 ? "carousel-item active" : "carousel-item"}>
-                              <img src={imgVal} className="d-block w-100" alt="..." />
-                            </div>
+                            imgVal ?
+                              <div className={i == 0 ? "carousel-item active" : "carousel-item"}>
+                                <img src={imgVal} className="d-block w-100" alt="..." />
+                              </div>
+                              :
+                              <></>
                           )
+
                         }
-                        else if (type === "Video") {
-                          const videoVAl = item && item.AttachmentFiles[0].ServerRelativeUrl ? item.AttachmentFiles[0].ServerRelativeUrl : '';
+                        else if (type === 'Video') {
+                          const videoVal = item && item.AttachmentFiles[0].ServerRelativeUrl ? item.AttachmentFiles[0].ServerRelativeUrl : false;
                           const thumbnailUrl = item && item.VideoThumbnail ? this.getImageUrl(item.VideoThumbnail) : '';
                           return (
+                            videoVal ?
                             <div className={i == 0 ? "carousel-item active" : "carousel-item"} ref={this.videoWrapperRef}>
                               <div className="videoWrapper">
-                                <VideoCarousel thumbnailUrl={thumbnailUrl} videoUrl={videoVAl} moveCarousel={this.state.moveCarousel} ></VideoCarousel>
+                                <VideoCarousel thumbnailUrl={thumbnailUrl} videoUrl={videoVal} moveCarousel={this.state.moveCarousel} ></VideoCarousel>
 
                               </div>
                             </div>
+                            :
+                            <></>
                           )
                         }
                       })
                     }
                   </div>
-                  {this.state.banner.length > 0 ?
+                  {this.state.banner.length >1 ?
                     <>
                       <button className="carousel-control-prev" type="button"
                         data-bs-target="#business-details-banner-CarouselControls" data-bs-slide="prev">
@@ -137,16 +166,41 @@ export default class AgiCorpIntranemInterim extends React.Component<IAgiCorpIntr
                 </div>
               </div>
               {
-                this.state.content.map((item)=>{
-                  return(
+                this.state.content.map((item) => {
+                  
+                    const videoVal = item && item.AttachmentFiles[0].ServerRelativeUrl ? item.AttachmentFiles[0].ServerRelativeUrl : false;
+                    const thumbnailUrl = item && item.VideoThumbnail ? this.getImageUrl(item.VideoThumbnail) : '';
+
+                  
+                  return (
+                    <>
                     <div className="detail-text mt-5 mb-5">
                       <h6 dangerouslySetInnerHTML={{ __html: item.Desc1 }}></h6>
                       <p dangerouslySetInnerHTML={{ __html: item.Desc2 }}></p>
                     </div>
+                    
+                    {
+                      videoVal?
+                    
+                    <div className="video-section mt-5">
+                    <div className="video-wrapper">
+                      <video className="video" id="aboutVideo" poster={thumbnailUrl} loop controls  onClick={() => this.videoPlayer()} >
+                        <source src={videoVal} type="video/mp4" />
+                      </video>
+                      <div className="playButton active" onClick={() => this.videoPlayer()} ></div>
+                    </div>
+                  </div>
+                  :
+                  <></>
+                  }
+                  </>
                   )
 
                 })
               }
+              
+
+              
 
 
             </article>

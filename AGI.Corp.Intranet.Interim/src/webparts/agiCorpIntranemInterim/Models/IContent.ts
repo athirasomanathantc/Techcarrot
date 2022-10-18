@@ -4,5 +4,6 @@ export interface IContent {
     Desc1:string;
     Desc2: string;
     AttachmentFiles:{ServerRelativeUrl: string};
+    VideoThumbnail:string;
     
 }
