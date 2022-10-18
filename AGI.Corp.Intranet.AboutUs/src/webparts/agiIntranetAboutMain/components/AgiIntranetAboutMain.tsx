@@ -188,7 +188,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                   visionContentItems.map((item, i) => {
                     const visionImage = item.BackgroundImage && item.BackgroundImage ? this.getImageUrl(item.BackgroundImage) : '';
                     return (
-                      <a href="">
+                      <a href={`${this.props.siteUrl}/SitePages/Interim.aspx?pageID=${item.Title}`}>
                         <div className="vision-img-wrapper">
                           <img src={visionImage} className="w-100" />
                           <div className="vision-content">
@@ -206,7 +206,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                   purposeContentItems.map((item, i) => {
                     const purposeImage = item.BackgroundImage && item.BackgroundImage ? this.getImageUrl(item.BackgroundImage) : '';
                     return (
-                      <a href="">
+                      <a href={`${this.props.siteUrl}/SitePages/Interim.aspx?pageID=${item.Title}`}>
                         <div className="vision-img-wrapper">
                           <img src={purposeImage} className="w-100" />
                           <div className="vision-content">
@@ -225,7 +225,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                   cultureContentItems.map((item, i) => {
                     const cultureImage = item.BackgroundImage && item.BackgroundImage ? this.getImageUrl(item.BackgroundImage) : '';
                     return (
-                      <a href="">
+                      <a href={`${this.props.siteUrl}/SitePages/Interim.aspx?pageID=${item.Title}`}>
                         <div className="vision-img-wrapper">
                           <img src={cultureImage} className="w-100" />
                           <div className="vision-content">
