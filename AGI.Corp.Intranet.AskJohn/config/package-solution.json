@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "agi-intranet-ask-john-client-side-solution",
+    "id": "4bdb90d8-f55b-4a90-99c0-f11d0768bf86",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.15.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "agiIntranetAskJohn description"
+      },
+      "longDescription": {
+        "default": "agiIntranetAskJohn description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "agi-intranet-ask-john Feature",
+        "description": "The feature that activates elements of the agi-intranet-ask-john solution.",
+        "id": "c9e4fb9c-3d16-4d71-9875-cf948023c736",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/agi-intranet-ask-john.sppkg"
+  }
+}
