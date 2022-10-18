@@ -186,11 +186,12 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
           <section className="section business-leadership-section" style={{ display: this.state.contentItems.length > 0 ? 'block' : 'none' }}>
             <div className="container">
               <div className="row">
-                <div className="col-8 col-lg-10 text-let text-lg-center">
+                <div className='title-header'>
+                <div className="text-left text-lg-center">
                   <h3 className="leadership-team-heading">{this.props.listName}</h3>
 
                 </div>
-                <div className="align-self-end col-4 col-lg-2">
+                <div className="align-self-end leadership-btn-control">
                   <div className="button-container">
                     <button className="carousel-control-prev business-leadership-control-prev" type="button" data-bs-target="#leadershipCarousel"
                       data-bs-slide="prev">
@@ -203,6 +204,7 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
                       <span className="visually-hidden">Next</span>
                     </button>
                   </div>
+                </div>
                 </div>
               </div>
 

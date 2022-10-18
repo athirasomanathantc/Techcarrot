@@ -135,11 +135,12 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
           <section className="section our-services" style={{ display: this.state.contentItems.length > 0 ? 'block' : 'none' }}>
             <div className="container">
               <div className="row">
-                <div className="col-8 col-lg-11 text-let text-lg-center">
+                <div className='title-header'>
+                <div className="text-left text-lg-center">
                   <h3 className="section-title">{this.props.listName}</h3>
 
                 </div>
-                <div className="align-self-end col-4 col-lg-1">
+                <div className="align-self-end our-service-btn-control">
                   <div className="button-container">
                     <button className="carousel-control-prev our-service-control-prev" type="button" data-bs-target="#ourServiceCarousel"
                       data-bs-slide="prev">
@@ -152,6 +153,7 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
                       <span className="visually-hidden">Next</span>
                     </button>
                   </div>
+                </div>
                 </div>
                 <div id="ourServiceCarousel" className="carousel container our-service-carousel mt-5"
                   data-bs-ride="carousel"  data-bs-interval="false" data-bs-wrap="false">
