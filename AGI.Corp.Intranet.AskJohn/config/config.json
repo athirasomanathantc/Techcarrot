@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-intranet-ask-john-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiIntranetAskJohn/AgiIntranetAskJohnWebPart.js",
+          "manifest": "./src/webparts/agiIntranetAskJohn/AgiIntranetAskJohnWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiIntranetAskJohnWebPartStrings": "lib/webparts/agiIntranetAskJohn/loc/{locale}.js"
+  }
+}
