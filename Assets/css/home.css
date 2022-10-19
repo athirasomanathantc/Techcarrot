@@ -1141,11 +1141,11 @@ input[type="radio"]:checked+label::after {
     -moz-border-radius: 7.5px;
     -webkit-border-radius: 7.5px;
     border-radius: 7.5px;
-    position: absolute;
-    top: 4em;
-    left: 35%;
+    /* position: absolute;
+    top: 4em; */
+    /* left: 35%; */
 }
-
+/* 
 .DayPicker-Day--event .event {
     background-color: #c40d26;
 }
@@ -1158,6 +1158,37 @@ input[type="radio"]:checked+label::after {
 .DayPicker-Day--announcement .announcement {
     background-color: #036ef8;
     left: 60% !important;
+} */
+
+.round-info-wrapp {
+    position: absolute;
+    left: 29%;
+    top: 3.4em;
+}
+
+.round-info-wrapp span {
+    margin-right: 5px;
+    position: relative;
+    width: 5px;
+    height: 5px;
+    display: inline-block;
+    border-radius: 50%;
+    display: none;
+}
+
+.DayPicker-Day--event .round-info-wrapp span.event {
+    background-color: #c40d26;
+    display: inline-block;
+}
+
+.DayPicker-Day--holiday .round-info-wrapp span.holiday {
+    background-color: #0DC49A;
+    display: inline-block;
+}
+
+.DayPicker-Day--announcement .round-info-wrapp span.announcement {
+    background-color: #036ef8;
+    display: inline-block;
 }
 
 /* Date Picker End*/

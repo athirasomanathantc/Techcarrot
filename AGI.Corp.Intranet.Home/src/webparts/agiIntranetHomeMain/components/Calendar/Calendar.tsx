@@ -173,9 +173,11 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
                             .toUpperCase()}
                     </span>}
                 </div>
-                <span className="event"></span>
-                <span className="holiday"></span>
-                <span className="announcement"></span>
+                <div className="round-info-wrapp">
+                    <span className="event"></span>
+                    <span className="holiday"></span>
+                    <span className="announcement"></span>
+                </div>
             </div>
         );
     }
