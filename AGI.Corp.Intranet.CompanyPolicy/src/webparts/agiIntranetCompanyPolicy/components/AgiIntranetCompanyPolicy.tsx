@@ -34,6 +34,29 @@ export default class AgiIntranetCompanyPolicy extends React.Component<IAgiIntran
       policyType
     })
   }
+  private getQueryStringValue(param:string):string{
+    const params= new URLSearchParams(window.location.search);
+    let value=params.get(param) || '';
+    return value;
+  }
+  public async componentDidMount(): Promise<void> {
+    const policyType = this.getQueryStringValue('Policy');
+    
+    if(policyType==''){
+      
+    }
+    else{
+      this.setState({
+        policyType:policyType,
+        
+      },()=>{
+        console.log('policy type',this.state.policyType);
+
+      });
+
+    }
+    
+  }
 
   private showFilteredPolicies(filteredPolicies: IPolicy[]): void {
     this.setState({

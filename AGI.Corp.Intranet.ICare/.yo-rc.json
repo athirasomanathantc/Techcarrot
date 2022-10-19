@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.2",
+    "libraryName": "agi-intranet-i-care",
+    "libraryId": "4bc62871-c03e-431d-81bb-c5fdd0dc66e2",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "agiIntranetICare",
+    "solutionShortDescription": "agiIntranetICare description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

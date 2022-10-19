@@ -92,7 +92,8 @@ export default class AgiIntBusFuncTestimonials extends React.Component<IAgiIntBu
         <div className="container">
           <div id="carouselTestimonial" className="carousel  slide" data-bs-ride="carousel">
             <div className="col-12 text-left text-lg-center">
-              <h2 className="section-title">Testimonials</h2>
+              <h3 className="section-title">Testimonials</h3>
+
             </div>
             <div className="col-sm-8 mx-auto">
               <div className="carousel-inner text-center  py-5">
