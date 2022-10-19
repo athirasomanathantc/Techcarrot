@@ -10,7 +10,7 @@ export interface ICareState {
     items: any[];
     iCare: ICare[];
     iCareExtension: ICareExtension[];
-    iCareIsAnonymous: any;
+    iCareIsAnonymous: boolean;
     iCareBusiness: ICareBusiness[];
     selectedUserName: string;
     selectedUserEmail: string;

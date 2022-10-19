@@ -153,7 +153,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
                 <div className="row">
                   <div className="col-12">
                     <label className="container-check">Post your message anonymously
-                      <input type="checkbox" value={this.state.iCareIsAnonymous} onChange={(e) => this.handleIsAnonymousChange(e)} />
+                      <input type="checkbox" checked={this.state.iCareIsAnonymous} onChange={(e) => this.handleIsAnonymousChange(e)} />
                       <span className="checkmark"></span>
                       </label>  
                   </div>
@@ -252,8 +252,8 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
       selectedUserName: Nm
     });
   }
-  private handleIsAnonymousChange(e: any) {
-    const Ia = e.target.value;
+  private handleIsAnonymousChange(e: any) {debugger;
+    const Ia = e.target.checked;
     this.setState({
       iCareIsAnonymous: Ia
     });
