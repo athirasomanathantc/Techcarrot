@@ -36,6 +36,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
     selectedUserDepartment: '',
     selectedUserMsg: '',
     selectedUserJobTitle: '',
+    selectedUserIsAnonymous: '',
     selectedUserBusinessUnit: '',
     showSuccessMsg: false,
     showErrorEmailMsg: false,
@@ -55,7 +56,8 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
     sp.web.lists.getByTitle(LIST_ICARE_EXTENSION).items.get().then((items: ICareExtension[]) => {
       const iCareExtension = items && items.length > 0 ? items[0] : NULL_ICARE_EXTENSION_ITEM;
       this.setState({
-        iCareExtension: items
+        iCareExtension: items,
+        selectedUserExtn: items[0]?.ID?.toString()
       });
     });
   }
@@ -63,7 +65,8 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
     sp.web.lists.getByTitle(LIST_ICARE_BUSINESS).items.get().then((items: ICareBusiness[]) => {
       const iCareBusiness = items && items.length > 0 ? items[0] : NULL_ICARE_BUSINESS_ITEM;
       this.setState({
-        iCareBusiness: items
+        iCareBusiness: items,
+        selectedUserBusinessUnit: items[0]?.ID?.toString()
       });
     });
   }
@@ -149,7 +152,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
                 <div className="row">
                   <div className="col-12">
                     <label className="container-check">Post your message anonymously
-                      <input type="checkbox" />
+                      <input type="checkbox" value={this.state.selectedUserIsAnonymous} onChange={(e) => this.handleIsAnonymousChange(e)} />
                       <span className="checkmark"></span>
                       </label>  
                   </div>
@@ -177,7 +180,12 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
                   <div className="mb-4 col-md-6">
                     <label htmlFor="contactFormSubject" className="form-label">Business Unit</label>
                     <select className="form-select form-control" value={this.state.selectedUserBusinessUnit} onChange={(e) => this.handleBusinessUnitChange(e)}>
-                    <option value="Energy">Energy</option>
+                      {
+                          this.state.iCareBusiness.map((iCareBusiness : ICareBusiness)=>{
+                            return <option value={iCareBusiness.ID}>{iCareBusiness.Title}</option>
+                          })
+                      }
+                    
                     </select>
                   </div>
                   <div className="mb-4 col-md-6">
@@ -185,7 +193,11 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
                     <div className="d-flex">
                       <div className="col-6 col-md-3">
                         <select className="form-select" value={this.state.selectedUserExtn} onChange={(e) => this.handleExtnChange(e)}>
-                        <option value="+971">+971</option>
+                        {
+                          this.state.iCareExtension.map((iCareExtension : ICareExtension)=>{
+                            return <option value={iCareExtension.ID}>{iCareExtension.Title}</option>
+                          })
+                      }
                         </select>
                       </div>
                       <div className="flex-grow flex-grow-1 ms-3">
@@ -237,6 +249,12 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
     const Nm = e.target.value;
     this.setState({
       selectedUserName: Nm
+    });
+  }
+  private handleIsAnonymousChange(e: any) {
+    const Ia = e.target.value;
+    this.setState({
+      selectedUserIsAnonymous: Ia
     });
   }
   private handleEmailChange(e: any) {
@@ -292,12 +310,13 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
 
       Title: this.state.selectedUserName,
       Email: this.state.selectedUserEmail,
-      //Extension: this.state.selectedUserExtn,
+      ExtensionId: this.state.selectedUserExtn,
       Number: this.state.selectedUserPhone,
       JobTitle: this.state.selectedUserJobTitle,
       Department: this.state.selectedUserDepartment,
-     // Business: this.state.selectedUserBusinessUnit,
-      Message: this.state.selectedUserMsg
+      BusinessId: this.state.selectedUserBusinessUnit,
+      Message: this.state.selectedUserMsg,
+      //IsAnonymous: this.state.selectedUserIsAnonymous
     }
 
     //const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${LIST_REGISTRATION}')/items`;

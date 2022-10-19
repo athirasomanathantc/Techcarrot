@@ -18,6 +18,7 @@ export interface ICareState {
     selectedUserMsg: string;
     selectedUserJobTitle: string;
     selectedUserBusinessUnit: string;
+    selectedUserIsAnonymous: string;
     showSuccessMsg: boolean;
     showErrorEmailMsg: boolean;
     showErrorExtnMsg: boolean;
