@@ -27,6 +27,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
     iCareDetails: NULL_ICARE_DETAILS_ITEM,
     iCareExtension: [],
     iCareBusiness: [],
+    iCareIsAnonymous: false,
     items: [],
     iCare: [],
     selectedUserName: '',
@@ -152,7 +153,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
                 <div className="row">
                   <div className="col-12">
                     <label className="container-check">Post your message anonymously
-                      <input type="checkbox" value={this.state.selectedUserIsAnonymous} onChange={(e) => this.handleIsAnonymousChange(e)} />
+                      <input type="checkbox" value={this.state.iCareIsAnonymous} onChange={(e) => this.handleIsAnonymousChange(e)} />
                       <span className="checkmark"></span>
                       </label>  
                   </div>
@@ -254,7 +255,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
   private handleIsAnonymousChange(e: any) {
     const Ia = e.target.value;
     this.setState({
-      selectedUserIsAnonymous: Ia
+      iCareIsAnonymous: Ia
     });
   }
   private handleEmailChange(e: any) {
@@ -316,7 +317,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
       Department: this.state.selectedUserDepartment,
       BusinessId: this.state.selectedUserBusinessUnit,
       Message: this.state.selectedUserMsg,
-      //IsAnonymous: this.state.selectedUserIsAnonymous
+      IsAnonymous: this.state.iCareIsAnonymous
     }
 
     //const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${LIST_REGISTRATION}')/items`;
