@@ -17,6 +17,7 @@ interface ICalendarState {
     allEvents: any,
     events: any,
     holidays: any,
+    announcements: any,
     isMonthEvents: boolean,
     isDayEvent: boolean,
     monthlyHolidaysText: string,
@@ -42,6 +43,7 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
             allEvents: [],
             events: [],
             holidays: [],
+            announcements: [],
             isMonthEvents: false,
             isDayEvent: false,
             monthlyHolidaysText: NO_HOLIDAYS,
@@ -53,11 +55,7 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
     }
 
     public componentDidMount() {
-        // var cw = $('.DayPicker .DayPicker-Day').width() + 5;
-        // $('.DayPicker .DayPicker-Day').css({ 'height': cw + 'px' });
-        // var x = document.getElementsByClassName("DayPicker-Day");
         this.getCalendarEvents();
-
     }
 
     private async getCalendarEvents() {
@@ -65,43 +63,40 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
             select('*, fRecurrence,Title, EventDate, EndDate, Category, Location').
             get();
 
-
-
         let holidays = [];
         let events = [];
+        let announcements = [];
         let allEvents = [];
 
-        //console.log("Events ");
-        //console.table(eventItems);
-
         eventItems.map((event) => {
-            //const dates = this.getDates(event.EventDate, event.fRecurrence ? event.EventDate : event.EventDate);
             const endDate = this.getEventEndDate(event);
             const dates = this.getDates(event.EventDate, endDate);
-            //console.log("Event " + event.Title);
-            //console.table(dates);
 
             if (event.Category == 'Holiday') {
                 dates.map((date) => {
                     holidays.push(new Date(date));
                     allEvents.push({ Title: event.Title, Category: event.Category, EventDate: date })
                 })
-                //event.EventDate && holidays.push(new Date(event.EventDate));
             }
-            else {
+            else if (event.Category === 'Announcement') {
+                dates.map((date) => {
+                    announcements.push(new Date(date));
+                    allEvents.push({ Title: event.Title, Category: event.Category, EventDate: date })
+                })
+            }
+            else if (event.Category === 'Event') {
                 dates.map((date) => {
                     events.push(new Date(date));
                     allEvents.push({ Title: event.Title, Category: event.Category, EventDate: date })
                 })
-                //event.EventDate && events.push(new Date(event.EventDate));
             }
-
         })
         this.setState({
             eventItems,
             allEvents,
             holidays,
-            events
+            events,
+            announcements
         }, () => {
             this.getCurrentMonthEvents();
         })
@@ -123,9 +118,6 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
         let currentDate = moment(startDate);
         const stopDate = moment(endDate);
         while (currentDate <= stopDate) {
-            // dateArray.push(moment(currentDate).format('YYYY-MM-DD') )
-            // currentDate = moment(currentDate).add(1, 'days');
-
             dateArray.push(moment(currentDate).format('YYYY-MM-DD'))
             currentDate = moment(currentDate).add(1, 'days');
         }
@@ -133,10 +125,6 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
     }
 
     handleDayClick(selectedDay, modifiers, e) {
-        //console.log('modifiers');
-        //console.table(modifiers);
-        //console.log(modifiers);
-
         if (modifiers.disabled) return;
         if (Object.keys(modifiers).length == 0) {
             this.setState({
@@ -167,35 +155,32 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
                 isDayEvent: false
             })
         }
-
-
     }
 
     renderDay(day, modifiers) {
         const date = day.getDate();
-        if (day.getTime() == new Date(new Date().setHours(12, 0, 0, 0)).getTime()) {
-            return (
-                <div className="date-wrap">
+        const today = new Date(new Date().setHours(12, 0, 0, 0));
+        const isToday = day.getTime() == today.getTime();
+
+        return (
+            <div className="date-container">
+                <div className={isToday ? 'date-wrap' : ''}>
                     <span>{date}</span>
-                    <span>
+                    {isToday && <span>
                         {moment(day)
                             .format('dddd')
                             .substring(0, 3)
                             .toUpperCase()}
-                    </span>
+                    </span>}
                 </div>
-            );
-        }
-        else {
-            return (
-                <div>{date}</div>
-            );
-        }
+                <span className="event"></span>
+                <span className="holiday"></span>
+                <span className="announcement"></span>
+            </div>
+        );
     }
 
     handleMonthChange(month) {
-        //console.log('month changed');
-        //console.log(month);
         this.setState({
             isDayEvent: false,
             dailyEvents: []
@@ -245,12 +230,6 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
         this.setState({
             monthlyEventsText
         })
-
-        //console.log('Events for selected month');
-        //console.table(events);
-
-        //console.log('Holidays for selected month');
-        //console.table(holidays);
     }
 
     public render(): React.ReactElement<ICalendarProps> {
@@ -261,23 +240,26 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
                         <div className="app">
                             <div className="app__main">
                                 <div className="calendar">
-                                    <DayPicker modifiers={{ holiday: this.state.holidays, event: this.state.events }}
+                                    <DayPicker modifiers={{ holiday: this.state.holidays, event: this.state.events, announcement: this.state.announcements }}
                                         month={this.state.selectedMonth}
                                         selectedDays={this.state.selectedDay}
                                         onDayClick={(day, modifiers, e) => this.handleDayClick(day, modifiers, e)}
                                         onMonthChange={(month) => this.handleMonthChange(month)}
                                         weekdaysShort={WEEK_DAYS}
-                                        renderDay={(day, modifiers) => this.renderDay(day, modifiers)}
+                                        renderDay={(day) => this.renderDay(day, { holiday: this.state.holidays, event: this.state.events, announcement: this.state.announcements })}
                                     />
                                     <div className="legend calendar-legend">
                                         <span>Today</span>
                                         <span>Holidays</span>
+                                        <span>Announcements</span>
+                                        <span>Events</span>
                                     </div>
                                     <div>
                                         {
                                             this.state.dailyEvents.map((event, i) => {
+                                                const categoryClass = event.Category == 'Holiday' ? 'Holiday' : (event.Category == 'Event' ? 'Event' : 'Announcement')
                                                 return <div className='eventDetail'>
-                                                    <div className={`datebox ${event.Category == 'Holiday' ? 'Holiday' : 'Event'}`}>{new Date(event.EventDate).getDate()}</div>
+                                                    <div className={`datebox ${categoryClass}`}>{new Date(event.EventDate).getDate()}</div>
                                                     <div className="events in">
                                                         <div className="event">
                                                             <span>{event.Title}</span>
