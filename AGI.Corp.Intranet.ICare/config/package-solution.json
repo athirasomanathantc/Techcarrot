@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "agi-intranet-i-care-client-side-solution",
+    "id": "4bc62871-c03e-431d-81bb-c5fdd0dc66e2",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.15.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "agiIntranetICare description"
+      },
+      "longDescription": {
+        "default": "agiIntranetICare description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "agi-intranet-i-care Feature",
+        "description": "The feature that activates elements of the agi-intranet-i-care solution.",
+        "id": "c4aaa63b-b0ee-4658-a0c5-823fcddb4d14",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/agi-intranet-i-care.sppkg"
+  }
+}
