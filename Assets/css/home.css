@@ -1105,6 +1105,8 @@ input[type="radio"]:checked+label::after {
     background: #FFFFFF 0% 0% no-repeat padding-box;
     border: 1px solid #EBEBEB;
     border-radius: 20px;
+    margin: 5px 15px 5px 0;
+    display: inline-block;
 }
 
 .legend span:after {
@@ -1140,7 +1142,7 @@ input[type="radio"]:checked+label::after {
     -webkit-border-radius: 7.5px;
     border-radius: 7.5px;
     position: absolute;
-    bottom: 3px;
+    top: 4em;
     left: 35%;
 }
 
