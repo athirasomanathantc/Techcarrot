@@ -223,7 +223,6 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
   
                   <div className="btn-wrap">
                     <input type="button" value="Send Message" className="btn btn-gradient btn-lg btn-hover btn-view-more mt-3" onClick={(e) => this.checkIsAnonymousChange()} />
-                    <input type="button" value="Close" className="btn btn-gradient btn-lg btn-hover btn-view-more mt-3 close-btn ms-3"/>
                      
                   </div>
                 </div>
