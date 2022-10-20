@@ -32,7 +32,7 @@ export const NULL_ICARE_EXTENSION_ITEM = {
     Country: ''
 }
 
-export const LIST_ICARE_BUSINESS = 'Business';
+export const LIST_ICARE_BUSINESS = 'BusinessUnit';
 
 export const NULL_ICARE_BUSINESS_ITEM = {
     ID: 0,
