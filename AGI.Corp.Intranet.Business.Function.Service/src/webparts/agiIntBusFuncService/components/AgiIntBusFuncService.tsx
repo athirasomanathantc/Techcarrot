@@ -180,7 +180,7 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
                         return (
                           
                           <div className={i == 0 ? "carousel-item active" : "carousel-item"}>
-                            <div className="col-md-3 m-2">
+                            <div className="col-md-3 m-2 h-100">
                               <div className="card  our-services">
                                 <img className="w-100" src={imgVal} />
                                 <div className="card-body">
