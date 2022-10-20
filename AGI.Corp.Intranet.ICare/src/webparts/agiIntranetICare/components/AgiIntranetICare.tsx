@@ -43,6 +43,9 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
     showErrorEmailMsg: false,
     showErrorExtnMsg: false,
     showErrorPhoneMsg: false,
+    showErrorMessage: false,
+    showErrorDepartment: false,
+    showErrorJobTitle: false,
     validationText: '',
     };
   }
@@ -126,6 +129,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
       userDisplayName
     } = this.props;
     const iCareDetailsInfo = this.state.iCareDetails;
+    
     return (
       <div className="main-content contact-us-wrapper iCare-wrapper">
       <div className="content-wrapper">
@@ -153,7 +157,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
                 <div className="row">
                   <div className="col-12">
                     <label className="container-check">Post your message anonymously
-                      <input type="checkbox" checked={this.state.iCareIsAnonymous} onChange={(e) => this.handleIsAnonymousChange(e)} />
+                      <input type="checkbox" id="anonymousCheck" checked={this.state.iCareIsAnonymous} onChange={(e) => this.handleIsAnonymousChange(e)} />
                       <span className="checkmark"></span>
                       </label>  
                   </div>
@@ -171,11 +175,13 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
                   <div className="mb-4 col-md-6">
                     <label htmlFor="contactFormName" className="form-label">Department</label>
                     <input type="text" className="form-control" id="contactFormDepartment" value={this.state.selectedUserDepartment} onChange={(e) => this.handleDepartmentChange(e)} />
+                    <p id="errorDepartment" className="errorMsgClass" style={{ display: this.state.showErrorDepartment ? "block" : "none" }}>Department is required</p>
                   </div>
   
                   <div className="mb-4 col-md-6">
                     <label htmlFor="contactFormEmail" className="form-label">Job Title</label>
                     <input type="text" className="form-control" id="contactFormJobTitle" value={this.state.selectedUserJobTitle} onChange={(e) => this.handleJobTitleChange(e)} />
+                    <p id="errorJobTitle" className="errorMsgClass" style={{ display: this.state.showErrorJobTitle ? "block" : "none" }}>Job Title is required</p>
                   </div>
   
                   <div className="mb-4 col-md-6">
@@ -211,12 +217,12 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
                   <div className="mb-4 col-md-12 msgBox">
                     <label htmlFor="contactFormMessage" className="form-label">Submit</label>
                     <textarea className="form-control" placeholder="Write your message...." id="contactFormMessage" rows={4} value={this.state.selectedUserMsg} onChange={(e) => this.handleMsgChange(e)}></textarea>
-                      
+                    <p id="errorMessage" className="errorMsgClass" style={{ display: this.state.showErrorMessage ? "block" : "none" }}>Message is required</p>
                   </div>
   
   
                   <div className="btn-wrap">
-                    <input type="button" value="Send Message" className="btn btn-gradient btn-lg btn-hover btn-view-more mt-3" onClick={(e) => this.handleRegister()} />
+                    <input type="button" value="Send Message" className="btn btn-gradient btn-lg btn-hover btn-view-more mt-3" onClick={(e) => this.checkIsAnonymousChange()} />
                     <input type="button" value="Close" className="btn btn-gradient btn-lg btn-hover btn-view-more mt-3 close-btn ms-3"/>
                      
                   </div>
@@ -250,12 +256,6 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
     const Nm = e.target.value;
     this.setState({
       selectedUserName: Nm
-    });
-  }
-  private handleIsAnonymousChange(e: any) {debugger;
-    const Ia = e.target.checked;
-    this.setState({
-      iCareIsAnonymous: Ia
     });
   }
   private handleEmailChange(e: any) {
@@ -300,8 +300,50 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
       selectedUserPhone: Ph
     });
   }
+  private handleIsAnonymousChange(e: any) {debugger;
+    const Ia = e.target.checked;
+    this.setState({
+      iCareIsAnonymous: Ia
+    });
+    
+  }
+  private checkIsAnonymousChange() {debugger;
+    const Iac = this.state.iCareIsAnonymous;
+    if(Iac == true){
+      const IsAnonymousForm = this.validateAnonymousForm();
+    }
+    else{
+      const isFormValid = this.handleRegister();
+    }
+    
+  }
+  private validateAnonymousForm(){
+    const isFormValid = this.validateFormforAnonymous();
+    if (!isFormValid) {
+      return false;
+    }
+
+    const body = {
+      BusinessId: this.state.selectedUserBusinessUnit,
+      Message: this.state.selectedUserMsg,
+      IsAnonymous: this.state.iCareIsAnonymous
+    }
+
+    //const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${LIST_REGISTRATION}')/items`;
+
+    sp.web.lists.getByTitle(LIST_ICARE).items.add(body).then((data) => {
+      console.log('registration completed');
+      this.setState({
+        showSuccessMsg: true
+      });
+      this.successResetForm();
+    }).catch((error) => {
+      console.log('Registration failed', error);
+    });
+  }
   private handleRegister() {
     debugger;
+    
     const isFormValid = this.validateForm();
     if (!isFormValid) {
       return false;
@@ -333,6 +375,33 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
     });
 
   }
+  private validateFormforAnonymous(): boolean{
+    let isValid = false;
+
+    let errors = [];
+    let isMsgValid: boolean = true;
+    if (!this.state.selectedUserMsg.trim().length) {
+      errors.push('User Message');
+      isMsgValid = false;
+      this.setState({
+        showErrorMessage: true
+      })
+    }
+    else {
+      this.setState({
+        showErrorMessage: false
+      })
+    }
+    isValid = isMsgValid ;
+    if (!isValid) {
+      const _error = errors.length > 1 ? 'Mandatory fields' : 'Mandatory field'
+      const error = `${_error}: ${errors.join(', ')}`;
+      this.setState({
+        validationText: error
+      });
+    }
+    return isValid;
+  }
   private validateForm(): boolean {
     //console.log('validation');
     let isValid = false;
@@ -344,11 +413,44 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
       errors.push('Phone Number');
       isPhoneValid = false;
     }
-
     let isMsgValid: boolean = true;
-    if (!this.state.selectedUserMsg) {
+    if (!this.state.selectedUserMsg.trim().length) {
       errors.push('User Message');
       isMsgValid = false;
+      this.setState({
+        showErrorMessage: true
+      })
+    }
+    else {
+      this.setState({
+        showErrorMessage: false
+      })
+    }
+    let isDeptValid: boolean = true;
+    if (!this.state.selectedUserDepartment.trim().length) {
+      errors.push('Department');
+      isDeptValid = false;
+      this.setState({
+        showErrorDepartment: true
+      })
+    }
+    else {
+      this.setState({
+        showErrorDepartment: false
+      })
+    }
+    let isJobTitleValid: boolean = true;
+    if (!this.state.selectedUserJobTitle.trim().length) {
+      errors.push('Job Title');
+      isJobTitleValid = false;
+      this.setState({
+        showErrorJobTitle: true
+      })
+    }
+    else {
+      this.setState({
+        showErrorJobTitle: false
+      })
     }
 
     const phoneErrorNew = this.validatePhone(this.state.selectedUserPhone);
@@ -363,8 +465,8 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
         showErrorPhoneMsg: false
       });
     }
-
-    isValid = isPhoneValid && isMsgValid;
+    debugger
+    isValid = isPhoneValid && isMsgValid && isDeptValid && isJobTitleValid;
     if (!isValid) {
       const _error = errors.length > 1 ? 'Mandatory fields' : 'Mandatory field'
       const error = `${_error}: ${errors.join(', ')}`;
@@ -433,6 +535,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
     this.setState({
       showSuccessMsg: false
     });
+    window.location.reload();
   }
   private renderSuccessForm(): JSX.Element {
     return (

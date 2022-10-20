@@ -25,5 +25,8 @@ export interface ICareState {
     showErrorEmailMsg: boolean;
     showErrorExtnMsg: boolean;
     showErrorPhoneMsg: boolean;
+    showErrorMessage: boolean,
+    showErrorDepartment: boolean,
+    showErrorJobTitle: boolean,
     validationText: string;
 }
