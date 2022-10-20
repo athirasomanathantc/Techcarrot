@@ -917,7 +917,7 @@ input[type="radio"]:checked+label::after {
     color: #000;
 }
 
-.DayPicker-Day--holiday:not(.DayPicker-Day--outside):not(.DayPicker-Day--event):after {
+/* .DayPicker-Day--holiday:not(.DayPicker-Day--outside):not(.DayPicker-Day--event):after {
     content: '';
     display: inline-block;
     width: 5px;
@@ -930,7 +930,7 @@ input[type="radio"]:checked+label::after {
     bottom: 7px;
     left: 45%;
     transform: translate(0px, 0px);
-}
+} */
 
 .DayPicker-Day--event:not(.DayPicker-Day--outside) {
     color: #000;
