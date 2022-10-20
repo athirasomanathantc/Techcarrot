@@ -946,7 +946,8 @@ input[type="radio"]:checked+label::after {
 
 .DayPicker-Day--today,
 .DayPicker-Day--holiday,
-.DayPicker-Day--event {
+.DayPicker-Day--event,
+.DayPicker-Day--announcement {
     cursor: pointer !important;
 }
 
@@ -1145,6 +1146,7 @@ input[type="radio"]:checked+label::after {
     top: 4em; */
     /* left: 35%; */
 }
+
 /* 
 .DayPicker-Day--event .event {
     background-color: #c40d26;
