@@ -22,7 +22,7 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
     this.state = {
       contentItems: [],
       lastNavItem: '',
-      programID: ''
+      programID: '',
     }
   }
 
@@ -158,12 +158,27 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
                 <div id="ourServiceCarousel" className="carousel container our-service-carousel mt-5"
                   data-bs-ride="carousel"  data-bs-interval="false" data-bs-wrap="false">
                   <div className="carousel-inner w-100">
+                    
                     {
                       this.state.contentItems.map((items, i) => {
+                        debugger
+                        
                         const catVal = this.getQueryStringValue('categoryId');
-                        const navURL = `${this.props.siteUrl}/SitePages/Articles.aspx?serviceId=${items.ID}&env=WebView`;//items.NavigationUrl.Url;
+                        let navURL = `${this.props.siteUrl}/SitePages/Articles.aspx?serviceId=${items.ID}&env=WebView`;//items.NavigationUrl.Url;
+                        const article = items.isArticle;
+                        let trgt;
+                        if(article==true){
+                          navURL = `${this.props.siteUrl}/SitePages/Articles.aspx?serviceId=${items.ID}&env=WebView`;//items.NavigationUrl.Url;
+                          trgt = '_blank';
+                        }
+                        else
+                        {
+                          navURL = window.location.href;
+                          trgt = '_self'
+                        }
                         const imgVal = this.getImageUrl(items.ServiceIcon);
                         return (
+                          
                           <div className={i == 0 ? "carousel-item active" : "carousel-item"}>
                             <div className="col-md-3 m-2 h-100">
                               <div className="card  our-services">
@@ -171,7 +186,8 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
                                 <div className="card-body">
                                   <h4 className="card-title">{items.Title}</h4>
                                   <p className="card-description mb-4" dangerouslySetInnerHTML={{ __html: items.Description }}></p>
-                                  <a href={navURL} className="btn news-read-more mt-auto align-self-end">{items.NavigationText}</a>
+                                  
+                                  <a href={navURL} target={trgt} data-interception="off" className="btn news-read-more mt-auto align-self-end">{items.NavigationText}</a>
                                 </div>
                               </div>
                             </div>

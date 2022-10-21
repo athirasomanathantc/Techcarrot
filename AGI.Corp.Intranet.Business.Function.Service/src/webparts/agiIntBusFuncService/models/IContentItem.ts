@@ -7,4 +7,6 @@ export interface IContentItem {
     ServiceIcon: string;
     Business: string;
     Function: string;
+    isArticle: boolean;
+    target: string;
 }
