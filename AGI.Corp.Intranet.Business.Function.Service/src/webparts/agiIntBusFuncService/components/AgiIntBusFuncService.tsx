@@ -46,7 +46,8 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
     });
   }
 
-  private fnInitiate() {debugger;
+  private fnInitiate() {
+    debugger;
     var ourServiceCardCarousel = document.querySelector(
       "#ourServiceCarousel"
     );
@@ -55,14 +56,14 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
       //   interval: false,
       // });
       ourServiceCardCarousel.addEventListener('slide.bs.carousel', function () {
-  
+
         interval: false
       });
       var carouselWidth = $(".our-services .carousel-inner")[0].scrollWidth;
       var cardWidth = $(".our-services  .carousel-item").width();
       var scrollPosition = 0;
       $(".our-service-control-next").click(function () {
-    
+
         if (scrollPosition < carouselWidth - cardWidth * 4) {
           scrollPosition += cardWidth;
           $("#ourServiceCarousel .carousel-inner").animate(
@@ -136,49 +137,52 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
             <div className="container">
               <div className="row">
                 <div className='title-header'>
-                <div className="text-left text-lg-center">
-                  <h3 className="section-title">{this.props.listName}</h3>
+                  <div className="text-left text-lg-center">
+                    <h3 className="section-title">{this.props.listName}</h3>
 
-                </div>
-                <div className="align-self-end our-service-btn-control">
-                  <div className="button-container">
-                    <button className="carousel-control-prev our-service-control-prev" type="button" data-bs-target="#ourServiceCarousel"
-                      data-bs-slide="prev">
-                      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Previous</span>
-                    </button>
-                    <button className="carousel-control-next our-service-control-next" type="button" data-bs-target="#ourServiceCarousel"
-                      data-bs-slide="next">
-                      <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Next</span>
-                    </button>
+                  </div>
+                  <div className="align-self-end our-service-btn-control">
+                    <div className="button-container">
+                      <button className="carousel-control-prev our-service-control-prev" type="button" data-bs-target="#ourServiceCarousel"
+                        data-bs-slide="prev">
+                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span className="visually-hidden">Previous</span>
+                      </button>
+                      <button className="carousel-control-next our-service-control-next" type="button" data-bs-target="#ourServiceCarousel"
+                        data-bs-slide="next">
+                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span className="visually-hidden">Next</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-                </div>
                 <div id="ourServiceCarousel" className="carousel container our-service-carousel mt-5"
-                  data-bs-ride="carousel"  data-bs-interval="false" data-bs-wrap="false">
+                  data-bs-ride="carousel" data-bs-interval="false" data-bs-wrap="false">
                   <div className="carousel-inner w-100">
-                    
+
                     {
                       this.state.contentItems.map((items, i) => {
                         debugger
-                        
+
                         const catVal = this.getQueryStringValue('categoryId');
                         let navURL = `${this.props.siteUrl}/SitePages/Articles.aspx?serviceId=${items.ID}&env=WebView`;//items.NavigationUrl.Url;
                         const article = items.isArticle;
-                        let trgt;
-                        if(article==true){
+                        let trgt = '_self';
+                        // {article == true ? 
+                        // {navURL : `${this.props.siteUrl}/SitePages/Articles.aspx?serviceId=${items.ID}&env=WebView`, trgt : '_blank'} : 
+                        // {navURL : items.NavigationUrl.Url , trgt : '_self'}}
+                        if (article == true) {
                           navURL = `${this.props.siteUrl}/SitePages/Articles.aspx?serviceId=${items.ID}&env=WebView`;//items.NavigationUrl.Url;
-                          trgt = '_blank';
+                          trgt = '_self';
                         }
-                        else
-                        {
-                          navURL = window.location.href;
-                          trgt = '_self'
+                        else {
+                          const tempURL = items.NavigationUrl.Url;
+                          navURL = tempURL;
+                          trgt = '_blank'
                         }
                         const imgVal = this.getImageUrl(items.ServiceIcon);
                         return (
-                          
+
                           <div className={i == 0 ? "carousel-item active" : "carousel-item"}>
                             <div className="col-md-3 m-2 h-100">
                               <div className="card  our-services">
@@ -186,7 +190,7 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
                                 <div className="card-body">
                                   <h4 className="card-title">{items.Title}</h4>
                                   <p className="card-description mb-4" dangerouslySetInnerHTML={{ __html: items.Description }}></p>
-                                  
+
                                   <a href={navURL} target={trgt} data-interception="off" className="btn news-read-more mt-auto align-self-end">{items.NavigationText}</a>
                                 </div>
                               </div>
