@@ -70,7 +70,7 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
 
         eventItems.map((event) => {
             const endDate = this.getEventEndDate(event);
-            const dates = this.getDates(event.EventDate, endDate);
+            const dates = this.getDates(event.EventDate, endDate ? endDate : event.EventDate);
 
             if (event.Category == 'Holiday') {
                 dates.map((date) => {
