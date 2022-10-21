@@ -70,7 +70,7 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
 
         eventItems.map((event) => {
             const endDate = this.getEventEndDate(event);
-            const dates = this.getDates(event.EventDate, endDate);
+            const dates = this.getDates(event.EventDate, endDate ? endDate : event.EventDate);
 
             if (event.Category == 'Holiday') {
                 dates.map((date) => {
@@ -166,12 +166,12 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
             <div className="date-container">
                 <div className={isToday ? 'date-wrap' : ''}>
                     <span>{date}</span>
-                    {isToday && <span>
+                    {/* {isToday && <span>
                         {moment(day)
                             .format('dddd')
                             .substring(0, 3)
                             .toUpperCase()}
-                    </span>}
+                    </span>} */}
                 </div>
                 <div className="round-info-wrapp">
                     <span className="event"></span>

@@ -194,7 +194,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
                       <p id="errorJobTitle" className="errorMsgClass" style={{ display: this.state.showErrorJobTitle ? "block" : "none" }}>Job Title is required</p>
                     </div>
 
-                    <div className="mb-4 col-md-6">
+                    <div className="mb-4 col-md-6 BusinessUnit">
                       <label htmlFor="contactFormSubject" className="form-label">Business Unit</label>
                       <select className="form-select form-control" value={this.state.selectedUserBusinessUnit} onChange={(e) => this.handleBusinessUnitChange(e)}>
                         {
@@ -205,7 +205,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
 
                       </select>
                     </div>
-                    <div className="mb-4 col-md-6" style={{ display: this.state.showPhone ? "none" : "block" }}>
+                    <div className="mb-4 col-md-6 PhoneNo" style={{ display: this.state.showPhone ? "none" : "block" }}>
                       <label htmlFor="contactFormPhone" className="form-label">Phone</label>
                       <div className="d-flex">
                         <div className="col-6 col-md-3">
@@ -224,7 +224,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
                       </div>
                     </div>
 
-                    <div className="mb-4 col-md-12 msgBox">
+                    <div className="mt-5 mb-4 col-md-12 msgBox">
                       <label htmlFor="contactFormMessage" className="form-label">Submit</label>
                       <textarea className="form-control" placeholder="Write your message...." id="contactFormMessage" rows={4} value={this.state.selectedUserMsg} onChange={(e) => this.handleMsgChange(e)}></textarea>
                       <p id="errorMessage" className="errorMsgClass" style={{ display: this.state.showErrorMessage ? "block" : "none" }}>Message is required</p>
