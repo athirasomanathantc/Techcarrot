@@ -12,6 +12,13 @@ import { ISnap } from "../models/ISnap";
 import { ISocialMediaPost } from "../models/ISocialMediaPost";
 import { ISurveyOption } from "../models/ISurveyOption";
 import { ISurveyQuestion } from "../models/ISurveyQuestion";
+import { IQuizOption } from "../models/IQuizOptions";
+import { IQuizQuestion } from "../models/IQuizQuestion ";
+import { IQuizResponse } from "../models/IQuizResponse";
+//import { spfi } from "@pnp/sp";
+import "@pnp/sp/webs";
+import "@pnp/sp/folders";
+//const sp1 = spfi(...);
 
 export class SPService {
     private _props: IAgiIntranetHomeMainProps;
@@ -116,18 +123,138 @@ export class SPService {
                 throw new Error(exception);
             });
     }
+    /* public async getSurveyQuestions(): Promise<ISurveyQuestion[]> {
+         return await sp.web.lists.getByTitle('SurveyQuestions').items.select("Id,Title,SortOrder")
+             .top(this._props.topSurveyQuestions)
+             .orderBy("SortOrder", true)()
+             .then((items: ISurveyQuestion[]) => {
+                 return items;
+             })
+             .catch((exception) => {
+                 throw new Error(exception);
+             });
+     }
 
-    public async getSurveyOptions(): Promise<ISurveyOption[]> {
-        return await sp.web.lists.getByTitle('SurveyOptions').items.select("Id,Title,Question/Title,Question/Id")
-            .top(5000)
-            .expand("Question")()
-            .then((items: ISurveyOption[]) => {
+     public async getSurveyOptions(): Promise<ISurveyOption[]> {
+         return await sp.web.lists.getByTitle('SurveyOptions').items.select("Id,Title,Question/Title,Question/Id")
+             .top(5000)
+             .expand("Question")()
+             .then((items: ISurveyOption[]) => {
+                 return items;
+             })
+             .catch((exception) => {
+                 throw new Error(exception);
+             });
+     }*/
+
+    public async getQuizQuestions(): Promise<IQuizQuestion[]> {
+        return await sp.web.lists.getByTitle('SurveyQuestions').items.select("Id,Title,SortOrder")
+            .top(this._props.topSurveyQuestions)
+            .orderBy("SortOrder", true)()
+            .then((items: IQuizQuestion[]) => {
                 return items;
             })
             .catch((exception) => {
                 throw new Error(exception);
             });
     }
+
+    public async getQuizOptions(): Promise<IQuizOption[]> {
+        return await sp.web.lists.getByTitle('SurveyOptions').items.select("Id,Title,Question/Title,Question/Id,CorrectOption")
+            .top(5000)
+            .expand("Question")()
+            .then((items: IQuizOption[]) => {
+                return items;
+            })
+            .catch((exception) => {
+                throw new Error(exception);
+            });
+    }
+    public async submitQuiz(quiz: any) {
+        if (quiz != null) {
+            if (!quiz.submitted) {
+                const userEmail = this._props.context.pageContext.legacyPageContext.userEmail;
+                //Create a folder if not present already
+                await sp.web.lists.getByTitle("SurveyResponses").items
+                    .add({ Title: userEmail, ContentTypeId: "0x0120" }).then(async result => {
+                        await result.item.update({
+                            Title: userEmail,
+                            FileLeafRef: `/${userEmail}`
+                        });
+                        quiz.submitted = true;
+                        const response = this.createResponse(quiz.responses);
+                        return response.then((result) => {
+                            return true
+                        })
+                    })
+                    .catch(function (err) {
+                        console.log('first folder creation', err);
+                    });
+            }
+            else {
+                const response = this.createResponse(quiz.responses);
+                return response.then((result) => {
+                    return true
+                })
+            }
+
+        }
+    }
+
+    private createResponse(responses): Promise<any[]> {
+        return new Promise((resolve, reject) => {
+            let promises: Promise<any>[] = [];
+            const _spPageContextInfo = this._props.context.pageContext.legacyPageContext;
+            const webUrl = _spPageContextInfo.webAbsoluteUrl;
+            const listPath = webUrl + "/Lists/SurveyResponses";
+            let folderName;
+            let promise;
+
+            responses.forEach((response) => {
+                folderName = response.UserEmail;
+                promise = sp.site.rootWeb.lists.getByTitle("SurveyResponses").addValidateUpdateItemUsingPath([
+                    { FieldName: 'Title', FieldValue: response.Title },
+                    { FieldName: 'QuestionId', FieldValue: String(response.QuestionId) },
+                    { FieldName: 'Option', FieldValue: response.Option },
+                    { FieldName: 'OptionId', FieldValue: String(response.OptionId) },
+                    { FieldName: 'UserEmail', FieldValue: response.UserEmail },
+                    { FieldName: 'UserId', FieldValue: String(response.UserId) }
+                ]
+                    , `${listPath}/${folderName}`);
+                promises.push(promise);
+            })
+
+            Promise.all(promises).then(result => {
+                resolve(result);
+            }).catch((exception) => {
+                reject(exception)
+            });
+        });
+    }
+
+    public async checkSubmitted(email: any): Promise<any> {
+
+        //let isExists = false;
+        return await sp.web.lists.getByTitle('SurveyResponses').rootFolder.folders.getByName(email).get().then((data) => {
+
+            console.log("folders", data);
+            if (data) {
+                return true;
+            } else {
+                return false;
+            }
+        }).catch((exception) => {
+            if ({ data: exception.message == 'File Not Found' }) {
+                return false;
+                console.log('excep', exception);
+            }
+            else {
+                throw new Error(exception);
+            }
+        });
+        //return isExists;
+    }
+
 
     public async getListGuid(listname: string) {
         return await sp.web.lists.getByTitle(listname)()
@@ -138,6 +265,42 @@ export class SPService {
                 throw new Error(exception);
             });
     }
+    public async getData(email: any): Promise<any> {
+        const listName = 'SurveyResponses';
+
+        const list = sp.web.lists.getByTitle(listName);
+
+        // Get list's root folders and their items' props
+        return await list.items.filter(`FSObjType eq 0`).get()
+            .then((folders:IQuizResponse[]) => {
+                return folders;
+                //console.log("folder items", folders)
+            })
+            .catch(console.error);
+        // ///......................
+        //         return await sp.web.lists.getByTitle(listName).select('*')
+        //     .rootFolder.folders
+        //         .filter('ListItemAllFields/Id ne null')
+        //         .expand('ListItemAllFields')
+        //         .get()
+        //         .then((folders) =>{
+        //             console.log("folder items",folders)
+        //             return folders
+
+        //         })
+        //         .catch(console.error);
+        // return await sp.web.lists.getByTitle(listname)()
+        //     .then((response: IListInfo) => {
+        //         return response.Id;
+        //     })
+        //     .catch((exception) => {
+        //         throw new Error(exception);
+        //     });
+    }
+
+
+
+
 
 }
 
