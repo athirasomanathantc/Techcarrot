@@ -417,7 +417,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                                     <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i>{moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
                                   </div>
                                   <p className={'card-text mt-2'}>{item.Description}</p>
-                                  <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">Read more</a>
+                                  <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}&env=WebView`} className={'news-read-more  align-self-start'} data-interception="off">Read more</a>
                                 </div>
                               </div>
                             </div>
