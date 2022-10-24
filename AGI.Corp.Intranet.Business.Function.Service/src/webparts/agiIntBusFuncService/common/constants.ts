@@ -8,7 +8,8 @@ export const NULL_CONTENT_ITEM = {
     NavigationUrl: {Url: ''},
     ServiceIcon: '',
     Business: '',
-    Function: ''
+    Function: '',
+    isArticle: ''
 }
 
 //export const TEXT_FDP_CAROUSEL_HOME = 'Home';

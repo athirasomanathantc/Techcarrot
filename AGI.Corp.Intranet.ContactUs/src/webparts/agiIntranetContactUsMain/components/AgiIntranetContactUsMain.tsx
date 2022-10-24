@@ -195,7 +195,8 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
                             {
                               itemGroup.map((item: IContactUsTalk2UsItem) => {
                                 let icon = JSON.parse(item.Icon);
-                                icon = `${icon?.serverUrl}${icon?.serverRelativeUrl}`
+                                icon = `${icon?.serverUrl}${icon?.serverRelativeUrl}`;
+                                const tempTitle: any = item.Title;
                                 return (
                                   <div className="col-lg-6 d-flex align-items-center">
                                     <div className="icon me-3">
@@ -203,7 +204,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
                                     </div>
                                     <div className="">
                                       <h6>{item.Title}</h6>
-                                      <p>{ReactHtmlParser(item.Detail)}</p>
+                                      {(tempTitle == 'Ask John') || (tempTitle == "iCare") ? <div><input type="button" value="Click here" className="btn btn-gradient btn-lg btn-hover btn-view-more mt-3" onClick={() => this.handleRedirection(tempTitle)} /></div> : <p>{ReactHtmlParser(item.Detail)}</p>}
                                     </div>
                                   </div>
                                 )
@@ -361,6 +362,11 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
     }).catch((error) => {
       console.log('Registration failed', error);
     });
+  }
+
+  private handleRedirection(pageName) {
+    const tempURl = `${this.props.siteUrl}/SitePages/${pageName}.aspx`;
+    window.open(tempURl, '_blank');
   }
 
   private validateForm(): boolean {
