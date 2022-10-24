@@ -309,16 +309,18 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                                 <img src={imageUrl} className="img-fluid" />
                               </div>
                               <div className="card-body d-flex flex-column">
-                                <div className="mb-3 card-content-header">
+                                <div className={'category'}>
+                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i>{category}</span>
+                                </div>
+
+                                <div className={'mb-2 mt-2 card-content-header'}>
                                   <h5 className="card-title">{item.Title}</h5>
                                 </div>
-                                <div className="news-details">
-                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date.svg`} alt="" /></i> {moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
-                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {category}</span>
-
+                                <div className={'date'}>
+                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i>{moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
                                 </div>
-                                <p className="card-text">{item.Description}</p>
-                                <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}&env=WebView`} className="btn news-read-more  align-self-start">Read more</a>
+                                <p className={'card-text mt-2'}>{item.Description}</p>
+                                <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}&env=WebView`} className={'news-read-more  align-self-start'}>Read more</a>
                               </div>
                             </div>
                           </div>
