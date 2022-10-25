@@ -5,7 +5,7 @@ export interface IAnnouncementData {
     Summary: string;
     AnnouncementImage: string;
     AnnouncementThumbnail: string;
-    PublishedDate: Date;
+    PublishedDate: string;
     Functions: {
         ID: number;
         Title: String;
@@ -15,4 +15,6 @@ export interface IAnnouncementData {
         Title: String;
     };
     Location: string;
+    Featured: boolean;
+    Modified: string;
 }
