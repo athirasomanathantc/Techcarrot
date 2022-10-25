@@ -33,8 +33,8 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
       showBusinessData: true,
       selectedOption: {
         ID: 0
-      }
-
+      },
+      featuredTitle: ''
     }
   }
 
@@ -44,9 +44,24 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
+    await this.getConfigItems();
     await this.getblog().then(() => {
       this.setDefaultFilter();
     });
+  }
+
+  private getConfigItems() {
+    const listName = "IntranetConfig";
+    sp.web.lists.getByTitle(listName).items.select('ID,Title,Detail').filter("Title eq 'FeaturedBlogs'").get()
+      .then((response: any[]) => {
+        this.setState({
+          featuredTitle: response[0]?.Detail
+        });
+
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
   }
 
   private setDefaultFilter() {
@@ -258,7 +273,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
             <div className="row title-wrapper">
               <div className="main-header-section">
                 <div className="col-12">
-                  <h3>Featured Blogs</h3>
+                  <h3>{this.state.featuredTitle}</h3>
                 </div>
 
               </div>

@@ -34,4 +34,14 @@ export class SPService {
                 return items;
             });
     }
+
+    public async getConfigItems(): Promise<string> {
+        const listName = 'IntranetConfig';
+        return await sp.web.lists.getByTitle(listName).items
+            .filter("Title eq 'FeaturedAnnouncements'")
+            .select("ID,Title,Detail")
+            .top(1)().then((items: any[]) => {
+                return items[0]?.Detail;
+            });
+    }
 }

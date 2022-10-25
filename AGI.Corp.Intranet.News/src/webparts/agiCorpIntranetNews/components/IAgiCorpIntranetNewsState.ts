@@ -18,5 +18,6 @@ export interface IAgiCorpIntranetNewsState {
   showBusinessData: boolean;
   selectedOption: {
     ID: number;
-  }
+  },
+  featuredTitle: string;
 }

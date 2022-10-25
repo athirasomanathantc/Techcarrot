@@ -38,7 +38,8 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
       showBusinessData: true,
       selectedOption: {
         ID: 0
-      }
+      },
+      featuredTitle: ''
     }
   }
 
@@ -84,9 +85,29 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
+    await this.getConfigItems();
     await this.getNewsItems().then(() => {
       this.setDefaultFilter();
     });
+  }
+
+  private getConfigItems() {
+    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('IntranetConfig')/items?$filter=(Title eq 'FeaturedNews')&$top=1`;
+    this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+      .then((response: SPHttpClientResponse) => {
+        return response.json();
+      })
+      .then((response) => {
+        const items = response.value;
+
+        this.setState({
+          featuredTitle: items[0]?.Detail
+        });
+
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
   }
 
   private setDefaultFilter() {
@@ -285,7 +306,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
             <div className="row title-wrapper">
               <div className="main-header-section">
                 <div className="col-12">
-                  <h3>Featured News</h3>
+                  <h3>{this.state.featuredTitle}</h3>
                 </div>
 
               </div>
