@@ -177,45 +177,39 @@ export class SPService {
             debugger;
             if (!quiz.submitted) {
 
+                
                 const userEmail = this._props.context.pageContext.legacyPageContext.userEmail;
-                const folder=`this._props.siteUrl/SurveyResponses/${userEmail}}`;
-
                 //delete a folder if not present already
                  /*await sp.web.lists.getByTitle("SurveyResponses").rootFolder.folders.getByName(userEmail).delete()
                  .then((data)=>{
                      console.log(data);
                  })*/
-
-                  //Create a folder if not present already
-                        await sp.web.lists.getByTitle("SurveyResponses").items
-                            .add({ Title: userEmail, ContentTypeId: "0x0120"}).then(async result => {
-                                console.log('result',result)
-                                await result.item.update({
-                                    Title: userEmail,
-                                    FileLeafRef: `/${userEmail}`
-                                    
-                                })
-                                
-                                
-                                quiz.submitted = true;
-                                const response = this.createResponse(quiz.responses);
-                                return response.then((result) => {
-                                    return true
-                                })
-                            })
-                            .catch(function (err) {
-                                console.log('first folder creation', err);
-                            });
-                    }
+                //Create a folder if not present already
+                await sp.web.lists.getByTitle("SurveyResponses").items
+                    .add({ Title: userEmail, ContentTypeId: "0x0120" }).then(async result => {
+                        await result.item.update({
+                            Title: userEmail,
+                            FileLeafRef: `/${userEmail}`
+                        });
+                        quiz.submitted = true;
+                        const response = this.createResponse(quiz.responses);
+                        return response.then((result) => {
+                            return true
+                        })
+                    })
+                    .catch(function (err) {
+                        console.log('first folder creation', err);
+                    });
+            }
             else {
-                            const response = this.createResponse(quiz.responses);
-                            return response.then((result) => {
-                                return true
-                            })
-                        }
+                const response = this.createResponse(quiz.responses);
+                return response.then((result) => {
+                    return true
+                })
+            }
 
         }
-        }
+    }
 
     private createResponse(responses): Promise<any[]> {
         let date = moment(new Date());
@@ -237,7 +231,7 @@ export class SPService {
                     { FieldName: 'OptionId', FieldValue: String(response.OptionId) },
                     { FieldName: 'UserEmail', FieldValue: folderName },
                     { FieldName: 'UserId', FieldValue: String(response.UserId) },
-                    { FieldName: 'SubmittedDate', FieldValue: date }
+                    //{ FieldName: 'SubmittedDate', FieldValue: date }
                 ]
                     , `${listPath}/${folderName}`);
                 promises.push(promise);
@@ -290,7 +284,7 @@ export class SPService {
         const list = sp.web.lists.getByTitle(listName);
 
         // Get list's root folders and their items' props
-        return await list.items.filter(`FSObjType eq 0`).get()
+        return await sp.web.lists.getByTitle(listName).items.filter(`FSObjType eq 0`).orderBy('ID',false).top(3).get()
             .then((folders: IQuizResponse[]) => {
                 console.log("folder items", folders)
                 return folders;
