@@ -12,6 +12,7 @@ import { ISocialLink } from "../../models/ISocialLinkItem";
 import { OrgModal } from "../OrganizationChart/OrgModal/OrgModal";
 import { IFunctionItem } from "../../models";
 import { IBusinessItem } from "../../models";
+import IntranetLastLogin from "../LastLogin/LastLogin";
 
 const menuIcon: IIconProps = { iconName: 'GlobalNavButton' };
 const closeIcon: IIconProps = { iconName: 'Cancel' };
@@ -502,6 +503,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
             {...this.props}
             closeModal={() => this.closeModal()}
           ></OrgModal>}
+          <IntranetLastLogin siteUrl={this.props.siteUrl} context={this.props.context} spHttpClient={this.props.context} ></IntranetLastLogin>
         </header>
       </>
     );

@@ -3,4 +3,6 @@ export interface IConfigItem {
     Title: string;
     Image?: string;
     Detail: string;
+    Message?: string;
+    Interval?: number;
 }
