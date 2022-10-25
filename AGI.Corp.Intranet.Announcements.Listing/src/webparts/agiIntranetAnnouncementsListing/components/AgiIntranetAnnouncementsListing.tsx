@@ -267,7 +267,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
                     })
                   }
                   {
-                    !this.state.featuredAnnouncements.length && <h5>No items found</h5>
+                    !this.state.featuredAnnouncements.length && <h5 className="not-found">No items found</h5>
                   }
 
                 </div>

@@ -299,7 +299,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                     })
                   }
                   {
-                    !this.state.featuredBlogs.length && <h5>No items found</h5>
+                    !this.state.featuredBlogs.length && <h5 className="not-found">No items found</h5>
                   }
 
                 </div>

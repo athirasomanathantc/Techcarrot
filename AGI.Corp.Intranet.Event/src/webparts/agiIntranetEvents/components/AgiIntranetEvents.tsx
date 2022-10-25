@@ -480,7 +480,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
                     })
                   }
                   {
-                    !this.state.featuredEvents.length && <h5>No items found</h5>
+                    !this.state.featuredEvents.length && <h5 className="not-found">No items found</h5>
                   }
                 </div>
                 <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
