@@ -152,8 +152,8 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
 
     }
 
-    const onSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.preventDefault();
+    const onSubmit = async () => {
+       // e.preventDefault();
         let score = await _spService.CalculateScore(quiz.responses, quiz.options);
         // debugger;
         // quiz.responses.map((response) => {
@@ -190,7 +190,7 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
             }
         } )
         .then(()=>{
-            //window.location.reload();
+            window.location.reload();
         })
         .catch((exception) => {
             setError(exception)
@@ -202,7 +202,7 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
     if (error) {
         throw error;
     }
-    const onRetest = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const onRetest = async () => {
 
 
       
@@ -305,9 +305,9 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
                                                     transform="translate(-13 -3)" fill="#9d0e71" />
                                             </svg></i>
                                         </button>
-                                        <button id="submit-btn" type="submit" className={questions.length === currentQuestion.question.SortOrder ? '' : 'd-none'} onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onSubmit(e)}>Submit</button>
+                                        <a href="javascript:void(0)" id="submit-btn"  className={questions.length === currentQuestion.question.SortOrder ? 'btn btn-lg btn-gradient ms-3' : 'd-none '} onClick={() => onSubmit()}>Submit</a>
                                     </>}
-                                    {!retest && <button id="submit-btn" type="button" className={submitted ? '' : 'd-none'} onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onRetest(e)}>Retest</button>}
+                                    {(!retest&&quiz.submitted) && <a href="javascript:void(0)" id="submit-btn" type="button" className={ submitted?'btn btn-lg btn-gradient ms-3':"d-none"} onClick={() => onRetest()}>Retest</a>}
                                 </div>
 
                                 {/* <img src={`${props.siteUrl}/assets/images/quiz-icon.svg`} />
