@@ -177,7 +177,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
     return items.filter((item) => item.Featured).sort((a, b) => {
       dateA = a.StartDate || a.Modified;
       dateB = b.StartDate || b.Modified;
-      return (new Date(dateB).getTime() - new Date(dateA).getTime())
+      return (new Date(dateA).getTime() - new Date(dateB).getTime())
     }).slice(0, 4)
   }
 
@@ -220,7 +220,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
           this.setState({
             eventsData: items,
-            featuredEvents: this.getFeaturedEvents(items),
+            featuredEvents: this.getFeaturedEvents(upcoming),
             filterData: upcoming,
             selectedTab: "Upcoming Events",
             upcomingEvents: upcoming,
