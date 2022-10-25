@@ -1,6 +1,7 @@
 import { IEventData } from '../Model/IEventData';
 export interface IAgiIntranetEventsStates {
   eventsData: IEventData[];
+  featuredEvents: IEventData[];
   currentPage: number;
   totalPage: number;
   pageSize: number;
