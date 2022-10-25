@@ -21,3 +21,6 @@ export const NULL_SELECTED_ITEM = {
         Author: { Title: '', ID: 0 }
     }
 
+
+export const MEDIA_PER_PAGE = 16;
+
