@@ -21,9 +21,10 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
         options: [],
         responses: [],
         scores: 0,
-        submitted: false
+        submitted: false,
     });
     const [showResult, setShowResult] = useState(false);
+    const [retest,setRetest]=useState(false);
 
     const _spService = new SPService(props);
     siteUrl = props.siteUrl;
@@ -32,17 +33,13 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
     useEffect(() => {
         // const func2 = async () => { _spService.checkSubmitted(props.context.pageContext.legacyPageContext.userEmail) };
         // let submit:boolean= await _spService.checkSubmitted(props.context.pageContext.legacyPageContext.userEmail);
-        const getLatestNews = async () => {
+        const getQuizDetails = async () => {
             // let submit = await func2();
-            let givenAns: IQuizResponse[];
+           
             let submit: boolean = await _spService.checkSubmitted(props.context.pageContext.legacyPageContext.userEmail);
-            //console.log('submitted', submit)
-            if(submit){
-                givenAns=await _spService.getData(props.context.pageContext.legacyPageContext.userEmail);
-            }
-            
             let questions: IQuizQuestion[] = await _spService.getQuizQuestions();
             let options: IQuizOption[] = await _spService.getQuizOptions();
+            
             if (questions.length > 0) {
                 setQuiz({
                     ...quiz,
@@ -64,19 +61,46 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
                     }),
                     submitted: submit
                 });
-            }
-             if(submit){
-                let resp=await _spService.getData(props.context.pageContext.legacyPageContext.userEmail);
                 
-        
-             }
-            console.log(quiz.submitted);
+                console.log('reset',retest);
+            }
+
+            
+
         }
-        getLatestNews().catch((error) => {
+        getQuizDetails().catch((error) => {
             setError(error);
         })
     }, [])
 
+    useEffect(() => {
+        const getQuizCalc = async () => {
+            const { options, submitted, } = quiz;
+            
+            if (submitted) {
+
+                let givenAns = await _spService.getData(props.context.pageContext.legacyPageContext.userEmail);
+                console.log('Given ans', givenAns);
+                //debugger;
+                let score = await _spService.CalculateScore(givenAns, quiz.options);
+
+                console.log("score after reload", score);
+                setQuiz({
+                    ...quiz,
+                    scores:score,
+                    submitted:submitted
+                });
+                if(!retest && submitted)
+                    setShowResult(true);
+            }
+            console.log('submitted', quiz.submitted);
+            
+        }
+        getQuizCalc().catch((error) => {
+            setError(error);
+        })
+    }, [quiz.options])
+    
     const moveNext = (index: number) => {
         setQuiz({
             ...quiz,
@@ -130,42 +154,62 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
 
     const onSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
-        quiz.responses.map((response) => {
-            const ans: IQuizOption[] = quiz.options.filter((option: IQuizOption) => {
-                if (option.Question.Id === response.QuestionId && option.CorrectOption == true) {
-                    return option;
-                }
+        let score = await _spService.CalculateScore(quiz.responses, quiz.options);
+        // debugger;
+        // quiz.responses.map((response) => {
+        //     const ans: IQuizOption[] = quiz.options.filter((option: IQuizOption) => {
+        //         if (option.Question.Id === response.QuestionId && option.CorrectOption == true) {
+        //             return option;
+        //         }
 
-            })
-            if (response.OptionId == ans[0].Id) {
-                quiz.scores++;
-            }
-        })
-        console.log('score:', quiz.scores);
+        //     })
+        //     if (response.OptionId == ans[0].Id) {
+        //         score++;
+        //     }
+            
+        // })
         setQuiz({
             ...quiz,
-            //submitted: true
-        });
-        console.log('quiz', quiz);
-        const quizSubmitted = await _spService.submitQuiz(quiz).catch((exception)=>{
+            scores:score
+        })
+        // console.log('score:', quiz.scores);
+        
+        // console.log('quiz', quiz);
+        debugger;
+        const quizSubmitted = await _spService.submitQuiz(quiz)
+        .then((value)=>{
+            
+            if (value) {
+                setQuiz({
+                    ...quiz,
+                    submitted: true,
+                    scores:score
+                });
+                setShowResult(true);
+                setRetest(false);
+            }
+        } )
+        .then(()=>{
+            //window.location.reload();
+        })
+        .catch((exception) => {
             setError(exception)
         });
-        if (quizSubmitted) {
-            setShowResult(true);
-        }
+        
+        
     }
 
     if (error) {
         throw error;
     }
     const onRetest = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+
+
+      
+    setShowResult(false);
+    setRetest(true);
+   
         
-        
-        setQuiz({
-            ...quiz,
-            submitted: false
-        });
-       
     }
 
     return (<>
@@ -198,7 +242,7 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
                             <form className="needs-validation" id="form-wrapper" method="post"
                                 name="form-wrapper" >
                                 <div id="steps-container">
-                                    {!quiz.submitted && <div className="step d-block">
+                                    {(!quiz.submitted || retest) &&  <div className="step d-block">
                                         <h4>{quiz.currentQuestion.question.Title}</h4>
                                         <div className="form-check ps-0 q-box">
                                             {
@@ -225,45 +269,45 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
 
                                 </div>
                                 <div id="q-box__buttons">
-                                    {!quiz.submitted &&<> 
-                                    <button id="prev-btn" type="button" className={currentQuestion.question.SortOrder === 1 ? 'd-none' : ''} onClick={() => movePrev(currentQuestion.question.SortOrder - 2)}>
-                                        <i><svg id="Group_8057" data-name="Group 8057"
-                                            xmlns="http://www.w3.org/2000/svg" width="30"
-                                            height="30" viewBox="0 0 30 30">
-                                            <g id="Ellipse_76" data-name="Ellipse 76"
-                                                fill="rgba(157,14,113,0.05)"
-                                                stroke="rgba(112,112,112,0.04)"
-                                                stroke-width="1">
-                                                <circle cx="15" cy="15" r="15" stroke="none" />
-                                                <circle cx="15" cy="15" r="14.5" fill="none" />
-                                            </g>
-                                            <path id="Path_73923" data-name="Path 73923"
-                                                d="M30.211,13.153a.56.56,0,1,1,.768.814l-4.605,4.35,4.605,4.35a.56.56,0,1,1-.768.814l-5.036-4.756a.56.56,0,0,1,0-.814l5.036-4.756Z"
-                                                transform="translate(-13.155 -3)"
-                                                fill="#9d0e71" />
-                                        </svg>
-                                        </i>
-                                        Previous
-                                    </button>
-                                    <button id="next-btn" type="button" className={questions.length === currentQuestion.question.SortOrder ? 'd-none' : 'd-inline-block'} onClick={() => moveNext(currentQuestion.question.SortOrder)}>Next
-                                        <i><svg id="Group_8056" data-name="Group 8056"
-                                            xmlns="http://www.w3.org/2000/svg" width="30"
-                                            height="30" viewBox="0 0 30 30">
-                                            <g id="Ellipse_76" data-name="Ellipse 76"
-                                                fill="rgba(157,14,113,0.05)"
-                                                stroke="rgba(112,112,112,0.04)"
-                                                stroke-width="1">
-                                                <circle cx="15" cy="15" r="15" stroke="none" />
-                                                <circle cx="15" cy="15" r="14.5" fill="none" />
-                                            </g>
-                                            <path id="Path_73923" data-name="Path 73923"
-                                                d="M25.944,13.153a.56.56,0,1,0-.768.814l4.605,4.35-4.605,4.35a.56.56,0,1,0,.768.814l5.036-4.756a.56.56,0,0,0,0-.814l-5.036-4.756Z"
-                                                transform="translate(-13 -3)" fill="#9d0e71" />
-                                        </svg></i>
-                                    </button>
-                                    <button id="submit-btn" type="submit" className={questions.length === currentQuestion.question.SortOrder ? '' : 'd-none'} onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onSubmit(e)}>Submit</button>
+                                    {(!quiz.submitted || retest)&& <>
+                                        <button id="prev-btn" type="button" className={currentQuestion.question.SortOrder === 1 ? 'd-none' : ''} onClick={() => movePrev(currentQuestion.question.SortOrder - 2)}>
+                                            <i><svg id="Group_8057" data-name="Group 8057"
+                                                xmlns="http://www.w3.org/2000/svg" width="30"
+                                                height="30" viewBox="0 0 30 30">
+                                                <g id="Ellipse_76" data-name="Ellipse 76"
+                                                    fill="rgba(157,14,113,0.05)"
+                                                    stroke="rgba(112,112,112,0.04)"
+                                                    stroke-width="1">
+                                                    <circle cx="15" cy="15" r="15" stroke="none" />
+                                                    <circle cx="15" cy="15" r="14.5" fill="none" />
+                                                </g>
+                                                <path id="Path_73923" data-name="Path 73923"
+                                                    d="M30.211,13.153a.56.56,0,1,1,.768.814l-4.605,4.35,4.605,4.35a.56.56,0,1,1-.768.814l-5.036-4.756a.56.56,0,0,1,0-.814l5.036-4.756Z"
+                                                    transform="translate(-13.155 -3)"
+                                                    fill="#9d0e71" />
+                                            </svg>
+                                            </i>
+                                            Previous
+                                        </button>
+                                        <button id="next-btn" type="button" className={questions.length === currentQuestion.question.SortOrder ? 'd-none' : 'd-inline-block'} onClick={() => moveNext(currentQuestion.question.SortOrder)}>Next
+                                            <i><svg id="Group_8056" data-name="Group 8056"
+                                                xmlns="http://www.w3.org/2000/svg" width="30"
+                                                height="30" viewBox="0 0 30 30">
+                                                <g id="Ellipse_76" data-name="Ellipse 76"
+                                                    fill="rgba(157,14,113,0.05)"
+                                                    stroke="rgba(112,112,112,0.04)"
+                                                    stroke-width="1">
+                                                    <circle cx="15" cy="15" r="15" stroke="none" />
+                                                    <circle cx="15" cy="15" r="14.5" fill="none" />
+                                                </g>
+                                                <path id="Path_73923" data-name="Path 73923"
+                                                    d="M25.944,13.153a.56.56,0,1,0-.768.814l4.605,4.35-4.605,4.35a.56.56,0,1,0,.768.814l5.036-4.756a.56.56,0,0,0,0-.814l-5.036-4.756Z"
+                                                    transform="translate(-13 -3)" fill="#9d0e71" />
+                                            </svg></i>
+                                        </button>
+                                        <button id="submit-btn" type="submit" className={questions.length === currentQuestion.question.SortOrder ? '' : 'd-none'} onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onSubmit(e)}>Submit</button>
                                     </>}
-                                    {quiz.submitted && <button id="submit-btn" type="submit" className={submitted ? '' : 'd-none'} onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onRetest(e)}>Retest</button>}
+                                    {!retest && <button id="submit-btn" type="button" className={submitted ? '' : 'd-none'} onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onRetest(e)}>Retest</button>}
                                 </div>
 
                                 {/* <img src={`${props.siteUrl}/assets/images/quiz-icon.svg`} />
