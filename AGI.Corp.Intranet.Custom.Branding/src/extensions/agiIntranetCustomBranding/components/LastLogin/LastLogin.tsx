@@ -135,7 +135,7 @@ export default class LastLogin extends React.Component<LastLoginProps, LastLogin
               <div className='msgSuccess'>
                 {this.state.successMsg}
               </div>
-              <div className="btn-Agree">
+              <div className="btn-Agree float-end">
                 <input type="button" value={this.state.btnValue} className="btn btn-gradient btn-lg btn-hover btn-view-more mt-3" onClick={(e) => this.handleCloseSuccessForm(e)} />
               </div>
             </div>
