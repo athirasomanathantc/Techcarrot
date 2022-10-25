@@ -1,0 +1,12 @@
+.listWebpartContainer {
+    margin-bottom:70px;
+  }
+  
+.galleryBackNavigation .tab-header {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+[data-automation-id="webPartHeader"] {
+    display: none;
+}
