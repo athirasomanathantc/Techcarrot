@@ -266,6 +266,9 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
                       )
                     })
                   }
+                  {
+                    !this.state.featuredAnnouncements.length && <h5>No items found</h5>
+                  }
 
                 </div>
                 <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"

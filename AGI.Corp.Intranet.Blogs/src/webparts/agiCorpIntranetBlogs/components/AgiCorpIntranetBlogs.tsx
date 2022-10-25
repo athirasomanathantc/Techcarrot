@@ -298,6 +298,9 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                       )
                     })
                   }
+                  {
+                    !this.state.featuredBlogs.length && <h5>No items found</h5>
+                  }
 
                 </div>
                 <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
