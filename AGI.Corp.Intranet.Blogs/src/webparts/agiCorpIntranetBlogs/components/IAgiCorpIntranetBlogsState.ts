@@ -2,6 +2,7 @@ import { IBlogData } from '../Model/IBlogData'
 export interface IAgiCorpIntranetBlogsState {
   blogData: IBlogData[];
   filterData: IBlogData[];
+  featuredBlogs: IBlogData[];
   filterValuesBusiness: {
     ID: number,
     Title: string
