@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-intranet-gallery-explorer-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiIntranetGalleryExplorer/AgiIntranetGalleryExplorerWebPart.js",
+          "manifest": "./src/webparts/agiIntranetGalleryExplorer/AgiIntranetGalleryExplorerWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiIntranetGalleryExplorerWebPartStrings": "lib/webparts/agiIntranetGalleryExplorer/loc/{locale}.js"
+  }
+}
