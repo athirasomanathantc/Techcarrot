@@ -2,6 +2,7 @@ export interface INewsData {
     ID: string;
     Title: string;
     PublishedDate: string;
+    Modified: string;
     Description: string;
     Summary: string;
     NewsThumbnail: string;
@@ -13,5 +14,6 @@ export interface INewsData {
     Functions: {
         ID: number,
         Title: string
-    }
+    },
+    Featured: boolean
 }
