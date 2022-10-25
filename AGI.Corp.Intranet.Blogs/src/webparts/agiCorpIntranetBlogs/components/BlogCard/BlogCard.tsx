@@ -29,15 +29,14 @@ const BlogCard = (props: IBLogCard) => {
                 <div className={'category'}>
                     <span><i><img src={`${siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {category}</span>
                 </div>
-                <a href={`${siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">
-                    <div className={'mb-2 mt-2 card-content-header'}>
-                        <h5 className={'card-title'}>{item.Title}</h5>
-                    </div>
-                    <div className={'date'}>
-                        <span><i><img src={`${siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i> {moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
-                    </div>
-                    <p className={'card-text mt-2'}><i><img src={`${siteUrl}/Assets/icons/avatar.png`} alt="" /></i> <span>{item.Author.Title}</span></p>
-                </a>
+                {/* <a href={`${siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'align-self-start'} data-interception="off"></a> */}
+                <div className={'mb-2 mt-2 card-content-header'}>
+                    <h5 className={'card-title'}>{item.Title}</h5>
+                </div>
+                <div className={'date'}>
+                    <span><i><img src={`${siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i> {moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
+                </div>
+                <p className={'card-text mt-2'}><i><img src={`${siteUrl}/Assets/icons/avatar.png`} alt="" /></i> <span>{item.Author.Title}</span></p>
             </div>
         </div>
     )
