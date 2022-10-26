@@ -31,7 +31,8 @@ export default class LastLogin extends React.Component<LastLoginProps, LastLogin
       loginVal: "",
       configDetails: [],
       successMsg: "",
-      btnValue: ""
+      btnValue: "",
+      isChecked: false
     }
   }
 
@@ -96,7 +97,7 @@ export default class LastLogin extends React.Component<LastLoginProps, LastLogin
       loginVal: _lastLoginDetail[0].Title,
       successMsg: _lastLoginDetail[0].Message,
       btnValue: _lastLoginDetail[0].Detail,
-      showSuccessMsg: true
+      //  showSuccessMsg: true
     }) : this.setState({
       loginVal: _lastLoginDetail[0].Title,
       btnValue: _lastLoginDetail[0].Detail,
@@ -126,17 +127,27 @@ export default class LastLogin extends React.Component<LastLoginProps, LastLogin
     });
   }
 
+  private handleCheckBox() {
+    var isChecked = document.getElementById('chk-Agree') as HTMLInputElement;
+
+    this.setState({
+      isChecked: isChecked.checked
+    })
+  }
+
   private renderSuccessForm(): JSX.Element {
     return (
       <div className='successOverlay'>
         <div className='overlay'>
           <div className='msgContainer'>
             <div className='msgBox'>
-              <div className='msgSuccess'>
-                {this.state.successMsg}
+              <div className='msgSuccess' dangerouslySetInnerHTML={{ __html: this.state.successMsg }}></div>
+              <div className="btn-Agree">
+                <input type="checkbox" id="chk-Agree" name="checkbox" className="me-2 custom-chkbox" value="0" onChange={() => this.handleCheckBox()} />
+                <label htmlFor="demoCheckbox"> I agree to all Terms of Use.</label>
               </div>
               <div className="btn-Agree float-end">
-                <input type="button" value={this.state.btnValue} className="btn btn-gradient btn-lg btn-hover btn-view-more mt-3" onClick={(e) => this.handleCloseSuccessForm(e)} />
+                <input type="button" disabled={this.state.isChecked ? false : true} value={this.state.btnValue} className="btn btn-gradient btn-lg btn-hover btn-view-more mt-3" onClick={(e) => this.handleCloseSuccessForm(e)} /> {/* disabled={isChecked ? false : true}  */}
               </div>
             </div>
           </div>
