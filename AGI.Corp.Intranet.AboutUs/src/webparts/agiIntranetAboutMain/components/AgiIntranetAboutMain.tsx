@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './AgiIntranetAboutMain.module.scss';
 import { IAgiIntranetAboutMainProps } from './IAgiIntranetAboutMainProps';
-import { escape } from '@microsoft/sp-lodash-subset';
+import { escape, intersection } from '@microsoft/sp-lodash-subset';
 import { sp } from '@pnp/sp/presets/all';
 import { IAgiIntranetAboutMainState } from './IAgiIntranetAboutMainState';
 import { IAboutUsItem } from '../models/IAboutUsItem';
@@ -27,7 +27,8 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
       selectedVideoUrl: '',
       showVideo: false,
       readMore: {
-        leadershipContent: false,
+        leadershipContent1: false,
+        leadershipContent2: false,
         aboutContent: false,
         ourCultureContent: false
       }
@@ -129,10 +130,10 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                               <h6>{item.Designation}</h6>
                             </div>
                             <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
-                            <div className={`more ${this.state.readMore.leadershipContent ? 'd-block' : ''}`}>
+                            <div className={`more ${this.state.readMore.leadershipContent1 ? 'd-block' : ''}`}>
                               <p dangerouslySetInnerHTML={{ __html: item.MoreDescription }}></p>
                             </div>
-                            {!this.state.readMore.leadershipContent && <button className="toggle" onClick={() => { this.showReadMore('leadership') }}>Read More</button>}
+                            {!this.state.readMore.leadershipContent1 && <button className="toggle" onClick={() => { this.showReadMore('leadership1') }}>Read More</button>}
                           </div>
                         </div>
                         
@@ -153,10 +154,10 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                               <h6>{item.Designation}</h6>
                             </div>
                             <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
-                            <div className={`more ${this.state.readMore.leadershipContent ? 'd-block' : ''}`}>
+                            <div className={`more ${this.state.readMore.leadershipContent2 ? 'd-block' : ''}`}>
                               <p dangerouslySetInnerHTML={{ __html: item.MoreDescription }}></p>
                             </div>
-                            {!this.state.readMore.leadershipContent && <button className="toggle" onClick={() => { this.showReadMore('leadership') }}>Read More</button>}
+                            {!this.state.readMore.leadershipContent2 && <button className="toggle" onClick={() => { this.showReadMore('leadership2') }}>Read More</button>}
                           </div>
                           </div>
                         </>                  
@@ -188,7 +189,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                   visionContentItems.map((item, i) => {
                     const visionImage = item.BackgroundImage && item.BackgroundImage ? this.getImageUrl(item.BackgroundImage) : '';
                     return (
-                      <a href={`${this.props.siteUrl}/SitePages/About Us/Interim.aspx?pageID=${item.Title}`}>
+                      <a data-interception='off' href={`${this.props.siteUrl}/SitePages/About Us/Interim.aspx?pageID=${item.Title}`}>
                         <div className="vision-img-wrapper">
                           <img src={visionImage} className="w-100" />
                           <div className="vision-content">
@@ -206,7 +207,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                   purposeContentItems.map((item, i) => {
                     const purposeImage = item.BackgroundImage && item.BackgroundImage ? this.getImageUrl(item.BackgroundImage) : '';
                     return (
-                      <a href={`${this.props.siteUrl}/SitePages/About Us/Interim.aspx?pageID=${item.Title}`}>
+                      <a data-interception='off' href={`${this.props.siteUrl}/SitePages/About Us/Interim.aspx?pageID=${item.Title}`}>
                         <div className="vision-img-wrapper">
                           <img src={purposeImage} className="w-100" />
                           <div className="vision-content">
@@ -225,7 +226,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                   cultureContentItems.map((item, i) => {
                     const cultureImage = item.BackgroundImage && item.BackgroundImage ? this.getImageUrl(item.BackgroundImage) : '';
                     return (
-                      <a href={`${this.props.siteUrl}/SitePages/About Us/Interim.aspx?pageID=${item.Title}`}>
+                      <a data-interception='off' href={`${this.props.siteUrl}/SitePages/About Us/Interim.aspx?pageID=${item.Title}`}>
                         <div className="vision-img-wrapper">
                           <img src={cultureImage} className="w-100" />
                           <div className="vision-content">
@@ -314,11 +315,18 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
   }
 
   private showReadMore(type: string) {
-    if (type === 'leadership') {
+    if (type === 'leadership1') {
       this.setState({
         readMore: {
           ...this.state.readMore,
-          leadershipContent: true
+          leadershipContent1: true
+        }
+      });
+    }else if (type === 'leadership2') {
+      this.setState({
+        readMore: {
+          ...this.state.readMore,
+          leadershipContent2: true
         }
       });
     }

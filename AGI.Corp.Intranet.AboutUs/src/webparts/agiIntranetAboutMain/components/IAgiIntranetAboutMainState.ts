@@ -12,7 +12,8 @@ export interface IAgiIntranetAboutMainState {
    showVideo: boolean;
    selectedVideoUrl: string;
    readMore: {
-      leadershipContent: boolean;
+      leadershipContent1: boolean;
+      leadershipContent2: boolean;
       aboutContent: boolean;
       ourCultureContent: boolean;
    }
