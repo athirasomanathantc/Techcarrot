@@ -142,8 +142,8 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     });
 
     await sp.web.lists.getByTitle(listName).items.getById(id)
-      .select('*,Business/Title,Business/ID')
-      .expand('Business')
+      .select('*,Business/Title,Business/ID,Functions/Title,Functions/ID')
+      .expand('Business,Functions')
       .get().then((item: INewsItem) => {
         this.setState({
           news: item,
