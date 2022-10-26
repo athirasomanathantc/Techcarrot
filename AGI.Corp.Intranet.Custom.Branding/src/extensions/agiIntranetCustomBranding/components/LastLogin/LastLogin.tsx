@@ -144,7 +144,7 @@ export default class LastLogin extends React.Component<LastLoginProps, LastLogin
               <div className='msgSuccess' dangerouslySetInnerHTML={{ __html: this.state.successMsg }}></div>
               <div className="btn-Agree">
                 <input type="checkbox" id="chk-Agree" name="checkbox" className="me-2 custom-chkbox" value="0" onChange={() => this.handleCheckBox()} />
-                <label htmlFor="demoCheckbox"> I agree to all Terms of Use.</label>
+                <label htmlFor="demoCheckbox"> I agree to all Terms of Use.</label> 
               </div>
               <div className="btn-Agree float-end">
                 <input type="button" disabled={this.state.isChecked ? false : true} value={this.state.btnValue} className="btn btn-gradient btn-lg btn-hover btn-view-more mt-3" onClick={(e) => this.handleCloseSuccessForm(e)} /> {/* disabled={isChecked ? false : true}  */}
