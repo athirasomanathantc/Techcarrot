@@ -187,7 +187,7 @@ export default class AgiCorpIntranemInterim extends React.Component<IAgiCorpIntr
                       <video className="video" id="aboutVideo" poster={thumbnailUrl} loop controls  onClick={() => this.videoPlayer()} >
                         <source src={videoVal} type="video/mp4" />
                       </video>
-                      <div className="playButton active" onClick={() => this.videoPlayer()} ></div>
+                      {/* <div className="playButton active" onClick={() => this.videoPlayer()} ></div> */}
                     </div>
                   </div>
                   :
