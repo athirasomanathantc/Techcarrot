@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-intranet-i-care-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiIntranetICare/AgiIntranetICareWebPart.js",
+          "manifest": "./src/webparts/agiIntranetICare/AgiIntranetICareWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiIntranetICareWebPartStrings": "lib/webparts/agiIntranetICare/loc/{locale}.js"
+  }
+}

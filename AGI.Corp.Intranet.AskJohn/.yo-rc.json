@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.2",
+    "libraryName": "agi-intranet-ask-john",
+    "libraryId": "4bdb90d8-f55b-4a90-99c0-f11d0768bf86",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "agiIntranetAskJohn",
+    "solutionShortDescription": "agiIntranetAskJohn description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

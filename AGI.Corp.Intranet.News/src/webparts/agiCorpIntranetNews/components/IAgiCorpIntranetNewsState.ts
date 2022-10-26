@@ -1,6 +1,7 @@
 import { INewsData } from '../Model/INewsData';
 export interface IAgiCorpIntranetNewsState {
   newsData: INewsData[];
+  featuredNews: INewsData[];
   filterData: INewsData[];
   filterValuesBusiness: {
     ID: number;
@@ -17,5 +18,6 @@ export interface IAgiCorpIntranetNewsState {
   showBusinessData: boolean;
   selectedOption: {
     ID: number;
-  }
+  },
+  featuredTitle: string;
 }

@@ -21,13 +21,15 @@
     "@microsoft/sp-core-library": "1.15.2",
     "@microsoft/sp-dialog": "1.15.2",
     "@microsoft/sp-office-ui-fabric-core": "^1.11.0",
-    "@pnp/sp": "^2.11.0",
+    "@pnp/sp": "^2.14.0",
     "@pnp/spfx-controls-react": "^1.21.1",
     "@pnp/spfx-property-controls": "^3.9.0",
     "@uifabric/merge-styles": "^7.19.2",
     "idb-keyval": "^5.1.5",
+    "moment": "^2.29.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "react-moment": "^1.1.2",
     "spfx-uifabric-themes": "^0.8.5"
   },
   "devDependencies": {

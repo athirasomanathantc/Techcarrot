@@ -39,26 +39,20 @@ export default class AgiCorpIntranetEventsDetails extends React.Component<IAgiCo
         this.setState({
           eventsData: item,
           eventId: id
-        }, () => {
-          console.log('value', item);
         });
       })
-      const userId: string = this.props.context.pageContext.legacyPageContent.userId;
+      const userId: string = this.props.context.pageContext.legacyPageContext.userId;
       let readBy = this.state.eventsData.ReadBy;
       const userIDColl = readBy ? readBy.split(';') : [];
       const isIdExists = userIDColl.includes(userId.toString());
       if (!isIdExists) {
-        readBy = readBy ? `${readBy};${userId}` : userId;
-        sp.web.lists.getByTitle('EventDatails').items.getById(this.state.eventId).update({
+        readBy = readBy ? `${readBy};${userId}` : userId.toString();
+        sp.web.lists.getByTitle('EventDetails').items.getById(id).update({
           ReadBy: readBy
-        }).then((data) => {
-          console.log('item updated...', data);
         }).catch((error) => {
-          console.log('error in updating list item:', error);
+          console.error('error in updating list item:', error);
         })
-
       }
-
     }
   }
   getImageUrl(imageContent: string) {

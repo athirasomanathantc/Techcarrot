@@ -10,6 +10,7 @@ import Paging from './Paging/Paging';
 import * as moment from 'moment';
 import { IBusinessData } from '../models/IBusinessData';
 import { IFunctionData } from '../models/IFunctionData';
+import AnnouncementCard from './AnnouncementCard/AnnouncementCard';
 const itemsPerPage: number = 12;
 
 export default class AgiIntranetAnnouncementsListing extends React.Component<IAgiIntranetAnnouncementsListingProps, IAgiIntranetEventsStates> {
@@ -23,6 +24,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
     this.state = {
       totalAnnouncementData: [],
       filteredAnnouncementData: [],
+      featuredAnnouncements: [],
       exceptionOccured: false,
       currentPage: 1,
       totalPage: 0,
@@ -34,7 +36,8 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       showBusinessData: true,
       selectedOption: {
         ID: 0
-      }
+      },
+      featuredTitle: ''
     }
   }
   async componentDidMount(): Promise<void> {
@@ -42,11 +45,14 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       const announcements: IAnnouncementData[] = await this._spServices.getAnnouncements();
       const business: IBusinessData[] = await this._spServices.getBussiness();
       const functions: IFunctionData[] = await this._spServices.getFunctionData();
+      const featuredTitle: string = await this._spServices.getConfigItems();
       this.setState({
         totalAnnouncementData: announcements,
+        featuredAnnouncements: this.getFeaturedAnnouncements(announcements),
         filteredAnnouncementData: announcements,
         businessData: business,
-        functionData: functions
+        functionData: functions,
+        featuredTitle: featuredTitle
       });
       this.getFirstPageAnnouncements();
 
@@ -68,6 +74,16 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
         exceptionOccured: true
       });
     }
+  }
+
+  private getFeaturedAnnouncements(items: IAnnouncementData[]) {
+    let dateA;
+    let dateB;
+    return items.filter((item) => item.Featured).sort((a, b) => {
+      dateA = a.PublishedDate || a.Modified;
+      dateB = b.PublishedDate || b.Modified;
+      return (new Date(dateB).getTime() - new Date(dateA).getTime())
+    }).slice(0, 4)
   }
 
   private setDefaultFilter() {
@@ -222,101 +238,133 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
     const options: IBusinessData[] | IFunctionData[] = this.state.showBusinessData ? this.state.businessData : this.state.functionData;
 
     return (
-      <div className="main-content" id='announcementContent'>
-        <div className="content-wrapper">
+      <>
+        <section className="featured-section col-lg-12 bg-light bg-gradient mt-5 ">
           <div className="container">
-            <div className="main-header-section">
-              <div className={'row'} >
-                <div className={'col-12 col-md-6 heading-section'} >
-                  <h3>Announcements</h3>
+            <div className="row title-wrapper">
+              <div className="main-header-section">
+                <div className="col-12">
+                  <h3>{this.state.featuredTitle}</h3>
                 </div>
-                <div className={'col-12 col-md-6 filter-section text-end'}>
-                  <div className="row">
-                    <div className="col-4 d-flex align-items-center justify-content-around">
-                      <div className="form-check q-box__question">
-                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business') }} />
-                        <label className="form-check-label" htmlFor="flexRadioDefault1">
-                          Business
-                        </label>
-                      </div>
-                      <div className="form-check q-box__question">
-                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
-                        <label className="form-check-label" htmlFor="flexRadioDefault2">
-                          Functions
-                        </label>
-                      </div>
-                    </div>
-                    <div className="col-8">
-                      <div className={'form-select custom-select w-100 '}>
-                        <select onChange={(e) => this.handleFilter(parseInt(e.target.value))}>
-                          <option value="0">Filter By</option>
-                          {
-                            options.map((option: IBusinessData | IFunctionData, index: number) => {
-                              return (
-                                <option selected={this.state.selectedOption.ID == option.ID} key={`optionkey${index}`} value={option.ID}>{option.Title}</option>
-                              )
-                            })
-                          }
-                        </select>
-                      </div>
-                    </div>
-                  </div>
 
-
-                </div>
               </div>
             </div>
-            <article className="row gx-5 mb-5">
-              <section className="col-lg-12 announcement-listing">
-                <div className="row">
-                  {
-                    this.state.currentPageAnnouncementData.length > 0 ?
-                      this.state.currentPageAnnouncementData.map((announcement) => {
-                        const category = this.state.showBusinessData ? announcement.Business : announcement.Functions;
-                        return (
-                          <div className="col-lg-3 mb-4 d-flex align-items-stretch">
-                            <div className="card news-card">
-                              <img src={this.getImageUrl(announcement)} className="card-img-top" alt="Card Image" />
-                              <div className="card-body d-flex flex-column">
-                                <div className={'category'}>
-                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {category ? category.Title : ""}</span>
-                                </div>
-                                <div className="mb-2 mt-2 card-content-header">
-                                  <h5 className="card-title">{announcement.Title}</h5>
-                                </div>
-                                <div className="date">
-                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i> {moment(announcement.PublishedDate).format('DD-MMM-YYYY')}</span>
 
-                                </div>
-                                <p className="card-text mt-2">{announcement.Description}</p>
-                                <a href={`${this.props.siteUrl}/SitePages/News/Announcements/Announcement Details.aspx?announcementID=${announcement.ID}`} className="btn news-read-more  align-self-start">Read more</a>
-                              </div>
-                            </div>
+            <div className="row featured-carousel">
+              <div id="featuredCarousel" className="carousel slide" data-bs-interval="false" data-bs-ride="carousel">
+                <div className="carousel-inner" role="listbox">
+                  {
+                    this.state.featuredAnnouncements.map((item: IAnnouncementData, index: number) => {
+                      const category = item.Business ? item.Business : item.Functions;
+
+                      return (
+                        <div className={`carousel-item ${!index ? 'active' : ''}`}>
+                          <div className="col-md-3 h-100">
+                            <AnnouncementCard imageUrl={this.getImageUrl(item)} siteUrl={this.props.siteUrl} isFeatured={true} announcement={item} category={category}></AnnouncementCard>
                           </div>
-                        )
-                      })
-                      :
-                      <div className={'invalidTxt'}>
-                        NO ANNOUNCEMENTS
-                      </div>
+                        </div>
+                      )
+                    })
                   }
+                  {
+                    !this.state.featuredAnnouncements.length && <h5 className="not-found">No items found</h5>
+                  }
+
                 </div>
-              </section>
-            </article>
-            <div className="col-12">
-              <div className="d-flex justify-content-end">
-                <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
-                  <Paging currentPage={this.state.currentPage}
-                    totalItems={this.state.filteredAnnouncementData.length}
-                    itemsCountPerPage={itemsPerPage}
-                    onPageUpdate={(selectedPageNumber) => this._getSelectedPageAnnouncements(selectedPageNumber)}
-                  />
+                <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
+                  data-bs-slide="prev">
+                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span className="visually-hidden">Previous</span>
+                </button>
+                <button className="carousel-control-next" type="button" data-bs-target="#featuredCarousel"
+                  data-bs-slide="next">
+                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span className="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div className="main-content" id='announcementContent'>
+          <div className="content-wrapper">
+            <div className="container">
+              <div className="main-header-section">
+                <div className={'row'} >
+                  <div className={'col-12 col-md-6 heading-section'} >
+                    <h3>Announcements</h3>
+                  </div>
+                  <div className={'col-12 col-md-6 filter-section text-end'}>
+                    <div className="row">
+                      <div className="col-4 d-flex align-items-center justify-content-around">
+                        <div className="form-check q-box__question">
+                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business') }} />
+                          <label className="form-check-label" htmlFor="flexRadioDefault1">
+                            Business
+                          </label>
+                        </div>
+                        <div className="form-check q-box__question">
+                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
+                          <label className="form-check-label" htmlFor="flexRadioDefault2">
+                            Functions
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-8">
+                        <div className={'form-select custom-select w-100 '}>
+                          <select onChange={(e) => this.handleFilter(parseInt(e.target.value))}>
+                            <option value="0">Filter By</option>
+                            {
+                              options.map((option: IBusinessData | IFunctionData, index: number) => {
+                                return (
+                                  <option selected={this.state.selectedOption.ID == option.ID} key={`optionkey${index}`} value={option.ID}>{option.Title}</option>
+                                )
+                              })
+                            }
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+              <article className="row gx-5 mb-5">
+                <section className="col-lg-12 announcement-listing">
+                  <div className="row">
+                    {
+                      this.state.currentPageAnnouncementData.length > 0 ?
+                        this.state.currentPageAnnouncementData.map((announcement) => {
+                          const category = this.state.showBusinessData ? announcement.Business : announcement.Functions;
+                          return (
+                            <div className="col-lg-3 mb-4 d-flex align-items-stretch">
+                              <AnnouncementCard siteUrl={this.props.siteUrl} imageUrl={this.getImageUrl(announcement)} announcement={announcement} category={category} isFeatured={false}></AnnouncementCard>
+                            </div>
+                          )
+                        })
+                        :
+                        <div className={'invalidTxt'}>
+                          NO ANNOUNCEMENTS
+                        </div>
+                    }
+                  </div>
+                </section>
+              </article>
+              <div className="col-12">
+                <div className="d-flex justify-content-end">
+                  <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
+                    <Paging currentPage={this.state.currentPage}
+                      totalItems={this.state.filteredAnnouncementData.length}
+                      itemsCountPerPage={itemsPerPage}
+                      onPageUpdate={(selectedPageNumber) => this._getSelectedPageAnnouncements(selectedPageNumber)}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div >
+      </>
     );
   }
 }

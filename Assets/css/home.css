@@ -567,7 +567,7 @@ transition: all 0.15s ease-in-out;
 .user-dropdown.dropdown .dropdown-toggle::after {
     content: '';
     display: block;
-    background: url('images/icon-caret-dropdown.svg');
+    background: url('../images/icon-caret-dropdown.svg');
     width: 18px;
     height: 18px;
     border: 0;
@@ -917,7 +917,7 @@ input[type="radio"]:checked+label::after {
     color: #000;
 }
 
-.DayPicker-Day--holiday:not(.DayPicker-Day--outside):not(.DayPicker-Day--event):after {
+/* .DayPicker-Day--holiday:not(.DayPicker-Day--outside):not(.DayPicker-Day--event):after {
     content: '';
     display: inline-block;
     width: 5px;
@@ -930,7 +930,7 @@ input[type="radio"]:checked+label::after {
     bottom: 7px;
     left: 45%;
     transform: translate(0px, 0px);
-}
+} */
 
 .DayPicker-Day--event:not(.DayPicker-Day--outside) {
     color: #000;
@@ -946,7 +946,8 @@ input[type="radio"]:checked+label::after {
 
 .DayPicker-Day--today,
 .DayPicker-Day--holiday,
-.DayPicker-Day--event {
+.DayPicker-Day--event,
+.DayPicker-Day--announcement {
     cursor: pointer !important;
 }
 
@@ -957,7 +958,7 @@ input[type="radio"]:checked+label::after {
     /* border: 2px solid #9D0D71; */
 }
 
-.DayPicker-Day--event:not(.DayPicker-Day--outside):after {
+/* .DayPicker-Day--event:not(.DayPicker-Day--outside):after {
     content: '';
     display: inline-block;
     width: 5px;
@@ -971,11 +972,11 @@ input[type="radio"]:checked+label::after {
     left: 45%;
     transform: translate(0px, 0px);
 
-}
+} */
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
     position: relative;
-    /* color: #ffffff; */
+    color: #9D0D71;
     background: none;
     /* border: 2px solid #9D0D71; */
 }
@@ -987,15 +988,20 @@ input[type="radio"]:checked+label::after {
 }
 
 .datebox.Event {
-    background-color: #036ef8;
+    background-color: #c40d26;
 }
 
 .datebox.Holiday {
     background-color: #0DC49A;
 }
 
+.datebox.Announcement {
+    background-color: #036ef8;
+}
+
 .datebox.Holiday,
-.datebox.Event {
+.datebox.Event,
+.datebox.Announcement {
     display: inline-block;
     text-align: center;
     line-height: 1;
@@ -1100,6 +1106,8 @@ input[type="radio"]:checked+label::after {
     background: #FFFFFF 0% 0% no-repeat padding-box;
     border: 1px solid #EBEBEB;
     border-radius: 20px;
+    margin: 5px 15px 5px 0;
+    display: inline-block;
 }
 
 .legend span:after {
@@ -1118,6 +1126,71 @@ input[type="radio"]:checked+label::after {
 
 .legend span:nth-child(2):after {
     background: #0DC49A;
+}
+
+.legend span:nth-child(3):after {
+    background: #036ef8;
+}
+
+.legend span:nth-child(4):after {
+    background: #c40d26;
+}
+
+.DayPicker-Day>.date-container>span {
+    width: 5px;
+    height: 5px;
+    -moz-border-radius: 7.5px;
+    -webkit-border-radius: 7.5px;
+    border-radius: 7.5px;
+    /* position: absolute;
+    top: 4em; */
+    /* left: 35%; */
+}
+
+/* 
+.DayPicker-Day--event .event {
+    background-color: #c40d26;
+}
+
+.DayPicker-Day--holiday .holiday {
+    background-color: #0DC49A;
+    left: 47% !important;
+}
+
+.DayPicker-Day--announcement .announcement {
+    background-color: #036ef8;
+    left: 60% !important;
+} */
+
+.round-info-wrapp {
+    position: absolute;
+    left: 29%;
+    top: 3.4em;
+}
+
+.round-info-wrapp span {
+    margin-right: 5px;
+    position: relative;
+    width: 5px;
+    height: 5px;
+    display: inline-block;
+    border-radius: 50%;
+    display: none;
+}
+
+.DayPicker-Day--event .round-info-wrapp span.event {
+    background-color: #c40d26;
+    display: inline-block;
+}
+
+.DayPicker-Day--holiday .round-info-wrapp span.holiday {
+    background-color: #0DC49A;
+    display: inline-block;
+}
+
+.DayPicker-Day--announcement .round-info-wrapp span.announcement {
+    background-color: #036ef8;
+    display: inline-block;
 }
 
 /* Date Picker End*/
@@ -1225,3 +1298,27 @@ input[type="radio"]:checked+label::after {
 .snap-share-section .carousel-inner .carousel-item {
     cursor: inherit !important;
 }
+
+/* disabling the flickering event when clicking on the card header start*/
+@media (min-width:992px) {
+    [data-bs-target="#employeeOffer"] {
+        pointer-events: none;
+    }
+
+    .employee-offer-section .card-header div.d-flex {
+        position: initial;
+        z-index: 999;
+        pointer-events: all;
+
+    }
+
+    [data-bs-target="#socialOffer"] {
+        pointer-events: none;
+    }
+
+    [data-bs-target="#survey"] {
+        pointer-events: none;
+    }
+}
+
+/* disabling the flickering event when clicking on the card header end*/

@@ -5,7 +5,7 @@ import { IPurposeCultureVisionItem } from "../models/IPurposeCultureVisionItem";
 
 export interface IAgiIntranetAboutMainState {
    aboutUsItem: IAboutUsItem;
-   leadershipMessageItem: ILeadershipMessageItem;
+   leadershipMessageItem: ILeadershipMessageItem[];
    leadershipTeamItems: ILeadershipTeamItem[];
    purposeCultureVisionItems: IPurposeCultureVisionItem[];
    selectedItem: ILeadershipTeamItem;

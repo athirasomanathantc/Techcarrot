@@ -6,7 +6,7 @@ import { sp } from '@pnp/sp/presets/all';
 import { IAgiIntBusFuncMediaState } from './IAgiIntBusFuncMediaState';
 import { IContentItem } from '../models/IContentItem';
 import { LIST_CONTENT, NULL_CONTENT_ITEM } from '../common/constants';
-
+import * as $ from 'jquery';
 //require('../css/business.css');
 
 export default class AgiIntBusFuncMedia extends React.Component<IAgiIntBusFuncMediaProps, IAgiIntBusFuncMediaState> {
@@ -88,90 +88,62 @@ export default class AgiIntBusFuncMedia extends React.Component<IAgiIntBusFuncMe
   }
 
   private fnInitiate() {
-    let mediaItems = document.querySelectorAll(".media-carousel .carousel-item");
+    // let mediaItems = document.querySelectorAll(".media-carousel .carousel-item");
 
-    mediaItems.forEach((el) => {
-      const minPerSlide = 4;
-      let mediaNext = el.nextElementSibling;
-      for (var i = 1; i < minPerSlide; i++) {
-        if (!mediaNext) {
-          // wrap carousel by using first child
-          mediaNext = mediaItems[0];
-        }
-        let cloneChild: any = mediaNext.cloneNode(true);
-        el.appendChild(cloneChild.children[0]);
-        mediaNext = mediaNext.nextElementSibling;
-      }
-    });
-  }
+    // mediaItems.forEach((el) => {
+    //   const minPerSlide = 4;
+    //   let mediaNext = el.nextElementSibling;
+    //   for (var i = 1; i < minPerSlide; i++) {
+    //     if (!mediaNext) {
+    //       // wrap carousel by using first child
+    //       mediaNext = mediaItems[0];
+    //     }
+    //     let cloneChild: any = mediaNext.cloneNode(true);
+    //     el.appendChild(cloneChild.children[0]);
+    //     mediaNext = mediaNext.nextElementSibling;
+    //   }
+    // });
 
-  private fnOpenPropertyPabe()
-  {
-    this.context.propertyPane.open();
-  }
-  private renderCarouselSection(): JSX.Element {
-
-    const carouselItem = this.state.contentItems;
-    if (!carouselItem) {
-      return;
-    }
-
-    return (
-      <section className="section media-section">
-        <div className="container">
-          <div className="row">
-            <div className="col-8 col-lg-11 text-let text-lg-center">
-              <h3 className="section-title">Media</h3>
-
-            </div>
-            <div className="align-self-end col-4 col-lg-1">
-              <div className="button-container">
-                <button className="carousel-control-prev" type="button" data-bs-target="#mediaCarousel"
-                  data-bs-slide="prev">
-                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span className="visually-hidden">Previous</span>
-                </button>
-                <button className="carousel-control-next" type="button" data-bs-target="#mediaCarousel"
-                  data-bs-slide="next">
-                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span className="visually-hidden">Next</span>
-                </button>
-              </div>
-            </div>
-            <div id="mediaCarousel" className="carousel slide container media-carousel mt-5"
-              data-bs-ride="carousel">
-              <div className="carousel-inner w-100">
-                {
-                  this.state.contentItems.map((items, i) => {debugger;
-                    const imgVal = this.getImageUrl(items.MediaIcon);
-                    const isGallery = items[i].SitePages.NavigationComponent.includes("Gallery");
-                    console.log("Gallery",isGallery);
-                  //  items.SitePages.NavigationComponent.includes("Gallery");
-
-                    const tempNav = `${this.props.siteUrl}/SitePages/${items.SitePages.NavigationComponent}?program=${this.state.lastNavItem}&programId=${this.state.programID}`;
-                    // const finalNavUrl = {tempNav}`?program=Function&programId=2`
-                    return (
-                      <div className={i == 0 ? "carousel-item active" : "carousel-item"}>
-                        <div className="col-md-3 m-2 ">
-                          <div className="card  d-flex align-items-stretch">
-                            <img className="w-100" src={imgVal} />
-                          </div>
-                          <div className="card-body  d-flex flex-column">
-                            <h4 className="card-title">{items.Title}</h4>
-                            <p className="card-description" dangerouslySetInnerHTML={{ __html: items.Description }}></p>
-                            <a href={tempNav} className="btn news-read-more  align-self-center">{items.NavigationText}</a>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })
-                }
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    var ourServiceCardCarousel = document.querySelector(
+      "#mediaCarousel"
     );
+    if (window.matchMedia("(min-width: 768px)").matches) {
+      // var carousel = new bootstrap.Carousel(ourServiceCardCarousel, {
+      //   interval: false,
+      // });
+      ourServiceCardCarousel.addEventListener('slide.bs.carousel', function () {
+
+        interval: false
+      });
+      var carouselWidth = $(".business-media-section .carousel-inner")[0].scrollWidth;
+      var cardWidth = $(".business-media-section  .carousel-item").width();
+      var scrollPosition = 0;
+      $(".media-carousel-control-next").click(function () {
+
+        if (scrollPosition < carouselWidth - cardWidth * 4) {
+          scrollPosition += cardWidth;
+          $("#mediaCarousel .carousel-inner").animate(
+            { scrollLeft: scrollPosition },
+            600
+          );
+        }
+      });
+      $(".media-carousel-control-prev").on("click", function () {
+        if (scrollPosition > 0) {
+          scrollPosition -= cardWidth;
+          $("#mediaCarousel .carousel-inner").animate(
+            { scrollLeft: scrollPosition },
+            600
+          );
+        }
+      });
+    } else {
+      $(ourServiceCardCarousel).addClass("slide");
+    }
+  }
+
+  private fnOpenPropertyPabe() {
+    this.context.propertyPane.open();
   }
 
   public render(): React.ReactElement<IAgiIntBusFuncMediaProps> {
@@ -181,57 +153,60 @@ export default class AgiIntBusFuncMedia extends React.Component<IAgiIntBusFuncMe
         {/* {this.renderCarouselSection()} */}
         {this.props.listName && this.props.listName ?
 
-          <section className="section media-section">
+          <section className="section business-media-section" style={{ display: this.state.contentItems.length > 0 ? 'block' : 'none' }}>
             <div className="container">
               <div className="row">
-                <div className="col-8 col-lg-11 text-let text-lg-center">
+                <div className='title-header'>
+                <div className="text-left text-lg-center">
                   <h3 className="section-title">{this.props.listName}</h3>
 
                 </div>
-                <div className="align-self-end col-4 col-lg-1">
+                <div className="align-self-end media-btn-control">
                   <div className="button-container">
-                    <button className="carousel-control-prev" type="button" data-bs-target="#mediaCarousel"
+                    <button className="carousel-control-prev media-carousel-control-prev" type="button" data-bs-target="#mediaCarousel"
                       data-bs-slide="prev">
                       <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                       <span className="visually-hidden">Previous</span>
                     </button>
-                    <button className="carousel-control-next" type="button" data-bs-target="#mediaCarousel"
+                    <button className="carousel-control-next media-carousel-control-next" type="button" data-bs-target="#mediaCarousel"
                       data-bs-slide="next">
                       <span className="carousel-control-next-icon" aria-hidden="true"></span>
                       <span className="visually-hidden">Next</span>
                     </button>
                   </div>
                 </div>
-                <div id="mediaCarousel" className="carousel slide container media-carousel mt-5"
-                  data-bs-ride="carousel">
+                </div>
+                <div id="mediaCarousel" className="carousel container media-carousel mt-5"
+                  data-bs-ride="carousel" data-bs-interval="false" data-bs-wrap="false">
                   <div className="carousel-inner w-100">
                     {
-                      this.state.contentItems.map((items, i) => {debugger;
-                        let tempVal :any = '';let tempNav;
+                      this.state.contentItems.map((items, i) => {
+                        debugger;
+                        let tempVal: any = ''; let tempNav;
                         const imgVal = this.getImageUrl(items.MediaIcon);
                         const isGallery = items.SitePages.NavigationComponent.includes("Gallery");
                         //{isGallery == true ? const tempNav = `${this.props.siteUrl}/SitePages/${items.SitePages.NavigationComponent}&program=${this.state.lastNavItem}&programId=${this.state.programID}` : const tempNav = `${this.props.siteUrl}/SitePages/${items.SitePages.NavigationComponent}?program=${this.state.lastNavItem}&programId=${this.state.programID}` }
-                        if(isGallery == true)
-                        {
+                        if (isGallery == true) {
                           tempNav = `${this.props.siteUrl}/SitePages/${items.SitePages.NavigationComponent}&program=${this.state.lastNavItem}&programId=${this.state.programID}`;
                         }
-                        else
-                        {
+                        else {
                           tempNav = `${this.props.siteUrl}/SitePages/${items.SitePages.NavigationComponent}?program=${this.state.lastNavItem}&programId=${this.state.programID}`;
                         }
 
                         return (
                           <div className={i == 0 ? "carousel-item active" : "carousel-item"}>
-                            <div className="col-md-3 m-2 ">
-                              <div className="card  d-flex align-items-stretch">
+                            {/* <div className="col-md-3 m-2 "> */}
+                            <div className="card">
+                              <div className='img-wrapper'>
                                 <img className="w-100" src={imgVal} />
                               </div>
-                              <div className="card-body  d-flex flex-column">
-                                <h4 className="card-title">{items.Title}</h4>
-                                <p className="card-description" dangerouslySetInnerHTML={{ __html: items.Description }}></p>
-                                <a href={tempNav} className="btn news-read-more  align-self-center">{items.NavigationText}</a>
-                              </div>
                             </div>
+                            <div className="card-body  d-flex flex-column">
+                              <h4 className="card-title">{items.Title}</h4>
+                              <p className="card-description" dangerouslySetInnerHTML={{ __html: items.Description }}></p>
+                              <a href={tempNav} className="btn news-read-more  align-self-center">{items.NavigationText}</a>
+                            </div>
+                            {/* </div> */}
                           </div>
                         )
                       })

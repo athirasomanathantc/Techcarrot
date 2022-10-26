@@ -19,7 +19,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
       spfxContext: this.props.context
     });
     this.state = {
-      leadershipMessageItem: NULL_ABOUT_LEADERSHIPMESSAGE_ITEM,
+      leadershipMessageItem: [],
       aboutUsItem: NULL_ABOUT_ABOUTUS_ITEM,
       leadershipTeamItems: [],
       purposeCultureVisionItems: [],
@@ -55,9 +55,9 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
   private async getLeadershipMessageItem(): Promise<void> {
 
     sp.web.lists.getByTitle(LIST_ABOUT_LEADERSHIPMESSAGE).items.get().then((items: ILeadershipMessageItem[]) => {
-      const leadershipMessageItem = items && items.length > 0 ? items[0] : NULL_ABOUT_LEADERSHIPMESSAGE_ITEM;
+      //const leadershipMessageItem = items && items.length > 0 ? items : NULL_ABOUT_LEADERSHIPMESSAGE_ITEM;
       this.setState({
-        leadershipMessageItem
+        leadershipMessageItem: items
       });
     });
 
@@ -95,7 +95,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
 
   private renderFindOutMoreSection(): JSX.Element {
 
-    const leadershipMessageImg = this.state.leadershipMessageItem.LeadershipImage && this.state.leadershipMessageItem.LeadershipImage ? this.getImageUrl(this.state.leadershipMessageItem.LeadershipImage) : '';
+    //const leadershipMessageImg = this.state.leadershipMessageItem.LeadershipImage && this.state.leadershipMessageItem.LeadershipImage ? this.getImageUrl(this.state.leadershipMessageItem.LeadershipImage) : '';
 
     const visionContentItems = this.state.purposeCultureVisionItems.filter(item => item.Title == TEXT_ABOUT_VISION_CONTENT);
     const purposeContentItems = this.state.purposeCultureVisionItems.filter(item => item.Title == TEXT_ABOUT_PURPOSE_CONTENT);
@@ -112,21 +112,65 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
           <div className="container">
             <div className="section-wrapper">
               <div className="leadership-section">
-                <div className="leadership-content">
-                  <div className="leadership-content-header">
-                    <h5>{this.state.leadershipMessageItem.Title}</h5>
-                    <h3>{this.state.leadershipMessageItem.Name}</h3>
-                    <h6>{this.state.leadershipMessageItem.Designation}</h6>
-                  </div>
-                  <div className="leadership-image">
-                    <img src={leadershipMessageImg} className="w-100" />
-                  </div>
-                  <p dangerouslySetInnerHTML={{ __html: this.state.leadershipMessageItem.Description }}></p>
-                  <div className={`more ${this.state.readMore.leadershipContent ? 'd-block' : ''}`}>
-                    <p dangerouslySetInnerHTML={{ __html: this.state.leadershipMessageItem.MoreDescription }}></p>
-                  </div>
-                  {!this.state.readMore.leadershipContent && <button className="toggle" onClick={() => { this.showReadMore('leadership') }}>Read More</button>}
-                </div>
+                {
+                  this.state.leadershipMessageItem.map((item, i) => {
+                    const leadershipMessageImg = item.LeadershipImage && item.LeadershipImage ? this.getImageUrl(item.LeadershipImage) : '';
+                    return (
+                      i == 0 ?
+                      
+                        <div className="leadership-content">
+                          <div className="leadership-image">
+                            <img src={leadershipMessageImg} className="w-100" />
+                          </div>
+                          <div className="leadership-content-right">
+                            <div className="leadership-content-header">
+                              <h5>{item.Title}</h5>
+                              <h3>{item.Name}</h3>
+                              <h6>{item.Designation}</h6>
+                            </div>
+                            <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
+                            <div className={`more ${this.state.readMore.leadershipContent ? 'd-block' : ''}`}>
+                              <p dangerouslySetInnerHTML={{ __html: item.MoreDescription }}></p>
+                            </div>
+                            {!this.state.readMore.leadershipContent && <button className="toggle" onClick={() => { this.showReadMore('leadership') }}>Read More</button>}
+                          </div>
+                        </div>
+                        
+                        
+                        :
+          
+                        i == 1 ?
+                        <>
+                        <hr className="mt-5 divider-horizontal" />
+                        <div className="leadership-content reverse mt-5">
+                            <div className="leadership-image">
+                            <img src={leadershipMessageImg} className="w-100" />
+                          </div>
+                          <div className="leadership-content-right">
+                            <div className="leadership-content-header">
+                              <h5>{item.Title}</h5>
+                              <h3>{item.Name}</h3>
+                              <h6>{item.Designation}</h6>
+                            </div>
+                            <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
+                            <div className={`more ${this.state.readMore.leadershipContent ? 'd-block' : ''}`}>
+                              <p dangerouslySetInnerHTML={{ __html: item.MoreDescription }}></p>
+                            </div>
+                            {!this.state.readMore.leadershipContent && <button className="toggle" onClick={() => { this.showReadMore('leadership') }}>Read More</button>}
+                          </div>
+                          </div>
+                        </>                  
+                          :
+
+                          <></>
+
+
+                    )
+
+
+                  })
+                }
+
               </div>
               <hr className="m-0 mx-5 divider-horizontal" />
               <div className="about-section">
@@ -138,47 +182,59 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                 </div>
               </div>
             </div>
-            <div className="row mx-0 vision-container">
-              <div className="col-lg-4  p-0">
+            <div className="row  vision-container">
+              <div className="col-lg-4 ">
                 {
                   visionContentItems.map((item, i) => {
+                    const visionImage = item.BackgroundImage && item.BackgroundImage ? this.getImageUrl(item.BackgroundImage) : '';
                     return (
-                      <div className="vision-img-wrapper">
-                        <img src={`${this.props.siteUrl}/Assets/images/about/vision.png`} className="w-100" />
-                        <div className="vision-content">
-                          <h3>{item.Title}</h3>
-                          <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
+                      <a href={`${this.props.siteUrl}/SitePages/About Us/Interim.aspx?pageID=${item.Title}`}>
+                        <div className="vision-img-wrapper">
+                          <img src={visionImage} className="w-100" />
+                          <div className="vision-content">
+                            <h3>{item.Title}</h3>
+                            <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
+                          </div>
                         </div>
-                      </div>
+                      </a>
                     )
                   })
                 }
               </div>
-              <div className="col-lg-4  p-lg-0 our-purpose-section">
+              <div className="col-lg-4  our-purpose-section">
                 {
                   purposeContentItems.map((item, i) => {
+                    const purposeImage = item.BackgroundImage && item.BackgroundImage ? this.getImageUrl(item.BackgroundImage) : '';
                     return (
-                      <div className="our-purpose-wrapper">
-                        <div className="our-purpose-content">
-                          <h3>{item.Title}</h3>
-                          <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
+                      <a href={`${this.props.siteUrl}/SitePages/About Us/Interim.aspx?pageID=${item.Title}`}>
+                        <div className="vision-img-wrapper">
+                          <img src={purposeImage} className="w-100" />
+                          <div className="vision-content">
+
+                            <h3>{item.Title}</h3>
+                            <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
+                          </div>
                         </div>
-                      </div>
+                      </a>
                     )
                   })
                 }
               </div>
-              <div className="col-lg-4  p-lg-0">
+              <div className="col-lg-4 ">
                 {
                   cultureContentItems.map((item, i) => {
+                    const cultureImage = item.BackgroundImage && item.BackgroundImage ? this.getImageUrl(item.BackgroundImage) : '';
                     return (
-                      <div className="our-culture-section">
-                        <div className="our-culture-content">
-                          <h3>{item.Title}</h3>
-                          <p className={`${this.state.readMore.ourCultureContent ? 'show-more' : ''}`} dangerouslySetInnerHTML={{ __html: item.Description }}></p>
-                          {!this.state.readMore.ourCultureContent && <button className="toggle2" onClick={() => { this.showReadMore('ourculture') }}>Read More</button>}
+                      <a href={`${this.props.siteUrl}/SitePages/About Us/Interim.aspx?pageID=${item.Title}`}>
+                        <div className="vision-img-wrapper">
+                          <img src={cultureImage} className="w-100" />
+                          <div className="vision-content">
+                            <h3>{item.Title}</h3>
+                            <p className={`${this.state.readMore.ourCultureContent ? 'show-more' : ''}`} dangerouslySetInnerHTML={{ __html: item.Description }}></p>
+                            
+                          </div>
                         </div>
-                      </div>
+                      </a>
                     )
                   })
                 }
@@ -189,14 +245,14 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
               {
                 leadershipTeamHeading.map((item, i) => {
                   return (
-                    <div className="col-lg-11">
+                    <div className="col-lg-10">
                       <h3 className="leadership-team-heading">{item.HeadingTitle}</h3>
                       <p className="leadership-team-description">{item.HeadingDescription}</p>
                     </div>
                   )
                 })
               }
-              <div className="align-self-end col-lg-1">
+              <div className="align-self-end col-lg-2">
                 <div className="button-container">
                   <button className="carousel-control-prev" type="button" data-bs-target="#leadershipCarousel"
                     data-bs-slide="prev">

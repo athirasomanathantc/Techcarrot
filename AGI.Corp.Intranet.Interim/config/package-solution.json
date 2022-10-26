@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "agi-corp-intranem-interim-client-side-solution",
+    "id": "bccea0db-2fc0-4501-b195-d84d1e02b548",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.14.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "AGICorpIntranemInterim description"
+      },
+      "longDescription": {
+        "default": "AGICorpIntranemInterim description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "agi-corp-intranem-interim Feature",
+        "description": "The feature that activates elements of the agi-corp-intranem-interim solution.",
+        "id": "f7735e9d-8a31-4d68-b5e4-90986c0f8b76",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/agi-corp-intranem-interim.sppkg"
+  }
+}

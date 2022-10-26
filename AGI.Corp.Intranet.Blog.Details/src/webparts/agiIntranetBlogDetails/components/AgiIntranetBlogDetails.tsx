@@ -63,7 +63,7 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
   public componentDidUpdate(prevProps: Readonly<IAgiIntranetBlogDetailsProps>, prevState: Readonly<IAgiIntranetBlogDetailsState>, snapshot?: any): void {
     if (this.state.comments !== prevState.comments) {
       this.setState({
-        showMoreComments: window.innerWidth <= 767 && this.state.comments.length > 0
+        showMoreComments: window.innerWidth <= 767 && this.state.comments.length > 3
       });
     }
   }

@@ -11,6 +11,7 @@ import {
   SPHttpClient,
   SPHttpClientResponse
 } from '@microsoft/sp-http'
+import BlogCard from './BlogCard/BlogCard';
 //const pageSize: number = 12;
 export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntranetBlogsProps, IAgiCorpIntranetBlogsState> {
   constructor(props) {
@@ -20,6 +21,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
     });
     this.state = {
       blogData: [],
+      featuredBlogs: [],
       filterData: [],
       filterValuesBusiness: [],
       filterValuesFunctions: [],
@@ -31,8 +33,8 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
       showBusinessData: true,
       selectedOption: {
         ID: 0
-      }
-
+      },
+      featuredTitle: ''
     }
   }
 
@@ -42,9 +44,24 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
+    await this.getConfigItems();
     await this.getblog().then(() => {
       this.setDefaultFilter();
     });
+  }
+
+  private getConfigItems() {
+    const listName = "IntranetConfig";
+    sp.web.lists.getByTitle(listName).items.select('ID,Title,Detail').filter("Title eq 'FeaturedBlogs'").get()
+      .then((response: any[]) => {
+        this.setState({
+          featuredTitle: response[0]?.Detail
+        });
+
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
   }
 
   private setDefaultFilter() {
@@ -172,12 +189,22 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
 
   }
 
+  private getFeaturedBlogs(items: IBlogData[]) {
+    let dateA;
+    let dateB;
+    return items.filter((item) => item.Featured).sort((a, b) => {
+      dateA = a.PublishedDate || a.Modified;
+      dateB = b.PublishedDate || b.Modified;
+      return (new Date(dateB).getTime() - new Date(dateA).getTime())
+    }).slice(0, 4)
+  }
+
   private async getblog(): Promise<void> {
     return new Promise(async resolve => {
       const listName = "Blogs";
       await sp.web.lists
         .getByTitle(listName).items
-        .select('ID,Title,PublishedDate,BlogThumbnail,BlogImage,Author/ID,Author/Title,Business/ID,Business/Title,Functions/ID,Functions/Title')
+        .select('ID,Title,PublishedDate,BlogThumbnail,BlogImage,Author/ID,Author/Title,Business/ID,Business/Title,Functions/ID,Functions/Title,Featured')
         .orderBy('PublishedDate', false)
         .expand('Author,Business,Functions')
         .top(5000)().then((resp: IBlogData[]) => {
@@ -185,6 +212,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
           console.log(resp.length);
           this.setState({
             blogData: resp,
+            featuredBlogs: this.getFeaturedBlogs(resp),
             filterData: resp,
             pageData: resp.slice(0, this.state.pageSize),
             totalPages: pageCount,
@@ -239,132 +267,165 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
     const filterValues = this.state.showBusinessData ? this.state.filterValuesBusiness : this.state.filterValuesFunctions;
 
     return (
-      <div className={'main-content'} id='blogTop'>
-        <div className={'content-wrapper'}>
-          <div className={'container'} style={{ display: this.state.isDataLoaded ? 'block' : 'none' }}>
-
-            <div className={'main-header-section'}>
-              <div className={'row'} >
-                <div className={'col-12 col-md-6 heading-section'} >
-                  <h3>Blogs</h3>
+      <>
+        <section className="featured-section blog-featured-section col-lg-12 bg-light bg-gradient mt-5 ">
+          <div className="container">
+            <div className="row title-wrapper">
+              <div className="main-header-section">
+                <div className="col-12">
+                  <h3>{this.state.featuredTitle}</h3>
                 </div>
-                <div className={'col-12 col-md-6 filter-section text-end'}>
-                  <div className="row">
-                    <div className="col-4 d-flex align-items-center justify-content-around">
-                      <div className="form-check q-box__question">
-                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business') }} />
-                        <label className="form-check-label" htmlFor="flexRadioDefault1">
-                          Business
-                        </label>
-                      </div>
-                      <div className="form-check q-box__question">
-                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
-                        <label className="form-check-label" htmlFor="flexRadioDefault2">
-                          Functions
-                        </label>
-                      </div>
-                    </div>
-                    <div className="col-8">
-                      <div className={'form-select custom-select w-100 '}>
-                        <select onChange={(e) => this.handleFilter(parseInt(e.target.value))}>
 
-                          <option value="0">Filter By</option>
-                          {
-                            filterValues.map((option) => {
-                              return (
-                                <option selected={this.state.selectedOption.ID == option.ID} value={option.ID}>{option.Title}</option>
-                              )
-                            })
-                          }
+              </div>
+            </div>
 
-                        </select>
+            <div className="row featured-carousel">
+              <div id="featuredCarousel" className="carousel slide" data-bs-interval="false" data-bs-ride="carousel">
+                <div className="carousel-inner" role="listbox">
+                  {
+                    this.state.featuredBlogs.map((item: IBlogData, index: number) => {
+                      const category = item.Business ? item.Business : item.Functions;
+                      let imageJSON = { serverRelativeUrl: "" };
+                      if (item.BlogThumbnail != null) {
+                        imageJSON = JSON.parse(item.BlogThumbnail);
+                      }
+                      return (
+                        <div className={`carousel-item ${!index ? 'active' : ''}`}>
+                          <div className="col-md-3 h-100">
+                            <BlogCard imageUrl={imageJSON.serverRelativeUrl} siteUrl={this.props.siteUrl} isFeatured={true} item={item} category={category.Title}></BlogCard>
+                          </div>
+                        </div>
+                      )
+                    })
+                  }
+                  {
+                    !this.state.featuredBlogs.length && <h5 className="not-found">No items found</h5>
+                  }
+
+                </div>
+                <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
+                  data-bs-slide="prev">
+                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span className="visually-hidden">Previous</span>
+                </button>
+                <button className="carousel-control-next" type="button" data-bs-target="#featuredCarousel"
+                  data-bs-slide="next">
+                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span className="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div className={'main-content'} id='blogTop'>
+          <div className={'content-wrapper'}>
+            <div className={'container'} style={{ display: this.state.isDataLoaded ? 'block' : 'none' }}>
+
+              <div className={'main-header-section'}>
+                <div className={'row'} >
+                  <div className={'col-12 col-md-6 heading-section'} >
+                    <h3>Blogs</h3>
+                  </div>
+                  <div className={'col-12 col-md-6 filter-section text-end'}>
+                    <div className="row">
+                      <div className="col-4 d-flex align-items-center justify-content-around">
+                        <div className="form-check q-box__question">
+                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business') }} />
+                          <label className="form-check-label" htmlFor="flexRadioDefault1">
+                            Business
+                          </label>
+                        </div>
+                        <div className="form-check q-box__question">
+                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
+                          <label className="form-check-label" htmlFor="flexRadioDefault2">
+                            Functions
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-8">
+                        <div className={'form-select custom-select w-100 '}>
+                          <select onChange={(e) => this.handleFilter(parseInt(e.target.value))}>
+
+                            <option value="0">Filter By</option>
+                            {
+                              filterValues.map((option) => {
+                                return (
+                                  <option selected={this.state.selectedOption.ID == option.ID} value={option.ID}>{option.Title}</option>
+                                )
+                              })
+                            }
+
+                          </select>
+                        </div>
                       </div>
                     </div>
                   </div>
+
                 </div>
 
               </div>
 
-            </div>
+              <article className={'row gx-5 mb-5'}>
 
-            <article className={'row gx-5 mb-5'}>
+                <section className={'col-lg-12 blog-section'}>
+                  <div className={'row'}>
+                    {
+                      this.state.pageData.length > 0 ?
+                        this.state.pageData.map((item) => {
+                          let imageJSON = { serverRelativeUrl: "" };
+                          if (item.BlogThumbnail != null) {
+                            imageJSON = JSON.parse(item.BlogThumbnail);
+                          }
 
-              <section className={'col-lg-12 blog-section'}>
-                <div className={'row'}>
-                  {
-                    this.state.pageData.length > 0 ?
-                      this.state.pageData.map((item) => {
-                        let imageJSON = { serverRelativeUrl: "" };
-                        if (item.BlogThumbnail != null) {
-                          imageJSON = JSON.parse(item.BlogThumbnail);
-                        }
+                          const category = this.state.showBusinessData ? item.Business?.Title : item.Functions?.Title;
 
-                        const category = this.state.showBusinessData ? item.Business?.Title : item.Functions?.Title;
+                          return (
 
-                        return (
-
-                          < div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
-                            <div className={'card news-card'}>
-                              <a href={`${this.props.siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">
-                                <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Card Image" />
-                              </a>
-                              <div className={'card-body d-flex flex-column'}>
-                                <div className={'category'}>
-                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {category}</span>
-                                </div>
-                                <a href={`${this.props.siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">
-                                  <div className={'mb-2 mt-2 card-content-header'}>
-                                    <h5 className={'card-title'}>{item.Title}</h5>
-                                  </div>
-                                  <div className={'date'}>
-                                    <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i> {moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
-                                  </div>
-                                  <p className={'card-text mt-2'}><i><img src={`${this.props.siteUrl}/Assets/icons/avatar.png`} alt="" /></i> <span>{item.Author.Title}</span></p>
-                                </a>
-                              </div>
+                            <div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
+                              <BlogCard imageUrl={imageJSON.serverRelativeUrl} item={item} category={category} siteUrl={this.props.siteUrl} isFeatured={false}></BlogCard>
                             </div>
-                          </div>
 
-                        )
+                          )
 
-                      })
-                      :
-                      <div>
-                        <p>
-                          NO BLOGS
-                        </p>
-                      </div>
+                        })
+                        :
+                        <div>
+                          <p>
+                            NO BLOGS
+                          </p>
+                        </div>
 
-                  }
-
+                    }
 
 
-                </div>
-              </section>
-            </article>
 
-            <div className={'pagination-wrapper'} style={{ display: this.state.totalPages > 0 ? 'block' : 'none' }} >
-              {/* <Pagination
+                  </div>
+                </section>
+              </article>
+
+              <div className={'pagination-wrapper'} style={{ display: this.state.totalPages > 0 ? 'block' : 'none' }} >
+                {/* <Pagination
                   currentPage={this.state.currentPage}
                   totalPages={this.state.totalPages}
                   onChange={(page) => this._getPage(page)}
                   limiter={5}
                 /> */}
-              <Paging currentPage={this.state.currentPage}
-                totalItems={this.state.filterData.length}
-                itemsCountPerPage={this.state.pageSize}
-                onPageUpdate={(page) => this._getPage(page)}
-              />
+                <Paging currentPage={this.state.currentPage}
+                  totalItems={this.state.filterData.length}
+                  itemsCountPerPage={this.state.pageSize}
+                  onPageUpdate={(page) => this._getPage(page)}
+                />
 
 
+              </div>
+            </div>
+          </div>
+          <div className='loaderContainer' style={{ display: this.state.isDataLoaded ? 'none' : 'flex' }}>
+            <div className="loader">
             </div>
           </div>
         </div>
-        <div className='loaderContainer' style={{ display: this.state.isDataLoaded ? 'none' : 'flex' }}>
-          <div className="loader">
-          </div>
-        </div>
-      </div >
+      </>
     );
   }
 

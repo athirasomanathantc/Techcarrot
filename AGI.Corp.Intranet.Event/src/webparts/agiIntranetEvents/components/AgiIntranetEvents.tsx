@@ -1,20 +1,16 @@
 import * as React from 'react';
-import styles from './AgiIntranetEvents.module.scss';
 import { IAgiIntranetEventsProps } from './IAgiIntranetEventsProps';
-import { escape } from '@microsoft/sp-lodash-subset';
 //require('../CSS/Styles.css');
 import { IEventData } from '../Model/IEventData';
 import { IAgiIntranetEventsStates } from './IAgiIntranetEventsStates';
 import {
   SPHttpClient,
-  SPHttpClientResponse,
-  IHttpClientOptions
+  SPHttpClientResponse
 } from '@microsoft/sp-http';
 import * as moment from 'moment';
-import { Pagination } from '@pnp/spfx-controls-react/lib/pagination';
 import Paging from './Paging/Paging';
 import { EVENTS, TABS } from '../common/constants';
-//const pageSize: number = 12;
+import EventCard from './EventCard/EventCard';
 
 
 export default class AgiIntranetEvents extends React.Component<IAgiIntranetEventsProps, IAgiIntranetEventsStates> {
@@ -22,6 +18,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
     super(props);
     this.state = {
       eventsData: [],
+      featuredEvents: [],
       currentPage: 1,
       totalPage: 0,
       pageData: [],
@@ -37,7 +34,9 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
       showBusinessData: true,
       selectedOption: {
         ID: 0
-      }
+      },
+      guid: "",
+      featuredTitle: ''
     }
   }
 
@@ -45,12 +44,51 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
     this.fetch();
   }
 
+  private getConfigItems() {
+    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('IntranetConfig')/items?$filter=(Title eq 'FeaturedEvents')&$top=1`;
+    this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+      .then((response: SPHttpClientResponse) => {
+        return response.json();
+      })
+      .then((response) => {
+        const items = response.value;
+
+        this.setState({
+          featuredTitle: items[0]?.Detail
+        });
+
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
+  }
+
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
-    await this.getNewsItems().then(() => {
-      this.setDefaultFilter();
-    });
+    await this.getConfigItems();
+    await this.getListGuid('EventDetails').then(async (guid: string): Promise<void> => {
+      this.setState({
+        guid
+      });
+      await this.getNewsItems().then(() => {
+        this.setDefaultFilter();
+      })
+    })
+  }
+
+  private async getListGuid(listname: string): Promise<string> {
+    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${listname}')`;
+    return await this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+      .then((response: SPHttpClientResponse) => {
+        return response.json();
+      })
+      .then((response) => {
+        return response.Id;
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
   }
 
   private setDefaultFilter() {
@@ -154,6 +192,16 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
   }
 
+  private getFeaturedEvents(items) {
+    let dateA;
+    let dateB;
+    return items.filter((item) => item.Featured).sort((a, b) => {
+      dateA = a.StartDate || a.Modified;
+      dateB = b.StartDate || b.Modified;
+      return (new Date(dateA).getTime() - new Date(dateB).getTime())
+    }).slice(0, 4)
+  }
+
   private async getNewsItems(): Promise<void> {
     return new Promise<void>(async (resolve) => {
       const list = 'EventDetails';
@@ -165,7 +213,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
           return resp.value;
         });
 
-      const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=ID,Title,Description,StartDate,EndDate,EventThumbnail,Country,City,Business/ID,Business/Title,Functions/ID,Functions/Title&$expand=Business,Functions&$top=${count}`;
+      const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${list}')/items?$select=ID,Title,Description,StartDate,EndDate,EventThumbnail,Country,City,Business/ID,Business/Title,Functions/ID,Functions/Title,Featured&$expand=Business,Functions&$orderby=StartDate asc&$top=${count}`;
       await this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
         .then((response: SPHttpClientResponse) => {
           return response.json();
@@ -193,6 +241,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
           this.setState({
             eventsData: items,
+            featuredEvents: this.getFeaturedEvents(upcoming),
             filterData: upcoming,
             selectedTab: "Upcoming Events",
             upcomingEvents: upcoming,
@@ -316,8 +365,8 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
         selectedTabValues,
         filterData: selectedTabValues
       }, () => {
-
-        this.paging();
+        this.onSelectFilterBy(this.state.showBusinessData ? 'Business' : 'Functions');
+        // this.paging();
       });
 
     } else {
@@ -401,162 +450,171 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
     const filterValues = this.state.showBusinessData ? this.state.filterValuesBusiness : this.state.filterValuesFunctions;
 
     return (
-      <div className={'main-content'} id='eventsTab'>
-        <div className={'content-wrapper'}>
-          <div className={'container'}>
-            <div className={'tabs'}>
-              <div className={'tab-header'} id='eventsTab' >
-                <div className={'row '} >
-                  <div className={'col-12 col-md-6 d-none d-md-block heading-section'}>
+      <>
+        <section className="featured-section col-lg-12 bg-light bg-gradient mt-5 ">
+          <div className="container">
+            <div className="row title-wrapper">
+              <div className="main-header-section">
+                <div className="col-12">
+                  <h3>{this.state.featuredTitle}</h3>
+                </div>
 
-                    <ul className={'nav nav-tabs event-tabs'} id="myTab" role="tablist">
-                      {
-                        tabs.map((tab, i) => {
-                          return (
-                            <li className={'nav-item'} role="presentation">
-                              <button className={this.state.selectedTab == tab ? `nav-link active` : `nav-link`}
-                                id={tab} data-bs-toggle="tab" data-bs-target="#ongoing-events"
-                                type="button" role="tab" aria-controls="ongoing-events"
-                                aria-selected="true" onClick={(e) => this.selectTab(e)}>
-                                {tab}
-                              </button>
-                            </li>
+              </div>
+            </div>
 
-                          )
-                        })
-                      }
-                    </ul>
-                  </div>
-                  <div className={'col-12  col-md-6 d-block d-md-none mobileTab'}>
-                    <select onChange={(e) => this.handleTab(e)} className={'nav nav-tabs'} id="myTab" role="tablist" >
-                      {
-                        tabs.map((tab, i) => {
-                          return (
-                            <option value={tab}>{tab}</option>
-                          )
-                        })
-                      }
-                    </select>
-                  </div>
-                  <div className={'col-12 col-md-6 filter-section text-end'}>
-                    <div className="row">
-                      <div className="col-4 d-flex align-items-center justify-content-around">
-                        <div className="form-check q-box__question">
-                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business') }} />
-                          <label className="form-check-label" htmlFor="flexRadioDefault1">
-                            Business
-                          </label>
+            <div className="row featured-carousel">
+              <div id="featuredCarousel" className="carousel slide" data-bs-interval="false" data-bs-ride="carousel">
+                <div className="carousel-inner" role="listbox">
+                  {
+                    this.state.featuredEvents.map((item: IEventData, index: number) => {
+                      const imageUrl = JSON.parse(item.EventThumbnail)?.serverRelativeUrl;
+                      const category = item.Business ? item.Business?.Title : item.Functions?.Title;
+
+                      return (
+                        <div className={`carousel-item ${!index ? 'active' : ''}`}>
+                          <div className="col-md-3 h-100">
+                            <EventCard imageUrl={imageUrl} item={item} siteUrl={this.props.siteUrl} guid={this.state.guid} selectedTab={this.state.selectedTab} isFeatured={true}></EventCard>
+                          </div>
                         </div>
-                        <div className="form-check q-box__question">
-                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
-                          <label className="form-check-label" htmlFor="flexRadioDefault2">
-                            Functions
-                          </label>
+                      )
+                    })
+                  }
+                  {
+                    !this.state.featuredEvents.length && <h5 className="not-found">No items found</h5>
+                  }
+                </div>
+                <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
+                  data-bs-slide="prev">
+                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span className="visually-hidden">Previous</span>
+                </button>
+                <button className="carousel-control-next" type="button" data-bs-target="#featuredCarousel"
+                  data-bs-slide="next">
+                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span className="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div className={'main-content'} id='eventsTab'>
+          <div className={'content-wrapper'}>
+            <div className={'container'}>
+              <div className={'tabs'}>
+                <div className={'tab-header'} id='eventsTab' >
+                  <div className={'row '} >
+                    <div className={'col-12 col-md-6 d-none d-md-block heading-section'}>
+
+                      <ul className={'nav nav-tabs event-tabs'} id="myTab" role="tablist">
+                        {
+                          tabs.map((tab, i) => {
+                            return (
+                              <li className={'nav-item'} role="presentation">
+                                <button className={this.state.selectedTab == tab ? `nav-link active` : `nav-link`}
+                                  id={tab} data-bs-toggle="tab" data-bs-target="#ongoing-events"
+                                  type="button" role="tab" aria-controls="ongoing-events"
+                                  aria-selected="true" onClick={(e) => this.selectTab(e)}>
+                                  {tab}
+                                </button>
+                              </li>
+
+                            )
+                          })
+                        }
+                      </ul>
+                    </div>
+                    <div className={'col-12  col-md-6 d-block d-md-none mobileTab'}>
+                      <select onChange={(e) => this.handleTab(e)} className={'nav nav-tabs'} id="myTab" role="tablist" >
+                        {
+                          tabs.map((tab, i) => {
+                            return (
+                              <option value={tab}>{tab}</option>
+                            )
+                          })
+                        }
+                      </select>
+                    </div>
+                    <div className={'col-12 col-md-6 filter-section text-end'}>
+                      <div className="row">
+                        <div className="col-4 d-flex align-items-center justify-content-around">
+                          <div className="form-check q-box__question">
+                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business') }} />
+                            <label className="form-check-label" htmlFor="flexRadioDefault1">
+                              Business
+                            </label>
+                          </div>
+                          <div className="form-check q-box__question">
+                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
+                            <label className="form-check-label" htmlFor="flexRadioDefault2">
+                              Functions
+                            </label>
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-8">
-                        <div className={'form-select custom-select w-100 '}>
-                          <select onChange={(e) => this.handleFilter(parseInt(e.target.value))}>
-                            <option value='0'>Filter By</option>
-                            {
-                              filterValues.map((option) => {
-                                return (
-                                  <option selected={this.state.selectedOption.ID == option.ID} value={option.ID}>{option.Title}</option>
-                                )
-                              })
-                            }
-                          </select>
+                        <div className="col-8">
+                          <div className={'form-select custom-select w-100 '}>
+                            <select onChange={(e) => this.handleFilter(parseInt(e.target.value))}>
+                              <option value='0'>Filter By</option>
+                              {
+                                filterValues.map((option) => {
+                                  return (
+                                    <option selected={this.state.selectedOption.ID == option.ID} value={option.ID}>{option.Title}</option>
+                                  )
+                                })
+                              }
+                            </select>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className={'tab-content'}>
-                <div className={'tab-pane fade show active'}>
-                  <div className={'row'}>
-                    {
-                      this.state.pageData.length > 0 ?
-                        this.state.pageData.map((item) => {
-                          let imageJSON = { serverRelativeUrl: "" }
-                          if (item.EventThumbnail != null) {
-                            imageJSON = JSON.parse(item.EventThumbnail);
-                          }
-                          //console.log("END DATE " + item.EndDate);
-                          return (
+                <div className={'tab-content'}>
+                  <div className={'tab-pane fade show active'}>
+                    <div className={'row'}>
+                      {
+                        this.state.pageData.length > 0 ?
+                          this.state.pageData.map((item) => {
+                            let imageJSON = { serverRelativeUrl: "" }
+                            if (item.EventThumbnail != null) {
+                              imageJSON = JSON.parse(item.EventThumbnail);
+                            }
+                            //console.log("END DATE " + item.EndDate);
+                            return (
 
-                            <div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
-                              <div className={'card news-card'}>
-                                <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Card Image" />
-                                <div className={'card-body d-flex flex-column'}>
-                                  <div className={'event-date-wrapper'}>
-                                    <div className={'event-date'} style={{ display: item.StartDate === null ? "none" : "display" }}>
-                                      <p className={'notification-date'} >
-                                        {moment(item.StartDate).format('DD')}
-                                      </p>
-                                      <p className={'notification-month'} >
-                                        {moment(item.StartDate).format('MMM')}
-                                      </p>
-                                    </div>
-                                    {
-                                      item.EndDate &&
-                                      <>
-                                        <div className={'divider'} style={{ display: item.StartDate == item.EndDate ? "none" : "display" }}></div>
-                                        <div className={'event-date'} style={{ display: item.StartDate == item.EndDate ? "none" : "display" }} >
-                                          <p className={'notification-date'} >
-                                            {moment(item.EndDate).format('DD')}
-                                          </p>
-                                          <p className={'notification-month'} >
-                                            {moment(item.EndDate).format('MMM')}
-                                          </p>
-                                        </div>
-                                      </>
-                                    }
-                                  </div>
-
-                                  <div className={'mb-3 card-content-header'}>
-                                    <h5 className={'card-title'}>{item.Title}</h5>
-                                  </div>
-                                  <div className={'news-details'}>
-                                    <span><i><img src={`${this.props.siteUrl}/Assets/icons/icon-location.png`} alt="" /></i> {item.City},{item.Country}</span>
-
-                                  </div>
-                                  <p className={'card-text'}>{item.Description}</p>
-                                  <a href={`${this.props.siteUrl}/SitePages/News/Events/Event Details.aspx?eventID=${item.ID}&tab=${this.state.selectedTab}`}
-                                    className={'news-read-more  align-self-start'} data-interception="off">Read more</a>
-                                </div>
+                              <div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
+                                <EventCard imageUrl={imageJSON.serverRelativeUrl} item={item} siteUrl={this.props.siteUrl} guid={this.state.guid} selectedTab={this.state.selectedTab} isFeatured={false}></EventCard>
                               </div>
-                            </div>
 
-                          )
-                        })
-                        :
-                        <div className={'invalidTxt'}>
-                          <p>NO EVENTS</p>
-                        </div>
+                            )
+                          })
+                          :
+                          <div className={'invalidTxt'}>
+                            <p>NO EVENTS</p>
+                          </div>
 
-                    }
+                      }
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
-              {/* <Pagination
+              <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
+                {/* <Pagination
                 currentPage={this.state.currentPage}
                 totalPages={this.state.totalPage}
                 onChange={(page) => this._getPage(page)}
                 limiter={5}
                 //hideFirstPageJump={false}
               /> */}
-              <Paging currentPage={this.state.currentPage}
-                totalItems={this.state.filterData.length}
-                itemsCountPerPage={this.state.pageSize}
-                onPageUpdate={(page) => this._getPage(page)}
-              />
+                <Paging currentPage={this.state.currentPage}
+                  totalItems={this.state.filterData.length}
+                  itemsCountPerPage={this.state.pageSize}
+                  onPageUpdate={(page) => this._getPage(page)}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }

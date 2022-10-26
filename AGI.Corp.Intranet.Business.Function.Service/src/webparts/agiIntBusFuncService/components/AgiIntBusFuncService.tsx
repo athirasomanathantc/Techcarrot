@@ -6,6 +6,7 @@ import { sp } from '@pnp/sp/presets/all';
 import { IAgiIntBusFuncServiceState } from './IAgiIntBusFuncServiceState';
 import { IContentItem } from '../models/IContentItem';
 import { LIST_CONTENT, NULL_CONTENT_ITEM } from '../common/constants';
+import * as $ from 'jquery';
 
 //require('../css/business.css');
 
@@ -21,7 +22,7 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
     this.state = {
       contentItems: [],
       lastNavItem: '',
-      programID: ''
+      programID: '',
     }
   }
 
@@ -46,21 +47,43 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
   }
 
   private fnInitiate() {
-    let serviceItems = document.querySelectorAll(".our-service-carousel .carousel-item");
+    debugger;
+    var ourServiceCardCarousel = document.querySelector(
+      "#ourServiceCarousel"
+    );
+    if (window.matchMedia("(min-width: 768px)").matches) {
+      // var carousel = new bootstrap.Carousel(ourServiceCardCarousel, {
+      //   interval: false,
+      // });
+      ourServiceCardCarousel.addEventListener('slide.bs.carousel', function () {
 
-    serviceItems.forEach((el) => {
-      const minPerSlide = 4;
-      let serviceNext = el.nextElementSibling;
-      for (var i = 1; i < minPerSlide; i++) {
-        if (!serviceNext) {
-          // wrap carousel by using first child
-          serviceNext = serviceItems[0];
+        interval: false
+      });
+      var carouselWidth = $(".our-services .carousel-inner")[0].scrollWidth;
+      var cardWidth = $(".our-services  .carousel-item").width();
+      var scrollPosition = 0;
+      $(".our-service-control-next").click(function () {
+
+        if (scrollPosition < carouselWidth - cardWidth * 4) {
+          scrollPosition += cardWidth;
+          $("#ourServiceCarousel .carousel-inner").animate(
+            { scrollLeft: scrollPosition },
+            600
+          );
         }
-        let cloneChild: any = serviceNext.cloneNode(true);
-        el.appendChild(cloneChild.children[0]);
-        serviceNext = serviceNext.nextElementSibling;
-      }
-    });
+      });
+      $(".our-service-control-prev").on("click", function () {
+        if (scrollPosition > 0) {
+          scrollPosition -= cardWidth;
+          $("#ourServiceCarousel .carousel-inner").animate(
+            { scrollLeft: scrollPosition },
+            600
+          );
+        }
+      });
+    } else {
+      $(ourServiceCardCarousel).addClass("slide");
+    }
   }
 
   private getImageUrl(imageContent: string): string {
@@ -110,44 +133,65 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
 
           ?
 
-          <section className="section our-services">
+          <section className="section our-services" style={{ display: this.state.contentItems.length > 0 ? 'block' : 'none' }}>
             <div className="container">
               <div className="row">
-                <div className="col-8 col-lg-11 text-let text-lg-center">
-                  <h3 className="section-title">{this.props.listName}</h3>
+                <div className='title-header'>
+                  <div className="text-left text-lg-center">
+                    <h3 className="section-title">{this.props.listName}</h3>
 
-                </div>
-                <div className="align-self-end col-4 col-lg-1">
-                  <div className="button-container">
-                    <button className="carousel-control-prev" type="button" data-bs-target="#ourServiceCarousel"
-                      data-bs-slide="prev">
-                      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Previous</span>
-                    </button>
-                    <button className="carousel-control-next" type="button" data-bs-target="#ourServiceCarousel"
-                      data-bs-slide="next">
-                      <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Next</span>
-                    </button>
+                  </div>
+                  <div className="align-self-end our-service-btn-control">
+                    <div className="button-container">
+                      <button className="carousel-control-prev our-service-control-prev" type="button" data-bs-target="#ourServiceCarousel"
+                        data-bs-slide="prev">
+                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span className="visually-hidden">Previous</span>
+                      </button>
+                      <button className="carousel-control-next our-service-control-next" type="button" data-bs-target="#ourServiceCarousel"
+                        data-bs-slide="next">
+                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span className="visually-hidden">Next</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <div id="ourServiceCarousel" className="carousel slide container our-service-carousel mt-5"
-                  data-bs-ride="carousel">
+                <div id="ourServiceCarousel" className="carousel container our-service-carousel mt-5"
+                  data-bs-ride="carousel" data-bs-interval="false" data-bs-wrap="false">
                   <div className="carousel-inner w-100">
+
                     {
                       this.state.contentItems.map((items, i) => {
+                        debugger
+
                         const catVal = this.getQueryStringValue('categoryId');
-                        const navURL = `${this.props.siteUrl}/SitePages/Articles.aspx?progName=${this.state.lastNavItem}&progId=${catVal}`;//items.NavigationUrl.Url;
+                        let navURL = `${this.props.siteUrl}/SitePages/Articles.aspx?serviceId=${items.ID}&env=WebView`;//items.NavigationUrl.Url;
+                        const article = items.isArticle;
+                        let trgt = '_self';
+                        // {article == true ? 
+                        // {navURL : `${this.props.siteUrl}/SitePages/Articles.aspx?serviceId=${items.ID}&env=WebView`, trgt : '_blank'} : 
+                        // {navURL : items.NavigationUrl.Url , trgt : '_self'}}
+                        if (article == true) {
+                          navURL = `${this.props.siteUrl}/SitePages/Articles.aspx?serviceId=${items.ID}&env=WebView`;//items.NavigationUrl.Url;
+                          trgt = '_self';
+                        }
+                        else {
+                          const tempURL = items.NavigationUrl.Url;
+                          navURL = tempURL;
+                          trgt = '_blank'
+                        }
                         const imgVal = this.getImageUrl(items.ServiceIcon);
                         return (
+
                           <div className={i == 0 ? "carousel-item active" : "carousel-item"}>
-                            <div className="col-md-3 m-2">
+                            <div className="col-md-3 m-2 h-100">
                               <div className="card  our-services">
                                 <img className="w-100" src={imgVal} />
                                 <div className="card-body">
                                   <h4 className="card-title">{items.Title}</h4>
                                   <p className="card-description mb-4" dangerouslySetInnerHTML={{ __html: items.Description }}></p>
-                                  <a href={navURL} className="btn news-read-more mt-auto align-self-end">{items.NavigationText}</a>
+
+                                  <a href={navURL} target={trgt} data-interception="off" className="btn news-read-more mt-auto align-self-end">{items.NavigationText}</a>
                                 </div>
                               </div>
                             </div>

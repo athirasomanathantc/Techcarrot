@@ -17,7 +17,7 @@ export const VideoCarousel = (props: IVideoCarousel) => {
     })
 
     return (<>
-        <video className="video1" loop controls muted poster={props.thumbnailUrl} ref={videoRef}>
+        <video className="video1" loop controls poster={props.thumbnailUrl} ref={videoRef}>
             <source src={props.videoUrl} type="video/mp4" />
             Your browser does not support the video tag.
         </video>

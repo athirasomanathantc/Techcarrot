@@ -7,8 +7,7 @@ export const LIST_CONTENT3 = 'Articles-Content3';
 export const NULL_BANNER_ITEM = {
     ID: 0,
     Title: '',
-    Business: '',
-    Function: '',
+    ServiceName: {Title: '', Id: ''},
     BannerImage: '',
     PrimaryDescription: '',
     SecondaryDescription: ''
@@ -17,16 +16,14 @@ export const NULL_BANNER_ITEM = {
 export const NULL_SLIDE_ITEM = {
     ID: 0,
     Title: '',
-    Business: '',
-    Function: '',
+    ServiceName: {Title: '', Id: ''},
     ContentImage: ''
 }
 
 export const NULL_CONTENT_ITEM = {
     ID: 0,
     Title: '',
-    Business: '',
-    Function: '',
+    ServiceName: {Title: '', Id: ''},
     ContentImage: '',
     PrimaryDescription: '',
     SecondaryDescription: ''
@@ -35,15 +32,15 @@ export const NULL_CONTENT_ITEM = {
 export const NULL_CONTENT2_ITEM = {
     ID: 0,
     Title: '',
-    Business: '',
-    Function: '',
-    Description: ''
+    ServiceName: {Title: '', Id: ''},
+    Description: '',
+    Author:'',
+    Location:''
 }
 
 export const NULL_CONTENT3_ITEM = {
     ID: 0,
     Title: '',
-    Business: '',
-    Function: '',
+    ServiceName: {Title: '', Id: ''},
     Description: ''
 }

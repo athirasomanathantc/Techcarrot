@@ -1,7 +1,6 @@
 export interface IContent3Item {
     ID: number;
     Title: string;
-    Business: string;
-    Function: string;
+    ServiceName: {Title: string, Id: string};
     Description: string;
 }

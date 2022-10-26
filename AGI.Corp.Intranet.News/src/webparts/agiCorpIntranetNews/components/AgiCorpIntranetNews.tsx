@@ -27,6 +27,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
       });
     this.state = {
       newsData: [],
+      featuredNews: [],
       filterData: [],
       filterValuesBusiness: [],
       filterValuesFunctions: [],
@@ -37,7 +38,8 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
       showBusinessData: true,
       selectedOption: {
         ID: 0
-      }
+      },
+      featuredTitle: ''
     }
   }
 
@@ -83,9 +85,29 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
+    await this.getConfigItems();
     await this.getNewsItems().then(() => {
       this.setDefaultFilter();
     });
+  }
+
+  private getConfigItems() {
+    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('IntranetConfig')/items?$filter=(Title eq 'FeaturedNews')&$top=1`;
+    this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+      .then((response: SPHttpClientResponse) => {
+        return response.json();
+      })
+      .then((response) => {
+        const items = response.value;
+
+        this.setState({
+          featuredTitle: items[0]?.Detail
+        });
+
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
   }
 
   private setDefaultFilter() {
@@ -102,6 +124,16 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
     });
   }
 
+  private getFeaturedNews(items) {
+    let dateA;
+    let dateB;
+    return items.filter((item) => item.Featured).sort((a, b) => {
+      dateA = a.PublishedDate || a.Modified;
+      dateB = b.PublishedDate || b.Modified;
+      return (new Date(dateB).getTime() - new Date(dateA).getTime())
+    }).slice(0, 4)
+  }
+
   private async getNewsItems(): Promise<void> {
     return new Promise<void>(async (resolve) => {
       const list = 'News';
@@ -115,7 +147,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
 
       await sp.web.lists
         .getByTitle(list).items
-        .select("ID,Title,PublishedDate,Description,NewsThumbnail,NewsImage,Business/ID,Business/Title,Functions/ID,Functions/Title")
+        .select("ID,Title,PublishedDate,Description,NewsThumbnail,NewsImage,Business/ID,Business/Title,Functions/ID,Functions/Title,Featured")
         .orderBy("PublishedDate", false)
         .expand("Business,Functions").top(count)()
         //this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
@@ -126,6 +158,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
 
           this.setState({
             newsData: items,
+            featuredNews: this.getFeaturedNews(items),
             filterData: items,
             pageData: items.slice(0, this.state.pageSize),
             totalPages: pageCount
@@ -268,6 +301,73 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
 
     return (
       <div>
+        <section className="featured-section col-lg-12 bg-light bg-gradient mt-5 ">
+          <div className="container">
+            <div className="row title-wrapper">
+              <div className="main-header-section">
+                <div className="col-12">
+                  <h3>{this.state.featuredTitle}</h3>
+                </div>
+
+              </div>
+            </div>
+
+            <div className="row featured-carousel">
+              <div id="featuredCarousel" className="carousel slide" data-bs-interval="false" data-bs-ride="carousel">
+                <div className="carousel-inner" role="listbox">
+                  {
+                    this.state.featuredNews.map((item: INewsData, index: number) => {
+                      const imageUrl = JSON.parse(item.NewsThumbnail)?.serverRelativeUrl;
+                      const category = item.Business ? item.Business?.Title : item.Functions?.Title;
+
+                      return (
+                        <div className={`carousel-item ${!index ? 'active' : ''}`}>
+                          <div className="col-md-3 h-100">
+                            <div className="card h-100">
+                              <div className="badge-label"><span><i><img src={`${this.props.siteUrl}/Assets/images/star.svg`} /></i></span><span
+                                className="badge-txt">Featured</span></div>
+                              <div className="card-img">
+                                <img src={imageUrl} className="img-fluid" />
+                              </div>
+                              <div className="card-body d-flex flex-column">
+                                <div className={'category'}>
+                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Tag.svg`} alt="" /></i>{category}</span>
+                                </div>
+
+                                <div className={'mb-2 mt-2 card-content-header'}>
+                                  <h5 className="card-title">{item.Title}</h5>
+                                </div>
+                                <div className={'date'}>
+                                  <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i>{moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
+                                </div>
+                                <p className={'card-text mt-2'}>{item.Description}</p>
+                                <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}&env=WebView`} className={'news-read-more  align-self-start'}>Read more</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    })
+                  }
+                  {
+                    !this.state.featuredNews.length && <h5 className="not-found">No items found</h5>
+                  }
+
+                </div>
+                <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
+                  data-bs-slide="prev">
+                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span className="visually-hidden">Previous</span>
+                </button>
+                <button className="carousel-control-next" type="button" data-bs-target="#featuredCarousel"
+                  data-bs-slide="next">
+                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span className="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
         <div className={'main-content'} id='newsTop'>
           <div className={'content-wrapper'}>
             <div className={'container'}>
@@ -343,7 +443,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                                     <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i>{moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
                                   </div>
                                   <p className={'card-text mt-2'}>{item.Description}</p>
-                                  <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}`} className={'news-read-more  align-self-start'} data-interception="off">Read more</a>
+                                  <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}&env=WebView`} className={'news-read-more  align-self-start'}>Read more</a>
                                 </div>
                               </div>
                             </div>

@@ -4,6 +4,7 @@ import { IFunctionData } from "../models/IFunctionData";
 export interface IAgiIntranetEventsStates {
   totalAnnouncementData: IAnnouncementData[];
   filteredAnnouncementData: IAnnouncementData[];
+  featuredAnnouncements: IAnnouncementData[];
   exceptionOccured: boolean;
   currentPage: number;
   totalPage: number;
@@ -19,4 +20,5 @@ export interface IAgiIntranetEventsStates {
   selectedOption: {
     ID: number;
   }
+  featuredTitle: string;
 }

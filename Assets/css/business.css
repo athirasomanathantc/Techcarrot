@@ -27,16 +27,55 @@
 	}
 
 	#businessBannerCarousel .carousel-caption p {
-		font-size: 37px;
+		font-size: 18px !important;
 		line-height: 42px;
 		font-weight: 100;
+	}
+
+	#businessBannerCarousel .carousel-caption p {
+		font-size: 34px;
+		line-height: 1.20583em;
+	}
+
+	#businessBannerCarousel .carousel-item .videoWrapper {
+		width: 100%;
 	}
 
 	#businessBannerCarousel .carousel-item img,
 	#businessBannerCarousel .carousel-item video {
 		object-fit: cover;
-		max-height: 720px;
-		width: 100vw;
+		max-height: 356px;
+		width: 100%;
+		/* z-index:99999; */
+	}
+
+	.footer-col .title-wrapper {
+		font-family: 'Gill Sans';
+	}
+
+	#businessBannerCarousel .carousel-control-prev-icon {
+		width: 55px;
+		height: 55px;
+		border: 1px solid #fff;
+		border-radius: 50%;
+		background-size: 50%;
+	}
+
+	#businessBannerCarousel .carousel-control-next-icon {
+		width: 55px;
+		height: 55px;
+		border: 1px solid #fff;
+		border-radius: 50%;
+		background-size: 50%;
+	}
+
+	@media (max-width:768px) {
+
+		#businessBannerCarousel .carousel-control-next-icon,
+		#businessBannerCarousel .carousel-control-prev-icon {
+			width: 40px;
+			height: 40px;
+		}
 	}
 
 	.section {
@@ -130,6 +169,16 @@
 		line-height: 40px;
 	}
 
+	@media (max-width:768px) {
+		.banner-text-wrapper div[class^="ExternalClass"] {
+			font-size: 20px !important;
+			line-height: 1.1em;
+		}
+
+		.banner-text-wrapper div[class^="ExternalClass"] b {
+			font-size: 30px !important;
+		}
+	}
 
 	.banner-text-wrapper span {
 		font-weight: 600;
@@ -144,13 +193,24 @@
 	}
 
 	.txt-img-section .business-txt-img h2 div[class^="ExternalClass"],
-	.txt-img-section .business-txt-img div[class^="ExternalClass"] div,
-	.txt-img-section .business-txt-img div[class^="ExternalClass"] span,
-	.txt-img-section .business-txt-img div[class^="ExternalClass"] p {
+	.txt-img-section .business-txt-img h2 div[class^="ExternalClass"] div,
+	.txt-img-section .business-txt-img h2 div[class^="ExternalClass"] span,
+	.txt-img-section .business-txt-img h2 div[class^="ExternalClass"] p {
 		font-size: 35px !important;
 		letter-spacing: 0px;
 		color: #000000;
 		line-height: 40px;
+	}
+
+	@media (max-width:991px) {
+
+		.txt-img-section .business-txt-img h2 div[class^="ExternalClass"],
+		.txt-img-section .business-txt-img h2 div[class^="ExternalClass"] div,
+		.txt-img-section .business-txt-img h2 div[class^="ExternalClass"] span,
+		.txt-img-section .business-txt-img h2 div[class^="ExternalClass"] p {
+			font-size: 24px !important;
+			line-height: 1.2em;
+		}
 	}
 
 	.txt-img-section .business-txt-img h2 {
@@ -201,6 +261,10 @@
 		font-size: 20px;
 		font-family: 'Gill Sans';
 		color: #000;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
 	}
 
 	.testimonial-slider h2.section-title {
@@ -224,7 +288,7 @@
 		display: block;
 	}
 
-	blockquote p::before {
+	#carouselTestimonial .carousel-inner::before {
 
 
 		background-image: url(images/business/blockquote-open.svg);
@@ -234,11 +298,14 @@
 		display: block;
 		width: 5rem;
 		height: 5rem;
+		bottom: 140px;
+		position: absolute;
+		left: 0px;
 	}
 
-	blockquote p::after {
+	#carouselTestimonial .carousel-inner::after {
 
-		background-image: url(images/business/blockquote-close.svg);
+		background-image: url(images/business/blockquote-open.svg);
 		background-position: top left;
 		background-repeat: no-repeat;
 		content: "";
@@ -247,6 +314,20 @@
 		height: 5rem;
 		position: absolute;
 		right: 0;
+		bottom: 0px;
+		transform: rotate(180deg);
+	}
+
+	@media (max-width:767px) {
+		#carouselTestimonial .carousel-inner::before {
+			background-size: 40px;
+			bottom: 120px;
+		}
+
+		#carouselTestimonial .carousel-inner::after {
+			background-size: 40px;
+			bottom: 20px;
+		}
 	}
 
 	.testimonial-slider .button-container {
@@ -294,7 +375,7 @@
 	}
 
 	.team-content {
-		text-align: left;
+		text-align: center;
 		padding: 0 1rem;
 	}
 
@@ -313,6 +394,7 @@
 		letter-spacing: 0px;
 		color: #444;
 		margin-top: 20px;
+		text-align: center;
 	}
 
 	.leadership-carousel .team-card {
@@ -475,8 +557,12 @@
 
 	.our-services .carousel-inner .carousel-item .card-body {
 		background: #FFF;
+		display: grid;
 	}
 
+	.our-services .news-read-more {
+		text-align: left;
+	}
 
 	.our-services .button-container {
 		display: flex;
@@ -726,7 +812,8 @@
 			overflow: hidden;
 		}
 
-		#businessBannerCarousel .carousel-item img {
+		#businessBannerCarousel .carousel-item img,
+		#businessBannerCarousel .carousel-item video {
 			height: 200px;
 			object-fit: cover;
 		}
@@ -761,7 +848,7 @@
 
 		.banner-section {
 
-			min-height: 148px;
+			min-height: 260px;
 
 			overflow-x: hidden;
 		}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agi-corp-intranem-interim-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agiCorpIntranemInterim/AgiCorpIntranemInterimWebPart.js",
+          "manifest": "./src/webparts/agiCorpIntranemInterim/AgiCorpIntranemInterimWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgiCorpIntranemInterimWebPartStrings": "lib/webparts/agiCorpIntranemInterim/loc/{locale}.js"
+  }
+}

@@ -12,6 +12,7 @@ import { PortalNavigation } from './PortalNavigation/PortalNavigation';
 import { MyApps } from './MyApps/MyApps';
 import { CompanyEvents } from './CompanyEvents/CompanyEvents';
 import { EmployeeSurvey } from './EmployeeSurvey/EmployeeSurvey';
+import { Quiz } from './Quiz/Quiz';
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 import Calender from './Calendar/Calendar';
 
@@ -43,7 +44,7 @@ export default class AgiIntranetHomeMain extends React.Component<IAgiIntranetHom
             <div className="container">
               <div className="row home-page">
                 <div className="col-xl-8 col-sm-12  ">
-                  <div className="row h-100">
+                  <div className="row">
                     <ErrorBoundary>
                       <LatestNews {...this.props}></LatestNews>
                     </ErrorBoundary>
@@ -79,6 +80,9 @@ export default class AgiIntranetHomeMain extends React.Component<IAgiIntranetHom
                     </ErrorBoundary>
                     <ErrorBoundary>
                       <EmployeeSurvey {...this.props}></EmployeeSurvey>
+                    </ErrorBoundary>
+                    <ErrorBoundary>
+                      <Quiz {...this.props}></Quiz>
                     </ErrorBoundary>
                   </div>
                 </div>
