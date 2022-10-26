@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "agi-corp-intranet-gallery-explorer-client-side-solution",
+    "id": "8dc47058-adf4-43c0-ba9f-d94ba68458bb",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.15.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "agi-corp-intranet-gallery-explorer description"
+      },
+      "longDescription": {
+        "default": "agi-corp-intranet-gallery-explorer description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "agi-corp-intranet-gallery-explorer Feature",
+        "description": "The feature that activates elements of the agi-corp-intranet-gallery-explorer solution.",
+        "id": "0b425a9f-a69e-4ec3-8056-58383cfe8f70",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/agi-corp-intranet-gallery-explorer.sppkg"
+  }
+}

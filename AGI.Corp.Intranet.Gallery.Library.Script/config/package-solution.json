@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "agi-corp-intranet-gallery-library-script-client-side-solution",
+    "id": "f154f4c5-1bf4-4749-b5ff-2a3d7840a286",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.15.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "agi-corp-intranet-gallery-library-script description"
+      },
+      "longDescription": {
+        "default": "agi-corp-intranet-gallery-library-script description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "agi-corp-intranet-gallery-library-script Feature",
+        "description": "The feature that activates elements of the agi-corp-intranet-gallery-library-script solution.",
+        "id": "0975f08e-29e1-4688-96c2-c28712371cd4",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/agi-corp-intranet-gallery-library-script.sppkg"
+  }
+}

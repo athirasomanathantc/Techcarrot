@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.2",
+    "libraryName": "agi-corp-intranet-gallery-library-script",
+    "libraryId": "f154f4c5-1bf4-4749-b5ff-2a3d7840a286",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "agi-corp-intranet-gallery-library-script",
+    "solutionShortDescription": "agi-corp-intranet-gallery-library-script description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

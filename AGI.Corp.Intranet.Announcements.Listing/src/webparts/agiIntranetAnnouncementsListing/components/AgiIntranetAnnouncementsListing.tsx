@@ -36,7 +36,8 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       showBusinessData: true,
       selectedOption: {
         ID: 0
-      }
+      },
+      featuredTitle: ''
     }
   }
   async componentDidMount(): Promise<void> {
@@ -44,12 +45,14 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       const announcements: IAnnouncementData[] = await this._spServices.getAnnouncements();
       const business: IBusinessData[] = await this._spServices.getBussiness();
       const functions: IFunctionData[] = await this._spServices.getFunctionData();
+      const featuredTitle: string = await this._spServices.getConfigItems();
       this.setState({
         totalAnnouncementData: announcements,
         featuredAnnouncements: this.getFeaturedAnnouncements(announcements),
         filteredAnnouncementData: announcements,
         businessData: business,
-        functionData: functions
+        functionData: functions,
+        featuredTitle: featuredTitle
       });
       this.getFirstPageAnnouncements();
 
@@ -241,7 +244,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
             <div className="row title-wrapper">
               <div className="main-header-section">
                 <div className="col-12">
-                  <h3>Featured Announcements</h3>
+                  <h3>{this.state.featuredTitle}</h3>
                 </div>
 
               </div>
@@ -262,6 +265,9 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
                         </div>
                       )
                     })
+                  }
+                  {
+                    !this.state.featuredAnnouncements.length && <h5 className="not-found">No items found</h5>
                   }
 
                 </div>

@@ -20,4 +20,5 @@ export interface IAgiIntranetEventsStates {
   selectedOption: {
     ID: number;
   }
+  featuredTitle: string;
 }
