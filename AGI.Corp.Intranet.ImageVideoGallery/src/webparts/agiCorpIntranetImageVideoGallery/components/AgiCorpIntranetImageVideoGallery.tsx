@@ -4,7 +4,7 @@ import { IAgiCorpIntranetImageVideoGalleryProps } from './IAgiCorpIntranetImageV
 import { escape } from '@microsoft/sp-lodash-subset';
 import { containsInvalidFileFolderChars, sp } from '@pnp/sp/presets/all';
 import { IAgiCorpIntranetImageVideoGalleryState } from './IAgiCorpIntranetImageVideoGalleryState';
-import { LIBRARY_PHOTO_GALLERY, LIBRARY_VIDEO_GALLERY, NULL_IMAGE_ITEM, NULL_SELECTED_ITEM, PATH_PHOTO_GALLERY, PROP_DEFAULT_ORDERBY } from '../common/constants';
+import { LIBRARY_PHOTO_GALLERY, LIBRARY_VIDEO_GALLERY, MEDIA_PER_PAGE, NULL_IMAGE_ITEM, NULL_SELECTED_ITEM, PATH_PHOTO_GALLERY, PROP_DEFAULT_ORDERBY } from '../common/constants';
 import {
   SPHttpClient,
   SPHttpClientResponse,
@@ -69,7 +69,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       isDataLoaded: false,
 
       pagedImages: [],
-      imagesPerPage: 4,
+      imagesPerPage: MEDIA_PER_PAGE,
       totalImages: 0,
       imagesCurrentPage: 1,
 
@@ -490,7 +490,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       // .select("*, FileRef, FileLeafRef, Created, File, ID, Title, Author/Title")
       // .expand("File, Author").get().then((allItems) => {
       const totalImages = allItems.length;
-      const imagesPerPage = 4;
+      const imagesPerPage = MEDIA_PER_PAGE;
       const pagedImages = allItems.slice(0, imagesPerPage);
       this.setState({
         imageItems: allItems,

@@ -230,7 +230,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
   private handleSearchResults(e: any) {
     try {
       const navUrl = `${this.props.siteUrl}/sitepages/CustomSearch.aspx?q=${this.state.selectedSearchVal}`;
-      window.open(navUrl,"").focus();
+      window.open(navUrl, "").focus();
       //location.replace(navUrl);
     }
     catch (e) {
@@ -246,6 +246,11 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
 
   private gotoNotifications() {
     window.location.href = `${this.props.siteUrl}${this.state.notificationsURL}?env=WebView`;
+  }
+
+  private logoutUser(){
+    window.location.replace(`/_layouts/15/signout.aspx?post_logout_redirect_uri=${this.props.siteUrl}&client_id=00000003-0000-0ff1-ce00-000000000000`);
+    return false;
   }
 
   private closeModal() {
@@ -265,6 +270,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
     const newsMiscContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_NEWSMISC);
     const galleryContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_GALLERY);
     const otherContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_OTHER);
+
 
     const { businessItems, functionItems } = this.state;
 
@@ -290,7 +296,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                 <form action="" className="d-block d-md-flex mt-3 mt-lg-0 order-4 order-md-1 search-bar">
                   <div className="input-group">
                     <input type="text" className="form-control form-control-lg" placeholder="Search Here" id="txtSeachText" onChange={(e) => this.handleSearchChange(e)} />
-                    <a  className="input-group-text btn-serach" href={`${this.props.siteUrl}/SitePages/CustomSearch.aspx?q=${this.state.selectedSearchVal}`}><i className="bi bi-search">
+                    <a className="input-group-text btn-serach" href={`${this.props.siteUrl}/SitePages/CustomSearch.aspx?q=${this.state.selectedSearchVal}`}><i className="bi bi-search">
                       <img src={`${this.props.siteUrl}/Assets/images/icon-search.svg`} alt="" /></i></a>
                   </div>
                 </form>
@@ -332,7 +338,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                             <div className="row">
                               <div className="top-user-section d-flex justify-content-between align-items-center">
                                 <div className="org-email">{this.state.domainName}</div>
-                                <div className="signout-btn">sign out</div>
+                                <a className="signout-btn" href="#" onClick={() => this.logoutUser()}>sign out</a>
                               </div>
                             </div>
                             <div className="row mt-4">

@@ -15,5 +15,7 @@ export interface IBlogData {
     Functions: {
         ID: number,
         Title: string
-    }
+    };
+    Featured: boolean;
+    Modified: string;
 }

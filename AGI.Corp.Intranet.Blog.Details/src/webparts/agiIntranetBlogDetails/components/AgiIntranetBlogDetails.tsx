@@ -11,6 +11,7 @@ import { ICommentItem } from '../models/ICommentItem';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link, Text } from 'office-ui-fabric-react';
 import * as _ from 'lodash';
+import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 
 export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranetBlogDetailsProps, IAgiIntranetBlogDetailsState> {
 
@@ -545,7 +546,9 @@ export default class AgiIntranetBlogDetails extends React.Component<IAgiIntranet
           <img src={imageUrl} className="d-block w-100" alt="..." />
         </section>
         <section className="news-detail-text">
-          <div dangerouslySetInnerHTML={{ __html: blog.Summary }}></div>
+          <div>
+            {ReactHtmlParser(blog.Summary)}
+          </div>
         </section>
         <section className="content row-meta-details">
           <div className="row">

@@ -28,6 +28,7 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
   protected onInit(): Promise<void> {
     const randomNumber = Math.floor(Math.random() * 90000) + 10000;
     SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/snapandshare.css?${randomNumber}`);
+    SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/style.css?${randomNumber}`);
     SPComponentLoader.loadCss(`${this.context.pageContext.web.absoluteUrl}/Assets/css/home.css?${randomNumber}`);
     return Promise.resolve();
   }

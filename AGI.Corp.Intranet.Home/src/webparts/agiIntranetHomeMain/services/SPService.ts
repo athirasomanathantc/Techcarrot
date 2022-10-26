@@ -15,6 +15,7 @@ import { ISurveyQuestion } from "../models/ISurveyQuestion";
 import { IQuizOption } from "../models/IQuizOptions";
 import { IQuizQuestion } from "../models/IQuizQuestion ";
 import { IQuizResponse } from "../models/IQuizResponse";
+import * as moment from 'moment';
 //import { spfi } from "@pnp/sp";
 import "@pnp/sp/webs";
 import "@pnp/sp/folders";
@@ -172,8 +173,17 @@ export class SPService {
     }
     public async submitQuiz(quiz: any) {
         if (quiz != null) {
+
+            debugger;
             if (!quiz.submitted) {
+
+
                 const userEmail = this._props.context.pageContext.legacyPageContext.userEmail;
+                //delete a folder if not present already
+                /*await sp.web.lists.getByTitle("SurveyResponses").rootFolder.folders.getByName(userEmail).delete()
+                .then((data)=>{
+                    console.log(data);
+                })*/
                 //Create a folder if not present already
                 await sp.web.lists.getByTitle("SurveyResponses").items
                     .add({ Title: userEmail, ContentTypeId: "0x0120" }).then(async result => {
@@ -202,6 +212,8 @@ export class SPService {
     }
 
     private createResponse(responses): Promise<any[]> {
+        let date = moment();//.toISOString;
+        console.log(date);
         return new Promise((resolve, reject) => {
             let promises: Promise<any>[] = [];
             const _spPageContextInfo = this._props.context.pageContext.legacyPageContext;
@@ -217,8 +229,9 @@ export class SPService {
                     { FieldName: 'QuestionId', FieldValue: String(response.QuestionId) },
                     { FieldName: 'Option', FieldValue: response.Option },
                     { FieldName: 'OptionId', FieldValue: String(response.OptionId) },
-                    { FieldName: 'UserEmail', FieldValue: response.UserEmail },
-                    { FieldName: 'UserId', FieldValue: String(response.UserId) }
+                    { FieldName: 'UserEmail', FieldValue: folderName },
+                    { FieldName: 'UserId', FieldValue: String(response.UserId) },
+                    //{ FieldName: 'SubmittedDate', FieldValue: '2022-10-25T10:27:44Z' }
                 ]
                     , `${listPath}/${folderName}`);
                 promises.push(promise);
@@ -233,25 +246,39 @@ export class SPService {
     }
 
     public async checkSubmitted(email: any): Promise<any> {
+       // debugger;
 
-        //let isExists = false;
-        return await sp.web.lists.getByTitle('SurveyResponses').rootFolder.folders.getByName(email).get().then((data) => {
+        const folderName = this._props.context.pageContext.web.serverRelativeUrl + "/Lists/SurveyResponses/" + email;
+        const folder = await sp.web.getFolderByServerRelativePath(folderName).select('Exists').get();
 
-            console.log("folders", data);
-            if (data) {
-                return true;
-            } else {
-                return false;
-            }
-        }).catch((exception) => {
-            if ({ data: exception.message == 'File Not Found' }) {
-                return false;
-                console.log('excep', exception);
-            }
-            else {
-                throw new Error(exception);
-            }
-        });
+        if (folder.Exists) {
+            return true;
+        }else{
+            return false;
+        }
+
+        //    let folder;  
+        //       folder= await sp.web.lists.getByTitle('SurveyResponses').rootFolder.folders.
+        //       getByName(email).
+        //       .get();
+        //       console.log("folders Exist",folder);
+        // .then((data) => {
+        //     debugger;
+        //     console.log("folders", data);
+        //     if (data) {
+        //         return true;
+        //     } else {
+        //         return false;
+        //     }
+        // // }).catch((exception) => {
+        //     if ({ data: exception.message == 'File Not Found' }) {
+        //         return false;
+        //         console.log('excep', exception);
+        //     }
+        //     else {
+        //         throw new Error(exception);
+        //     }
+        // });
         //return isExists;
     }
 
@@ -265,37 +292,35 @@ export class SPService {
                 throw new Error(exception);
             });
     }
-    public async getData(email: any): Promise<any> {
+    public async getData(email: any,length:any): Promise<any> {
         const listName = 'SurveyResponses';
 
         const list = sp.web.lists.getByTitle(listName);
 
         // Get list's root folders and their items' props
-        return await list.items.filter(`FSObjType eq 0`).get()
-            .then((folders:IQuizResponse[]) => {
+        return await sp.web.lists.getByTitle(listName).items.filter(`FSObjType eq 0`).orderBy('ID', false).top(length).get()
+            .then((folders: IQuizResponse[]) => {
+                console.log("folder items", folders)
                 return folders;
-                //console.log("folder items", folders)
+                //
             })
             .catch(console.error);
-        // ///......................
-        //         return await sp.web.lists.getByTitle(listName).select('*')
-        //     .rootFolder.folders
-        //         .filter('ListItemAllFields/Id ne null')
-        //         .expand('ListItemAllFields')
-        //         .get()
-        //         .then((folders) =>{
-        //             console.log("folder items",folders)
-        //             return folders
+    }
 
-        //         })
-        //         .catch(console.error);
-        // return await sp.web.lists.getByTitle(listname)()
-        //     .then((response: IListInfo) => {
-        //         return response.Id;
-        //     })
-        //     .catch((exception) => {
-        //         throw new Error(exception);
-        //     });
+    public async CalculateScore(givenAns: IQuizResponse[], options: IQuizOption[]): Promise<any> {
+
+        let scores = 0;
+        await givenAns.map((ans) => {
+            options.map((option) => {
+                if (option.Question.Id.toString() == ans.QuestionId && option.CorrectOption) {
+                    if (option.Id.toString() == ans.OptionId)
+                        scores++;
+                }
+            })
+
+        })
+        return scores;
+
     }
 
 

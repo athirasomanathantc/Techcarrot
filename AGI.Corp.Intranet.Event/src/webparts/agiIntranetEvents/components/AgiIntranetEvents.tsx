@@ -35,7 +35,8 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
       selectedOption: {
         ID: 0
       },
-      guid: ""
+      guid: "",
+      featuredTitle: ''
     }
   }
 
@@ -43,9 +44,29 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
     this.fetch();
   }
 
+  private getConfigItems() {
+    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('IntranetConfig')/items?$filter=(Title eq 'FeaturedEvents')&$top=1`;
+    this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+      .then((response: SPHttpClientResponse) => {
+        return response.json();
+      })
+      .then((response) => {
+        const items = response.value;
+
+        this.setState({
+          featuredTitle: items[0]?.Detail
+        });
+
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
+  }
+
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
+    await this.getConfigItems();
     await this.getListGuid('EventDetails').then(async (guid: string): Promise<void> => {
       this.setState({
         guid
@@ -177,7 +198,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
     return items.filter((item) => item.Featured).sort((a, b) => {
       dateA = a.StartDate || a.Modified;
       dateB = b.StartDate || b.Modified;
-      return (new Date(dateB).getTime() - new Date(dateA).getTime())
+      return (new Date(dateA).getTime() - new Date(dateB).getTime())
     }).slice(0, 4)
   }
 
@@ -220,7 +241,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
           this.setState({
             eventsData: items,
-            featuredEvents: this.getFeaturedEvents(items),
+            featuredEvents: this.getFeaturedEvents(upcoming),
             filterData: upcoming,
             selectedTab: "Upcoming Events",
             upcomingEvents: upcoming,
@@ -435,7 +456,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
             <div className="row title-wrapper">
               <div className="main-header-section">
                 <div className="col-12">
-                  <h3>Featured News</h3>
+                  <h3>{this.state.featuredTitle}</h3>
                 </div>
 
               </div>
@@ -458,7 +479,9 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
                       )
                     })
                   }
-
+                  {
+                    !this.state.featuredEvents.length && <h5 className="not-found">No items found</h5>
+                  }
                 </div>
                 <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
                   data-bs-slide="prev">
