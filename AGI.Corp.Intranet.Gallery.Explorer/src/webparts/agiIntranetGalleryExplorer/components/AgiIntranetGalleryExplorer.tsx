@@ -46,6 +46,19 @@ export default class AgiIntranetGalleryExplorer extends React.Component<IAgiIntr
   public render(): React.ReactElement<IAgiIntranetGalleryExplorerProps> {
     return (
       <section className={`${styles.agiIntranetGalleryExplorer} galleryList`}>
+         <div className="container">
+          <div className="tab-header">
+            <div className="row">
+              <div className="col-md-12">
+                <ul className="nav">
+                  <li className="nav-item" role="presentation">
+                      {this.props.description}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="container">
           <div className="row">
             {
