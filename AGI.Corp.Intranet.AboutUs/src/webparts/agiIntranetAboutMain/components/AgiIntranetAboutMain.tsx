@@ -171,9 +171,9 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
 
                   })
                 }
-
+              <hr className="mt-5 divider-horizontal" />
               </div>
-              <hr className="m-0 mx-5 divider-horizontal" />
+              
               <div className="about-section">
                 <div className="about-content">
                   <h5>{this.state.aboutUsItem.Title}</h5>

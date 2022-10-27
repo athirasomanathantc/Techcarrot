@@ -44,6 +44,7 @@ export class SPService {
 
     public async getAnnouncements(): Promise<IAnnouncement[]> {
         return await sp.web.lists.getByTitle('Announcements').items.select("ID,Title,Description,AnnouncementThumbnail,PublishedDate")
+            .orderBy('PublishedDate', false)
             .top(this._props.topAnnouncements)()
             .then((items: IAnnouncement[]) => {
                 return items;
@@ -246,14 +247,14 @@ export class SPService {
     }
 
     public async checkSubmitted(email: any): Promise<any> {
-       // debugger;
+        // debugger;
 
         const folderName = this._props.context.pageContext.web.serverRelativeUrl + "/Lists/SurveyResponses/" + email;
         const folder = await sp.web.getFolderByServerRelativePath(folderName).select('Exists').get();
 
         if (folder.Exists) {
             return true;
-        }else{
+        } else {
             return false;
         }
 
@@ -292,7 +293,7 @@ export class SPService {
                 throw new Error(exception);
             });
     }
-    public async getData(email: any,length:any): Promise<any> {
+    public async getData(email: any, length: any): Promise<any> {
         const listName = 'SurveyResponses';
 
         const list = sp.web.lists.getByTitle(listName);
