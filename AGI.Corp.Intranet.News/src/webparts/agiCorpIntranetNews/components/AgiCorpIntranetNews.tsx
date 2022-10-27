@@ -301,7 +301,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
 
     return (
       <div>
-        <section className="featured-section col-lg-12 bg-light bg-gradient mt-5 ">
+        <section className="featured-section col-lg-12 mt-5 ">
           <div className="container">
             <div className="row title-wrapper">
               <div className="main-header-section">
