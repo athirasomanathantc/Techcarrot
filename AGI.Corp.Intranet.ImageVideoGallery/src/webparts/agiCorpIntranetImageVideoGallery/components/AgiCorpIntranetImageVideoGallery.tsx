@@ -683,11 +683,12 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     });
   }
 
-  private previewImage(e: any): void {
+  private previewImage(e: any, isFeatured: boolean): void {
     const src = e.target.attributes["data-src"].value;
     const id = e.target.attributes["data-id"].value;
     const index = id ? parseInt(id) : -1;
-    const _imageItem = this.state.imageItems.filter((image) => image.ListItemAllFields.ID == id);
+    const imageItems = isFeatured ? this.state.featured.imageItems : this.state.imageItems;
+    const _imageItem = imageItems.filter((image) => image.ListItemAllFields.ID == id);
     //console.log("imageitem", _imageItem);
     const imageItem = _imageItem && _imageItem.length > 0 ? _imageItem[0] : NULL_IMAGE_ITEM;
     this.setState({
@@ -829,7 +830,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
               closeImageFolder={() => this.closeImageFolder(true)}
               pagedImages={featured.pagedImages}
               imageItems={featured.imageItems}
-              previewImage={(e) => this.previewImage(e)}
+              previewImage={(e) => this.previewImage(e, true)}
               imagesCurrentPage={featured.imagesCurrentPage}
               totalImages={featured.totalImages}
               imagesPerPage={featured.imagesPerPage}
@@ -1058,7 +1059,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                         // <a href="images/gallery-folder-img-large.png" data-toggle="lightbox" data-gallery="image-gallery" className="col-md-3 gallery-item gallery-folder-item" data-caption="<h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><ul><li><i class='icon user-icon'><img src='images/icon-avatar.svg'></i> Debra Teles</li></ul>">
                         //   <img src={`${this.props.siteUrl}/Assets/images/gallery-folder-img.png`} alt="" className="gallery-item--img" />
                         // </a>
-                        <a href={'javascript:void(0);'} onClick={(e) => this.previewImage(e)} data-src={items.ServerRelativeUrl} data-id={items.ListItemAllFields.ID} data-toggle="lightbox" data-gallery="image-gallery"
+                        <a href={'javascript:void(0);'} onClick={(e) => this.previewImage(e, false)} data-src={items.ServerRelativeUrl} data-id={items.ListItemAllFields.ID} data-toggle="lightbox" data-gallery="image-gallery"
                           className=" col-6 col-md-3 gallery-item gallery-folder-item" data-caption="<h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><ul><li><i class='icon user-icon'><img src='images/icon-avatar.svg'></i> Debra Teles</li></ul>">
                           <img src={items.ServerRelativeUrl} alt={items.Title} style={{ width: '100%' }} data-src={items.ServerRelativeUrl} data-id={items.ListItemAllFields.ID} className="gallery-item--img" />
                         </a>
