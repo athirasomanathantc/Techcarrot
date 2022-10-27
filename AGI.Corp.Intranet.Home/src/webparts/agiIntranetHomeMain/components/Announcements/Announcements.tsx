@@ -28,7 +28,7 @@ const Announcement = (props: IAnnouncement) => {
                     <img style={imageStyle} src={imageUrl}
                         width="100%" />
                 </div>
-                <div className="d-flex flex-column flex-wrap">
+                <div className="d-flex flex-column flex-wrap announcement-txt-wrapper">
                     <p className="announcement-date">{moment(props.PublishedDate).format("DD MMMM YYYY")}
                     </p>
                     <p className="announcement-title">{props.Title}</p>

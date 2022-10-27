@@ -225,7 +225,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
                     </div>
 
                     <div className="mt-5 mb-4 col-md-12 msgBox">
-                      <label htmlFor="contactFormMessage" className="form-label">Submit</label>
+                      <label htmlFor="contactFormMessage" className="form-label">Message</label>
                       <textarea className="form-control" placeholder="Write your message...." id="contactFormMessage" rows={4} value={this.state.selectedUserMsg} onChange={(e) => this.handleMsgChange(e)}></textarea>
                       <p id="errorMessage" className="errorMsgClass" style={{ display: this.state.showErrorMessage ? "block" : "none" }}>Message is required</p>
                     </div>
