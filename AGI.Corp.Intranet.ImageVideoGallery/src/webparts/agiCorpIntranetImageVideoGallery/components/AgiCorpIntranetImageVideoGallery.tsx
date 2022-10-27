@@ -584,7 +584,11 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           fileData.push({ ID: file.ID, FilePath: fileRelativePath, FolderName: folderPath });
         });
         this.setState({
-          fileData
+          fileData,
+          featured: {
+            ...this.state.featured,
+            fileData
+          }
         });
       });
   }
