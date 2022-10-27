@@ -497,7 +497,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
 
   private scrollToTop(isFeatured: boolean): void {
 
-    var element = document.getElementById(isFeatured ? "galleryRoot" : "gallerySection");
+    // var element = document.getElementById(isFeatured ? "galleryRoot" : "gallerySection");
+    var element = document.getElementById("galleryRoot");
 
     element.scrollIntoView(true);
 
@@ -836,7 +837,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       <div className={styles.agiCorpIntranetImageVideoGallery} id="galleryRoot">
         {this.props.libraryName && this.props.libraryPath ?
           <>
-            <FeaturedGallery
+            {!this.state.selectedImageFolder && <FeaturedGallery
               siteUrl={this.props.siteUrl}
               tab={tab}
               pageData={featured.pageData}
@@ -857,8 +858,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
               openVideo={(id) => this.openVideo(id, true)}
               imageGalleryTitle={featured.imageGalleryTitle}
               videoGalleryTitle={featured.videoGalleryTitle}
-            ></FeaturedGallery>
-            <div id="gallerySection" className="main-content" style={{ display: this.state.selectedImageFolder ? 'none' : 'block' }}>
+            ></FeaturedGallery>}
+            {!featured.selectedImageFolder && <div id="gallerySection" className="main-content" style={{ display: this.state.selectedImageFolder ? 'none' : 'block' }}>
               <div className="content-wrapper" style={{ display: this.state.isDataLoaded ? 'block' : 'none' }}>
                 <div className="container">
                   <div className="tabs">
@@ -1032,7 +1033,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                 <div className="loader">
                 </div>
               </div>
-            </div>
+            </div>}
           </>
           :
           <div style={{ display: this.state.selectedImageFolder ? 'none' : 'block' }}>
