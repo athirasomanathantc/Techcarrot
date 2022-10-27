@@ -8,7 +8,7 @@ require('../css/style.css');
 export default class AgiIntranetGalleryLibraryScript extends React.Component<IAgiIntranetGalleryLibraryScriptProps, {}> {
 
   private backToListing() {
-    location.href = `${this.props.siteUrl}/SitePages/Gallery List.aspx`;
+    location.href = `${this.props.siteUrl}/SitePages/Toolkit.aspx`;
   }
 
   public render(): React.ReactElement<IAgiIntranetGalleryLibraryScriptProps> {
