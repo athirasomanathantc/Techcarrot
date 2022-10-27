@@ -19,6 +19,7 @@ import * as moment from 'moment';
 //import { spfi } from "@pnp/sp";
 import "@pnp/sp/webs";
 import "@pnp/sp/folders";
+import { LIST_PATH_SURVEY, LIST_SURVEY } from "../common/constants";
 //const sp1 = spfi(...);
 
 export class SPService {
@@ -174,12 +175,11 @@ export class SPService {
     }
     public async submitQuiz(quiz: any) {
         if (quiz != null) {
+            const userEmail = this._props.context.pageContext.legacyPageContext.userEmail;
 
             debugger;
             if (!quiz.submitted) {
 
-
-                const userEmail = this._props.context.pageContext.legacyPageContext.userEmail;
                 //delete a folder if not present already
                 /*await sp.web.lists.getByTitle("SurveyResponses").rootFolder.folders.getByName(userEmail).delete()
                 .then((data)=>{
@@ -203,6 +203,9 @@ export class SPService {
                     });
             }
             else {
+                //update existing responses
+                await this.updateResponses(userEmail)
+                // add new responses
                 const response = this.createResponse(quiz.responses);
                 return response.then((result) => {
                     return true
@@ -210,6 +213,44 @@ export class SPService {
             }
 
         }
+    }
+
+    private async updateResponses(email: string): Promise<any> {
+        debugger;
+        const listName = LIST_SURVEY;
+        const siteRelativePath = this._props.context.pageContext.web.serverRelativeUrl;
+        const listUri = `${siteRelativePath}/Lists/${LIST_PATH_SURVEY}`;
+
+        const list = sp.web.lists.getByTitle(listName);
+        const entityTypeFullName = await list.getListItemEntityTypeFullName();
+
+        return new Promise((resolve, reject) => { 
+             list
+            .items.filter(`FileDirRef eq '${listUri}/${email}'`)
+            .get().then((data) => {
+                console.log('responses');
+                console.log(data);
+                //batch update
+                let createBatchRequest = sp.web.createBatch();
+                data.forEach((item) => {
+                    list.items.getById(item.ID)
+                        .inBatch(createBatchRequest)
+                        .update({ LatestResponse: false }, '*', entityTypeFullName);
+                });
+
+                createBatchRequest.execute().then((createResponse: any) => {
+                    console.log("All Item Updated")
+                    resolve(createResponse);
+                }).catch((error) => {
+                    reject(error);
+                    console.log('error in executing batch request');
+                });
+            }).catch((error) => {
+                reject(error);
+                console.log('error');
+                console.log(error);
+            });
+        });
     }
 
     private createResponse(responses): Promise<any[]> {

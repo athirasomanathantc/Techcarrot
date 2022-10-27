@@ -27,6 +27,9 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
     const [retest,setRetest]=useState(false);
     const [next,setNext]=useState(false);
 
+    const userEmail = props.context.pageContext.legacyPageContext.userEmail;
+    const userId = props.context.pageContext.legacyPageContext.userId;
+
     const _spService = new SPService(props);
     siteUrl = props.siteUrl;
     const { currentQuestion, questions, submitted } = quiz;
@@ -36,8 +39,8 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
         // let submit:boolean= await _spService.checkSubmitted(props.context.pageContext.legacyPageContext.userEmail);
         const getQuizDetails = async () => {
             // let submit = await func2();
-           
-            let submit: boolean = await _spService.checkSubmitted(props.context.pageContext.legacyPageContext.userEmail);
+            
+            let submit: boolean = await _spService.checkSubmitted(userEmail);
             let questions: IQuizQuestion[] = await _spService.getQuizQuestions();
             let options: IQuizOption[] = await _spService.getQuizOptions();
             
@@ -54,12 +57,10 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
                         return {
                             Title: question.Title,
                             QuestionId: question.Id,
-                            UserEmail: props.context.pageContext.legacyPageContext.userEmail,
-                            UserId: props.context.pageContext.legacyPageContext.userId,
+                            UserEmail: userEmail,
+                            UserId: userId,
                             OptionId:''
-
                         }
-
                     }),
                     submitted: submit
                 });
@@ -81,7 +82,7 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
             
             if (submitted) {
 
-                let givenAns = await _spService.getData(props.context.pageContext.legacyPageContext.userEmail,quiz.questions.length);
+                let givenAns = await _spService.getData(userEmail, quiz.questions.length);
                 console.log('Given ans', givenAns);
                 //debugger;
                 let score = await _spService.CalculateScore(givenAns, quiz.options);
