@@ -45,6 +45,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       const announcements: IAnnouncementData[] = await this._spServices.getAnnouncements();
       const business: IBusinessData[] = await this._spServices.getBussiness();
       const functions: IFunctionData[] = await this._spServices.getFunctionData();
+      //console.log(announcements);
       const featuredTitle: string = await this._spServices.getConfigItems();
       this.setState({
         totalAnnouncementData: announcements,
