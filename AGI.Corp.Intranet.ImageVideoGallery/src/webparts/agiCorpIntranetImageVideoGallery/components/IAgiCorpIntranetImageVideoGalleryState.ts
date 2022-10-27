@@ -69,5 +69,7 @@ export interface IAgiCorpIntranetImageVideoGalleryState {
     currentPage: number;
     filterVideoData: IImageItem[];
     pageVideoSize: number;
+    imageGalleryTitle: string;
+    videoGalleryTitle: string;
   }
 }

@@ -83,7 +83,9 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         totalPage: 1,
         currentPage: 1,
         filterVideoData: [],
-        pageVideoSize: 0
+        pageVideoSize: 0,
+        imageGalleryTitle: '',
+        videoGalleryTitle: '',
       }
     }
     // this.getImages = this.getImages.bind(this);
@@ -93,10 +95,33 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     await this.getBusinessItems();
     await this.getFunctionItems();
     await this.getCoverPhotos();
-
+    await this.getConfigItems();
     Promise.all([this.getGalleryItems(), this.getVideoItems()]).then(() => {
       this.setDefaultFilter();
     });
+  }
+
+  private getConfigItems() {
+    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('IntranetConfig')/items?$filter=(Title eq 'FeaturedGallery')&$top=1`;
+    this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+      .then((response: SPHttpClientResponse) => {
+        return response.json();
+      })
+      .then((response) => {
+        const items = response.value;
+
+        this.setState({
+          featured: {
+            ...this.state.featured,
+            imageGalleryTitle: items[0]?.Detail?.split(';')[0]?.trim(),
+            videoGalleryTitle: items[0]?.Detail?.split(';')[1]?.trim()
+          }
+        });
+
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      })
   }
 
   private setDefaultFilter() {
@@ -813,6 +838,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
               videoData={featured.videoData}
               getImageUrl={(imageContent) => this.getImageUrl(imageContent)}
               openVideo={(id) => this.openVideo(id, true)}
+              imageGalleryTitle={featured.imageGalleryTitle}
+              videoGalleryTitle={featured.videoGalleryTitle}
             ></FeaturedGallery>
             <div id="gallerySection" className="main-content" style={{ display: this.state.selectedImageFolder ? 'none' : 'block' }}>
               <div className="content-wrapper" style={{ display: this.state.isDataLoaded ? 'block' : 'none' }}>

@@ -23,6 +23,8 @@ interface IFeaturedGallery {
     fnCurTab: (string) => void;
     getImageUrl: (string) => string;
     openVideo: (number) => void;
+    imageGalleryTitle: string;
+    videoGalleryTitle: string;
 }
 
 const FeaturedGallery = (props: IFeaturedGallery) => {
@@ -43,7 +45,9 @@ const FeaturedGallery = (props: IFeaturedGallery) => {
         onPageUpdateImages,
         fnCurTab,
         getImageUrl,
-        openVideo } = props;
+        openVideo,
+        imageGalleryTitle,
+        videoGalleryTitle } = props;
 
     return (
         <section className="featured-section gallery-featured-section col-lg-12 mt-5 ">
@@ -54,7 +58,7 @@ const FeaturedGallery = (props: IFeaturedGallery) => {
                             <div className="col-md-12">
                                 <ul className="nav nav-tabs" id="myTab" role="tablist">
                                     <li className="nav-item" role="presentation">
-                                        <button className={tab == "image" ? `nav-link active` : `nav-link`} id="featured-image-gallery-tab" data-bs-toggle="tab" data-bs-target="#featured-image-gallery" type="button" role="tab" aria-controls="featured-image-gallery" aria-selected="true" onClick={() => { fnCurTab("image") }}>Featured Image Gallery
+                                        <button className={tab == "image" ? `nav-link active` : `nav-link`} id="featured-image-gallery-tab" data-bs-toggle="tab" data-bs-target="#featured-image-gallery" type="button" role="tab" aria-controls="featured-image-gallery" aria-selected="true" onClick={() => { fnCurTab("image") }}>{imageGalleryTitle}
                                             <i>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35">
                                                     <g id="Image_Gallery_active" data-name="Image Gallery_active" transform="translate(-195 -370)">
@@ -71,7 +75,7 @@ const FeaturedGallery = (props: IFeaturedGallery) => {
                                         </button>
                                     </li>
                                     <li className="nav-item" role="presentation">
-                                        <button className={tab == "video" ? `nav-link active` : `nav-link`} id="featured-video-gallery-tab" data-bs-toggle="tab" data-bs-target="#featured-video-gallery" type="button" role="tab" aria-controls="featured-video-gallery" aria-selected="false" onClick={() => fnCurTab("video")}>Featured Video Gallery
+                                        <button className={tab == "video" ? `nav-link active` : `nav-link`} id="featured-video-gallery-tab" data-bs-toggle="tab" data-bs-target="#featured-video-gallery" type="button" role="tab" aria-controls="featured-video-gallery" aria-selected="false" onClick={() => fnCurTab("video")}>{videoGalleryTitle}
                                             <i>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35">
                                                     <g id="Video_Galley_Active" data-name="Video Galley_Active" transform="translate(-409 -370)">
