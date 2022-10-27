@@ -128,6 +128,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                     checkSubscription: true
                 });
                 }
+                console.log(this.state.checkSubscription);
             }
             
         })
