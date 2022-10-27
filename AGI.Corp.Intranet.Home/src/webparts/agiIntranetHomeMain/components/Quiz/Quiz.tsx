@@ -25,6 +25,7 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
     });
     const [showResult, setShowResult] = useState(false);
     const [retest,setRetest]=useState(false);
+    const [next,setNext]=useState(false);
 
     const _spService = new SPService(props);
     siteUrl = props.siteUrl;
@@ -55,6 +56,7 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
                             QuestionId: question.Id,
                             UserEmail: props.context.pageContext.legacyPageContext.userEmail,
                             UserId: props.context.pageContext.legacyPageContext.userId,
+                            OptionId:''
 
                         }
 
@@ -79,7 +81,7 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
             
             if (submitted) {
 
-                let givenAns = await _spService.getData(props.context.pageContext.legacyPageContext.userEmail);
+                let givenAns = await _spService.getData(props.context.pageContext.legacyPageContext.userEmail,quiz.questions.length);
                 console.log('Given ans', givenAns);
                 //debugger;
                 let score = await _spService.CalculateScore(givenAns, quiz.options);
@@ -109,6 +111,26 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
                 options: quiz.options.filter((option: IQuizOption) => option.Question.Id === quiz.questions[index].Id)
             }
         });
+        console.log(quiz.responses[index].OptionId);
+        quiz.responses.map((item)=>{
+           
+            if(item.QuestionId==quiz.questions[index].Id)
+            {
+                console.log('Response',item)
+                if(item.OptionId !=''){
+                    
+                
+                    setNext(true);
+
+                }else{
+                    setNext(false);
+    
+                }
+                
+                
+            }
+        })
+        
     }
 
     const movePrev = (index: number) => {
@@ -118,7 +140,19 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
                 question: quiz.questions[index],
                 options: quiz.options.filter((option: IQuizOption) => option.Question.Id === quiz.questions[index].Id)
             }
+            
         });
+       
+        quiz.responses.map((item)=>{
+           
+            if(item.QuestionId==quiz.questions[index].Id && item.OptionId != '')
+            {
+                console.log('Response',item)
+                
+                    setNext(true);
+                
+            }
+        })
     }
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>, quizOption: IQuizOption) => {
@@ -137,6 +171,7 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
             }
             return option;
         });
+        setNext(true);
 
 
         setQuiz({
@@ -175,7 +210,7 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
         // console.log('score:', quiz.scores);
         
         // console.log('quiz', quiz);
-        debugger;
+       // debugger;
         const quizSubmitted = await _spService.submitQuiz(quiz)
         .then((value)=>{
             
@@ -289,7 +324,7 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
                                             </i>
                                             Previous
                                         </button>
-                                        <button id="next-btn" type="button" className={questions.length === currentQuestion.question.SortOrder ? 'd-none' : 'd-inline-block'} onClick={() => moveNext(currentQuestion.question.SortOrder)}>Next
+                                        {next &&<button id="next-btn" type="button" className={questions.length === currentQuestion.question.SortOrder ? 'd-none' : 'd-inline-block'} onClick={() => moveNext(currentQuestion.question.SortOrder)}>Next
                                             <i><svg id="Group_8056" data-name="Group 8056"
                                                 xmlns="http://www.w3.org/2000/svg" width="30"
                                                 height="30" viewBox="0 0 30 30">
@@ -304,8 +339,8 @@ export const Quiz = (props: IAgiIntranetHomeMainProps) => {
                                                     d="M25.944,13.153a.56.56,0,1,0-.768.814l4.605,4.35-4.605,4.35a.56.56,0,1,0,.768.814l5.036-4.756a.56.56,0,0,0,0-.814l-5.036-4.756Z"
                                                     transform="translate(-13 -3)" fill="#9d0e71" />
                                             </svg></i>
-                                        </button>
-                                        <a href="javascript:void(0)" id="submit-btn"  className={questions.length === currentQuestion.question.SortOrder ? 'btn btn-lg btn-gradient ms-3' : 'd-none '} onClick={() => onSubmit()}>Submit</a>
+                                        </button>}
+                                        <a href="javascript:void(0)" id="submit-btn"  className={(questions.length === currentQuestion.question.SortOrder) && (quiz.responses[questions.length-1].OptionId!='') ? 'btn btn-lg btn-gradient ms-3' : 'd-none '} onClick={() => onSubmit()}>Submit</a>
                                     </>}
                                     {(!retest&&quiz.submitted) && <a href="javascript:void(0)" id="submit-btn" type="button" className={ submitted?'btn btn-lg btn-gradient ms-3':"d-none"} onClick={() => onRetest()}>Retest</a>}
                                 </div>

@@ -17,4 +17,5 @@ export interface LastLoginState {
     configDetails: IConfigItem[];
     successMsg: string;
     btnValue: string;
+    isChecked: boolean;
 }

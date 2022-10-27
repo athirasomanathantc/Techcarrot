@@ -451,7 +451,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
 
     return (
       <>
-        <section className="featured-section col-lg-12 bg-light bg-gradient mt-5 ">
+        <section className="featured-section col-lg-12 mt-5 ">
           <div className="container">
             <div className="row title-wrapper">
               <div className="main-header-section">
