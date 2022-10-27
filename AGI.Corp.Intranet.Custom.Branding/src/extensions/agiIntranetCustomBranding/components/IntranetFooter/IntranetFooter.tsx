@@ -323,7 +323,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                 </form>
                             </div>
                             {this.state.showSuccessMsg && <p className="success" style={{ display: "block", color: "green", fontSize: "1rem", marginTop: "10px" }}>{TEXT_REGISTRATION_SUCCESS}</p>}
-                            <div className="subscription-txt subscription-success" style={{ display: this.state.checkSubscription ? 'block' : 'none' }}>You have already subscribed to the Newsletter.</div>
+                            <div className="subscription-txt subscription-success" style={{ display: this.state.checkSubscription ? 'block' : 'none' ,color: "green", fontSize: "1rem", marginTop: "10px"}}>You have already subscribed to the Newsletter.</div>
                             
                         </div>
                     </div>
