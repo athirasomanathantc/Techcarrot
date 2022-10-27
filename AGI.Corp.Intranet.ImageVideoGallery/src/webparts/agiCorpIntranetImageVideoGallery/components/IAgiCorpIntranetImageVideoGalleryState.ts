@@ -55,4 +55,19 @@ export interface IAgiCorpIntranetImageVideoGalleryState {
   imagesCurrentPage: number;
 
   fileData: IFileData[];
+  featured: {
+    fileData: IFileData[];
+    imageItems: IImageItem[];
+    pagedImages: IImageItem[];
+    totalImages: number;
+    imagesPerPage: number;
+    selectedImageFolder: string;
+    imagesCurrentPage: number;
+    pageData: IFolderItem[];
+    videoData: IImageItem[];
+    totalPage: number;
+    currentPage: number;
+    filterVideoData: IImageItem[];
+    pageVideoSize: number;
+  }
 }

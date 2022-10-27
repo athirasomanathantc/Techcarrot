@@ -1,25 +1,22 @@
 import * as React from 'react';
 import styles from './AgiCorpIntranetImageVideoGallery.module.scss';
 import { IAgiCorpIntranetImageVideoGalleryProps } from './IAgiCorpIntranetImageVideoGalleryProps';
-import { escape } from '@microsoft/sp-lodash-subset';
-import { containsInvalidFileFolderChars, sp } from '@pnp/sp/presets/all';
+import { sp } from '@pnp/sp/presets/all';
 import { IAgiCorpIntranetImageVideoGalleryState } from './IAgiCorpIntranetImageVideoGalleryState';
-import { LIBRARY_PHOTO_GALLERY, LIBRARY_VIDEO_GALLERY, MEDIA_PER_PAGE, NULL_IMAGE_ITEM, NULL_SELECTED_ITEM, PATH_PHOTO_GALLERY, PROP_DEFAULT_ORDERBY } from '../common/constants';
+import { LIBRARY_VIDEO_GALLERY, MEDIA_PER_PAGE, NULL_IMAGE_ITEM, NULL_SELECTED_ITEM, PROP_DEFAULT_ORDERBY } from '../common/constants';
 import {
   SPHttpClient,
-  SPHttpClientResponse,
-  IHttpClientOptions
+  SPHttpClientResponse
 } from '@microsoft/sp-http';
-import { IFolderItem } from '../models/IFolderItem';
 import { IImageItem } from '../models/IImageItem';
 import { Icon } from 'office-ui-fabric-react';
 import * as $ from 'jquery';
-import { resultItem } from 'office-ui-fabric-react/lib/components/FloatingPicker/PeoplePicker/PeoplePicker.scss';
 //import { Icon } from 'office-ui-fabric-react/lib/components/Icon/Icon';
 //import { Pagination } from '@pnp/spfx-controls-react/lib/pagination';
 //import Paging from './Paging/Paging';
 import Paging from './Paging/Paging';
 import { IFileItem } from '../models/IFileItem';
+import FeaturedGallery from './FeaturedGallery/FeaturedGallery';
 const CAROUSEL_HEIGHT = '240px';
 export default class AgiCorpIntranetImageVideoGallery extends React.Component<IAgiCorpIntranetImageVideoGalleryProps, IAgiCorpIntranetImageVideoGalleryState> {
 
@@ -72,8 +69,22 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       imagesPerPage: MEDIA_PER_PAGE,
       totalImages: 0,
       imagesCurrentPage: 1,
-
-      fileData: []
+      fileData: [],
+      featured: {
+        fileData: [],
+        imageItems: [],
+        pagedImages: [],
+        totalImages: 0,
+        imagesPerPage: MEDIA_PER_PAGE,
+        selectedImageFolder: '',
+        imagesCurrentPage: 1,
+        pageData: [],
+        videoData: [],
+        totalPage: 1,
+        currentPage: 1,
+        filterVideoData: [],
+        pageVideoSize: 0
+      }
     }
     // this.getImages = this.getImages.bind(this);
   }
@@ -294,12 +305,26 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     }
   }
 
+  private getFeaturedData(items) {
+    let dateA;
+    let dateB;
+    return items.filter((item) => item.Featured).sort((a, b) => {
+      dateA = a.Modified;
+      dateB = b.Modified;
+      return (new Date(dateB).getTime() - new Date(dateA).getTime())
+    }).slice(0, 4)
+  }
+
   private paging() {
     if (this.state.currentTabName == "image") {
       const pageCount: number = Math.ceil(this.state.filterData.length / this.state.pageSize);
       const totalPages = (this.state.filterData.length / this.state.pageSize) - 1;
       this.setState({
         pageData: this.state.filterData.slice(0, this.state.pageSize),
+        featured: {
+          ...this.state.featured,
+          pageData: this.getFeaturedData(this.state.folders),
+        },
         totalPages: pageCount,
         totalPage: pageCount,
         currentPage: 1
@@ -314,7 +339,11 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         videoData: this.state.filterVideoData.slice(0, this.state.pageSize),
         totalPages: pageCount,
         totalPage: pageCount,
-        currentPage: 1
+        currentPage: 1,
+        featured: {
+          ...this.state.featured,
+          videoData: this.getFeaturedData(this.state.videoItems),
+        },
       }, () => {
         //console.log("videodata", this.state.videoData);
       });
@@ -326,6 +355,10 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         const totalPages = (this.state.filterData.length / this.state.pageSize) - 1;
         this.setState({
           pageData: this.state.filterData.slice(0, this.state.pageSize),
+          featured: {
+            ...this.state.featured,
+            pageData: this.getFeaturedData(this.state.folders),
+          },
           totalPages: pageCount,
           totalPage: pageCount,
           currentPage: 1
@@ -338,7 +371,11 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           videoData: this.state.filterVideoData.slice(0, this.state.pageSize),
           totalPages: pageCount,
           totalPage: pageCount,
-          currentPage: 1
+          currentPage: 1,
+          featured: {
+            ...this.state.featured,
+            videoData: this.getFeaturedData(this.state.videoData),
+          },
         });
       }
     }
@@ -355,7 +392,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         pageData,
         currentPage: page
       }, () => {
-        this.scrollToTop();
+        this.scrollToTop(false);
 
       });
     }
@@ -368,7 +405,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         videoData,
         currentPage: page
       }, () => {
-        this.scrollToTop();
+        this.scrollToTop(false);
 
       });
     }
@@ -383,7 +420,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           pageData,
           currentPage: page
         }, () => {
-          this.scrollToTop();
+          this.scrollToTop(false);
 
         });
       }
@@ -396,7 +433,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           videoData,
           currentPage: page
         }, () => {
-          this.scrollToTop();
+          this.scrollToTop(false);
 
         });
       }
@@ -412,14 +449,14 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       pagedImages,
       imagesCurrentPage: page
     }, () => {
-      this.scrollToTop();
+      this.scrollToTop(false);
 
     });
   }
 
-  private scrollToTop(): void {
+  private scrollToTop(isFeatured): void {
 
-    var element = document.getElementById("spPageCanvasContent");
+    var element = document.getElementById(isFeatured ? "galleryRoot" : "gallerySection");
 
     element.scrollIntoView(true);
 
@@ -440,7 +477,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         .then(async (folders: any) => {
           // get files
           await library.items
-            .select('*, FileRef, FileLeafRef')
+            .select('*, FileRef, FileLeafRef, Featured')
             .filter('FSObjType eq 0')
             .get()
             .then((files: IImageItem[]) => {
@@ -453,7 +490,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                   return folderPath == path;
                 });
                 const count = _files.length;
-                _folders.push({ ID: folder.ListItemAllFields.ID, Name: folder.Name, Count: count, BusinessId: folder.ListItemAllFields.BusinessId, FunctionsId: folder.ListItemAllFields.FunctionsId })
+                _folders.push({ ID: folder.ListItemAllFields.ID, Name: folder.Name, Count: count, BusinessId: folder.ListItemAllFields.BusinessId, FunctionsId: folder.ListItemAllFields.FunctionsId, Featured: folder.ListItemAllFields.Featured })
               });
               this.setState({
                 folders: _folders,
@@ -481,8 +518,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
 
   /** get images from folder */
 
-  private async getImageGalleryItems(subFolderName): Promise<void> {
-    this.scrollToTop();
+  private async getImageGalleryItems(subFolderName, isFeatured): Promise<void> {
+    this.scrollToTop(isFeatured);
     // sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(subFolderName).files.select('*, FileRef, FileLeafRef').get().then((allItems) => {
     const libraryPath = `${this.props.context.pageContext.web.serverRelativeUrl}/Image Gallery/${subFolderName}`;
     sp.web.getFolderByServerRelativePath(libraryPath).files.select('*, FileRef, FileLeafRef, ID, Author/Title').expand("ListItemAllFields,Author").get().then((allItems) => {
@@ -492,14 +529,29 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       const totalImages = allItems.length;
       const imagesPerPage = MEDIA_PER_PAGE;
       const pagedImages = allItems.slice(0, imagesPerPage);
-      this.setState({
-        imageItems: allItems,
-        pagedImages,
-        totalImages,
-        imagesPerPage,
-        selectedImageFolder: subFolderName,
-        imagesCurrentPage: 1
-      });
+      if (isFeatured) {
+        this.setState({
+          featured: {
+            ...this.state.featured,
+            imageItems: allItems,
+            pagedImages,
+            totalImages,
+            imagesPerPage,
+            selectedImageFolder: subFolderName,
+            imagesCurrentPage: 1
+          }
+        });
+      }
+      else {
+        this.setState({
+          imageItems: allItems,
+          pagedImages,
+          totalImages,
+          imagesPerPage,
+          selectedImageFolder: subFolderName,
+          imagesCurrentPage: 1
+        });
+      }
     });
 
     // const select = 'Id, ID, Title, FileRef, Modified, PublishedDate, CoverPhoto';
@@ -527,9 +579,9 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           const fileName = file.File.Name;
           const fileRelativePath = file.File.ServerRelativeUrl;
           const filePath = fileRelativePath.replace(fileName, '');
-          const paths =  filePath.split('/').filter(e => e);
+          const paths = filePath.split('/').filter(e => e);
           const folderPath = paths.pop();
-          fileData.push({ID: file.ID, FilePath: fileRelativePath, FolderName: folderPath});
+          fileData.push({ ID: file.ID, FilePath: fileRelativePath, FolderName: folderPath });
         });
         this.setState({
           fileData
@@ -537,16 +589,28 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       });
   }
 
-  private closeImageFolder() {
-    this.setState({
-      imageItems: [],
-      selectedImageFolder: ''
-    });
+  private closeImageFolder(isFeatured) {
+    if (isFeatured) {
+      this.setState({
+        featured: {
+          ...this.state.featured,
+          imageItems: [],
+          selectedImageFolder: ''
+        }
+      });
+    }
+    else {
+      this.setState({
+        imageItems: [],
+        selectedImageFolder: ''
+      });
+    }
+
   }
 
   private async getVideoItems(): Promise<void> {
     return new Promise<void>(async (resolve) => {
-      await sp.web.lists.getByTitle(LIBRARY_VIDEO_GALLERY).items.select('*, FileRef, FileLeafRef,Author/Title').expand("Author").filter('FSObjType eq 0').get().then((items: IImageItem[]) => {
+      await sp.web.lists.getByTitle(LIBRARY_VIDEO_GALLERY).items.select('*, FileRef, FileLeafRef,Author/Title, Featured').expand("Author").filter('FSObjType eq 0').get().then((items: IImageItem[]) => {
         this.setState({
           videoItems: items,
           videoData: items,
@@ -559,8 +623,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     });
   }
 
-  private openVideo(id) {
-    this.scrollToTop();
+  private openVideo(id, isFeatured) {
+    this.scrollToTop(isFeatured);
     const selectedItem = this.state.videoItems.filter(item => item.ID == id)[0];
     this.setState({
       selectedItem
@@ -639,9 +703,6 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         {
           currentTabName: tabName
         },
-        // () => {
-        //   this.handleFilter("0");
-        // },
         () => {
           this.setData();
           this.paging();
@@ -724,192 +785,211 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     const imageUrl = this.state.currentImageUrl;
     const filterValues = this.state.showBusinessData ? this.state.filterValuesBusiness : this.state.filterValuesFunctions;
 
+    const { featured } = this.state;
     return (
-      <div className={styles.agiCorpIntranetImageVideoGallery}>
+      <div className={styles.agiCorpIntranetImageVideoGallery} id="galleryRoot">
         {this.props.libraryName && this.props.libraryPath ?
-
-          <div className="main-content" style={{ display: this.state.selectedImageFolder ? 'none' : 'block' }}>
-            <div className="content-wrapper" style={{ display: this.state.isDataLoaded ? 'block' : 'none' }}>
-              <div className="container">
-                <div className="tabs">
-                  <div className="tab-header">
-                    <div className="row">
-                      <div className="col-md-6">
-                        <ul className="nav nav-tabs" id="myTab" role="tablist">
-                          <li className="nav-item" role="presentation">
-                            <button className={tab == "image" ? `nav-link active` : `nav-link`} id="image-gallery-tab" data-bs-toggle="tab" data-bs-target="#image-gallery" type="button" role="tab" aria-controls="image-gallery" aria-selected="true" onClick={(e) => this.fnCurTab("image")}>Image Gallery
-                              <i>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35">
-                                  <g id="Image_Gallery_active" data-name="Image Gallery_active" transform="translate(-195 -370)">
-                                    <g id="Group_9544" data-name="Group 9544" transform="translate(197 374)">
-                                      <g id="Group_8147" data-name="Group 8147" transform="translate(0 0)">
-                                        <path id="Path_73956" data-name="Path 73956" d="M177.107,159.668a3.118,3.118,0,1,0,3.118,3.118A3.118,3.118,0,0,0,177.107,159.668Zm0,4.752a1.633,1.633,0,0,1,0-3.267h0a1.633,1.633,0,1,1,0,3.267Z" transform="translate(-161.626 -150.211)" fill="#9d0e71" />
-                                        <path id="Path_73957" data-name="Path 73957" d="M27.917,28.905,7.648,26.6a2.784,2.784,0,0,0-2.19.631,2.821,2.821,0,0,0-1.077,1.93L4.01,32.209H2.859A2.983,2.983,0,0,0,0,35.29V50.473a2.821,2.821,0,0,0,2.746,2.895H23.24a3.047,3.047,0,0,0,3.118-2.9v-.594a3.712,3.712,0,0,0,1.411-.594,3.081,3.081,0,0,0,1.077-2l1.708-15.072A3.007,3.007,0,0,0,27.917,28.905ZM24.873,50.473a1.563,1.563,0,0,1-1.633,1.411H2.859a1.336,1.336,0,0,1-1.375-1.3q0-.057,0-.114V47.726L7.24,43.494a1.782,1.782,0,0,1,2.3.111l4.046,3.564a3.49,3.49,0,0,0,2.19.817A3.378,3.378,0,0,0,17.56,47.5l7.313-4.232v7.2Zm0-8.947L16.78,46.241a1.893,1.893,0,0,1-2.19-.186l-4.083-3.6a3.3,3.3,0,0,0-4.121-.149l-4.9,3.564V35.29a1.5,1.5,0,0,1,1.374-1.6H23.24a1.708,1.708,0,0,1,1.633,1.6v6.237Zm4.2-9.518v.015L27.323,47.1a1.262,1.262,0,0,1-.483,1c-.149.149-.483.223-.483.3V35.29a3.193,3.193,0,0,0-3.118-3.081H5.5l.334-2.9a1.708,1.708,0,0,1,.557-.965,1.708,1.708,0,0,1,1.114-.3L27.732,30.39A1.485,1.485,0,0,1,29.069,32.009Z" transform="translate(0 -26.576)" fill="#9d0e71" />
+          <>
+            <FeaturedGallery
+              siteUrl={this.props.siteUrl}
+              tab={tab}
+              pageData={featured.pageData}
+              getImageGalleryItems={(subFolderName) => this.getImageGalleryItems(subFolderName, true)}
+              fileData={featured.fileData}
+              selectedImageFolder={featured.selectedImageFolder}
+              closeImageFolder={() => this.closeImageFolder(true)}
+              pagedImages={featured.pagedImages}
+              imageItems={featured.imageItems}
+              previewImage={(e) => this.previewImage(e)}
+              imagesCurrentPage={featured.imagesCurrentPage}
+              totalImages={featured.totalImages}
+              imagesPerPage={featured.imagesPerPage}
+              onPageUpdateImages={(page) => this.onPageUpdateImages(page)}
+              fnCurTab={(tabName) => this.fnCurTab(tabName)}
+              videoData={featured.videoData}
+              getImageUrl={(imageContent) => this.getImageUrl(imageContent)}
+              openVideo={(id) => this.openVideo(id, true)}
+            ></FeaturedGallery>
+            <div id="gallerySection" className="main-content" style={{ display: this.state.selectedImageFolder ? 'none' : 'block' }}>
+              <div className="content-wrapper" style={{ display: this.state.isDataLoaded ? 'block' : 'none' }}>
+                <div className="container">
+                  <div className="tabs">
+                    <div className="tab-header">
+                      <div className="row">
+                        <div className="col-md-6">
+                          <ul className="nav nav-tabs" id="myTab" role="tablist">
+                            <li className="nav-item" role="presentation">
+                              <button className={tab == "image" ? `nav-link active` : `nav-link`} id="image-gallery-tab" data-bs-toggle="tab" data-bs-target="#image-gallery" type="button" role="tab" aria-controls="image-gallery" aria-selected="true" onClick={(e) => this.fnCurTab("image")}>Image Gallery
+                                <i>
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35">
+                                    <g id="Image_Gallery_active" data-name="Image Gallery_active" transform="translate(-195 -370)">
+                                      <g id="Group_9544" data-name="Group 9544" transform="translate(197 374)">
+                                        <g id="Group_8147" data-name="Group 8147" transform="translate(0 0)">
+                                          <path id="Path_73956" data-name="Path 73956" d="M177.107,159.668a3.118,3.118,0,1,0,3.118,3.118A3.118,3.118,0,0,0,177.107,159.668Zm0,4.752a1.633,1.633,0,0,1,0-3.267h0a1.633,1.633,0,1,1,0,3.267Z" transform="translate(-161.626 -150.211)" fill="#9d0e71" />
+                                          <path id="Path_73957" data-name="Path 73957" d="M27.917,28.905,7.648,26.6a2.784,2.784,0,0,0-2.19.631,2.821,2.821,0,0,0-1.077,1.93L4.01,32.209H2.859A2.983,2.983,0,0,0,0,35.29V50.473a2.821,2.821,0,0,0,2.746,2.895H23.24a3.047,3.047,0,0,0,3.118-2.9v-.594a3.712,3.712,0,0,0,1.411-.594,3.081,3.081,0,0,0,1.077-2l1.708-15.072A3.007,3.007,0,0,0,27.917,28.905ZM24.873,50.473a1.563,1.563,0,0,1-1.633,1.411H2.859a1.336,1.336,0,0,1-1.375-1.3q0-.057,0-.114V47.726L7.24,43.494a1.782,1.782,0,0,1,2.3.111l4.046,3.564a3.49,3.49,0,0,0,2.19.817A3.378,3.378,0,0,0,17.56,47.5l7.313-4.232v7.2Zm0-8.947L16.78,46.241a1.893,1.893,0,0,1-2.19-.186l-4.083-3.6a3.3,3.3,0,0,0-4.121-.149l-4.9,3.564V35.29a1.5,1.5,0,0,1,1.374-1.6H23.24a1.708,1.708,0,0,1,1.633,1.6v6.237Zm4.2-9.518v.015L27.323,47.1a1.262,1.262,0,0,1-.483,1c-.149.149-.483.223-.483.3V35.29a3.193,3.193,0,0,0-3.118-3.081H5.5l.334-2.9a1.708,1.708,0,0,1,.557-.965,1.708,1.708,0,0,1,1.114-.3L27.732,30.39A1.485,1.485,0,0,1,29.069,32.009Z" transform="translate(0 -26.576)" fill="#9d0e71" />
+                                        </g>
                                       </g>
+                                      <rect id="Rectangle_8528" data-name="Rectangle 8528" width="35" height="35" transform="translate(195 370)" fill="none" />
                                     </g>
-                                    <rect id="Rectangle_8528" data-name="Rectangle 8528" width="35" height="35" transform="translate(195 370)" fill="none" />
-                                  </g>
-                                </svg>
-                              </i>
-                            </button>
-                          </li>
-                          <li className="nav-item" role="presentation">
-                            <button className={tab == "video" ? `nav-link active` : `nav-link`} id="video-gallery-tab" data-bs-toggle="tab" data-bs-target="#video-gallery" type="button" role="tab" aria-controls="video-gallery" aria-selected="false" onClick={(e) => this.fnCurTab("video")}>Video Gallery
-                              <i>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35">
-                                  <g id="Video_Galley_Active" data-name="Video Galley_Active" transform="translate(-409 -370)">
-                                    <g id="Page-1_26_" transform="translate(414 375)">
-                                      <g id="web_export_26_">
-                                        <path id="play_x2C_-gallery_x2C_-video_x2C_-copy_x2C_-list" d="M316.9,796.9v1.493a2.985,2.985,0,0,1-2.985,2.985H298.985A2.985,2.985,0,0,1,296,798.393V783.466a2.985,2.985,0,0,1,2.985-2.985h1.493v-1.493A2.985,2.985,0,0,1,303.463,776H318.39a2.985,2.985,0,0,1,2.985,2.985v14.926a2.985,2.985,0,0,1-2.985,2.985H316.9Zm-16.419-14.927h-1.493a1.493,1.493,0,0,0-1.493,1.493v14.927a1.493,1.493,0,0,0,1.493,1.493h14.926a1.493,1.493,0,0,0,1.493-1.493V796.9H303.463a2.985,2.985,0,0,1-2.985-2.985Zm2.985-4.478a1.493,1.493,0,0,0-1.493,1.493v14.926a1.493,1.493,0,0,0,1.493,1.493H318.39a1.493,1.493,0,0,0,1.493-1.493V778.989a1.493,1.493,0,0,0-1.493-1.493H303.463Zm4.1,5.224a.746.746,0,0,1,1.16-.621l5.6,3.732a.746.746,0,0,1,0,1.242l-5.6,3.732a.746.746,0,0,1-1.16-.621Zm1.493,1.395v4.674l3.506-2.337Z" transform="translate(-296 -776.003)" fill="#9d0e71" />
+                                  </svg>
+                                </i>
+                              </button>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                              <button className={tab == "video" ? `nav-link active` : `nav-link`} id="video-gallery-tab" data-bs-toggle="tab" data-bs-target="#video-gallery" type="button" role="tab" aria-controls="video-gallery" aria-selected="false" onClick={(e) => this.fnCurTab("video")}>Video Gallery
+                                <i>
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35">
+                                    <g id="Video_Galley_Active" data-name="Video Galley_Active" transform="translate(-409 -370)">
+                                      <g id="Page-1_26_" transform="translate(414 375)">
+                                        <g id="web_export_26_">
+                                          <path id="play_x2C_-gallery_x2C_-video_x2C_-copy_x2C_-list" d="M316.9,796.9v1.493a2.985,2.985,0,0,1-2.985,2.985H298.985A2.985,2.985,0,0,1,296,798.393V783.466a2.985,2.985,0,0,1,2.985-2.985h1.493v-1.493A2.985,2.985,0,0,1,303.463,776H318.39a2.985,2.985,0,0,1,2.985,2.985v14.926a2.985,2.985,0,0,1-2.985,2.985H316.9Zm-16.419-14.927h-1.493a1.493,1.493,0,0,0-1.493,1.493v14.927a1.493,1.493,0,0,0,1.493,1.493h14.926a1.493,1.493,0,0,0,1.493-1.493V796.9H303.463a2.985,2.985,0,0,1-2.985-2.985Zm2.985-4.478a1.493,1.493,0,0,0-1.493,1.493v14.926a1.493,1.493,0,0,0,1.493,1.493H318.39a1.493,1.493,0,0,0,1.493-1.493V778.989a1.493,1.493,0,0,0-1.493-1.493H303.463Zm4.1,5.224a.746.746,0,0,1,1.16-.621l5.6,3.732a.746.746,0,0,1,0,1.242l-5.6,3.732a.746.746,0,0,1-1.16-.621Zm1.493,1.395v4.674l3.506-2.337Z" transform="translate(-296 -776.003)" fill="#9d0e71" />
+                                        </g>
                                       </g>
+                                      <rect id="Rectangle_8529" data-name="Rectangle 8529" width="35" height="35" transform="translate(409 370)" fill="none" />
                                     </g>
-                                    <rect id="Rectangle_8529" data-name="Rectangle 8529" width="35" height="35" transform="translate(409 370)" fill="none" />
-                                  </g>
-                                </svg>
-                              </i>
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                      <div className={'col-12 col-md-6 filter-section text-end'}>
-                        <div className="row">
-                          <div className="col-4 d-flex align-items-center justify-content-around">
-                            <div className="form-check q-box__question">
-                              <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business') }} />
-                              <label className="form-check-label" htmlFor="flexRadioDefault1">
-                                Business
-                              </label>
+                                  </svg>
+                                </i>
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                        <div className={'col-12 col-md-6 filter-section text-end'}>
+                          <div className="row">
+                            <div className="col-4 d-flex align-items-center justify-content-around">
+                              <div className="form-check q-box__question">
+                                <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business') }} />
+                                <label className="form-check-label" htmlFor="flexRadioDefault1">
+                                  Business
+                                </label>
+                              </div>
+                              <div className="form-check q-box__question">
+                                <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
+                                <label className="form-check-label" htmlFor="flexRadioDefault2">
+                                  Functions
+                                </label>
+                              </div>
                             </div>
-                            <div className="form-check q-box__question">
-                              <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
-                              <label className="form-check-label" htmlFor="flexRadioDefault2">
-                                Functions
-                              </label>
-                            </div>
-                          </div>
-                          <div className="col-8">
-                            <div className={'form-select custom-select w-100 '}>
-                              <select id="ddlFilterValues" onChange={(e) => this.handleFilter(parseInt(e.target.value))}>
+                            <div className="col-8">
+                              <div className={'form-select custom-select w-100 '}>
+                                <select id="ddlFilterValues" onChange={(e) => this.handleFilter(parseInt(e.target.value))}>
 
-                                <option value="0">Filter By</option>currentPage
-                                {
-                                  filterValues.map((option) => {
-                                    return (
-                                      <option selected={this.state.selectedOption.ID == option.ID} value={option.ID}>{option.Title}</option>
-                                    )
-                                  })
-                                }
+                                  <option value="0">Filter By</option>currentPage
+                                  {
+                                    filterValues.map((option) => {
+                                      return (
+                                        <option selected={this.state.selectedOption.ID == option.ID} value={option.ID}>{option.Title}</option>
+                                      )
+                                    })
+                                  }
 
-                              </select>
+                                </select>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="tab-content">
-                    <div className={tab == "image" ? `tab-pane fade show active` : `tab-pane fade `} id="image-gallery" role="tabpanel" aria-labelledby="image-gallery-tab">
-                      <div className="row">
-                        {
-                          this.state.pageData.length > 0 ?
-                            this.state.pageData.map((folder) => {
-                              const folderName = folder.Name;
-                              const targetUrl = `${this.props.siteUrl}/SitePages/Photos.aspx?folderName=${folder.Name}&libraryPath=${libraryPath}`;
-                              const _folder = this.state.fileData.filter((f) => f.FolderName == folderName);
-                              const coverImage = _folder && _folder.length > 0 ? _folder[0].FilePath : `${this.props.siteUrl}/Assets/images/gallery-item-img.png`;
-                              return (
-                                <div className=" col-md-3">
-                                  <div className="gallery-item">
-                                    <a href="javascript:void(0)" onClick={(e) => this.getImageGalleryItems(folder.Name)}>
-                                      <div className="gallery-item--img">
-                                        <img src={coverImage} alt="" />
-                                      </div>
-                                      <div className="gallery-item--text">
-                                        <p>{folder.Name}</p>
-                                      </div>
-                                    </a>
+                    <div className="tab-content">
+                      <div className={tab == "image" ? `tab-pane fade show active` : `tab-pane fade `} id="image-gallery" role="tabpanel" aria-labelledby="image-gallery-tab">
+                        <div className="row">
+                          {
+                            this.state.pageData.length > 0 ?
+                              this.state.pageData.map((folder) => {
+                                const folderName = folder.Name;
+                                const targetUrl = `${this.props.siteUrl}/SitePages/Photos.aspx?folderName=${folder.Name}&libraryPath=${libraryPath}`;
+                                const _folder = this.state.fileData.filter((f) => f.FolderName == folderName);
+                                const coverImage = _folder && _folder.length > 0 ? _folder[0].FilePath : `${this.props.siteUrl}/Assets/images/gallery-item-img.png`;
+                                return (
+                                  <div className=" col-md-3">
+                                    <div className="gallery-item">
+                                      <a href="javascript:void(0)" onClick={(e) => this.getImageGalleryItems(folder.Name, false)}>
+                                        <div className="gallery-item--img">
+                                          <img src={coverImage} alt="" />
+                                        </div>
+                                        <div className="gallery-item--text">
+                                          <p>{folder.Name}</p>
+                                        </div>
+                                      </a>
+                                    </div>
                                   </div>
-                                </div>
-                              )
-                            })
-                            :
-                            <div className={'invalidTxt'}>
-                              NO IMAGES
-                            </div>
-                        }
+                                )
+                              })
+                              :
+                              <div className={'invalidTxt'}>
+                                NO IMAGES
+                              </div>
+                          }
+                        </div>
+                        <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
+                          <Paging currentPage={this.state.currentPage}
+                            totalItems={this.state.filterData.length}
+                            itemsCountPerPage={this.state.pageSize}
+                            onPageUpdate={(page) => this.onPageUpdateImages(page)}
+                          />
+                        </div>
                       </div>
-                      <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
-                        <Paging currentPage={this.state.currentPage}
-                          totalItems={this.state.filterData.length}
-                          itemsCountPerPage={this.state.pageSize}
-                          onPageUpdate={(page) => this.onPageUpdateImages(page)}
-                        />
-                      </div>
-                    </div>
-                    <div className={tab == "video" ? `tab-pane fade show active` : `tab-pane fade `} id="video-gallery" role="tabpanel" aria-labelledby="video-gallery-tab">
-                      <div className="row">
-                        {
-                          //this.state.videoItems.map((item, i) => {
-                          this.state.videoData.length > 0 ?
-                            this.state.videoData.map((item, i) => {
-                              const imageUrl = this.getImageUrl(item.VideoThumbnail);
-                              //  const navUrl = item.NavigationUrl ? item.NavigationUrl.Url : '';
-                              return (
-                                <div className="col-md-3">
-                                  <div className="gallery-item video-gallery-item">
-                                    <a href="javascript:void(0);" onClick={() => this.openVideo(item.ID)} data-toggle="lightbox" data-gallery="image-gallery" data-video-caption="asdsad">
-                                      <div className="gallery-item--img">
-                                        <img src={imageUrl} alt="" />
-                                      </div>
-                                      <div className="gallery-item--button">
-                                        <button><img src={`${this.props.siteUrl}/Assets/images/icon-play.svg`} alt="" /></button>
-                                      </div>
-                                    </a>
+                      <div className={tab == "video" ? `tab-pane fade show active` : `tab-pane fade `} id="video-gallery" role="tabpanel" aria-labelledby="video-gallery-tab">
+                        <div className="row">
+                          {
+                            //this.state.videoItems.map((item, i) => {
+                            this.state.videoData.length > 0 ?
+                              this.state.videoData.map((item, i) => {
+                                const imageUrl = this.getImageUrl(item.VideoThumbnail);
+                                //  const navUrl = item.NavigationUrl ? item.NavigationUrl.Url : '';
+                                return (
+                                  <div className="col-md-3">
+                                    <div className="gallery-item video-gallery-item">
+                                      <a href="javascript:void(0);" onClick={() => this.openVideo(item.ID, false)} data-toggle="lightbox" data-gallery="image-gallery" data-video-caption="asdsad">
+                                        <div className="gallery-item--img">
+                                          <img src={imageUrl} alt="" />
+                                        </div>
+                                        <div className="gallery-item--button">
+                                          <button><img src={`${this.props.siteUrl}/Assets/images/icon-play.svg`} alt="" /></button>
+                                        </div>
+                                      </a>
+                                    </div>
                                   </div>
-                                </div>
-                              )
-                            })
-                            :
-                            <div className={'invalidTxt'}>
-                              NO VIDEOS
-                            </div>
-                        }
+                                )
+                              })
+                              :
+                              <div className={'invalidTxt'}>
+                                NO VIDEOS
+                              </div>
+                          }
 
-                      </div>
+                        </div>
 
-                      {/* paging */}
-                      <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
-                        {/* <Pagination
+                        {/* paging */}
+                        <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
+                          {/* <Pagination
                 currentPage={this.state.currentPage}
                 totalPages={this.state.totalPage}
                 onChange={(page) => this._getPage(page)}
                 limiter={5}
                 //hideFirstPageJump={false}
               /> */}
-                        <Paging currentPage={this.state.currentPage}
-                          totalItems={this.state.filterVideoData.length}
-                          itemsCountPerPage={this.state.pageVideoSize}
-                          onPageUpdate={(page) => this._getPage(page)}
-                        />
-                      </div>
+                          <Paging currentPage={this.state.currentPage}
+                            totalItems={this.state.filterVideoData.length}
+                            itemsCountPerPage={this.state.pageVideoSize}
+                            onPageUpdate={(page) => this._getPage(page)}
+                          />
+                        </div>
 
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className='loaderContainer' style={{ display: this.state.isDataLoaded ? 'none' : 'flex' }}>
-              <div className="loader">
+              <div className='loaderContainer' style={{ display: this.state.isDataLoaded ? 'none' : 'flex' }}>
+                <div className="loader">
+                </div>
               </div>
             </div>
-          </div>
-
+          </>
           :
-
           <div style={{ display: this.state.selectedImageFolder ? 'none' : 'block' }}>
             <div className='propertiesWarning'>Please configure library name & path.</div>
           </div>
-
         }
 
         <div className="main-content" style={{ display: this.state.selectedImageFolder ? 'block' : 'none' }}>
@@ -921,7 +1001,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                     <div className="col-md-12">
                       <ul className="nav">
                         <li className="nav-item" role="presentation">
-                          <a href="javascript:void(0)" onClick={(e) => this.closeImageFolder()} className="nav-link">
+                          <a href="javascript:void(0)" onClick={(e) => this.closeImageFolder(false)} className="nav-link">
                             <i>
                               <svg xmlns="http://www.w3.org/2000/svg" width="23.916" height="23.916" viewBox="0 0 23.916 23.916">
                                 <g id="Group_8097" data-name="Group 8097" transform="translate(23.916 0) rotate(90)">
