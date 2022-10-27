@@ -374,7 +374,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           currentPage: 1,
           featured: {
             ...this.state.featured,
-            videoData: this.getFeaturedData(this.state.videoData),
+            videoData: this.getFeaturedData(this.state.videoItems),
           },
         });
       }
