@@ -465,21 +465,37 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     }
   }
 
-  private onPageUpdateImages(page: number) {
+  private onPageUpdateImages(page: number, isFeatured) {
     const skipItems: number = this.state.imagesPerPage * (page - 1);
     const takeItems: number = skipItems + this.state.imagesPerPage;
     const roundupPage = Math.ceil(page);
-    const pagedImages = this.state.imageItems.slice(skipItems, takeItems)
-    this.setState({
-      pagedImages,
-      imagesCurrentPage: page
-    }, () => {
-      this.scrollToTop(false);
+    const imageItems = isFeatured ? this.state.featured.imageItems : this.state.imageItems;
+    const pagedImages = imageItems.slice(skipItems, takeItems)
+    if (isFeatured) {
+      this.setState({
+        featured: {
+          ...this.state.featured,
+          pagedImages,
+          imagesCurrentPage: page
+        }
+      }, () => {
+        this.scrollToTop(isFeatured);
 
-    });
+      });
+    }
+    else {
+      this.setState({
+        pagedImages,
+        imagesCurrentPage: page
+      }, () => {
+        this.scrollToTop(isFeatured);
+
+      });
+    }
+
   }
 
-  private scrollToTop(isFeatured): void {
+  private scrollToTop(isFeatured: boolean): void {
 
     var element = document.getElementById(isFeatured ? "galleryRoot" : "gallerySection");
 
@@ -834,7 +850,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
               imagesCurrentPage={featured.imagesCurrentPage}
               totalImages={featured.totalImages}
               imagesPerPage={featured.imagesPerPage}
-              onPageUpdateImages={(page) => this.onPageUpdateImages(page)}
+              onPageUpdateImages={(page) => this.onPageUpdateImages(page, true)}
               fnCurTab={(tabName) => this.fnCurTab(tabName)}
               videoData={featured.videoData}
               getImageUrl={(imageContent) => this.getImageUrl(imageContent)}
@@ -956,7 +972,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                           <Paging currentPage={this.state.currentPage}
                             totalItems={this.state.filterData.length}
                             itemsCountPerPage={this.state.pageSize}
-                            onPageUpdate={(page) => this.onPageUpdateImages(page)}
+                            onPageUpdate={(page) => this.onPageUpdateImages(page, false)}
                           />
                         </div>
                       </div>
@@ -1071,7 +1087,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                   <Paging currentPage={this.state.imagesCurrentPage}
                     totalItems={this.state.totalImages}
                     itemsCountPerPage={this.state.imagesPerPage}
-                    onPageUpdate={(page) => this.onPageUpdateImages(page)}
+                    onPageUpdate={(page) => this.onPageUpdateImages(page, false)}
                   />
                 </div>
               </div>
