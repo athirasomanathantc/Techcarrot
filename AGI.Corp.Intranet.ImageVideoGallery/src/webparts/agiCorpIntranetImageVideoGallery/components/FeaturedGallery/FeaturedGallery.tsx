@@ -143,7 +143,7 @@ const FeaturedGallery = (props: IFeaturedGallery) => {
                         </div>
                         <div id="featured-video-gallery" className={`featured-carousel tab-pane fade ${tab == "video" ? `show active` : ''}`} role="tabpanel" aria-labelledby="featured-video-gallery-tab">
                             <div id="featuredCarouselVideo" className="carousel slide" data-bs-interval="false" data-bs-ride="carousel">
-                                <div className="carousel-inner row" role="listbox">
+                                <div className="carousel-inner" role="listbox">
                                     {
                                         videoData.length > 0 ?
                                             videoData.map((item, i) => {
