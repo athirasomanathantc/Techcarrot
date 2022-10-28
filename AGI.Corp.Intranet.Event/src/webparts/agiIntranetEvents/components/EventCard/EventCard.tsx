@@ -64,7 +64,7 @@ const EventCard = (props: IEventCard) => {
                 </div>
                 <p className={'card-text'}>{item.Description}</p>
                 <a href={`${siteUrl}/SitePages/News/Events/Event Details.aspx?eventID=${item.ID}&tab=${selectedTab}`}
-                    className={'news-read-more  align-self-start'} data-interception="off">Read more</a>
+                    className={'news-read-more mt-auto  align-self-start'} data-interception="off">Read more</a>
             </div>
         </div>
     )
