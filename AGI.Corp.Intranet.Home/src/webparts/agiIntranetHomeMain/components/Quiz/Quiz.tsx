@@ -7,6 +7,7 @@ import { IQuizQuestion } from "../../models/IQuizQuestion ";
 import SPService from "../../services/SPService";
 
 let siteUrl: string = '';
+let initialQuestion = null;
 
 export const Quiz = (props: IQuizComponent) => {
     console.log("entered quiz");
@@ -46,7 +47,7 @@ export const Quiz = (props: IQuizComponent) => {
             let options: IQuizOption[] = await _spService.getQuizOptions();
 
             if (questions.length > 0) {
-                setQuiz({
+                initialQuestion = {
                     ...quiz,
                     currentQuestion: {
                         question: questions[0],
@@ -62,14 +63,14 @@ export const Quiz = (props: IQuizComponent) => {
                             UserId: userId,
                             OptionId: ''
                         }
+
                     }),
                     submitted: submit
-                });
+                }
+                setQuiz(initialQuestion);
 
                 console.log('reset', retest);
             }
-
-
 
         }
         getQuizDetails().catch((error) => {
@@ -224,9 +225,9 @@ export const Quiz = (props: IQuizComponent) => {
                     setRetest(false);
                 }
             })
-            .then(() => {
-                window.location.reload();
-            })
+            // .then(() => {
+            //     window.location.reload();
+            // })
             .catch((exception) => {
                 setError(exception)
             });
@@ -243,6 +244,11 @@ export const Quiz = (props: IQuizComponent) => {
 
         setShowResult(false);
         setRetest(true);
+        initialQuestion = {
+            ...initialQuestion,
+            submitted: true
+        }
+        setQuiz(initialQuestion);
 
 
     }
@@ -342,7 +348,9 @@ export const Quiz = (props: IQuizComponent) => {
                                         </button>}
                                         <a href="javascript:void(0)" id="submit-btn" className={(questions.length === currentQuestion.question.SortOrder) && (quiz.responses[questions.length - 1].OptionId != '') ? 'btn btn-lg btn-gradient ms-3' : 'd-none '} onClick={() => onSubmit()}>Submit</a>
                                     </>}
-                                    {(!retest && quiz.submitted) && <a href="javascript:void(0)" id="submit-btn" type="button" className={submitted ? 'btn btn-lg btn-gradient ms-3' : "d-none"} onClick={() => onRetest()}>Retest</a>}
+                                    </div>
+                                    <div id="q-box__button" className="retest">
+                                    {(!retest&&quiz.submitted) && <a href="javascript:void(0)" id="submit-btn" type="button" className={ submitted?'btn btn-lg btn-gradient ms-3':"d-none"} onClick={() => onRetest()}>Retest</a>}
                                 </div>
 
                                 {/* <img src={`${props.siteUrl}/assets/images/quiz-icon.svg`} />
