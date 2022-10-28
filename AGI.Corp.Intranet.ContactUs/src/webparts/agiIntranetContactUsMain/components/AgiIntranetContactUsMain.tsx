@@ -205,7 +205,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
                                     </div>
                                     <div className="">
                                       <h6>{item.Title}</h6>
-                                      {(tempTitle == 'Ask John') || (tempTitle == "iCare") ? <div><input type="button" value="Click here" className="btn btn-gradient btn-lg btn-hover btn-view-more mt-3" onClick={() => this.handleRedirection(tempTitle)} /></div> : <p>{ReactHtmlParser(item.Detail)}</p>}
+                                      <p>{ReactHtmlParser(item.Detail)}</p>
                                     </div>
                                   </div>
                                 )
