@@ -2,6 +2,8 @@ import * as moment from "moment";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { IAnnouncement } from "../../models/IAnnouncement";
+import { IAnnouncementComponent } from "../../models/IAnnouncementComponent";
+import { IConfigItem } from "../../models/IConfigItem";
 import Common from "../../services/Common";
 import SPService from "../../services/SPService";
 import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
@@ -54,12 +56,15 @@ const AnnouncementCarousel = (props: any) => {
     </>)
 }
 
-export const Announcements = (props: IAgiIntranetHomeMainProps) => {
+export const Announcements = (props: IAnnouncementComponent) => {
     const [error, setError] = useState(null);
     const [announcementCarousel, setAnnouncementCarousel] = useState([]);
     const _spService = new SPService(props);
     const _common = new Common();
     siteUrl = props.siteUrl;
+
+    const configItem: IConfigItem = props.configItems.filter((configItem) => configItem.Title === 'Announcements Title' && configItem.Section === 'Home')[0];
+
     useEffect(() => {
         const getLatestNews = async () => {
             let announcements: IAnnouncement[] = await _spService.getAnnouncements();
@@ -77,7 +82,7 @@ export const Announcements = (props: IAgiIntranetHomeMainProps) => {
 
 
     return (<>
-        {announcementCarousel.length > 0 && <div className="col-md-12 announcement-section ">
+        {announcementCarousel.length > 0 && !configItem?.Hide && <div className="col-md-12 announcement-section ">
             <div className="card border-radius-0">
 
                 <div className="card-body">
@@ -85,7 +90,7 @@ export const Announcements = (props: IAgiIntranetHomeMainProps) => {
                         data-bs-ride="carousel">
                         <div className="d-flex align-items-center justify-content-between flex-wrap mb-4 card-header announcement-header px-0">
 
-                            <h4>Announcements</h4>
+                            <h4>{configItem?.Detail}</h4>
                             <div className="d-flex align-items-center">
                                 <a href={`${props.siteUrl}/SitePages/News/Announcements.aspx?env=WebView`} className="viewall-link">View All</a>
                                 <div className="p-0 ms-3 position-relative ">

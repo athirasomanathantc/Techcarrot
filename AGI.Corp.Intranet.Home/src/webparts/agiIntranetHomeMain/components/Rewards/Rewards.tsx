@@ -1,8 +1,9 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { IConfigItem } from "../../models/IConfigItem";
 import { IReward } from "../../models/IReward";
+import { IRewardsComponent } from "../../models/IRewardsComponent";
 import SPService from "../../services/SPService";
-import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
 
 let siteUrl: string = '';
 
@@ -20,11 +21,13 @@ const RewardCarousel = (props: IReward) => {
     </>)
 }
 
-export const Rewards = (props: IAgiIntranetHomeMainProps) => {
+export const Rewards = (props: IRewardsComponent) => {
     const [error, setError] = useState(null);
     const [rewardsCarousel, setRewardsCarousel] = useState([]);
     const _spService = new SPService(props);
     siteUrl = props.siteUrl;
+    const configItem: IConfigItem = props.configItems.filter((configItem) => configItem.Title === 'Rewards Title' && configItem.Section === 'Home')[0];
+
     useEffect(() => {
         const getLatestNews = async () => {
             let rewardsCarousel: IReward[] = await _spService.getRewards();
@@ -40,12 +43,12 @@ export const Rewards = (props: IAgiIntranetHomeMainProps) => {
     }
 
     return (<>
-        {rewardsCarousel.length > 0 && <div className="col-xs-12 col-sm-6 col-xl-6   employee-offer-section mb-4 mb-md-0">
+        {rewardsCarousel.length > 0 && !configItem?.Hide && <div className="col-xs-12 col-sm-6 col-xl-6   employee-offer-section mb-4 mb-md-0">
 
             <div className="card h-100">
                 <div data-bs-target="#employeeOffer" data-bs-toggle="collapse">
                     <div className="card-header d-flex align-items-center justify-content-between" >
-                        <h4 className="card-title mb-0">Rewards</h4>
+                        <h4 className="card-title mb-0">{configItem?.Detail}</h4>
                         <div className="d-md-none me-0 ms-auto"><div className="float-right navbar-toggler d-md-none"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><g id="Dropdown-Logo" transform="translate(-84 -7.544)"><path id="Path_73662" data-name="Path 73662" d="M15.739,7.87,8.525.656,7.868,0,0,7.87" transform="translate(100.366 20.883) rotate(180)" fill="none" stroke="#dccede" stroke-width="1.5"></path><rect id="Rectangle_7537" data-name="Rectangle 7537" width="18" height="18" transform="translate(84 7.544)" fill="none"></rect></g></svg></div></div>
                         <div className="d-flex align-items-center">
                             <a href={`${props.siteUrl}/SitePages/Rewards.aspx?env=WebView`} className="viewall-link d-none d-md-block">View All</a>

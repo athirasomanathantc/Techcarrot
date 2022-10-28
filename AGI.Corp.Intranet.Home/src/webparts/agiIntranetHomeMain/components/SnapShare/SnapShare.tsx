@@ -1,12 +1,13 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { IConfigItem } from "../../models/IConfigItem";
 import { ISnap } from "../../models/ISnap";
+import { ISnapShareComponent } from "../../models/ISnapShareComponent";
 import Common from "../../services/Common";
 import SPService from "../../services/SPService";
-import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
 import { ImagePreview } from "./ImagePreview";
 
-export const SnapShare = (props: IAgiIntranetHomeMainProps) => {
+export const SnapShare = (props: ISnapShareComponent) => {
     const [error, setError] = useState(null);
     const [snapCarousel, setSnapCarousel] = useState([]);
     const [mobsnapCarousel, setmobSnapCarousel] = useState([]);
@@ -14,6 +15,7 @@ export const SnapShare = (props: IAgiIntranetHomeMainProps) => {
     const _spService = new SPService(props);
     const _common = new Common();
     let siteUrl: string = props.siteUrl;
+    const configItem: IConfigItem = props.configItems.filter((configItem) => configItem.Title === 'Snap and Share Title' && configItem.Section === 'Home')[0];
 
     const displayOverlay = (e, itemId) => {
         setShowImagePreview({
@@ -71,14 +73,14 @@ export const SnapShare = (props: IAgiIntranetHomeMainProps) => {
     return (
         <>
             {
-                !showImagePreview?.show && snapCarousel.length > 0 && <div className="col-md-12 snap-share-section mt-4 mb-4 stretch-card  desktop">
+                !showImagePreview?.show && !configItem?.Hide && snapCarousel.length > 0 && <div className="col-md-12 snap-share-section mt-4 mb-4 stretch-card  desktop">
                     <div className="card snap-share ">
                         <div className="card-body">
                             <div id="carouselExampleCaptions3" className="carousel slide"
                                 data-bs-ride="carousel">
                                 <div className="d-flex align-items-center justify-content-between flex-wrap card-header snap-share-header px-0">
 
-                                    <h4>Snap and Share</h4>
+                                    <h4>{configItem?.Detail}</h4>
                                     <div className="d-flex align-items-center">
                                         <a href={`${props.siteUrl}/SitePages/Snap and Share.aspx?env=WebView`} className="viewall-link">View All</a>
                                         <div className="p-0 ms-3 position-relative">

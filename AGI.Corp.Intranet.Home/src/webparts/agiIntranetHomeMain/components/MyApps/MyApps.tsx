@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { IConfigItem } from "../../models/IConfigItem";
 import { IMyApp } from "../../models/IMyApp";
+import { IMyAppsComponent } from "../../models/IMyAppsComponent";
 import Common from "../../services/Common";
 import SPService from "../../services/SPService";
 import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
@@ -41,12 +43,14 @@ const MyAppsCarousel = (props: any) => {
     </>)
 }
 
-export const MyApps = (props: IAgiIntranetHomeMainProps) => {
+export const MyApps = (props: IMyAppsComponent) => {
     const [error, setError] = useState(null);
     const [myAppsCarousel, setMyAppsCarousel] = useState([]);
     const _spService = new SPService(props);
     const _common = new Common();
     siteUrl = props.siteUrl;
+    const configItem: IConfigItem = props.configItems.filter((configItem) => configItem.Title === 'My Apps Title' && configItem.Section === 'Home')[0];
+
     useEffect(() => {
         const getExtraNavigation = async () => {
             let myApps: IMyApp[] = await _spService.getMyApps();
@@ -63,10 +67,10 @@ export const MyApps = (props: IAgiIntranetHomeMainProps) => {
     }
 
     return (<>
-        {myAppsCarousel.length > 0 && <div className="col-md-12 my-app ">
+        {myAppsCarousel.length > 0 && !configItem?.Hide && <div className="col-md-12 my-app ">
             <div className="card carousel slide" id="myApps">
                 <div className="card-header d-flex align-items-center justify-content-between">
-                    <h4 className="card-title m-2 me-2">My Apps</h4>
+                    <h4 className="card-title m-2 me-2">{configItem?.Detail}</h4>
                     <div className="p-0 ms-3 position-relative">
                         <button className="carousel-control-prev" style={{ borderRadius: '60px' }} type="button"
                             data-bs-target="#myApps"

@@ -1,3 +1,5 @@
+import { IConfigItem } from "../models/IConfigItem";
+
 export interface IAgiIntranetHomeMainProps {
   description: string;
   siteUrl: string;
@@ -9,5 +11,5 @@ export interface IAgiIntranetHomeMainProps {
   topMyApps: number;
   topRewards: number;
   topEvents: number;
-  topSurveyQuestions: number;
+  topSurveyQuestions: number;  
 }

@@ -3,10 +3,11 @@ import * as moment from "moment";
 import * as React from "react";
 import DayPicker from "react-day-picker";
 import 'react-day-picker/lib/style.css';
+import { IConfigItem } from "../../models/IConfigItem";
 import { IEventItem } from "../../models/IEventItem";
 
 interface ICalendarProps {
-
+    configItems: IConfigItem[];
 }
 
 interface ICalendarState {
@@ -22,7 +23,7 @@ interface ICalendarState {
     isDayEvent: boolean,
     monthlyHolidaysText: string,
     monthlyEventsText: string,
-    dailyEvents: IEventItem[]
+    dailyEvents: IEventItem[],
 }
 
 const EVENTS_LIST = 'Events';
@@ -54,8 +55,14 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
         this.getMonthlyEvents = this.getMonthlyEvents.bind(this);
     }
 
+    private configItem: IConfigItem;
+
     public componentDidMount() {
         this.getCalendarEvents();
+    }
+
+    public componentDidUpdate() {
+        this.configItem = this.props.configItems.filter((configItem) => configItem.Title === 'Calendar' && configItem.Section === 'Home')[0];
     }
 
     private async getCalendarEvents() {
@@ -236,7 +243,7 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
 
     public render(): React.ReactElement<ICalendarProps> {
         return (<>
-            <div className="col-md-12 mt-4 ">
+            {!this.configItem?.Hide && <div className="col-md-12 mt-4 ">
                 <div className="card calendar rounded-0">
                     <div className="card-body rounded-0">
                         <div className="app">
@@ -276,7 +283,7 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>}
         </>
         );
     }

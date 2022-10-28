@@ -9,9 +9,6 @@ import { IMyApp } from "../models/IMyApp";
 import { INavigation } from "../models/INavigation";
 import { IReward } from "../models/IReward";
 import { ISnap } from "../models/ISnap";
-import { ISocialMediaPost } from "../models/ISocialMediaPost";
-import { ISurveyOption } from "../models/ISurveyOption";
-import { ISurveyQuestion } from "../models/ISurveyQuestion";
 import { IQuizOption } from "../models/IQuizOptions";
 import { IQuizQuestion } from "../models/IQuizQuestion ";
 import { IQuizResponse } from "../models/IQuizResponse";
@@ -114,13 +111,12 @@ export class SPService {
             });
     }
 
-    public async getConfigItems(): Promise<IConfigItem> {
+    public async getConfigItems(): Promise<IConfigItem[]> {
         return await sp.web.lists.getByTitle('IntranetConfig').items
-            .select('Id,Title,Detail,Link,Image')
+            .select('Id,Title,Detail,Link,Image,Hide,Section')
             .get()
             .then((items: IConfigItem[]) => {
-                const _surveyItems = items.filter((item) => item.Title == 'EmployeeSurvey');
-                return _surveyItems[0];
+                return items;
             })
             .catch((exception) => {
                 throw new Error(exception);
@@ -226,32 +222,32 @@ export class SPService {
         const list = sp.web.lists.getByTitle(listName);
         const entityTypeFullName = await list.getListItemEntityTypeFullName();
 
-        return new Promise((resolve, reject) => { 
-             list
-            .items.filter(`FileDirRef eq '${listUri}/${email}'`)
-            .get().then((data) => {
-                console.log('responses');
-                console.log(data);
-                //batch update
-                let createBatchRequest = sp.web.createBatch();
-                data.forEach((item) => {
-                    list.items.getById(item.ID)
-                        .inBatch(createBatchRequest)
-                        .update({ LatestResponse: false }, '*', entityTypeFullName);
-                });
+        return new Promise((resolve, reject) => {
+            list
+                .items.filter(`FileDirRef eq '${listUri}/${email}'`)
+                .get().then((data) => {
+                    console.log('responses');
+                    console.log(data);
+                    //batch update
+                    let createBatchRequest = sp.web.createBatch();
+                    data.forEach((item) => {
+                        list.items.getById(item.ID)
+                            .inBatch(createBatchRequest)
+                            .update({ LatestResponse: false }, '*', entityTypeFullName);
+                    });
 
-                createBatchRequest.execute().then((createResponse: any) => {
-                    console.log("All Item Updated")
-                    resolve(createResponse);
+                    createBatchRequest.execute().then((createResponse: any) => {
+                        console.log("All Item Updated")
+                        resolve(createResponse);
+                    }).catch((error) => {
+                        reject(error);
+                        console.log('error in executing batch request');
+                    });
                 }).catch((error) => {
                     reject(error);
-                    console.log('error in executing batch request');
+                    console.log('error');
+                    console.log(error);
                 });
-            }).catch((error) => {
-                reject(error);
-                console.log('error');
-                console.log(error);
-            });
         });
     }
 
@@ -291,7 +287,7 @@ export class SPService {
 
     private async createResponseEntry(email: string): Promise<void> {
         const listName = LIST_SURVEY_RESPONSE_ENTRIES;
-        sp.web.lists.getByTitle(listName).items.add({Title: email}).then((response) => {
+        sp.web.lists.getByTitle(listName).items.add({ Title: email }).then((response) => {
             console.log('response entry added successfully');
         }).catch((error) => {
             console.log('error', error);
