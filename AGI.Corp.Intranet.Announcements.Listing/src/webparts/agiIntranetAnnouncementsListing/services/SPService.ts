@@ -13,9 +13,10 @@ export class SPService {
         const listName = 'Announcements';
         return await sp.web.lists.getByTitle(listName).items
             .select("ID,Title,Description,Summary,AnnouncementImage,AnnouncementThumbnail,PublishedDate,Business/ID,Business/Title,Location,Functions/ID,Functions/Title,Featured")
-            .orderBy("PublishedDate", false)
             .expand("Business,Functions")
-            .getAll(5000).then((items: IAnnouncementData[]) => {
+            .orderBy("PublishedDate",false)
+            .get()
+            .then((items: IAnnouncementData[]) => {
                 return items;
             });
     }

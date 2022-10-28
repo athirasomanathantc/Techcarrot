@@ -13,7 +13,7 @@ interface IBLogCard {
 const BlogCard = (props: IBLogCard) => {
     const { siteUrl, imageUrl, item, category, isFeatured } = props;
     return (
-        <div className={'card news-card'}>
+        <div className={'card news-card h-100'}>
             <a href={`${siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'align-self-start'} data-interception="off">
                 {isFeatured && <div className="badge-label">
                     <span>

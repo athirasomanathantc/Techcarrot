@@ -45,6 +45,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       const announcements: IAnnouncementData[] = await this._spServices.getAnnouncements();
       const business: IBusinessData[] = await this._spServices.getBussiness();
       const functions: IFunctionData[] = await this._spServices.getFunctionData();
+      //console.log(announcements);
       const featuredTitle: string = await this._spServices.getConfigItems();
       this.setState({
         totalAnnouncementData: announcements,
@@ -271,7 +272,9 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
                   }
 
                 </div>
-                <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
+                {
+                  this.state.featuredAnnouncements.length>0 && <>
+                  <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
                   data-bs-slide="prev">
                   <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                   <span className="visually-hidden">Previous</span>
@@ -281,6 +284,9 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
                   <span className="carousel-control-next-icon" aria-hidden="true"></span>
                   <span className="visually-hidden">Next</span>
                 </button>
+                </>
+                }
+                
               </div>
             </div>
           </div>

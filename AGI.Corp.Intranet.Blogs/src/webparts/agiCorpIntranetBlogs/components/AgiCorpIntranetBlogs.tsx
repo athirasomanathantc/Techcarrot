@@ -303,7 +303,9 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                   }
 
                 </div>
-                <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
+                {
+                  this.state.featuredBlogs.length>0 && <>
+                  <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
                   data-bs-slide="prev">
                   <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                   <span className="visually-hidden">Previous</span>
@@ -313,6 +315,9 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                   <span className="carousel-control-next-icon" aria-hidden="true"></span>
                   <span className="visually-hidden">Next</span>
                 </button>
+                  </>
+                }
+                
               </div>
             </div>
           </div>

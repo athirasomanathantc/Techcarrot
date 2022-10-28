@@ -14,7 +14,7 @@ interface IEventCard {
 const EventCard = (props: IEventCard) => {
     const { imageUrl, item, siteUrl, guid, selectedTab, isFeatured } = props;
     return (
-        <div className={'card news-card'}>
+        <div className={'card news-card h-100'}>
             {isFeatured && <div className="badge-label">
                 <span>
                     <i>

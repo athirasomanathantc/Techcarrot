@@ -483,7 +483,9 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
                     !this.state.featuredEvents.length && <h5 className="not-found">No items found</h5>
                   }
                 </div>
-                <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
+                {
+                  this.state.featuredEvents.length>0 && <>
+                  <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
                   data-bs-slide="prev">
                   <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                   <span className="visually-hidden">Previous</span>
@@ -493,6 +495,9 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
                   <span className="carousel-control-next-icon" aria-hidden="true"></span>
                   <span className="visually-hidden">Next</span>
                 </button>
+                  </>
+                }
+                
               </div>
             </div>
           </div>
