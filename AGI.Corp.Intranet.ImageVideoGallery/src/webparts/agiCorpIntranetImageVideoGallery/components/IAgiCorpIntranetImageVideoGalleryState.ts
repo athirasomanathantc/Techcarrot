@@ -55,6 +55,7 @@ export interface IAgiCorpIntranetImageVideoGalleryState {
   imagesCurrentPage: number;
 
   fileData: IFileData[];
+  isFeatured: boolean;
   featured: {
     fileData: IFileData[];
     imageItems: IImageItem[];

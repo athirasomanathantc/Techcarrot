@@ -70,6 +70,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       totalImages: 0,
       imagesCurrentPage: 1,
       fileData: [],
+      isFeatured: false,
       featured: {
         fileData: [],
         imageItems: [],
@@ -573,6 +574,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       const pagedImages = allItems.slice(0, imagesPerPage);
       if (isFeatured) {
         this.setState({
+          isFeatured,
           featured: {
             ...this.state.featured,
             imageItems: allItems,
@@ -586,6 +588,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       }
       else {
         this.setState({
+          isFeatured,
           imageItems: allItems,
           pagedImages,
           totalImages,
@@ -720,9 +723,9 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     })
   }
 
-  private prevImage() {
+  private prevImage(isFeatured) {
     const index = this.state.currentIndex;
-    const images = this.state.imageItems;
+    const images = isFeatured ? this.state.featured.imageItems : this.state.imageItems;
     const arrayIndex = images.map(e => e.ListItemAllFields.ID).indexOf(index);
     const prevIndex = arrayIndex == 0 ? (images.length - 1) : arrayIndex - 1;
     const prevImage = images[prevIndex];
@@ -732,9 +735,9 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     });
   }
 
-  private nextImage() {
+  private nextImage(isFeatured) {
     const index = this.state.currentIndex;
-    const images = this.state.imageItems;
+    const images = isFeatured ? this.state.featured.imageItems : this.state.imageItems;
     const arrayIndex = images.map(e => e.ListItemAllFields.ID).indexOf(index);
     const nextIndex = arrayIndex == (images.length - 1) ? 0 : arrayIndex + 1;
     const nextImage = images[nextIndex];
@@ -779,7 +782,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   }
 
 
-  private renderImagePreviewModal(): JSX.Element {
+  private renderImagePreviewModal(isFeatured): JSX.Element {
 
     return (
       <div className="imgOverlay" style={{ display: this.state.preview ? 'block' : 'none' }}>
@@ -788,7 +791,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         </div>
         <div className="imagePreview">
           <div className='arrowContainer'>
-            <Icon iconName="ChevronLeft" onClick={() => this.prevImage()} />
+            <Icon iconName="ChevronLeft" onClick={() => this.prevImage(isFeatured)} />
           </div>
           <div className="img-wrapper" >
             <div className="img-container">
@@ -808,7 +811,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
             </div>
           </div>
           <div className='arrowContainer'>
-            <Icon iconName="ChevronRight" onClick={() => this.nextImage()} />
+            <Icon iconName="ChevronRight" onClick={() => this.nextImage(isFeatured)} />
           </div>
         </div>
       </div>
@@ -1122,7 +1125,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
             </div>
           </div>
         </div>
-        {this.renderImagePreviewModal()}
+        {this.renderImagePreviewModal(this.state.isFeatured)}
         {/* <div className="imgOverlay" style={{ display: this.state.preview ? 'block' : 'none' }}>
           <div className="header">
             <Icon iconName="Cancel" onClick={() => this.closePreview()} />
