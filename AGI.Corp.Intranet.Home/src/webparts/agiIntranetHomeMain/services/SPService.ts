@@ -19,7 +19,7 @@ import * as moment from 'moment';
 //import { spfi } from "@pnp/sp";
 import "@pnp/sp/webs";
 import "@pnp/sp/folders";
-import { LIST_PATH_SURVEY, LIST_SURVEY } from "../common/constants";
+import { LIST_PATH_SURVEY, LIST_SURVEY, LIST_SURVEY_RESPONSE_ENTRIES } from "../common/constants";
 //const sp1 = spfi(...);
 
 export class SPService {
@@ -195,8 +195,9 @@ export class SPService {
                         quiz.submitted = true;
                         const response = this.createResponse(quiz.responses);
                         return response.then((result) => {
-                            return true
-                        })
+                            this.createResponseEntry(userEmail);
+                            return true;
+                        });
                     })
                     .catch(function (err) {
                         console.log('first folder creation', err);
@@ -208,7 +209,8 @@ export class SPService {
                 // add new responses
                 const response = this.createResponse(quiz.responses);
                 return response.then((result) => {
-                    return true
+                    this.createResponseEntry(userEmail);
+                    return true;
                 })
             }
 
@@ -284,6 +286,15 @@ export class SPService {
             }).catch((exception) => {
                 reject(exception)
             });
+        });
+    }
+
+    private async createResponseEntry(email: string): Promise<void> {
+        const listName = LIST_SURVEY_RESPONSE_ENTRIES;
+        sp.web.lists.getByTitle(listName).items.add({Title: email}).then((response) => {
+            console.log('response entry added successfully');
+        }).catch((error) => {
+            console.log('error', error);
         });
     }
 
