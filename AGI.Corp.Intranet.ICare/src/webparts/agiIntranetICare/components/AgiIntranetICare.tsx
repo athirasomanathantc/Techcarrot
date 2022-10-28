@@ -160,7 +160,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
 
 
               <div className="row contact-section-form iCare-section-form">
-                <form action="" className="contact-form mt-4">
+                <form action="" className="icare-contact-form mt-4">
                   <div className="row">
                     <div className="col-12">
                       <label className="container-check">Post your message anonymously
