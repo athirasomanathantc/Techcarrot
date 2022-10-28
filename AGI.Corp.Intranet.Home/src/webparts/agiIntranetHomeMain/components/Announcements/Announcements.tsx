@@ -27,7 +27,7 @@ const Announcement = (props: IAnnouncement) => {
             <div className="d-flex " onClick={() => { goToAnnouncement(props.Id) }}>
                 <div
                     className="icon-announcement text-dark flex-shrink-0 me-3">
-                    <img style={imageStyle} src={imageUrl}
+                    <img src={imageUrl}
                         width="100%" />
                 </div>
                 <div className="d-flex flex-column flex-wrap announcement-txt-wrapper">
