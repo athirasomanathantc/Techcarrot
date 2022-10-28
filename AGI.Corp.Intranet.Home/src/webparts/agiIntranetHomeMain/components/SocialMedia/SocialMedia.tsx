@@ -1,12 +1,14 @@
 import * as React from "react";
 import { useEffect } from "react";
-import { useLayoutEffect, useRef, useState } from "react";
-import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
+import { useRef, useState } from "react";
 import { SPComponentLoader } from '@microsoft/sp-loader';
+import { ISocialMediaComponent } from "../../models/ISocialMediaComponent";
+import { IConfigItem } from "../../models/IConfigItem";
 
-export const SocialMedia = (props: IAgiIntranetHomeMainProps) => {
+export const SocialMedia = (props: ISocialMediaComponent) => {
     const titleRef = useRef<any>();
     const [dimensions, setDimensions] = useState({ width: 0, height: 390, dimensionSet: false });
+    const configItem: IConfigItem = props.configItems.filter((configItem) => configItem.Title === 'Social Media Title' && configItem.Section === 'Home')[0];
 
     useEffect(() => {
         const renderSocialMedia = async () => {
@@ -25,11 +27,11 @@ export const SocialMedia = (props: IAgiIntranetHomeMainProps) => {
     }, [titleRef.current]);
 
     return (<>
-        <div className="col-sm-6 col-xl-6  social-media-section mb-4 mb-md-0">
+        {!configItem?.Hide && <div className="col-sm-6 col-xl-6  social-media-section mb-4 mb-md-0">
             <div className="card h-100">
                 <div data-bs-target="#socialOffer" data-bs-toggle="collapse" ref={titleRef}>
                     <div className="card-header d-flex align-items-center justify-content-between" >
-                        <h4 className="card-title mb-0">Social Media</h4>
+                        <h4 className="card-title mb-0">{configItem?.Detail}</h4>
                         <div className="d-md-none me-0 ms-auto">
                             <div className="float-right navbar-toggler d-md-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
@@ -55,6 +57,6 @@ export const SocialMedia = (props: IAgiIntranetHomeMainProps) => {
                     </div>}
                 </div>
             </div>
-        </div >
+        </div >}
     </>);
 }

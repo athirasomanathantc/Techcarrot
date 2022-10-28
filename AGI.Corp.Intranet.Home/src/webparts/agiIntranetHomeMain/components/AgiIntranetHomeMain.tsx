@@ -15,6 +15,8 @@ import { EmployeeSurvey } from './EmployeeSurvey/EmployeeSurvey';
 import { Quiz } from './Quiz/Quiz';
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 import Calender from './Calendar/Calendar';
+import SPService from '../services/SPService';
+import { IConfigItem } from '../models/IConfigItem';
 
 export default class AgiIntranetHomeMain extends React.Component<IAgiIntranetHomeMainProps, IAgiIntranetHomeMainState> {
 
@@ -24,11 +26,18 @@ export default class AgiIntranetHomeMain extends React.Component<IAgiIntranetHom
       spfxContext: this.props.context
     });
     this.state = {
-      hideLoader: false
+      hideLoader: false,
+      configItems: []
     }
   }
 
+  private _spService = new SPService(this.props);
+
   public async componentDidMount(): Promise<void> {
+    let configItems: IConfigItem[] = await this._spService.getConfigItems();
+    this.setState({
+      configItems
+    });
     setTimeout(() => {
       this.setState({
         hideLoader: true
@@ -46,20 +55,20 @@ export default class AgiIntranetHomeMain extends React.Component<IAgiIntranetHom
                 <div className="col-xl-8 col-sm-12  ">
                   <div className="row">
                     <ErrorBoundary>
-                      <LatestNews {...this.props}></LatestNews>
+                      <LatestNews {...this.props} configItems={this.state.configItems}></LatestNews>
                     </ErrorBoundary>
                     <ErrorBoundary>
-                      <Announcements {...this.props}></Announcements>
+                      <Announcements {...this.props} configItems={this.state.configItems}></Announcements>
                     </ErrorBoundary>
                     <ErrorBoundary>
-                      <SnapShare  {...this.props}></SnapShare>
+                      <SnapShare  {...this.props} configItems={this.state.configItems}></SnapShare>
                     </ErrorBoundary>
                     <div className=" row p-0 me-0 ms-0">
                       <ErrorBoundary>
-                        <SocialMedia {...this.props}></SocialMedia>
+                        <SocialMedia {...this.props} configItems={this.state.configItems}></SocialMedia>
                       </ErrorBoundary>
                       <ErrorBoundary>
-                        <Rewards {...this.props}></Rewards>
+                        <Rewards {...this.props} configItems={this.state.configItems}></Rewards>
                       </ErrorBoundary>
                     </div>
                   </div>
@@ -67,22 +76,22 @@ export default class AgiIntranetHomeMain extends React.Component<IAgiIntranetHom
                 <div className="col-xl-4 col-sm-12">
                   <div className="row">
                     <ErrorBoundary>
-                      <PortalNavigation {...this.props}></PortalNavigation>
+                      <PortalNavigation {...this.props} configItems={this.state.configItems}></PortalNavigation>
                     </ErrorBoundary>
                     <ErrorBoundary>
-                      <MyApps {...this.props}></MyApps>
+                      <MyApps {...this.props} configItems={this.state.configItems}></MyApps>
                     </ErrorBoundary>
                     <ErrorBoundary>
-                      <Calender {...this.props}></Calender>
+                      <Calender {...this.props} configItems={this.state.configItems}></Calender>
                     </ErrorBoundary>
                     <ErrorBoundary>
-                      <CompanyEvents {...this.props}></CompanyEvents>
+                      <CompanyEvents {...this.props} configItems={this.state.configItems}></CompanyEvents>
                     </ErrorBoundary>
                     <ErrorBoundary>
-                      <EmployeeSurvey {...this.props}></EmployeeSurvey>
+                      <EmployeeSurvey {...this.props} configItems={this.state.configItems}></EmployeeSurvey>
                     </ErrorBoundary>
                     <ErrorBoundary>
-                      <Quiz {...this.props}></Quiz>
+                      <Quiz {...this.props} configItems={this.state.configItems}></Quiz>
                     </ErrorBoundary>
                   </div>
                 </div>
