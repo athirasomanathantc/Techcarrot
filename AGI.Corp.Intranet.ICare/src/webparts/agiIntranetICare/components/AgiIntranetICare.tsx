@@ -205,7 +205,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
 
                       </select>
                     </div>
-                    <div className="mb-4 col-md-6 PhoneNo" style={{ display: this.state.showPhone ? "none" : "block" }}>
+                    <div className="mb-4 col-md-6 PhoneNo">
                       <label htmlFor="contactFormPhone" className="form-label">Phone</label>
                       <div className="d-flex">
                         <div className="col-6 col-md-3">
@@ -357,6 +357,8 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
     const body = {
       BusinessId: this.state.selectedUserBusinessUnit,
       Message: this.state.selectedUserMsg,
+      ExtensionId: this.state.selectedUserExtn,
+      Number: this.state.selectedUserPhone,
       IsAnonymous: this.state.iCareIsAnonymous
     }
 
