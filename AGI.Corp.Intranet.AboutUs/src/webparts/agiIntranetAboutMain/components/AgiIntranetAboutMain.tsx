@@ -119,7 +119,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                     return (
                       i == 0 ?
                       
-                        <div className="leadership-content mb-5">
+                        <div className="leadership-content mb-0 mb-lg-5">
                           <div className="leadership-image">
                             <img src={leadershipMessageImg} className="w-100" />
                           </div>
@@ -143,7 +143,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                         i == 1 ?
                         <>
                         <hr className="divider-horizontal" />
-                        <div className="leadership-content reverse mt-5">
+                        <div className="leadership-content reverse mt-0 mt-lg-5 mb-0 mb-lg-5">
                             <div className="leadership-image">
                             <img src={leadershipMessageImg} className="w-100" />
                           </div>
