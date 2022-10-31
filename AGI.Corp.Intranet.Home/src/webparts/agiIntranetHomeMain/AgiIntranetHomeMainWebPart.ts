@@ -21,6 +21,7 @@ export interface IAgiIntranetHomeMainWebPartProps {
   topRewards: number;
   topEvents: number;
   topSurveyQuestions: number;
+  topSocialMediaPosts: number;
 }
 
 export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IAgiIntranetHomeMainWebPartProps> {
@@ -73,11 +74,20 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
                   minValue: 1,
                   disabled: false
                 }),
-                PropertyFieldNumber("topAnnouncements", {
-                  key: "topAnnouncements",
-                  label: "topAnnouncements",
-                  description: "No of announcement carousel items",
-                  value: this.properties.topAnnouncements,
+                // PropertyFieldNumber("topAnnouncements", {
+                //   key: "topAnnouncements",
+                //   label: "topAnnouncements",
+                //   description: "No of announcement carousel items",
+                //   value: this.properties.topAnnouncements,
+                //   maxValue: 50,
+                //   minValue: 1,
+                //   disabled: false
+                // }),
+                PropertyFieldNumber("topSocialMediaPosts", {
+                  key: "topSocialMediaPosts",
+                  label: "topSocialMediaPosts",
+                  description: "No of social media post items",
+                  value: this.properties.topSocialMediaPosts,
                   maxValue: 50,
                   minValue: 1,
                   disabled: false

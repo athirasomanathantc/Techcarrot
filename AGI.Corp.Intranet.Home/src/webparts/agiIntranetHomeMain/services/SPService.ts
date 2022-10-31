@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import "@pnp/sp/webs";
 import "@pnp/sp/folders";
 import { LIST_PATH_SURVEY, LIST_SURVEY, LIST_SURVEY_RESPONSE_ENTRIES } from "../common/constants";
+import { ISocialMediaPost } from "../models/ISocialMediaPost";
 //const sp1 = spfi(...);
 
 export class SPService {
@@ -151,6 +152,17 @@ export class SPService {
             .top(this._props.topSurveyQuestions)
             .orderBy("SortOrder", true)()
             .then((items: IQuizQuestion[]) => {
+                return items;
+            })
+            .catch((exception) => {
+                throw new Error(exception);
+            });
+    }
+
+    public async getSocialMediaPosts(): Promise<ISocialMediaPost[]> {
+        return await sp.web.lists.getByTitle('SocialMediaPosts').items.select("Id,Title,Thumbnail,Description,Icon")
+            .top(this._props.topSocialMediaPosts)()
+            .then((items: ISocialMediaPost[]) => {
                 return items;
             })
             .catch((exception) => {
