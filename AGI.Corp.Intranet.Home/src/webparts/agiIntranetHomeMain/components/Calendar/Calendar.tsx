@@ -249,13 +249,15 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
                         <div className="app">
                             <div className="app__main">
                                 <div className="calendar">
-                                    <DayPicker modifiers={{ holiday: this.state.holidays, event: this.state.events, announcement: this.state.announcements }}
+                                    <DayPicker
+                                        modifiers={{ holiday: this.state.holidays, event: this.state.events, announcement: this.state.announcements }}
                                         month={this.state.selectedMonth}
                                         selectedDays={this.state.selectedDay}
                                         onDayClick={(day, modifiers, e) => this.handleDayClick(day, modifiers, e)}
                                         onMonthChange={(month) => this.handleMonthChange(month)}
                                         weekdaysShort={WEEK_DAYS}
                                         renderDay={(day) => this.renderDay(day, { holiday: this.state.holidays, event: this.state.events, announcement: this.state.announcements })}
+                                        firstDayOfWeek={1}
                                     />
                                     <div className="legend calendar-legend">
                                         <span>Today</span>
