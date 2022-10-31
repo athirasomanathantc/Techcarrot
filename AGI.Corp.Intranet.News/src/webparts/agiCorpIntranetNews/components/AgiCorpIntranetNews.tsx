@@ -301,7 +301,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
 
     return (
       <div>
-        <section className="featured-section col-lg-12 bg-light bg-gradient mt-5 ">
+        <section className="featured-section col-lg-12 mt-5 ">
           <div className="container">
             <div className="row title-wrapper">
               <div className="main-header-section">
@@ -341,7 +341,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                                   <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i>{moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
                                 </div>
                                 <p className={'card-text mt-2'}>{item.Description}</p>
-                                <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}&env=WebView`} className={'news-read-more  align-self-start'}>Read more</a>
+                                <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}&env=WebView`} className={'news-read-more mt-auto align-self-start'}>Read more</a>
                               </div>
                             </div>
                           </div>
@@ -354,16 +354,19 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                   }
 
                 </div>
-                <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
-                  data-bs-slide="prev">
-                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span className="visually-hidden">Previous</span>
-                </button>
-                <button className="carousel-control-next" type="button" data-bs-target="#featuredCarousel"
-                  data-bs-slide="next">
-                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span className="visually-hidden">Next</span>
-                </button>
+                {this.state.featuredNews.length>0 && <>
+                  <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
+                    data-bs-slide="prev">
+                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span className="visually-hidden">Previous</span>
+                  </button>
+                  <button className="carousel-control-next" type="button" data-bs-target="#featuredCarousel"
+                    data-bs-slide="next">
+                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span className="visually-hidden">Next</span>
+                  </button>
+                </>
+                }
               </div>
             </div>
           </div>
@@ -443,7 +446,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
                                     <span><i><img src={`${this.props.siteUrl}/Assets/icons/Date-blue.svg`} alt="" /></i>{moment(item.PublishedDate).format('DD-MMM-YYYY')}</span>
                                   </div>
                                   <p className={'card-text mt-2'}>{item.Description}</p>
-                                  <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}&env=WebView`} className={'news-read-more  align-self-start'}>Read more</a>
+                                  <a href={`${this.props.siteUrl}/SitePages/News/News Detail.aspx?newsID=${item.ID}&env=WebView`} className={'news-read-more mt-auto align-self-start'}>Read more</a>
                                 </div>
                               </div>
                             </div>

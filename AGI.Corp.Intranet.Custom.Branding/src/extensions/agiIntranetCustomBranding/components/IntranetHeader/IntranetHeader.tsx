@@ -140,7 +140,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
             profile.PictureURL = profile.UserProfileProperties[i].Value;
           }
         }
-        console.log('profile', profile); debugger;
+        console.log('profile', profile); 
         const firstName: string = profile.FirstName ? profile.FirstName.toString() : '';
         const lastName: string = profile.LastName ? profile.LastName.toString() : '';
         f = firstName.substring(0, 1);

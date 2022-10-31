@@ -196,6 +196,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
                               itemGroup.map((item: IContactUsTalk2UsItem) => {
                                 let icon = JSON.parse(item.Icon);
                                 icon = `${icon?.serverUrl}${icon?.serverRelativeUrl}`;
+                      
                                 const tempTitle: any = item.Title;
                                 return (
                                   <div className="col-lg-6 d-flex align-items-center">
@@ -204,7 +205,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
                                     </div>
                                     <div className="">
                                       <h6>{item.Title}</h6>
-                                      {(tempTitle == 'Ask John') || (tempTitle == "iCare") ? <div><input type="button" value="Click here" className="btn btn-gradient btn-lg btn-hover btn-view-more mt-3" onClick={() => this.handleRedirection(tempTitle)} /></div> : <p>{ReactHtmlParser(item.Detail)}</p>}
+                                      <p>{ReactHtmlParser(item.Detail)}</p>
                                     </div>
                                   </div>
                                 )
@@ -365,7 +366,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
   }
 
   private handleRedirection(pageName) {
-    const tempURl = `${this.props.siteUrl}/SitePages/${pageName}.aspx`;
+    const tempURl = `${this.props.siteUrl}/SitePages/Contact Us/${pageName}.aspx`;
     window.open(tempURl, '_blank');
   }
 

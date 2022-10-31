@@ -1,7 +1,9 @@
 import * as moment from "moment";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { IConfigItem } from "../../models/IConfigItem";
 import { ILatestNews } from "../../models/ILatestNews";
+import { ILatestNewsComponent } from "../../models/ILatestNewsComponent";
 import SPService from "../../services/SPService";
 import { IAgiIntranetHomeMainProps } from "../IAgiIntranetHomeMainProps";
 
@@ -28,11 +30,13 @@ const goToNews = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, props: ILates
 
 let siteUrl: string = '';
 
-export const LatestNews = (props: IAgiIntranetHomeMainProps) => {
+export const LatestNews = (props: ILatestNewsComponent) => {
     const [error, setError] = useState(null);
     const [carouselItems, setCarouselItems] = useState([]);
     const _spService = new SPService(props);
     siteUrl = props.siteUrl;
+    const configItem: IConfigItem = props.configItems.filter((configItem) => configItem.Title === 'Latest News Title' && configItem.Section === 'Home')[0];
+
     useEffect(() => {
         const getLatestNews = async () => {
             const latestNews: ILatestNews[] = await _spService.getLatestNews();
@@ -48,10 +52,10 @@ export const LatestNews = (props: IAgiIntranetHomeMainProps) => {
     }
 
     return (<>
-        {carouselItems.length > 0 && <div className="col-md-12 latest-news-section ">
+        {carouselItems.length > 0 && !configItem?.Hide && <div className="col-md-12 latest-news-section ">
             <div className="card ">
                 <div className="card-header d-flex align-items-center justify-content-between border-bottom-0 pb-0 pt-3">
-                    <h4 className="card-title mb-0">Latest News</h4>
+                    <h4 className="card-title mb-0">{configItem?.Detail}</h4>
                     <a href={`${props.siteUrl}/SitePages/News.aspx?env=WebView`} className="viewall-link">View All</a>
                 </div>
                 <div className="card-body">

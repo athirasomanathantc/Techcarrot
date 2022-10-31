@@ -38,7 +38,7 @@ const AnnouncementCard = (props: IEventCard) => {
 
                 </div>
                 <p className="card-text mt-2">{announcement.Description}</p>
-                <a href={`${siteUrl}/SitePages/News/Announcements/Announcement Details.aspx?announcementID=${announcement.ID}`} className="btn news-read-more  align-self-start">Read more</a>
+                <a href={`${siteUrl}/SitePages/News/Announcements/Announcement Details.aspx?announcementID=${announcement.ID}`} className="btn news-read-more mt-auto  align-self-start">Read more</a>
             </div>
         </div>
     )

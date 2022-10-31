@@ -160,7 +160,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
 
 
               <div className="row contact-section-form iCare-section-form">
-                <form action="" className="contact-form mt-4">
+                <form action="" className="icare-contact-form mt-4">
                   <div className="row">
                     <div className="col-12">
                       <label className="container-check">Post your message anonymously
@@ -205,7 +205,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
 
                       </select>
                     </div>
-                    <div className="mb-4 col-md-6 PhoneNo" style={{ display: this.state.showPhone ? "none" : "block" }}>
+                    <div className="mb-4 col-md-6 PhoneNo">
                       <label htmlFor="contactFormPhone" className="form-label">Phone</label>
                       <div className="d-flex">
                         <div className="col-6 col-md-3">
@@ -225,7 +225,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
                     </div>
 
                     <div className="mt-5 mb-4 col-md-12 msgBox">
-                      <label htmlFor="contactFormMessage" className="form-label">Submit</label>
+                      <label htmlFor="contactFormMessage" className="form-label">Message</label>
                       <textarea className="form-control" placeholder="Write your message...." id="contactFormMessage" rows={4} value={this.state.selectedUserMsg} onChange={(e) => this.handleMsgChange(e)}></textarea>
                       <p id="errorMessage" className="errorMsgClass" style={{ display: this.state.showErrorMessage ? "block" : "none" }}>Message is required</p>
                     </div>
@@ -357,6 +357,8 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
     const body = {
       BusinessId: this.state.selectedUserBusinessUnit,
       Message: this.state.selectedUserMsg,
+      ExtensionId: this.state.selectedUserExtn,
+      Number: this.state.selectedUserPhone,
       IsAnonymous: this.state.iCareIsAnonymous
     }
 

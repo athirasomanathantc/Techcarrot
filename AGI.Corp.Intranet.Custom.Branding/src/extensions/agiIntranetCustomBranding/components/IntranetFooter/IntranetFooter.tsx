@@ -119,7 +119,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
         const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${LIST_SUBSCRIBE}')/items?$filter=Email eq '${userEmail}'`
         await SPService.getItemsByRestApi(url, this.props.spHttpClient).then((data) => {
             const navigationItems: ISubscribeItem[] = data;
-            debugger
+            
             if(navigationItems.length>0){
                 console.log(navigationItems[0].Email);
                 if(navigationItems[0].Email == userEmail)
@@ -128,6 +128,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                     checkSubscription: true
                 });
                 }
+                console.log(this.state.checkSubscription);
             }
             
         })

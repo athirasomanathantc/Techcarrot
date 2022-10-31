@@ -9,9 +9,6 @@ import { IMyApp } from "../models/IMyApp";
 import { INavigation } from "../models/INavigation";
 import { IReward } from "../models/IReward";
 import { ISnap } from "../models/ISnap";
-import { ISocialMediaPost } from "../models/ISocialMediaPost";
-import { ISurveyOption } from "../models/ISurveyOption";
-import { ISurveyQuestion } from "../models/ISurveyQuestion";
 import { IQuizOption } from "../models/IQuizOptions";
 import { IQuizQuestion } from "../models/IQuizQuestion ";
 import { IQuizResponse } from "../models/IQuizResponse";
@@ -19,6 +16,7 @@ import * as moment from 'moment';
 //import { spfi } from "@pnp/sp";
 import "@pnp/sp/webs";
 import "@pnp/sp/folders";
+import { LIST_PATH_SURVEY, LIST_SURVEY, LIST_SURVEY_RESPONSE_ENTRIES } from "../common/constants";
 //const sp1 = spfi(...);
 
 export class SPService {
@@ -44,6 +42,7 @@ export class SPService {
 
     public async getAnnouncements(): Promise<IAnnouncement[]> {
         return await sp.web.lists.getByTitle('Announcements').items.select("ID,Title,Description,AnnouncementThumbnail,PublishedDate")
+            .orderBy('PublishedDate', false)
             .top(this._props.topAnnouncements)()
             .then((items: IAnnouncement[]) => {
                 return items;
@@ -112,13 +111,12 @@ export class SPService {
             });
     }
 
-    public async getConfigItems(): Promise<IConfigItem> {
+    public async getConfigItems(): Promise<IConfigItem[]> {
         return await sp.web.lists.getByTitle('IntranetConfig').items
-            .select('Id,Title,Detail,Link,Image')
+            .select('Id,Title,Detail,Link,Image,Hide,Section')
             .get()
             .then((items: IConfigItem[]) => {
-                const _surveyItems = items.filter((item) => item.Title == 'EmployeeSurvey');
-                return _surveyItems[0];
+                return items;
             })
             .catch((exception) => {
                 throw new Error(exception);
@@ -173,12 +171,11 @@ export class SPService {
     }
     public async submitQuiz(quiz: any) {
         if (quiz != null) {
+            const userEmail = this._props.context.pageContext.legacyPageContext.userEmail;
 
             debugger;
             if (!quiz.submitted) {
 
-
-                const userEmail = this._props.context.pageContext.legacyPageContext.userEmail;
                 //delete a folder if not present already
                 /*await sp.web.lists.getByTitle("SurveyResponses").rootFolder.folders.getByName(userEmail).delete()
                 .then((data)=>{
@@ -194,21 +191,64 @@ export class SPService {
                         quiz.submitted = true;
                         const response = this.createResponse(quiz.responses);
                         return response.then((result) => {
-                            return true
-                        })
+                            this.createResponseEntry(userEmail);
+                            return true;
+                        });
                     })
                     .catch(function (err) {
                         console.log('first folder creation', err);
                     });
             }
             else {
+                //update existing responses
+                await this.updateResponses(userEmail)
+                // add new responses
                 const response = this.createResponse(quiz.responses);
                 return response.then((result) => {
-                    return true
+                    this.createResponseEntry(userEmail);
+                    return true;
                 })
             }
 
         }
+    }
+
+    private async updateResponses(email: string): Promise<any> {
+        debugger;
+        const listName = LIST_SURVEY;
+        const siteRelativePath = this._props.context.pageContext.web.serverRelativeUrl;
+        const listUri = `${siteRelativePath}/Lists/${LIST_PATH_SURVEY}`;
+
+        const list = sp.web.lists.getByTitle(listName);
+        const entityTypeFullName = await list.getListItemEntityTypeFullName();
+
+        return new Promise((resolve, reject) => {
+            list
+                .items.filter(`FileDirRef eq '${listUri}/${email}'`)
+                .get().then((data) => {
+                    console.log('responses');
+                    console.log(data);
+                    //batch update
+                    let createBatchRequest = sp.web.createBatch();
+                    data.forEach((item) => {
+                        list.items.getById(item.ID)
+                            .inBatch(createBatchRequest)
+                            .update({ LatestResponse: false }, '*', entityTypeFullName);
+                    });
+
+                    createBatchRequest.execute().then((createResponse: any) => {
+                        console.log("All Item Updated")
+                        resolve(createResponse);
+                    }).catch((error) => {
+                        reject(error);
+                        console.log('error in executing batch request');
+                    });
+                }).catch((error) => {
+                    reject(error);
+                    console.log('error');
+                    console.log(error);
+                });
+        });
     }
 
     private createResponse(responses): Promise<any[]> {
@@ -245,15 +285,24 @@ export class SPService {
         });
     }
 
+    private async createResponseEntry(email: string): Promise<void> {
+        const listName = LIST_SURVEY_RESPONSE_ENTRIES;
+        sp.web.lists.getByTitle(listName).items.add({ Title: email }).then((response) => {
+            console.log('response entry added successfully');
+        }).catch((error) => {
+            console.log('error', error);
+        });
+    }
+
     public async checkSubmitted(email: any): Promise<any> {
-       // debugger;
+        // debugger;
 
         const folderName = this._props.context.pageContext.web.serverRelativeUrl + "/Lists/SurveyResponses/" + email;
         const folder = await sp.web.getFolderByServerRelativePath(folderName).select('Exists').get();
 
         if (folder.Exists) {
             return true;
-        }else{
+        } else {
             return false;
         }
 
@@ -292,7 +341,7 @@ export class SPService {
                 throw new Error(exception);
             });
     }
-    public async getData(email: any,length:any): Promise<any> {
+    public async getData(email: any, length: any): Promise<any> {
         const listName = 'SurveyResponses';
 
         const list = sp.web.lists.getByTitle(listName);

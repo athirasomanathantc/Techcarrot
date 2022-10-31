@@ -3,10 +3,11 @@ import * as moment from "moment";
 import * as React from "react";
 import DayPicker from "react-day-picker";
 import 'react-day-picker/lib/style.css';
+import { IConfigItem } from "../../models/IConfigItem";
 import { IEventItem } from "../../models/IEventItem";
 
 interface ICalendarProps {
-
+    configItems: IConfigItem[];
 }
 
 interface ICalendarState {
@@ -22,7 +23,7 @@ interface ICalendarState {
     isDayEvent: boolean,
     monthlyHolidaysText: string,
     monthlyEventsText: string,
-    dailyEvents: IEventItem[]
+    dailyEvents: IEventItem[],
 }
 
 const EVENTS_LIST = 'Events';
@@ -54,8 +55,14 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
         this.getMonthlyEvents = this.getMonthlyEvents.bind(this);
     }
 
+    private configItem: IConfigItem;
+
     public componentDidMount() {
         this.getCalendarEvents();
+    }
+
+    public componentDidUpdate() {
+        this.configItem = this.props.configItems.filter((configItem) => configItem.Title === 'Calendar' && configItem.Section === 'Home')[0];
     }
 
     private async getCalendarEvents() {
@@ -236,19 +243,21 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
 
     public render(): React.ReactElement<ICalendarProps> {
         return (<>
-            <div className="col-md-12 mt-4 ">
+            {!this.configItem?.Hide && <div className="col-md-12 mt-4 ">
                 <div className="card calendar rounded-0">
                     <div className="card-body rounded-0">
                         <div className="app">
                             <div className="app__main">
                                 <div className="calendar">
-                                    <DayPicker modifiers={{ holiday: this.state.holidays, event: this.state.events, announcement: this.state.announcements }}
+                                    <DayPicker
+                                        modifiers={{ holiday: this.state.holidays, event: this.state.events, announcement: this.state.announcements }}
                                         month={this.state.selectedMonth}
                                         selectedDays={this.state.selectedDay}
                                         onDayClick={(day, modifiers, e) => this.handleDayClick(day, modifiers, e)}
                                         onMonthChange={(month) => this.handleMonthChange(month)}
                                         weekdaysShort={WEEK_DAYS}
                                         renderDay={(day) => this.renderDay(day, { holiday: this.state.holidays, event: this.state.events, announcement: this.state.announcements })}
+                                        firstDayOfWeek={1}
                                     />
                                     <div className="legend calendar-legend">
                                         <span>Today</span>
@@ -276,7 +285,7 @@ export default class Calender extends React.Component<ICalendarProps, ICalendarS
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>}
         </>
         );
     }
