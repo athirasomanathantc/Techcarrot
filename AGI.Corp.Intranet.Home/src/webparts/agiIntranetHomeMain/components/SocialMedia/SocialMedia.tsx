@@ -45,16 +45,23 @@ export const SocialMedia = (props: ISocialMediaComponent) => {
                             </div>
                         </div>
                     </div>
-                </div>
+                    <div className="p-0 position-relative d-none d-md-block">
+                        <button className="carousel-control-prev" type="button"
+                            data-bs-target="#socialMediaControls"
+                            data-bs-slide="prev">
+                            <span className="carousel-control-prev-icon"
+                                aria-hidden="true"></span>
+                            <span className="visually-hidden">Previous</span>
+                        </button>
+                        <button className="carousel-control-next" type="button"
+                            data-bs-target="#socialMediaControls"
+                            data-bs-slide="next">
+                            <span className="carousel-control-next-icon"
+                                aria-hidden="true"></span>
+                            <span className="visually-hidden">Next</span>
+                        </button>
 
-                <div className="collapse dont-collapse-sm" id="socialOffer">
-                    {dimensions.dimensionSet && <div className="card-body d-flex flex-column align-items-center justify-content-center">
-                        <div className="fb-page" data-href="https://www.facebook.com/AlGhurairInvestment" data-tabs="timeline" data-width={dimensions.width} data-height={dimensions.height} data-small-header="true" data-adapt-container-width="false" data-hide-cover="false" data-show-facepile="true">
-                            <blockquote cite="https://www.facebook.com/AlGhurairInvestment" className="fb-xfbml-parse-ignore">
-                                <a href="https://www.facebook.com/AlGhurairInvestment">Al Ghurair Investment</a>
-                            </blockquote>
-                        </div>
-                    </div>}
+                    </div>
                 </div>
             </div>
         </div >}
