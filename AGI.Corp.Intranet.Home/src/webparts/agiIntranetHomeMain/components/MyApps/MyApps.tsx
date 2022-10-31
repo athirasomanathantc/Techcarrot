@@ -54,7 +54,7 @@ export const MyApps = (props: IMyAppsComponent) => {
     useEffect(() => {
         const getExtraNavigation = async () => {
             let myApps: IMyApp[] = await _spService.getMyApps();
-            const myAppsCarousel = _common.generateCarouselArray(myApps, 6);
+            const myAppsCarousel = _common.generateCarouselArray(myApps, 4);
             setMyAppsCarousel(myAppsCarousel);
         }
         getExtraNavigation().catch((error) => {

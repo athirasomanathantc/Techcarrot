@@ -202,8 +202,8 @@ export class SPService {
                         });
                         quiz.submitted = true;
                         const response = this.createResponse(quiz.responses);
-                        return response.then((result) => {
-                            this.createResponseEntry(userEmail);
+                        return response.then(async (result) => {
+                            await this.createResponseEntry(userEmail);
                             return true;
                         });
                     })
