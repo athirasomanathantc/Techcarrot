@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import "@pnp/sp/webs";
 import "@pnp/sp/folders";
 import { LIST_PATH_SURVEY, LIST_SURVEY, LIST_SURVEY_RESPONSE_ENTRIES } from "../common/constants";
+import { ISocialMediaPost } from "../models/ISocialMediaPost";
 //const sp1 = spfi(...);
 
 export class SPService {
@@ -158,6 +159,17 @@ export class SPService {
             });
     }
 
+    public async getSocialMediaPosts(): Promise<ISocialMediaPost[]> {
+        return await sp.web.lists.getByTitle('SocialMediaPosts').items.select("Id,Title,Thumbnail,Description,Icon,ThumbnailURL")
+            .top(this._props.topSocialMediaPosts)()
+            .then((items: ISocialMediaPost[]) => {
+                return items;
+            })
+            .catch((exception) => {
+                throw new Error(exception);
+            });
+    }
+
     public async getQuizOptions(): Promise<IQuizOption[]> {
         return await sp.web.lists.getByTitle('SurveyOptions').items.select("Id,Title,Question/Title,Question/Id,CorrectOption")
             .top(5000)
@@ -173,7 +185,6 @@ export class SPService {
         if (quiz != null) {
             const userEmail = this._props.context.pageContext.legacyPageContext.userEmail;
 
-            debugger;
             if (!quiz.submitted) {
 
                 //delete a folder if not present already
@@ -182,17 +193,18 @@ export class SPService {
                     console.log(data);
                 })*/
                 //Create a folder if not present already
-                await sp.web.lists.getByTitle("SurveyResponses").items
+                return await sp.web.lists.getByTitle("SurveyResponses").items
                     .add({ Title: userEmail, ContentTypeId: "0x0120" }).then(async result => {
-                        await result.item.update({
+                        return await result.item.update({
                             Title: userEmail,
                             FileLeafRef: `/${userEmail}`
-                        });
-                        quiz.submitted = true;
-                        const response = this.createResponse(quiz.responses);
-                        return response.then((result) => {
-                            this.createResponseEntry(userEmail);
-                            return true;
+                        }).then(() => {
+                            quiz.submitted = true;
+                            const response = this.createResponse(quiz.responses);
+                            return response.then(async (result) => {
+                                await this.createResponseEntry(userEmail);
+                                return true;
+                            });
                         });
                     })
                     .catch(function (err) {

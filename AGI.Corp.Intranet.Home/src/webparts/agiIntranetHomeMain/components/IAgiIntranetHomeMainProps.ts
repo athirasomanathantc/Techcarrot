@@ -11,5 +11,6 @@ export interface IAgiIntranetHomeMainProps {
   topMyApps: number;
   topRewards: number;
   topEvents: number;
-  topSurveyQuestions: number;  
+  topSurveyQuestions: number;
+  topSocialMediaPosts: number;
 }
