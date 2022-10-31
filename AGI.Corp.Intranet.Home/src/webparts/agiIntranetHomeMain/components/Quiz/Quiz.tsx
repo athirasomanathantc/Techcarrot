@@ -104,7 +104,7 @@ export const Quiz = (props: IQuizComponent) => {
         getQuizCalc().catch((error) => {
             setError(error);
         })
-    }, [quiz.options])
+    }, [quiz.options.length])
 
     const moveNext = (index: number) => {
         setQuiz({
@@ -212,27 +212,16 @@ export const Quiz = (props: IQuizComponent) => {
 
         // console.log('quiz', quiz);
         // debugger;
-        const quizSubmitted = await _spService.submitQuiz(quiz)
-            .then((value) => {
-
-                if (value) {
-                    setQuiz({
-                        ...quiz,
-                        submitted: true,
-                        scores: score
-                    });
-                    setShowResult(true);
-                    setRetest(false);
-                }
-            })
-            // .then(() => {
-            //     window.location.reload();
-            // })
-            .catch((exception) => {
-                setError(exception)
+        const quizSubmitted = await _spService.submitQuiz(quiz);
+        if (quizSubmitted) {
+            setQuiz({
+                ...quiz,
+                submitted: true,
+                scores: score
             });
-
-
+            setShowResult(true);
+            setRetest(false);
+        }
     }
 
     if (error) {
@@ -348,9 +337,9 @@ export const Quiz = (props: IQuizComponent) => {
                                         </button>}
                                         <a href="javascript:void(0)" id="submit-btn" className={(questions.length === currentQuestion.question.SortOrder) && (quiz.responses[questions.length - 1].OptionId != '') ? 'btn btn-lg btn-gradient ms-3' : 'd-none '} onClick={() => onSubmit()}>Submit</a>
                                     </>}
-                                    </div>
-                                    <div id="q-box__button" className="retest">
-                                    {(!retest&&quiz.submitted) && <a href="javascript:void(0)" id="submit-btn" type="button" className={ submitted?'btn btn-lg btn-gradient ms-3':"d-none"} onClick={() => onRetest()}>Retest</a>}
+                                </div>
+                                <div id="q-box__button" className="retest">
+                                    {(!retest && quiz.submitted) && <a href="javascript:void(0)" id="submit-btn" type="button" className={submitted ? 'btn btn-lg btn-gradient ms-3' : "d-none"} onClick={() => onRetest()}>Retest</a>}
                                 </div>
 
                                 {/* <img src={`${props.siteUrl}/assets/images/quiz-icon.svg`} />

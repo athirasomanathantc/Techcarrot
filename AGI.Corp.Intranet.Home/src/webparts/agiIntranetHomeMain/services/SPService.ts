@@ -185,7 +185,6 @@ export class SPService {
         if (quiz != null) {
             const userEmail = this._props.context.pageContext.legacyPageContext.userEmail;
 
-            debugger;
             if (!quiz.submitted) {
 
                 //delete a folder if not present already
@@ -194,17 +193,18 @@ export class SPService {
                     console.log(data);
                 })*/
                 //Create a folder if not present already
-                await sp.web.lists.getByTitle("SurveyResponses").items
+                return await sp.web.lists.getByTitle("SurveyResponses").items
                     .add({ Title: userEmail, ContentTypeId: "0x0120" }).then(async result => {
-                        await result.item.update({
+                        return await result.item.update({
                             Title: userEmail,
                             FileLeafRef: `/${userEmail}`
-                        });
-                        quiz.submitted = true;
-                        const response = this.createResponse(quiz.responses);
-                        return response.then(async (result) => {
-                            await this.createResponseEntry(userEmail);
-                            return true;
+                        }).then(() => {
+                            quiz.submitted = true;
+                            const response = this.createResponse(quiz.responses);
+                            return response.then(async (result) => {
+                                await this.createResponseEntry(userEmail);
+                                return true;
+                            });
                         });
                     })
                     .catch(function (err) {
