@@ -8,4 +8,7 @@ export interface ISocialMediaPost {
     PostUrl: {
         Url: string;
     };
+    ThumbnailURL: {
+        Url: string;
+    };
 }
