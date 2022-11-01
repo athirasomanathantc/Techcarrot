@@ -119,7 +119,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                     return (
                       i == 0 ?
                       
-                        <div className="leadership-content mb-0 mb-lg-5">
+                        <div className="leadership-content">
                           <div className="leadership-image">
                             <img src={leadershipMessageImg} className="w-100" />
                           </div>
