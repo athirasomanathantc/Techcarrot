@@ -4,6 +4,7 @@ export const NULL_EXTRA_NAVIGATION_ITEM = {
     ID: 0,
     Title: '',
     NavIcon: '',
+    IsExternal: '',
     NavigationUrl: {Url: ''}
 }
 
