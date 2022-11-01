@@ -73,7 +73,7 @@ export const SocialMedia = (props: ISocialMediaComponent) => {
                                 </svg>
                             </div>
                         </div>
-                        <div className="p-0 position-relative d-none d-md-block">
+                        <div className="p-0 position-relative d-none d-md-block social-arrow-container">
                             <button className="carousel-control-prev" type="button"
                                 data-bs-target="#socialMediaControls"
                                 data-bs-slide="prev">
