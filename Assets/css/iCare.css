@@ -1,0 +1,190 @@
+.contact-us-wrapper {
+	background: #EFEFEF;
+	width: 100%;
+	min-height: auto;
+
+
+}
+
+
+.contact-us-wrapper .content-wrapper {
+	width: 100%;
+	margin: auto;
+	min-height: auto;
+
+
+}
+
+.contact-us-wrapper .contact-section-main {
+	background: #FFF;
+	padding: 55px;
+	font-family: 'Gill Sans';
+}
+
+.contact-us-wrapper .contact-section-form {
+	background: #FFFFFF 0% 0% no-repeat padding-box;
+	border: 1px solid #CBCBCB82;
+	border-radius: 10px;
+	padding: 50px;
+	margin: 30px 0px;
+}
+
+.iCare-section-form {
+	background: #FBFBFB 0% 0% no-repeat padding-box !important;
+	padding-left: 30px !important;
+	padding-right: 30px !important;
+}
+
+.iCare-section-form .form-control,
+.iCare-section-form .form-select {
+	background-color: transparent !important;
+	border: none;
+	border-bottom: 1px solid #D9D9E4;
+	border-radius: 0 !important;
+	padding-left: 0;
+	padding-right: 0;
+	color: #300B55;
+	font-size: 18px;
+}
+
+.iCare-section-form .form-control:focus,
+.iCare-section-form .form-select:focus {
+	outline: none;
+	box-shadow: none;
+}
+
+.contact-section-main .img-responsive {
+	max-width: 100%;
+}
+
+.contact-talk-to-us-section p a {
+	color: #9D0E71;
+}
+
+.iCare-section-form input::placeholder {}
+
+.iCare-section-form .close-btn {
+	background: #707070;
+	padding-left: 50px;
+	padding-right: 50px;
+	margin-top: 1270px !important;
+	margin-right: 743px !important;
+}
+
+/* The container */
+.container-check {
+	display: block;
+	position: relative;
+	padding-left: 35px;
+	margin-bottom: 34px;
+	cursor: pointer;
+	font-size: 22px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	font-size: 18px;
+	color: #9D0E71;
+}
+
+@media (max-width: 576px) {
+	.container-check {
+		font-size: 13px;
+	}
+}
+
+/* Hide the browser's default checkbox */
+.container-check input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+}
+
+/* Create a custom checkbox */
+.container-check .checkmark {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 22px;
+	width: 22px;
+	border-radius: 5px;
+	background-color: #fff;
+	border: 1px solid #9D0E71;
+}
+
+/* On mouse-over, add a grey background color */
+.container-check:hover input~.checkmark {
+	background-color: #fff;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container-check .container input:checked~.checkmark {
+	background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.container-check .checkmark:after {
+	content: "";
+	position: absolute;
+	display: none;
+}
+
+/* Show the checkmark when checked */
+.container-check input:checked~.checkmark:after {
+	display: block;
+}
+
+/* Style the checkmark/indicator */
+.container-check .checkmark:after {
+	left: 8px;
+	top: 5px;
+	width: 5px;
+	height: 10px;
+	border: solid #9D0E71;
+	border-width: 0 3px 3px 0;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+@media (max-width:768px) {
+	.iCare-section-form {
+		padding-left: 15px !important;
+		padding-right: 15px !important;
+	}
+
+	.iCare-section-form .contact-form {
+		margin-top: 0px !important;
+	}
+
+	.iCare-wrapper .contact-section-main {
+		padding-left: 15px !important;
+		padding-right: 15px !important;
+	}
+}
+
+@media (max-width:576px) {
+	.iCare-section-form .btn-wrap {
+		display: block;
+	}
+
+	.iCare-section-form .btn {
+		max-width: 100%;
+		width: 100%;
+		margin-left: 0 !important;
+	}
+}
+
+.iCare-section-form .BusinessUnit {
+	height: 48px;
+}
+
+.iCare-section-form .PhoneNo {
+	height: 48px;
+}
+
+.iCare-section-form .msgBox {
+	height: auto !important;
+}

@@ -1,0 +1,41 @@
+.contact-us-wrapper {
+	background: #EFEFEF;
+	width: 100%;
+	min-height: auto;
+
+
+}
+
+
+.contact-us-wrapper .content-wrapper {
+	width: 100%;
+	margin: auto;
+	min-height: auto;
+
+
+}
+
+.contact-us-wrapper .contact-section-main {
+	background: #FFF;
+	padding: 55px;
+	font-family: 'Gill Sans';
+}
+
+.contact-us-wrapper .contact-section-main h1 {
+	font-family: 'Gill Sans';
+	font-size: 34px;
+	letter-spacing: 0px;
+	color: #000000;
+	font-weight: 600;
+	margin-bottom: 32px;
+}
+
+.contact-us-wrapper .contact-section-main p {
+	color: #666666;
+	font-family: 'Gill Sans';
+	font-size: 20px;
+}
+
+.contact-us-wrapper .contact-section-main a.contact-link {
+	color: #9D0E71;
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="43" height="43" viewBox="0 0 43 43">
+  <g id="Hamburger_menu_close" transform="translate(0 -0.027)">
+    <rect id="Rectangle_7663" data-name="Rectangle 7663" width="43" height="43" transform="translate(0 0.027)" fill="#fff"/>
+    <g id="Group_8303" data-name="Group 8303" transform="translate(12 11.62)">
+      <path id="Path_71650" data-name="Path 71650" d="M0,0H25.519" transform="translate(0) rotate(45)" fill="#300b55" stroke="#800c69" stroke-linecap="square" stroke-width="2"/>
+      <path id="Path_71651" data-name="Path 71651" d="M0,0H25.519" transform="translate(0 18.045) rotate(-45)" fill="#300b55" stroke="#800c69" stroke-linecap="square" stroke-width="2"/>
+    </g>
+  </g>
+</svg>

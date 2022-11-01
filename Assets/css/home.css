@@ -205,8 +205,8 @@ h2.chart-heading {
 
 #qbox-container {
     position: relative;
-    /*padding: 20px;*/
-    text-align: center;
+    padding: 20px;
+    text-align: left;
 }
 
 #qbox-container img {
@@ -239,6 +239,17 @@ h2.chart-heading {
     margin-bottom: 15px;
 }
 
+#qbox-container #success h4 {
+    font-family: 'Gill Sans';
+    font-size: 18px;
+}
+
+#qbox-container #success h3 {
+    font-family: 'Gill Sans';
+    font-size: 22px;
+    text-align: center;
+}
+
 #steps-container {
     margin: auto;
     width: 100%;
@@ -258,6 +269,10 @@ h2.chart-heading {
     font-weight: 600;
     font-size: 22px;
     font-family: 'Gill Sans';
+}
+
+.retest {
+    text-align: center;
 }
 
 #q-box__buttons button#prev-btn,
@@ -1164,12 +1179,19 @@ input[type="radio"]:checked+label::after {
 
 .round-info-wrapp {
     position: absolute;
-    left: 29%;
-    top: 3.4em;
+    /*left: 29%;
+    top: 3.4em;*/
+    left: 50%;
+    transform: translate(-50%, 0px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .round-info-wrapp span {
-    margin-right: 5px;
+    /*margin-right: 5px;*/
+    margin-right: 1px;
+    margin-left: 1px;
     position: relative;
     width: 5px;
     height: 5px;
@@ -1307,7 +1329,7 @@ input[type="radio"]:checked+label::after {
 
     .employee-offer-section .card-header div.d-flex {
         position: initial;
-        z-index: 999;
+        z-index: 99;
         pointer-events: all;
 
     }
@@ -1319,6 +1341,25 @@ input[type="radio"]:checked+label::after {
     [data-bs-target="#survey"] {
         pointer-events: none;
     }
+
+    [data-bs-target="#quiz"] {
+        pointer-events: none;
+    }
 }
 
 /* disabling the flickering event when clicking on the card header end*/
+
+
+.announcement-txt-wrapper {
+    min-width: 130px;
+}
+
+.icon-announcement,
+.announcement-txt-wrapper {
+    flex: 50%;
+}
+
+.icon-announcement img {
+    object-fit: cover;
+
+}

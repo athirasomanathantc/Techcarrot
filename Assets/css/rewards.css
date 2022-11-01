@@ -228,7 +228,7 @@
 }
 
 .offer-listing-section .card img {
-  height: 295px;
+  /* height: 295px;*/
   object-fit: cover;
 }
 

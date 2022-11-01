@@ -700,6 +700,11 @@ ul.news-list-style li i {
   min-width: 500px;
 }
 
+p.comment-time {
+  color: var(--bs-secondary);
+}
+
+
 .post-analytics a:first-child {
   width: 94px;
 }
