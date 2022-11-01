@@ -10,6 +10,15 @@ export const NULL_CONTACTUS_TALK2US_ITEM = {
     Category: '',
     Detail: ''
 }
+export const LIST_CONTACTUS_TITLE = 'TitleConfig';
+
+export const NULL_CONTACTUS_TITLE = {
+    ID: 0,
+    Title: '',
+    Section: '',
+    Key: '',
+    Header: ''
+}
 
 export const LIST_CONTACTUS_MAIN = 'ContactUs-EmailConfig';
 
