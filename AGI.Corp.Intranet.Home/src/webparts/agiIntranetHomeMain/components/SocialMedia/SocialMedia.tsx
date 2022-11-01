@@ -16,7 +16,7 @@ const goToPosts = (postUrl: string) => {
 const SocialMediaCarousel = (props: ISocialMediaPost) => {
     return (<>
         <div className={`carousel-item ${!props.index ? 'active' : ''}`} onClick={() => { goToPosts(props.PostUrl?.Url) }}>
-            <img src={props.ThumbnailURL?.Url} className="d-block w-100" alt="..." />
+            <img src={props.ImageUrl} className="d-block w-100" alt="..." />
             <div className="carousel-caption">
                 <p>{props.Description}</p>
                 <div className="caption-bottom d-flex justify-content-between">
