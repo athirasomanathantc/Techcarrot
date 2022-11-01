@@ -212,8 +212,8 @@
     display: block;
     width: 100%;
     text-align: left;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 30px !important;
+    padding-right: 30px !important;
     border: none;
     font-size: 18px;
     color: #666666;
@@ -309,7 +309,7 @@
         color: #000;
         top: 25px;
         border: none;
-        background: url(images/icon-dropdown.svg);
+        background: url(../images/icon-dropdown.svg);
         width: 20px;
         height: 9px;
         background-repeat: no-repeat;
