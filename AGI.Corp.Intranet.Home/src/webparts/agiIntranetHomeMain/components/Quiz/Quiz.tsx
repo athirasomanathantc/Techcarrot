@@ -291,7 +291,7 @@ export const Quiz = (props: IQuizComponent) => {
                                     </div>}
 
                                     {showResult && <div id="success">
-                                        <div className="mt-5">
+                                        <div>
                                             <h4>You have submitted your response!</h4>
                                             <h3>Your score is: {quiz.scores}/{quiz.responses.length}</h3>
                                         </div>
