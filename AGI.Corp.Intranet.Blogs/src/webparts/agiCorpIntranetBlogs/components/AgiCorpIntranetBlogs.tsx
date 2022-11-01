@@ -2,16 +2,18 @@ import * as React from 'react';
 import styles from './AgiCorpIntranetBlogs.module.scss';
 import { IAgiCorpIntranetBlogsProps } from './IAgiCorpIntranetBlogsProps';
 import { escape } from '@microsoft/sp-lodash-subset';
-import { IBlogData } from '../Model/IBlogData'
-import { IAgiCorpIntranetBlogsState } from './IAgiCorpIntranetBlogsState'
+import { IBlogData } from '../Model/IBlogData';
+import { IAgiCorpIntranetBlogsState } from './IAgiCorpIntranetBlogsState';
 import { sp } from '@pnp/sp/presets/all';
 import * as moment from 'moment';
 import Paging from './Paging/Paging';
 import {
   SPHttpClient,
   SPHttpClientResponse
-} from '@microsoft/sp-http'
+} from '@microsoft/sp-http';
 import BlogCard from './BlogCard/BlogCard';
+import { IBlogTitle } from '../Model/IBlogTitle';
+import { LIST_BLOG_TITLE } from '../common/constants';
 //const pageSize: number = 12;
 export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntranetBlogsProps, IAgiCorpIntranetBlogsState> {
   constructor(props) {
@@ -34,16 +36,18 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
       selectedOption: {
         ID: 0
       },
+      blogTitle:'',
       featuredTitle: ''
-    }
+    };
   }
 
   public async componentDidMount(): Promise<void> {
-    this.fetch()
+    this.fetch();
   }
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
+    await this.getTitle();
     await this.getConfigItems();
     await this.getblog().then(() => {
       this.setDefaultFilter();
@@ -61,7 +65,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
       })
       .catch((error) => {
         console.log('Error:', error);
-      })
+      });
   }
 
   private setDefaultFilter() {
@@ -90,7 +94,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
       })
       .catch((error) => {
         console.log('Error:', error);
-      })
+      });
     if (window.innerWidth <= 767) {
       this.setState({
         pageSize: 6
@@ -123,7 +127,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
       })
       .catch((error) => {
         console.log('Error:', error);
-      })
+      });
     if (window.innerWidth <= 767) {
       this.setState({
         pageSize: 6
@@ -159,7 +163,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
       const result: IBlogData[] = this.state.blogData.filter((obj) => {
         const itemId = this.state.showBusinessData ? obj.Business?.ID : obj.Functions?.ID;
         return typeof itemId !== "undefined";
-      });;
+      });
       this.setState({
         filterData: result
       }, () => {
@@ -170,7 +174,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
       const result = this.state.blogData.filter((obj) => {
         const itemId = this.state.showBusinessData ? obj.Business?.ID : obj.Functions?.ID;
         return itemId == value;
-      })
+      });
 
       this.setState({
         filterData: result
@@ -184,7 +188,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
       selectedOption: {
         ID: value
       }
-    })
+    });
 
 
   }
@@ -195,8 +199,8 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
     return items.filter((item) => item.Featured).sort((a, b) => {
       dateA = a.PublishedDate || a.Modified;
       dateB = b.PublishedDate || b.Modified;
-      return (new Date(dateB).getTime() - new Date(dateA).getTime())
-    }).slice(0, 4)
+      return (new Date(dateB).getTime() - new Date(dateA).getTime());
+    }).slice(0, 4);
   }
 
   private async getblog(): Promise<void> {
@@ -221,7 +225,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
 
         }).catch((error) => {
           console.log('error in fetching news items', error);
-        })
+        });
       this.paging();
       resolve();
     });
@@ -234,13 +238,22 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
     console.log('page', page);
     const roundupPage = Math.ceil(page);
     // const images = this.state.allImages.slice(roundupPage, (roundupPage * pageSize));
-    const pageData = this.state.filterData.slice(skipItems, takeItems)
+    const pageData = this.state.filterData.slice(skipItems, takeItems);
     this.setState({
       pageData,
       currentPage: page
     }, () => {
       this.scrollToTop();
 
+    });
+  }
+  private async getTitle(): Promise<void> {
+    debugger;
+    sp.web.lists.getByTitle(LIST_BLOG_TITLE).items.get().then((items: IBlogTitle[]) => {
+      this.setState({
+        blogTitle: items[8]?.Header,
+      });
+      console.log(items[8]?.Header);
     });
   }
   private scrollToTop(): void {
@@ -259,7 +272,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
       }
     }, () => {
       this.handleFilter(0);
-    })
+    });
   }
 
   public render(): React.ReactElement<IAgiCorpIntranetBlogsProps> {
@@ -295,7 +308,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                             <BlogCard imageUrl={imageJSON.serverRelativeUrl} siteUrl={this.props.siteUrl} isFeatured={true} item={item} category={category.Title}></BlogCard>
                           </div>
                         </div>
-                      )
+                      );
                     })
                   }
                   {
@@ -329,19 +342,19 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
               <div className={'main-header-section'}>
                 <div className={'row'} >
                   <div className={'col-12 col-md-6 heading-section'} >
-                    <h3>Blogs</h3>
+                    <h3>{this.state.blogTitle}</h3>
                   </div>
                   <div className={'col-12 col-md-6 filter-section text-end'}>
                     <div className="row">
                       <div className="col-4 d-flex align-items-center justify-content-around">
                         <div className="form-check q-box__question">
-                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business') }} />
+                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Business'); }} />
                           <label className="form-check-label" htmlFor="flexRadioDefault1">
                             Business
                           </label>
                         </div>
                         <div className="form-check q-box__question">
-                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function') }} />
+                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={!this.state.showBusinessData} onClick={() => { this.onSelectFilterBy('Function'); }} />
                           <label className="form-check-label" htmlFor="flexRadioDefault2">
                             Functions
                           </label>
@@ -356,7 +369,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                               filterValues.map((option) => {
                                 return (
                                   <option selected={this.state.selectedOption.ID == option.ID} value={option.ID}>{option.Title}</option>
-                                )
+                                );
                               })
                             }
 
@@ -390,7 +403,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
                               <BlogCard imageUrl={imageJSON.serverRelativeUrl} item={item} category={category} siteUrl={this.props.siteUrl} isFeatured={false}></BlogCard>
                             </div>
 
-                          )
+                          );
 
                         })
                         :
