@@ -21,7 +21,8 @@ export default class AgiIntBusFuncMedia extends React.Component<IAgiIntBusFuncMe
     this.state = {
       contentItems: [],
       lastNavItem: '',
-      programID: ''
+      programID: '',
+      mediaTitle: ''
     }
   }
 
@@ -29,6 +30,16 @@ export default class AgiIntBusFuncMedia extends React.Component<IAgiIntBusFuncMe
 
     await this.getCurrentNavInfo();
     await this.getCarouselItem();
+    await this.getTitleConfig();
+  }
+
+  private async getTitleConfig(): Promise<void> {
+    sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Media Title'")
+      .get().then((items: any) => {
+        this.setState({
+          mediaTitle: items[0]?.Header
+        });
+      });
   }
 
   private async getCarouselItem(): Promise<void> {
@@ -157,24 +168,24 @@ export default class AgiIntBusFuncMedia extends React.Component<IAgiIntBusFuncMe
             <div className="container">
               <div className="row">
                 <div className='title-header'>
-                <div className="text-left text-lg-center">
-                  <h3 className="section-title">{this.props.listName}</h3>
+                  <div className="text-left text-lg-center">
+                    <h3 className="section-title">{this.state.mediaTitle}</h3>
 
-                </div>
-                <div className="align-self-end media-btn-control">
-                  <div className="button-container">
-                    <button className="carousel-control-prev media-carousel-control-prev" type="button" data-bs-target="#mediaCarousel"
-                      data-bs-slide="prev">
-                      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Previous</span>
-                    </button>
-                    <button className="carousel-control-next media-carousel-control-next" type="button" data-bs-target="#mediaCarousel"
-                      data-bs-slide="next">
-                      <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Next</span>
-                    </button>
                   </div>
-                </div>
+                  <div className="align-self-end media-btn-control">
+                    <div className="button-container">
+                      <button className="carousel-control-prev media-carousel-control-prev" type="button" data-bs-target="#mediaCarousel"
+                        data-bs-slide="prev">
+                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span className="visually-hidden">Previous</span>
+                      </button>
+                      <button className="carousel-control-next media-carousel-control-next" type="button" data-bs-target="#mediaCarousel"
+                        data-bs-slide="next">
+                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span className="visually-hidden">Next</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
                 <div id="mediaCarousel" className="carousel container media-carousel mt-5"
                   data-bs-ride="carousel" data-bs-interval="false" data-bs-wrap="false">

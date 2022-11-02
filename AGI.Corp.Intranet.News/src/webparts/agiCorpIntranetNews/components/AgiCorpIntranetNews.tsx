@@ -39,7 +39,8 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
       selectedOption: {
         ID: 0
       },
-      featuredTitle: ''
+      featuredTitle: '',
+      LatesrNewsTitle:''
     }
   }
 
@@ -83,6 +84,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
   }
 
   private async fetch() {
+    await this.getTitle();
     await this.getBusinessItems();
     await this.getFunctionItems();
     await this.getConfigItems();
@@ -133,7 +135,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
       return (new Date(dateB).getTime() - new Date(dateA).getTime())
     }).slice(0, 4)
   }
-
+  
   private async getNewsItems(): Promise<void> {
     return new Promise<void>(async (resolve) => {
       const list = 'News';
@@ -172,7 +174,17 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
     });
   }
 
+  private async getTitle():Promise<void>{
+    sp.web.lists.getByTitle('TitleConfig').items.select('Header').filter("Title eq 'Latest News Title'").get()
+    .then((data)=>{
+      console.log("Title",data)
+      this.setState({
+        LatesrNewsTitle:data[0].Header
+      
+      });
 
+    })
+  }
 
   private async getBusinessItems(): Promise<void> {
     const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('Business')/items`;
@@ -377,7 +389,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
               <div className={'main-header-section'}>
                 <div className={'row'} >
                   <div className={'col-12 col-md-6 heading-section'} >
-                    <h3>Latest News</h3>
+                    <h3>{this.state.LatesrNewsTitle}</h3>
                   </div>
                   <div className={'col-12 col-md-6 filter-section text-end'}>
                     <div className="row">

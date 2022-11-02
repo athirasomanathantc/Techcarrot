@@ -312,7 +312,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
         return (
             <>
                 {this.state.footerLoaded && <footer className="">
-                    <div className="footer-subscription">
+                    <div className="footer-subscription" style={{'display':'none'}}>
                         <div className="container text-center">
                             <div className="subscription-txt">Subscribe to our newsletter and never miss our latest news</div>
                             <div className="newsletter mt-3" style={{ display: this.state.checkSubscription ? 'none' : 'block' }}>

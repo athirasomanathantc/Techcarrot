@@ -23,12 +23,23 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
       contentItems: [],
       lastNavItem: '',
       programID: '',
+      ourServicesTitle: ''
     }
   }
 
   public async componentDidMount(): Promise<void> {
     await this.getCurrentNavInfo();
     await this.getCarouselItem();
+    await this.getTitleConfig();
+  }
+
+  private async getTitleConfig(): Promise<void> {
+    sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Our Services Title'")
+      .get().then((items: any) => {
+        this.setState({
+          ourServicesTitle: items[0]?.Header
+        });
+      });
   }
 
   private async getCarouselItem(): Promise<void> {
@@ -138,7 +149,7 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
               <div className="row">
                 <div className='title-header'>
                   <div className="text-left text-lg-center">
-                    <h3 className="section-title">{this.props.listName}</h3>
+                    <h3 className="section-title">{this.state.ourServicesTitle}</h3>
 
                   </div>
                   <div className="align-self-end our-service-btn-control">
@@ -188,14 +199,14 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
                               <div className="card  our-services">
                                 <a href={navURL} target={trgt} data-interception="off"  ><img className="w-100 " src={imgVal} /></a>
                                 <div className="card-body">
-                                <a href={navURL} target={trgt} data-interception="off" className='service-link'>
-                                  <h4 className="card-title">{items.Title}</h4>
-                                  <p className="card-description mb-4" dangerouslySetInnerHTML={{ __html: items.Description }}></p>
+                                  <a href={navURL} target={trgt} data-interception="off" className='service-link'>
+                                    <h4 className="card-title">{items.Title}</h4>
+                                    <p className="card-description mb-4" dangerouslySetInnerHTML={{ __html: items.Description }}></p>
                                   </a>
                                   <a href={navURL} target={trgt} data-interception="off" className="btn news-read-more mt-auto align-self-end">{items.NavigationText}</a>
                                 </div>
                               </div>
-                              </div>
+                            </div>
                           </div>
                         )
 
