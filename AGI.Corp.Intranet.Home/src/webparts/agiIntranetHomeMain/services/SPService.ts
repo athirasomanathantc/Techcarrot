@@ -68,7 +68,7 @@ export class SPService {
     }
 
     public async getExtraNavigation(): Promise<INavigation[]> {
-        return await sp.web.lists.getByTitle('ExtraNavigation').items.select("Id,Title,NavIcon,NavigationUrl")
+        return await sp.web.lists.getByTitle('ExtraNavigation').items.select("Id,Title,NavIcon,NavigationUrl,IsExternal")
             .top(this._props.topNavigations)()
             .then((items: INavigation[]) => {
                 return items;
@@ -79,7 +79,7 @@ export class SPService {
     }
 
     public async getMyApps(): Promise<IMyApp[]> {
-        return await sp.web.lists.getByTitle('MyApps').items.select("Id,Title,AppIcon,NavigationUrl")
+        return await sp.web.lists.getByTitle('MyApps').items.select("Id,Title,AppIcon,NavigationUrl,IsExternal")
             .top(this._props.topMyApps)()
             .then((items: IMyApp[]) => {
                 return items;

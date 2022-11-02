@@ -15,11 +15,18 @@ const MyApp = (props: IMyApp) => {
 
     let url = props.NavigationUrl?.Url;
     url = url.toLowerCase().indexOf(siteUrl?.toLowerCase()) > -1 ? `${url}?env=WebView` : url;
-
+    let trgt;
+    const external = props.IsExternal;
+    if (external == true) {
+        trgt = '_blank';
+    }
+    else {
+        trgt = '_self';
+    }
 
     return (<>
         <div className="col col-lg-6 col-sm-4">
-            <a className="navlink" href={url} data-interception="off">
+            <a className="navlink" href={url} target={trgt} data-interception="off">
                 <div className="d-flex app-item">
                     <div className="app-item-icon"><img src={imageUrl} /></div>
                     <div className="d-flex flex-column justify-content-around">
@@ -92,10 +99,12 @@ export const MyApps = (props: IMyAppsComponent) => {
 
                     <div className="app-wrapper carousel-inner">
                         {myAppsCarousel.map((myAppsCarouselItem, index) =>
+
                             <MyAppsCarousel
                                 index={index}
                                 key={`key${index}`}
                                 myAppsCarouselItem={myAppsCarouselItem}></MyAppsCarousel>)}
+
                     </div>
                 </div>
             </div>
