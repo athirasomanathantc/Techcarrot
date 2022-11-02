@@ -130,7 +130,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
   }
 
   private scrollToTop(): void {
-    var element = document.getElementById("spPageCanvasContent");
+    var element = document.getElementById("announcementContent");
     element.scrollIntoView(true);
   }
 
