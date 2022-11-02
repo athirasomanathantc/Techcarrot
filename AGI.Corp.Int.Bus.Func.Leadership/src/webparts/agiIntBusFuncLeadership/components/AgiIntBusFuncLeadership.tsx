@@ -23,13 +23,24 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
       lastNavItem: '',
       programID: '',
       showModal: false,
-      selectedItem: null
+      selectedItem: null,
+      ourLeadershipTeamTitle: ''
     }
   }
 
   public async componentDidMount(): Promise<void> {
     await this.getCurrentNavInfo();
     await this.getCarouselItem();
+    await this.getTitleConfig();
+  }
+
+  private async getTitleConfig(): Promise<void> {
+    sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Our Leadership Team Title'")
+      .get().then((items: any) => {
+        this.setState({
+          ourLeadershipTeamTitle: items[0]?.Header
+        });
+      });
   }
 
   private async getCarouselItem(): Promise<void> {
@@ -187,24 +198,24 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
             <div className="container">
               <div className="row">
                 <div className='title-header'>
-                <div className="text-left text-lg-center">
-                  <h3 className="leadership-team-heading">{this.props.listName}</h3>
+                  <div className="text-left text-lg-center">
+                    <h3 className="leadership-team-heading">{this.state.ourLeadershipTeamTitle}</h3>
 
-                </div>
-                <div className="align-self-end leadership-btn-control">
-                  <div className="button-container">
-                    <button className="carousel-control-prev business-leadership-control-prev" type="button" data-bs-target="#leadershipCarousel"
-                      data-bs-slide="prev">
-                      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Previous</span>
-                    </button>
-                    <button className="carousel-control-next business-leadership-control-next" type="button" data-bs-target="#leadershipCarousel"
-                      data-bs-slide="next">
-                      <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Next</span>
-                    </button>
                   </div>
-                </div>
+                  <div className="align-self-end leadership-btn-control">
+                    <div className="button-container">
+                      <button className="carousel-control-prev business-leadership-control-prev" type="button" data-bs-target="#leadershipCarousel"
+                        data-bs-slide="prev">
+                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span className="visually-hidden">Previous</span>
+                      </button>
+                      <button className="carousel-control-next business-leadership-control-next" type="button" data-bs-target="#leadershipCarousel"
+                        data-bs-slide="next">
+                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span className="visually-hidden">Next</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
