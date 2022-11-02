@@ -489,7 +489,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         pagedImages,
         imagesCurrentPage: page
       }, () => {
-        this.scrollToTop(isFeatured);
+        this.scrollToTop(false);
 
       });
     }
@@ -498,8 +498,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
 
   private scrollToTop(isFeatured: boolean): void {
 
-    // var element = document.getElementById(isFeatured ? "galleryRoot" : "gallerySection");
-    var element = document.getElementById("galleryRoot");
+    var element = document.getElementById(isFeatured ? "galleryRoot" : "gallerySection");
+    // var element = document.getElementById("galleryRoot");
 
     element.scrollIntoView(true);
 
@@ -562,7 +562,6 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   /** get images from folder */
 
   private async getImageGalleryItems(subFolderName, isFeatured): Promise<void> {
-    this.scrollToTop(isFeatured);
     // sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(subFolderName).files.select('*, FileRef, FileLeafRef').get().then((allItems) => {
     const libraryPath = `${this.props.context.pageContext.web.serverRelativeUrl}/Image Gallery/${subFolderName}`;
     sp.web.getFolderByServerRelativePath(libraryPath).files.select('*, FileRef, FileLeafRef, ID, Author/Title').expand("ListItemAllFields,Author").get().then((allItems) => {
@@ -597,6 +596,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           imagesCurrentPage: 1
         });
       }
+      this.scrollToTop(true);
     });
 
     // const select = 'Id, ID, Title, FileRef, Modified, PublishedDate, CoverPhoto';
@@ -854,7 +854,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
               imagesCurrentPage={featured.imagesCurrentPage}
               totalImages={featured.totalImages}
               imagesPerPage={featured.imagesPerPage}
-              onPageUpdateImages={(page) => this.onPageUpdateImages(page, true)}
+              onPageUpdateImages={(page) => this._getPage(page)}
               fnCurTab={(tabName) => this.fnCurTab(tabName)}
               videoData={featured.videoData}
               getImageUrl={(imageContent) => this.getImageUrl(imageContent)}
@@ -976,7 +976,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                           <Paging currentPage={this.state.currentPage}
                             totalItems={this.state.filterData.length}
                             itemsCountPerPage={this.state.pageSize}
-                            onPageUpdate={(page) => this.onPageUpdateImages(page, false)}
+                            onPageUpdate={(page) => this._getPage(page)}
                           />
                         </div>
                       </div>
@@ -1014,12 +1014,12 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                         {/* paging */}
                         <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
                           {/* <Pagination
-                currentPage={this.state.currentPage}
-                totalPages={this.state.totalPage}
-                onChange={(page) => this._getPage(page)}
-                limiter={5}
-                //hideFirstPageJump={false}
-              /> */}
+                              currentPage={this.state.currentPage}
+                              totalPages={this.state.totalPage}
+                              onChange={(page) => this._getPage(page)}
+                              limiter={5}
+                              //hideFirstPageJump={false}
+                            /> */}
                           <Paging currentPage={this.state.currentPage}
                             totalItems={this.state.filterVideoData.length}
                             itemsCountPerPage={this.state.pageVideoSize}
