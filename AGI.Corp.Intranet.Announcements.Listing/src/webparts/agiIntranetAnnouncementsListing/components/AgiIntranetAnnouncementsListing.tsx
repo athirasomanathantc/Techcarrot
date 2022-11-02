@@ -37,7 +37,8 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       selectedOption: {
         ID: 0
       },
-      featuredTitle: ''
+      featuredTitle: '',
+      announcementsTitle:''
     }
   }
   async componentDidMount(): Promise<void> {
@@ -45,6 +46,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
       const announcements: IAnnouncementData[] = await this._spServices.getAnnouncements();
       const business: IBusinessData[] = await this._spServices.getBussiness();
       const functions: IFunctionData[] = await this._spServices.getFunctionData();
+      await this.getTitle();
       //console.log(announcements);
       const featuredTitle: string = await this._spServices.getConfigItems();
       this.setState({
@@ -75,6 +77,17 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
         exceptionOccured: true
       });
     }
+  }
+  private async getTitle():Promise<void>{
+    sp.web.lists.getByTitle('TitleConfig').items.select('Header').filter("Title eq 'Announcements Title'").get()
+    .then((data)=>{
+      console.log("Title",data)
+      this.setState({
+        announcementsTitle:data[0].Header
+      
+      });
+
+    })
   }
 
   private getFeaturedAnnouncements(items: IAnnouncementData[]) {
@@ -297,7 +310,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
               <div className="main-header-section">
                 <div className={'row'} >
                   <div className={'col-12 col-md-6 heading-section'} >
-                    <h3>Announcements</h3>
+                    <h3>{this.state.announcementsTitle}</h3>
                   </div>
                   <div className={'col-12 col-md-6 filter-section text-end'}>
                     <div className="row">

@@ -40,7 +40,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
         ID: 0
       },
       featuredTitle: '',
-      LatesrNewsTitle:''
+      LatestNewsTitle:''
     }
   }
 
@@ -179,7 +179,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
     .then((data)=>{
       console.log("Title",data)
       this.setState({
-        LatesrNewsTitle:data[0].Header
+        LatestNewsTitle:data[0].Header
       
       });
 
@@ -389,7 +389,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
               <div className={'main-header-section'}>
                 <div className={'row'} >
                   <div className={'col-12 col-md-6 heading-section'} >
-                    <h3>{this.state.LatesrNewsTitle}</h3>
+                    <h3>{this.state.LatestNewsTitle}</h3>
                   </div>
                   <div className={'col-12 col-md-6 filter-section text-end'}>
                     <div className="row">
