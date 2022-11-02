@@ -442,7 +442,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
   }
   private scrollToTop(): void {
 
-    var element = document.getElementById("spPageCanvasContent");
+    var element = document.getElementById("eventsTab");
 
     element.scrollIntoView(true);
 
