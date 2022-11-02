@@ -10,6 +10,8 @@ export interface IAgiIntranetGalleryListingState {
     selectedItem: IImageItem;
     showVideo: boolean;
     selectedVideoUrl: string;
+    imageTitle: string;
+    videoTitle: string;
     // filterData:IFolderItem[];
     // filterValues:{
     //   ID:number;
