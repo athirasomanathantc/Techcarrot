@@ -10,6 +10,7 @@ import { IContactUsMainItem } from '../models/IContactUsMainItem';
 import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import ReactHtmlParser from 'react-html-parser';
 import { IContactUsTitle } from '../models/IContactUSTitle';
+import { eq } from 'lodash';
 
 export default class AgiIntranetContactUsMain extends React.Component<IAgiIntranetContactUsMainProps, IAgiIntranetContactUsMainState> {
 
@@ -23,7 +24,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
       loading: false,
       items: [],
       contactUsMainItems: [],
-      contactUsTitle: '',
+      contactUsTitle: [],
       talkToUsTitle: '',
       contactUsTalk2UsItems: [],
       contactUsGoogleMapsItem: NULL_CONTACTUS_GOOGLEMAPS_ITEM,
@@ -49,7 +50,8 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
     await this.getTalk2UsItem();
     await this.getGoogleMapsItem();
     await this.getUserProfile();
-    await this.getTitle();
+    await this.getTitleContactUs();
+    await this.getTitleTalkToUs();
   }
 
   public getItems() {
@@ -98,16 +100,22 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
     });
   }
 
-  private async getTitle(): Promise<void> {
-    debugger
-    sp.web.lists.getByTitle(LIST_CONTACTUS_TITLE).items.get().then((items: IContactUsTitle[]) => {
-      this.setState({
-        contactUsTitle: items[13]?.Header,
-        talkToUsTitle:  items[12]?.Header,
+  private async getTitleContactUs(): Promise<void> {
+    sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Contact Us Title'")
+      .get().then((items: any) => {
+        this.setState({
+          contactUsTitle: items[0]?.Header
+        });
       });
-      
+}
+private async getTitleTalkToUs(): Promise<void> {
+  sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Talk To Us Title'")
+    .get().then((items: any) => {
+      this.setState({
+        talkToUsTitle: items[0]?.Header
+      });
     });
-  }
+}
 
   private async getTalk2UsItem(): Promise<void> {
     sp.web.lists.getByTitle(LIST_CONTACTUS_TALK2US).items.get().then((items: IContactUsTalk2UsItem[]) => {

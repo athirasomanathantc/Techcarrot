@@ -11,7 +11,7 @@ export interface IAgiIntranetContactUsMainState {
    contactUsMainItems: IContactUsMainItem[];
    contactUsTalk2UsItems: IContactUsTalk2UsItem[];
    contactUsGoogleMapsItem: IContactUsGoogleMapsItem;
-   contactUsTitle: string;
+   contactUsTitle: IContactUsTitle[];
    talkToUsTitle: string;
    selectedUserName: string;
    selectedUserEmail: string;
