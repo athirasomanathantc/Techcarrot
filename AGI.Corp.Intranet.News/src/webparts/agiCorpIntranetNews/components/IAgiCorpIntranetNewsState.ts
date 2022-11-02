@@ -20,5 +20,5 @@ export interface IAgiCorpIntranetNewsState {
     ID: number;
   },
   featuredTitle: string;
-  LatesrNewsTitle:string;
+  LatestNewsTitle:string;
 }
