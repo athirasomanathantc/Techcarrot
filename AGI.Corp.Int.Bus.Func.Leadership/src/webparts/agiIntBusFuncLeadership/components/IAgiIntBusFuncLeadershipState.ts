@@ -7,4 +7,5 @@ export interface IAgiIntBusFuncLeadershipState {
   programID: string;
   showModal: boolean;
   selectedItem: IContentItem;
+  ourLeadershipTeamTitle: string;
 }
