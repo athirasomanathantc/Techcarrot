@@ -1,4 +1,4 @@
-import { IBlogData } from '../Model/IBlogData'
+import { IBlogData } from '../Model/IBlogData';
 export interface IAgiCorpIntranetBlogsState {
   blogData: IBlogData[];
   filterData: IBlogData[];
@@ -19,6 +19,7 @@ export interface IAgiCorpIntranetBlogsState {
   showBusinessData: boolean;
   selectedOption: {
     ID: number;
-  },
+  };
   featuredTitle: string;
+  blogTitle: string;
 }

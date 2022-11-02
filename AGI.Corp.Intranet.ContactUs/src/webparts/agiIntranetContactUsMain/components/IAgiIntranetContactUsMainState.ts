@@ -1,6 +1,7 @@
 import { IContactUsTalk2UsItem } from "../models/IContactUsTalk2UsItem";
 import { IContactUsGoogleMapsItem } from "../models/IContactUsGoogleMapsItem";
 import { IContactUsMainItem } from "../models/IContactUsMainItem";
+import { IContactUsTitle } from "../models/IContactUSTitle";
 
 
 
@@ -10,6 +11,8 @@ export interface IAgiIntranetContactUsMainState {
    contactUsMainItems: IContactUsMainItem[];
    contactUsTalk2UsItems: IContactUsTalk2UsItem[];
    contactUsGoogleMapsItem: IContactUsGoogleMapsItem;
+   contactUsTitle: string;
+   talkToUsTitle: string;
    selectedUserName: string;
    selectedUserEmail: string;
    selectedUserExtn: string;

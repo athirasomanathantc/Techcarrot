@@ -149,11 +149,23 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
                   <ul>
                     {
                       this.state.extraNavigationItems.map((item) => {
-                        const linkVal = item.NavigationUrl && item.NavigationUrl.Url ? item.NavigationUrl.Url : '';
+                        let linkVal: string;
+                        let trgt: string;
+                        const external = item.IsExternal;
+                        if(external == true)
+                        {
+                          linkVal = item.NavigationUrl && item.NavigationUrl.Url ? item.NavigationUrl.Url : '';
+                          trgt = '_blank';
+                        }
+                        else
+                        {
+                          linkVal = item.NavigationUrl && item.NavigationUrl.Url ? item.NavigationUrl.Url : '';
+                          trgt = '_self';
+                        }
                         const imgVal = this.getImageUrl(item.NavIcon);
                         return (
                           <li>
-                            <a href={linkVal}><img src={imgVal} /><b>{item.Title}</b></a>
+                            <a href={linkVal} target={trgt}><img src={imgVal} /><b>{item.Title}</b></a>
                           </li>
                         )
                       })

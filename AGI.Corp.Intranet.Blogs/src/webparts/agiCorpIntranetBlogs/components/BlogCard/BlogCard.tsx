@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import * as React from 'react'
+import * as React from 'react';
 import { IBlogData } from '../../Model/IBlogData';
 
 interface IBLogCard {
@@ -40,7 +40,7 @@ const BlogCard = (props: IBLogCard) => {
                 </a>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default BlogCard;

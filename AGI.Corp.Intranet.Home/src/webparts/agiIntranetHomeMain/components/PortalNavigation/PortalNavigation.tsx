@@ -35,12 +35,25 @@ export const PortalNavigation = (props: IPortalNavigation) => {
                         <ul>
                             {navigations.map((navigation: INavigation) => {
                                 let imageUrl = JSON.parse(navigation.NavIcon);
+                                let trgt: string;
+                                const external = navigation.IsExternal;
                                 imageUrl = imageUrl?.serverUrl + imageUrl?.serverRelativeUrl;
                                 let url = navigation.NavigationUrl?.Url;
-                                url = url.toLowerCase().indexOf(props.siteUrl?.toLowerCase()) > -1 ? `${url}?env=WebView` : url;
+                               
+                                if(external == true)
+                                {
+                                    url = url.toLowerCase().indexOf(props.siteUrl?.toLowerCase()) > -1 ? `${url}?env=WebView` : url;
+                                    trgt = '_blank';
+                                    alert(url);
+                                }
+                                else
+                                {
+                                    url = url.toLowerCase().indexOf(props.siteUrl?.toLowerCase()) > -1 ? `${url}?env=WebView` : url;
+                                    trgt = '_self';
+                                }
                                 return (<>
                                     <li>
-                                        <a href={url} data-interception="off">
+                                        <a href={url} target={trgt} data-interception="off">
                                             <img src={imageUrl} />
                                             <b>{navigation.Title}</b>
                                         </a>

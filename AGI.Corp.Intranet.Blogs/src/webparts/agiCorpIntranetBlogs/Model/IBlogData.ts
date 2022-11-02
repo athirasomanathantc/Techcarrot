@@ -10,8 +10,8 @@ export interface IBlogData {
     };
     Business: {
         ID: number,
-        Title: string
-    }
+        Title: string,
+    };
     Functions: {
         ID: number,
         Title: string

@@ -5,10 +5,11 @@ import { sp } from '@pnp/sp/presets/all';
 import { IAgiIntranetContactUsMainState } from './IAgiIntranetContactUsMainState';
 import { IContactUsTalk2UsItem } from '../models/IContactUsTalk2UsItem';
 import { IContactUsGoogleMapsItem } from '../models/IContactUsGoogleMapsItem';
-import { LIST_CONTACTUS_REGISTRATION, LIST_CONTACTUS_TALK2US, NULL_CONTACTUS_TALK2US_ITEM, LIST_CONTACTUS_GOOGLEMAPS, NULL_CONTACTUS_GOOGLEMAPS_ITEM, TEXT_REGISTRATION_SUCCESS, LIST_TALK2US_RIGHT, LIST_TALK2US_LEFT, LIST_CONTACTUS_MAIN, NULL_CONTACTUS_MAIN_ITEM } from '../common/constants';
+import { LIST_CONTACTUS_REGISTRATION, LIST_CONTACTUS_TALK2US, NULL_CONTACTUS_TALK2US_ITEM, LIST_CONTACTUS_GOOGLEMAPS, NULL_CONTACTUS_GOOGLEMAPS_ITEM, TEXT_REGISTRATION_SUCCESS, LIST_TALK2US_RIGHT, LIST_TALK2US_LEFT, LIST_CONTACTUS_MAIN, NULL_CONTACTUS_MAIN_ITEM, LIST_CONTACTUS_TITLE } from '../common/constants';
 import { IContactUsMainItem } from '../models/IContactUsMainItem';
 import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import ReactHtmlParser from 'react-html-parser';
+import { IContactUsTitle } from '../models/IContactUSTitle';
 
 export default class AgiIntranetContactUsMain extends React.Component<IAgiIntranetContactUsMainProps, IAgiIntranetContactUsMainState> {
 
@@ -22,6 +23,8 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
       loading: false,
       items: [],
       contactUsMainItems: [],
+      contactUsTitle: '',
+      talkToUsTitle: '',
       contactUsTalk2UsItems: [],
       contactUsGoogleMapsItem: NULL_CONTACTUS_GOOGLEMAPS_ITEM,
       selectedUserName: '',
@@ -46,6 +49,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
     await this.getTalk2UsItem();
     await this.getGoogleMapsItem();
     await this.getUserProfile();
+    await this.getTitle();
   }
 
   public getItems() {
@@ -90,6 +94,18 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
         contactUsMainItems: items,
         selectedUserSubject: items[0]?.ID?.toString()
       });
+      console.log('hi' + items);
+    });
+  }
+
+  private async getTitle(): Promise<void> {
+    debugger
+    sp.web.lists.getByTitle(LIST_CONTACTUS_TITLE).items.get().then((items: IContactUsTitle[]) => {
+      this.setState({
+        contactUsTitle: items[13]?.Header,
+        talkToUsTitle:  items[12]?.Header,
+      });
+      
     });
   }
 
@@ -151,7 +167,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
               <div className="contact-section-main">
                 <div className="row ">
                   <div className="col-lg-12 contact-talk-to-us-section">
-                    <h2 className="d-block d-lg-flex mb-4 section-title">Talk To Us!</h2>
+                    <h2 className="d-block d-lg-flex mb-4 section-title">{this.state.talkToUsTitle}</h2>
                     <p>
                       {
                         headingContent.map((item) => {
@@ -228,7 +244,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
                   </div>
                 </div>
                 <div className="row contact-section-form">
-                  <h2 className="d-block d-lg-flex mb-4 section-title">Contact Us</h2>
+                  <h2 className="d-block d-lg-flex mb-4 section-title">{this.state.contactUsTitle}</h2>
                   <form action="" className="contact-form mt-4">
                     <div className="row">
                       <div className="mb-3 col-md-6">
