@@ -257,7 +257,7 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
   }
   private scrollToTop(): void {
 
-    var element = document.getElementById("spPageCanvasContent");
+    var element = document.getElementById("blogTop");
 
     element.scrollIntoView(true);
 
