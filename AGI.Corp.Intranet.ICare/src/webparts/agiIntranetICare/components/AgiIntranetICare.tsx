@@ -6,6 +6,7 @@ import { ICareDetails } from '../Models/ICareDetails';
 import { ICareExtension } from '../Models/ICareExtension';
 import { ICareBusiness } from '../Models/ICareBusiness';
 import { escape } from '@microsoft/sp-lodash-subset';
+import {RouteComponentProps} from 'react-router';
 import { sp } from '@pnp/sp/presets/all';
 import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import ReactHtmlParser from 'react-html-parser';
@@ -524,13 +525,13 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
   }
 
 
-  private validatePhone(phone: string | any[]) {
-    const numbers = /^[0-9]+$/;
+  private validatePhone(phone: string) {
+    const numbers =  /^\d+$/;
     const errorsNew = [];
-
-    // if (phone.match(numbers)) {
-    //   errorsNew.push("Phone Number format is not correct");
-    // }
+    debugger
+    if (!(numbers.test(phone))) {
+       errorsNew.push("Phone Number format is not correct");
+     }
 
     if ((phone.length < 9) || (phone.length > 9)) {
       errorsNew.push("Phone Number length is not correct");
