@@ -21,4 +21,5 @@ export interface IAgiIntranetEventsStates {
     ID: number;
   }
   featuredTitle: string;
+  announcementsTitle:string;
 }
