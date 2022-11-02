@@ -4,7 +4,7 @@ import { IAgiIntranetGalleryListingProps } from './IAgiIntranetGalleryListingPro
 import { escape } from '@microsoft/sp-lodash-subset';
 import { sp } from '@pnp/sp/presets/all';
 import { IAgiIntranetGalleryListingState } from './IAgiIntranetGalleryListingState';
-import { LIBRARY_PHOTO_GALLERY, LIBRARY_VIDEO_GALLERY, NULL_SELECTED_ITEM, PATH_PHOTO_GALLERY, PROP_DEFAULT_ORDERBY } from '../common/constants';
+import { LIBRARY_PHOTO_GALLERY, LIBRARY_VIDEO_GALLERY, LIST_GALLERY_TITLE, NULL_SELECTED_ITEM, PATH_PHOTO_GALLERY, PROP_DEFAULT_ORDERBY } from '../common/constants';
 import {
   SPHttpClient,
   SPHttpClientResponse,
@@ -15,6 +15,7 @@ import { IImageItem } from '../models/IImageItem';
 import { Icon } from 'office-ui-fabric-react';
 import { Pagination } from '@pnp/spfx-controls-react/lib/pagination';
 import Paging from './Paging/Paging';
+import { IGalleryTitle } from '../models/IGalleryTitle';
 
 export default class AgiIntranetGalleryListing extends React.Component<IAgiIntranetGalleryListingProps, IAgiIntranetGalleryListingState> {
 
@@ -31,6 +32,8 @@ export default class AgiIntranetGalleryListing extends React.Component<IAgiIntra
       selectedImageFolder:'',
       selectedItem: NULL_SELECTED_ITEM,
       selectedVideoUrl: '',
+      imageTitle: '',
+      videoTitle: '',
       showVideo: false,
       // filterData: [],
       // filterValues: [],
@@ -127,7 +130,16 @@ export default class AgiIntranetGalleryListing extends React.Component<IAgiIntra
       });
     });
   }
-
+  private async getTitle(): Promise<void> {
+    debugger;
+    sp.web.lists.getByTitle(LIST_GALLERY_TITLE).items.get().then((items: IGalleryTitle[]) => {
+      this.setState({
+        imageTitle: items[9]?.Header,
+        videoTitle: items[10]?.Header
+      });
+      
+    });
+  }
   private closeImageFolder() {
     this.setState({
       imageItems: [],
@@ -186,7 +198,7 @@ export default class AgiIntranetGalleryListing extends React.Component<IAgiIntra
                         <ul className="nav nav-tabs" id="myTab" role="tablist">
                           <li className="nav-item" role="presentation">
                             <button className={tab=="image"? 'nav-link active':'nav-link'} id="image-gallery-tab" data-bs-toggle="tab" data-bs-target="#image-gallery" type="button" role="tab" aria-controls="image-gallery" aria-selected="true"><img src={`${this.props.siteUrl}/Assets/icons/icon-location.png`}>
-                            </img>Image Gallery
+                            </img>{this.state.imageTitle}
                               <i>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="23.916" height="23.916" viewBox="0 0 23.916 23.916">
                                   <g id="Group_8097" data-name="Group 8097" transform="translate(23.916 0) rotate(90)">
@@ -200,7 +212,7 @@ export default class AgiIntranetGalleryListing extends React.Component<IAgiIntra
                             </button>
                           </li>
                           <li className="nav-item" role="presentation">
-                            <button className={tab=="video"? 'nav-link active':'nav-link'} id="video-gallery-tab" data-bs-toggle="tab" data-bs-target="#video-gallery" type="button" role="tab" aria-controls="video-gallery" aria-selected="false">Video Gallery
+                            <button className={tab=="video"? 'nav-link active':'nav-link'} id="video-gallery-tab" data-bs-toggle="tab" data-bs-target="#video-gallery" type="button" role="tab" aria-controls="video-gallery" aria-selected="false">{this.state.videoTitle}
                               <i>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="23.916" height="23.916" viewBox="0 0 23.916 23.916">
                                   <g id="Group_8097" data-name="Group 8097" transform="translate(23.916 0) rotate(90)">
