@@ -11,11 +11,16 @@ import * as moment from 'moment';
 import Paging from './Paging/Paging';
 import { EVENTS, TABS } from '../common/constants';
 import EventCard from './EventCard/EventCard';
+import { sp } from "@pnp/sp/presets/all"
+
 
 
 export default class AgiIntranetEvents extends React.Component<IAgiIntranetEventsProps, IAgiIntranetEventsStates> {
   constructor(props) {
     super(props);
+    sp.setup({
+      spfxContext: this.props.context
+    });
     this.state = {
       eventsData: [],
       featuredEvents: [],
@@ -36,7 +41,9 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
         ID: 0
       },
       guid: "",
-      featuredTitle: ''
+      featuredTitle: '',
+      pastEventsTitle: '',
+      upcomingEventsTitle: ""
     }
   }
 
@@ -64,6 +71,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
   }
 
   private async fetch() {
+    await this.getTitle();
     await this.getBusinessItems();
     await this.getFunctionItems();
     await this.getConfigItems();
@@ -90,6 +98,20 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
         console.log('Error:', error);
       })
   }
+  private async getTitle(): Promise<void> {
+    sp.web.lists.getByTitle('TitleConfig').items.select('Title,Header').filter("Section eq 'Events'").get()
+      .then((data) => {
+        //console.log("Title", data)
+        const upcomingEventsTitle = data[0].Title=='Upcoming Events Title' ? data[0].Header : data[1].Header;
+        const pastEventsTitle = data[0].Title=='Past Events Title' ? data[0].Header : data[1].Header;
+        this.setState({
+          upcomingEventsTitle,
+          pastEventsTitle
+
+        });
+
+      })
+  }
 
   private setDefaultFilter() {
     const params = new URLSearchParams(window.location.search);
@@ -114,7 +136,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
       .then((response) => {
         const items = response.value;
 
-        console.log('choices', items);
+        //console.log('choices', items);
         this.setState({
           filterValuesBusiness: items,
           selectedFilter: 0
@@ -224,7 +246,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
           //const select= this.getQueryStringValue('tab');
           //const categories = this.state.filterValues;
           //const selectedTab = select || this.state.selectedTab;
-          console.log("data", items);
+          //console.log("data", items);
 
           const upcoming: IEventData[] = items.filter((item) => {
             if (moment().isBefore(item.StartDate)) {
@@ -234,7 +256,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
           const past: IEventData[] = items.filter((item) => {
 
             if (moment().isAfter(item.StartDate) && item.EndDate == null || moment().isAfter(item.EndDate)) {
-              console.log('entering past');
+              //log('entering past');
               return (item);
             }
           })
@@ -243,7 +265,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
             eventsData: items,
             featuredEvents: this.getFeaturedEvents(upcoming),
             filterData: upcoming,
-            selectedTab: "Upcoming Events",
+            selectedTab: this.state.upcomingEventsTitle,
             upcomingEvents: upcoming,
             pastEvents: past,
             selectedTabValues: upcoming
@@ -268,7 +290,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
         return typeof itemId !== "undefined";
       });
 
-      console.log('filter', result);
+      //console.log('filter', result);
       this.setState({
         filterData: result,
         selectedFilter: value
@@ -358,7 +380,7 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
     else if (tabName == EVENTS.PAST) {
       selectedTabValues = this.state.pastEvents
     }
-    console.log("selectedtab", selectedTabValues);
+    //console.log("selectedtab", selectedTabValues);
 
     if (this.state.selectedFilter == 0) {
       this.setState({
@@ -396,8 +418,8 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
       totalPage: pageCount,
       currentPage: 1
     }, () => {
-      console.log('filterData', this.state.filterData);
-      console.log('pageData', this.state.pageData);
+      //console.log('filterData', this.state.filterData);
+      //console.log('pageData', this.state.pageData);
     });
 
   }
@@ -443,7 +465,8 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
   }
 
   public render(): React.ReactElement<IAgiIntranetEventsProps> {
-    const tabs = TABS;
+    const tabs = [this.state.upcomingEventsTitle,this.state.pastEventsTitle];
+   // console.log('tabs',tabs);
     //console.log('selected tab', this.state.selectedTab);
     //console.log(this.state.pageData);
 
@@ -484,20 +507,20 @@ export default class AgiIntranetEvents extends React.Component<IAgiIntranetEvent
                   }
                 </div>
                 {
-                  this.state.featuredEvents.length>0 && <>
-                  <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
-                  data-bs-slide="prev">
-                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span className="visually-hidden">Previous</span>
-                </button>
-                <button className="carousel-control-next" type="button" data-bs-target="#featuredCarousel"
-                  data-bs-slide="next">
-                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span className="visually-hidden">Next</span>
-                </button>
+                  this.state.featuredEvents.length > 0 && <>
+                    <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
+                      data-bs-slide="prev">
+                      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span className="visually-hidden">Previous</span>
+                    </button>
+                    <button className="carousel-control-next" type="button" data-bs-target="#featuredCarousel"
+                      data-bs-slide="next">
+                      <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span className="visually-hidden">Next</span>
+                    </button>
                   </>
                 }
-                
+
               </div>
             </div>
           </div>

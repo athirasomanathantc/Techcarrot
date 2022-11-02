@@ -26,4 +26,6 @@ export interface IAgiIntranetEventsStates {
   };
   guid: string;
   featuredTitle: string;
+  upcomingEventsTitle:string;
+  pastEventsTitle:string;
 }
