@@ -272,7 +272,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
   }
   private scrollToTop(): void {
 
-    var element = document.getElementById("spPageCanvasContent");
+    var element = document.getElementById("newsTop");
 
     element.scrollIntoView(true);
 

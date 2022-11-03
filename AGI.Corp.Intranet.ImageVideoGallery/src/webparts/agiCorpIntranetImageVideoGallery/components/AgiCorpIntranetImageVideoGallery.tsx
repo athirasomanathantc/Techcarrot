@@ -57,6 +57,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       pageVideoSize: 0,
       totalVideoPage: 1,
       curFilterValue: 0,
+      imageTitle: '',
+      videoTitle: '',
       filterValuesBusiness: [],
       filterValuesFunctions: [],
       showBusinessData: true,
@@ -96,10 +98,28 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     await this.getBusinessItems();
     await this.getFunctionItems();
     await this.getCoverPhotos();
+    await this.getTitleImage();
+    await this.getTitleVideo();
     await this.getConfigItems();
     Promise.all([this.getGalleryItems(), this.getVideoItems()]).then(() => {
       this.setDefaultFilter();
     });
+  }
+  private async getTitleImage(): Promise<void> {
+    sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Image Gallery Title'")
+      .get().then((items: any) => {
+        this.setState({
+          imageTitle: items[0]?.Header
+        });
+      });
+  }
+  private async getTitleVideo(): Promise<void> {
+    sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Video Gallery Title'")
+      .get().then((items: any) => {
+        this.setState({
+          videoTitle: items[0]?.Header
+        });
+      });
   }
 
   private getConfigItems() {
@@ -489,7 +509,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         pagedImages,
         imagesCurrentPage: page
       }, () => {
-        this.scrollToTop(isFeatured);
+        this.scrollToTop(false);
 
       });
     }
@@ -498,8 +518,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
 
   private scrollToTop(isFeatured: boolean): void {
 
-    // var element = document.getElementById(isFeatured ? "galleryRoot" : "gallerySection");
-    var element = document.getElementById("galleryRoot");
+    var element = document.getElementById(isFeatured ? "galleryRoot" : "gallerySection");
+    // var element = document.getElementById("galleryRoot");
 
     element.scrollIntoView(true);
 
@@ -562,7 +582,6 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   /** get images from folder */
 
   private async getImageGalleryItems(subFolderName, isFeatured): Promise<void> {
-    this.scrollToTop(isFeatured);
     // sp.web.folders.getByName(LIBRARY_PHOTO_GALLERY).folders.getByName(subFolderName).files.select('*, FileRef, FileLeafRef').get().then((allItems) => {
     const libraryPath = `${this.props.context.pageContext.web.serverRelativeUrl}/Image Gallery/${subFolderName}`;
     sp.web.getFolderByServerRelativePath(libraryPath).files.select('*, FileRef, FileLeafRef, ID, Author/Title').expand("ListItemAllFields,Author").get().then((allItems) => {
@@ -597,6 +616,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           imagesCurrentPage: 1
         });
       }
+      this.scrollToTop(true);
     });
 
     // const select = 'Id, ID, Title, FileRef, Modified, PublishedDate, CoverPhoto';
@@ -854,7 +874,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
               imagesCurrentPage={featured.imagesCurrentPage}
               totalImages={featured.totalImages}
               imagesPerPage={featured.imagesPerPage}
-              onPageUpdateImages={(page) => this.onPageUpdateImages(page, true)}
+              onPageUpdateImages={(page) => this._getPage(page)}
               fnCurTab={(tabName) => this.fnCurTab(tabName)}
               videoData={featured.videoData}
               getImageUrl={(imageContent) => this.getImageUrl(imageContent)}
@@ -871,7 +891,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                         <div className="col-md-6">
                           <ul className="nav nav-tabs" id="myTab" role="tablist">
                             <li className="nav-item" role="presentation">
-                              <button className={tab == "image" ? `nav-link active` : `nav-link`} id="image-gallery-tab" data-bs-toggle="tab" data-bs-target="#image-gallery" type="button" role="tab" aria-controls="image-gallery" aria-selected="true" onClick={(e) => this.fnCurTab("image")}>Image Gallery
+                              <button className={tab == "image" ? `nav-link active` : `nav-link`} id="image-gallery-tab" data-bs-toggle="tab" data-bs-target="#image-gallery" type="button" role="tab" aria-controls="image-gallery" aria-selected="true" onClick={(e) => this.fnCurTab("image")}>{this.state.imageTitle}
                                 <i>
                                   <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35">
                                     <g id="Image_Gallery_active" data-name="Image Gallery_active" transform="translate(-195 -370)">
@@ -888,7 +908,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                               </button>
                             </li>
                             <li className="nav-item" role="presentation">
-                              <button className={tab == "video" ? `nav-link active` : `nav-link`} id="video-gallery-tab" data-bs-toggle="tab" data-bs-target="#video-gallery" type="button" role="tab" aria-controls="video-gallery" aria-selected="false" onClick={(e) => this.fnCurTab("video")}>Video Gallery
+                              <button className={tab == "video" ? `nav-link active` : `nav-link`} id="video-gallery-tab" data-bs-toggle="tab" data-bs-target="#video-gallery" type="button" role="tab" aria-controls="video-gallery" aria-selected="false" onClick={(e) => this.fnCurTab("video")}>{this.state.videoTitle}
                                 <i>
                                   <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35">
                                     <g id="Video_Galley_Active" data-name="Video Galley_Active" transform="translate(-409 -370)">
@@ -976,7 +996,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                           <Paging currentPage={this.state.currentPage}
                             totalItems={this.state.filterData.length}
                             itemsCountPerPage={this.state.pageSize}
-                            onPageUpdate={(page) => this.onPageUpdateImages(page, false)}
+                            onPageUpdate={(page) => this._getPage(page)}
                           />
                         </div>
                       </div>
@@ -1014,12 +1034,12 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                         {/* paging */}
                         <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
                           {/* <Pagination
-                currentPage={this.state.currentPage}
-                totalPages={this.state.totalPage}
-                onChange={(page) => this._getPage(page)}
-                limiter={5}
-                //hideFirstPageJump={false}
-              /> */}
+                              currentPage={this.state.currentPage}
+                              totalPages={this.state.totalPage}
+                              onChange={(page) => this._getPage(page)}
+                              limiter={5}
+                              //hideFirstPageJump={false}
+                            /> */}
                           <Paging currentPage={this.state.currentPage}
                             totalItems={this.state.filterVideoData.length}
                             itemsCountPerPage={this.state.pageVideoSize}

@@ -12,6 +12,7 @@ export interface IAgiCorpIntranetOffersState {
   }[];
   currentPage: number;
   totalPages: number;
+  offersTitle: string;
   pageData: IOfferData[];
   pageSize: number;
   showBusinessData: boolean;

@@ -44,7 +44,7 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
       const currentArray: any = [];
       let i: any;
       for (i = 0; i < currentSitePagesNav.length; i++) {
-        debugger;
+       // debugger;
         const isLastPage = currentSitePagesNav[i].includes(".aspx");
         if (isLastPage == true) {
           var newItem = currentSitePagesNav[i].split(".aspx")[0];
@@ -119,7 +119,7 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
                   {
 
                     this.state.currentSitePagesNavArr.map((item, i) => {
-                      debugger;
+                     // debugger;
                       var isLast = /aspx/.test(item);
                       if (item != '') {
                         if (item === lastNavigationVal) {
@@ -130,7 +130,7 @@ export default class AgiIntranetExtraNavigation extends React.Component<IAgiIntr
                           )
                         }
                         else {
-                          debugger;
+                         // debugger;
                           tempURL = `${tempURL}/${item}`;
                           return (
                             <li className="breadcrumb-item"><a href={`${tempURL}.aspx?env=WebView`} data-interception="off">{item}</a></li>

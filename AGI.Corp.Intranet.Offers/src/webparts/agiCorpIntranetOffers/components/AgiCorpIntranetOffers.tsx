@@ -21,6 +21,7 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
       totalPages: 0,
       currentPage: 1,
       pageSize: 0,
+      offersTitle:'',
       showBusinessData: true,
       selectedOption: {
         ID: 0
@@ -50,8 +51,17 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
   private async fetch() {
     await this.getBusinessItems();
     await this.getFunctionItems();
+    await this.getOffersTitle();
     await this.getOffer().then(() => {
       this.setDefaultFilter();
+    });
+  }
+  private async getOffersTitle(): Promise<void> {
+    sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Rewards Title'")
+    .get().then((items: any) => {
+      this.setState({
+        offersTitle : items[0]?.Header
+      });
     });
   }
   private async getBusinessItems(): Promise<void> {
@@ -240,7 +250,7 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
             <div className={'main-header-section'}>
               <div className={'row'} >
                 <div className={'col-12 col-md-6 heading-section'} >
-                  <h3>Rewards</h3>
+                  <h3>{this.state.offersTitle}</h3>
                 </div>
                 <div className={'col-12 col-md-6 filter-section text-end'}>
                   <div className="row">

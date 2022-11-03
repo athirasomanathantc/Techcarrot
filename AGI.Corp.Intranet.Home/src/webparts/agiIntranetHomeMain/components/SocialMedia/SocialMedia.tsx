@@ -10,7 +10,8 @@ import SPService from "../../services/SPService";
 let siteUrl: string = '';
 
 const goToPosts = (postUrl: string) => {
-    window.location.href = postUrl;
+    // window.location.href = postUrl;
+    window.open(postUrl, '_blank');
 }
 
 const SocialMediaCarousel = (props: ISocialMediaPost) => {

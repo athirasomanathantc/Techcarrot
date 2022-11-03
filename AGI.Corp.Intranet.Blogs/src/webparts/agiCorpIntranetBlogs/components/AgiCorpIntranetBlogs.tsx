@@ -248,17 +248,16 @@ export default class AgiCorpIntranetBlogs extends React.Component<IAgiCorpIntran
     });
   }
   private async getTitle(): Promise<void> {
-    debugger;
-    sp.web.lists.getByTitle(LIST_BLOG_TITLE).items.get().then((items: IBlogTitle[]) => {
+    sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Blogs Title'")
+    .get().then((items: any) => {
       this.setState({
-        blogTitle: items[8]?.Header,
+        blogTitle: items[0]?.Header
       });
-      console.log(items[8]?.Header);
     });
   }
   private scrollToTop(): void {
 
-    var element = document.getElementById("spPageCanvasContent");
+    var element = document.getElementById("blogTop");
 
     element.scrollIntoView(true);
 

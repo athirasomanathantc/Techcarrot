@@ -130,16 +130,23 @@ export default class AgiIntranetGalleryListing extends React.Component<IAgiIntra
       });
     });
   }
-  private async getTitle(): Promise<void> {
-    debugger;
-    sp.web.lists.getByTitle(LIST_GALLERY_TITLE).items.get().then((items: IGalleryTitle[]) => {
-      this.setState({
-        imageTitle: items[9]?.Header,
-        videoTitle: items[10]?.Header
+  private async getTitleImage(): Promise<void> {
+    sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Image Gallery Title'")
+      .get().then((items: any) => {
+        this.setState({
+          imageTitle: items[0]?.Header
+        });
       });
-      
-    });
   }
+  private async getTitleVideo(): Promise<void> {
+    sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Video Gallery Title'")
+      .get().then((items: any) => {
+        this.setState({
+          videoTitle: items[0]?.Header
+        });
+      });
+  }
+
   private closeImageFolder() {
     this.setState({
       imageItems: [],

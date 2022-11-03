@@ -19,6 +19,8 @@ export interface IAgiCorpIntranetImageVideoGalleryState {
   currentIndex: number;
   currentImageUrl: string;
   currentImageTitle: string;
+  imageTitle: string;
+    videoTitle: string;
   currentImageDescription: string;
   currentImageAuthorName: string;
   currentTabName: string;
