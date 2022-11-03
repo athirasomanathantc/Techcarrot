@@ -4,5 +4,5 @@ export interface IReward {
     Id: number;
     Title: string;
     Description: string;
-    OfferImage: string;
+    OfferHomepage: string;
 }

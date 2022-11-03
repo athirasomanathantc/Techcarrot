@@ -90,7 +90,7 @@ export class SPService {
     }
 
     public async getRewards(): Promise<IReward[]> {
-        return await sp.web.lists.getByTitle('Offers').items.select("Id,Title,Description,OfferImage")
+        return await sp.web.lists.getByTitle('Offers').items.select("Id,Title,Description,OfferHomepage")
             .top(this._props.topRewards)()
             .then((items: IReward[]) => {
                 return items;
