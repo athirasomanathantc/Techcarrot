@@ -8,7 +8,7 @@ import SPService from "../../services/SPService";
 let siteUrl: string = '';
 
 const RewardCarousel = (props: IReward) => {
-    let imageUrl = JSON.parse(props.OfferImage);
+    let imageUrl = JSON.parse(props.OfferHomepage);
     imageUrl = imageUrl?.serverUrl + imageUrl?.serverRelativeUrl;
     return (<>
         <div className={`carousel-item ${!props.index ? 'active' : ''}`}>
