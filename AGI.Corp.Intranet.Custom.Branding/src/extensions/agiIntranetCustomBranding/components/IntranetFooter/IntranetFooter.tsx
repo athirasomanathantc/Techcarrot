@@ -3,10 +3,8 @@ import styles from './IntranetFooter.module.scss';
 import { IIntranetFooterProps } from "./IntranetFooterProps";
 import { IIntranetFooterState } from "./IntranetFooterState";
 import SPService from "../../services/spservice";
-import { escape } from '@microsoft/sp-lodash-subset';
-import { Item, sp } from '@pnp/sp/presets/all';
-import { ASSET_LIBRARY, BUSINESS_LIST, CONFIG_LIST, FUNCTION_LIST, LIST_SUBSCRIBE, NAVIGATION_LIST, NULL_COPYRIGHT_ITEM, NULL_SUBSCRIBE_ITEM, SOCIALLINK_LIST, TEXT_BUSINESS, TEXT_COMPANY, TEXT_FUNCTIONS, TEXT_GALLERY, TEXT_NEWSMISC, TEXT_OTHER, TEXT_REGISTRATION_SUCCESS } from "../../common/constants";
-import { FontIcon, Icon, Modal, IconButton, IIconProps } from 'office-ui-fabric-react';
+import { sp } from '@pnp/sp/presets/all';
+import { BUSINESS_LIST, CONFIG_LIST, FUNCTION_LIST, LIST_SUBSCRIBE, NAVIGATION_LIST, NULL_COPYRIGHT_ITEM, NULL_SUBSCRIBE_ITEM, SOCIALLINK_LIST, TEXT_COMPANY, TEXT_GALLERY, TEXT_NEWSMISC, TEXT_OTHER, TEXT_REGISTRATION_SUCCESS } from "../../common/constants";
 import { IConfigItem } from "../../models/IConfigItem";
 import { INavigationItem } from "../../models/INavigationItem";
 import { ISocialLink } from "../../models/ISocialLinkItem";
@@ -14,6 +12,7 @@ import { ISubscribeItem } from "../../models/ISubscribeItem";
 import IntranetChatbox from "../Chatbox/IntranetChatbox";
 import { IBusinessItem } from "../../models/IBusinessItem";
 import { IFunctionItem } from "../../models";
+import { ITitleConfig } from "../../models/ITitleConfig";
 
 
 
@@ -45,7 +44,8 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                 gallery: false,
                 otherlinks: false,
                 misclinks: false
-            }
+            },
+            homeTitles: null
         }
     }
 
@@ -57,12 +57,24 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
             await this.getFunctionItems(),
             await this.getNavigationItems(),
             await this.getSocialLinkItems(),
-            await this.getConfigDetailsItems()
+            await this.getConfigDetailsItems(),
+            await this.getTitleConfig()
         ]).then(() => {
             this.setState({
                 footerLoaded: true
             })
         })
+    }
+
+    private async getTitleConfig(): Promise<void> {
+        sp.web.lists.getByTitle('TitleConfig').items
+            .select('Title,Header')
+            .filter(`(Section eq 'Home')`)
+            .get().then((items: ITitleConfig[]) => {
+                this.setState({
+                    homeTitles: items
+                });
+            });
     }
 
     private async getNavigationItems(): Promise<void> {
@@ -321,6 +333,10 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
         }
     }
 
+    private getHeader(title: string) {
+        return this.state.homeTitles?.filter((item) => item.Title === title)[0]?.Header;
+    }
+
     private renderFooter(): JSX.Element {
 
         const companyContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_COMPANY);
@@ -330,6 +346,13 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
         const otherContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_OTHER);
 
         const { businessItems, functionItems } = this.state;
+
+        const companyTitle = this.getHeader('Company Title');
+        const businessTitle = this.getHeader('Business Title');
+        const functionsTitle = this.getHeader('Functions Title');
+        const newsTitle = this.getHeader('News Title')
+        const galleryTitle = this.getHeader('Gallery Title')
+        const otherLinksTitle = this.getHeader('Other Links Title')
 
         return (
             <>
@@ -355,9 +378,9 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                         <div className="container">
                             <div className="row top-footer">
                                 <div className="col-md-2 mx-auto footer-col">
-                                    <h5 className="my-2 font-weight-bold d-none d-md-block">{TEXT_COMPANY}</h5>
+                                    <h5 className="my-2 font-weight-bold d-none d-md-block">{companyTitle}</h5>
                                     <div className="d-md-none title" data-bs-toggle="collapse" data-bs-target="#Company">
-                                        <div className="mt-3 font-weight-bold title-wrapper">{TEXT_COMPANY}
+                                        <div className="mt-3 font-weight-bold title-wrapper">{companyTitle}
                                             <div className="float-right navbar-toggler">
                                                 <svg xmlns="http:www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                                     <g id="Dropdown-Logo" transform="translate(-84 -7.544)">
@@ -394,9 +417,9 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
 
 
                                 <div className="col-md-2 mx-auto footer-col">
-                                    <h5 className="my-2 font-weight-bold d-none d-md-block">{TEXT_BUSINESS}</h5>
+                                    <h5 className="my-2 font-weight-bold d-none d-md-block">{businessTitle}</h5>
                                     <div className="d-md-none title" data-bs-toggle="collapse" data-bs-target="#Business">
-                                        <div className="mt-3 font-weight-bold title-wrapper">{TEXT_BUSINESS}
+                                        <div className="mt-3 font-weight-bold title-wrapper">{businessTitle}
                                             <div className="float-right navbar-toggler">
                                                 <svg xmlns="http:www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                                     <g id="Dropdown-Logo" transform="translate(-84 -7.544)">
@@ -430,9 +453,9 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                             : <div className="all" onClick={() => this.showMoreLess('business', true)}>+ Show All</div>)
                                     }
                                     {/** Functions */}
-                                    <h5 className="mt-5 font-weight-bold d-none d-md-block">{TEXT_FUNCTIONS}</h5>
+                                    <h5 className="mt-5 font-weight-bold d-none d-md-block">{functionsTitle}</h5>
                                     <div className="d-md-none title" data-bs-toggle="collapse" data-bs-target="#Functions">
-                                        <div className="mt-3 font-weight-bold title-wrapper">{TEXT_FUNCTIONS}
+                                        <div className="mt-3 font-weight-bold title-wrapper">{functionsTitle}
                                             <div className="float-right navbar-toggler">
                                                 <svg xmlns="http:www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                                     <g id="Dropdown-Logo" transform="translate(-84 -7.544)">
@@ -468,9 +491,9 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                 </div>
 
                                 <div className="col-md-2 mx-auto footer-col">
-                                    <h5 className="my-2 font-weight-bold d-none d-md-block">{TEXT_NEWSMISC}</h5>
+                                    <h5 className="my-2 font-weight-bold d-none d-md-block">{newsTitle}</h5>
                                     <div className="d-md-none title" data-bs-target="#NewsMisc" data-bs-toggle="collapse">
-                                        <div className="mt-3 font-weight-bold title-wrapper">{TEXT_NEWSMISC}
+                                        <div className="mt-3 font-weight-bold title-wrapper">{newsTitle}
                                             <div className="float-right navbar-toggler">
                                                 <svg xmlns="http:www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                                     <g id="Dropdown-Logo" transform="translate(-84 -7.544)">
@@ -504,9 +527,9 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                             : <div className="all" onClick={() => this.showMoreLess('news', true)}>+ Show All</div>)
                                     }
 
-                                    <h5 className="mt-5 font-weight-bold d-none d-md-block">{TEXT_GALLERY}</h5>
+                                    <h5 className="mt-5 font-weight-bold d-none d-md-block">{galleryTitle}</h5>
                                     <div className="d-md-none title" data-bs-target="#Gallery" data-bs-toggle="collapse">
-                                        <div className="mt-3 font-weight-bold title-wrapper">{TEXT_GALLERY}
+                                        <div className="mt-3 font-weight-bold title-wrapper">{galleryTitle}
                                             <div className="float-right navbar-toggler">
                                                 <svg xmlns="http:www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                                     <g id="Dropdown-Logo" transform="translate(-84 -7.544)">
@@ -543,9 +566,9 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                     }
                                 </div>
                                 <div className="col-md-2 mx-auto footer-col">
-                                    <h5 className="my-2 font-weight-bold d-none d-md-block">{TEXT_OTHER}</h5>
+                                    <h5 className="my-2 font-weight-bold d-none d-md-block">{otherLinksTitle}</h5>
                                     <div className="d-md-none title" data-bs-target="#Other-Links" data-bs-toggle="collapse">
-                                        <div className="mt-3 font-weight-bold title-wrapper">{TEXT_OTHER}
+                                        <div className="mt-3 font-weight-bold title-wrapper">{otherLinksTitle}
                                             <div className="float-right navbar-toggler">
                                                 <svg xmlns="http:www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                                     <g id="Dropdown-Logo" transform="translate(-84 -7.544)">

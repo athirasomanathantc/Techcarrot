@@ -4,6 +4,7 @@ import { IConfigItem } from "../../models/IConfigItem";
 import { INavigationItem } from "../../models/INavigationItem";
 import { ISocialLink } from "../../models/ISocialLinkItem";
 import { ISubscribeItem } from "../../models/ISubscribeItem";
+import { ITitleConfig } from "../../models/ITitleConfig";
 
 export interface IIntranetFooterState {
     navigationItems: INavigationItem[];
@@ -30,5 +31,6 @@ export interface IIntranetFooterState {
         gallery: boolean;
         otherlinks: boolean;
         misclinks: boolean;
-    }
+    },
+    homeTitles: ITitleConfig[];
 }
