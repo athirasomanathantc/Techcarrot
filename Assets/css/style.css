@@ -2070,7 +2070,7 @@ input[type="radio"]:checked+label::after {
         overflow: hidden;
     }
 
-    .top-footer .show-less-social {
+    .top-footer .show-less.social {
         height: 15rem;
         overflow: hidden;
     }
@@ -2197,7 +2197,8 @@ input[type="radio"]:checked+label::after {
 
 .resize {
     margin-top: 0.3rem;
-    font-size: 1.25rem;
+    font-size: 1
+    .25rem;
 }
 
 /*RESIZESCREEN ANIMATION*/
