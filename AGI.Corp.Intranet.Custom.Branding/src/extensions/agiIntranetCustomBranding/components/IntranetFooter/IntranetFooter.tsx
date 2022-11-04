@@ -15,10 +15,7 @@ import IntranetChatbox from "../Chatbox/IntranetChatbox";
 import { IBusinessItem } from "../../models/IBusinessItem";
 import { IFunctionItem } from "../../models";
 
-const menuIcon: IIconProps = { iconName: 'GlobalNavButton' };
-const closeIcon: IIconProps = { iconName: 'Cancel' };
 
-const toggleStyle = { color: "#DF009B !important", cursor: "pointer" };
 
 export default class IntranetFooter extends React.Component<IIntranetFooterProps, IIntranetFooterState> {
     constructor(props: IIntranetFooterProps) {
@@ -39,7 +36,16 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
             checkSubscription: false,
             showAllBusiness: false,
             showAllFunctions: false,
-            footerLoaded: false
+            footerLoaded: false,
+            showMore: {
+                company: false,
+                business: false,
+                functions: false,
+                news: false,
+                gallery: false,
+                otherlinks: false,
+                misclinks: false
+            }
         }
     }
 
@@ -119,27 +125,24 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
         const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${LIST_SUBSCRIBE}')/items?$filter=Email eq '${userEmail}'`
         await SPService.getItemsByRestApi(url, this.props.spHttpClient).then((data) => {
             const navigationItems: ISubscribeItem[] = data;
-            
-            if(navigationItems.length>0){
+
+            if (navigationItems.length > 0) {
                 console.log(navigationItems[0].Email);
-                if(navigationItems[0].Email == userEmail)
-                {
+                if (navigationItems[0].Email == userEmail) {
                     this.setState({
-                    checkSubscription: true
-                });
+                        checkSubscription: true
+                    });
                 }
                 console.log(this.state.checkSubscription);
             }
-            
+
         })
     }
-    
-   
+
+
 
     private async getUserProfile(): Promise<void> {
         //let loginName="i:0#.f|membership|"+user.userPrincipalName;
-        const userPrincipalName = this.props.context.pageContext.legacyPageContext.userLoginName;
-        let loginName = `i:0#.f|membership|${userPrincipalName}`;
         await sp.web.currentUser.get().then((userData) => {
             //console.log('userdeail', data);
             this.setState({
@@ -244,7 +247,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
 
         //const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${LIST_REGISTRATION}')/items`;
 
-        sp.web.lists.getByTitle(LIST_SUBSCRIBE).items.add(body).then((data) => {
+        sp.web.lists.getByTitle(LIST_SUBSCRIBE).items.add(body).then(() => {
             console.log('registration completed');
             this.setState({
                 showSuccessMsg: true
@@ -255,48 +258,67 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
         });
     }
 
-    private showAllBusiness() {
-        this.setState({
-            showAllBusiness: true
-        });
-    }
-
-    private showLessBusiness() {
-        this.setState({
-            showAllBusiness: false
-        });
-    }
-
-    private showAllFunctions() {
-        this.setState({
-            showAllFunctions: true
-        });
-    }
-
-    private showLessFunctions() {
-        this.setState({
-            showAllFunctions: false
-        });
-    }
-
-
-    private renderSuccessForm(): JSX.Element {
-        return (
-            <>
-                <div className='overlay'>
-                    <div className='msgContainer'>
-                        <div className='msgBox'>
-                            <div className='msgSuccess'>
-                                {TEXT_REGISTRATION_SUCCESS}
-                            </div>
-                            <div className='btnClose'>
-                                <input type="button" value={'Close'} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </>
-        );
+    private showMoreLess(section, more) {
+        switch (section) {
+            case 'company':
+                this.setState({
+                    showMore: {
+                        ...this.state.showMore,
+                        company: more
+                    }
+                });
+                break;
+            case 'business':
+                this.setState({
+                    showMore: {
+                        ...this.state.showMore,
+                        business: more
+                    }
+                });
+                break;
+            case 'functions':
+                this.setState({
+                    showMore: {
+                        ...this.state.showMore,
+                        functions: more
+                    }
+                });
+                break;
+            case 'news':
+                this.setState({
+                    showMore: {
+                        ...this.state.showMore,
+                        news: more
+                    }
+                });
+                break;
+            case 'gallery':
+                this.setState({
+                    showMore: {
+                        ...this.state.showMore,
+                        gallery: more
+                    }
+                });
+                break;
+            case 'otherlinks':
+                this.setState({
+                    showMore: {
+                        ...this.state.showMore,
+                        otherlinks: more
+                    }
+                });
+                break;
+            case 'misclinks':
+                this.setState({
+                    showMore: {
+                        ...this.state.showMore,
+                        misclinks: more
+                    }
+                });
+                break;
+            default:
+                break
+        }
     }
 
     private renderFooter(): JSX.Element {
@@ -312,20 +334,20 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
         return (
             <>
                 {this.state.footerLoaded && <footer className="">
-                    <div className="footer-subscription" style={{'display':'none'}}>
+                    <div className="footer-subscription" style={{ 'display': 'none' }}>
                         <div className="container text-center">
                             <div className="subscription-txt">Subscribe to our newsletter and never miss our latest news</div>
                             <div className="newsletter mt-3" style={{ display: this.state.checkSubscription ? 'none' : 'block' }}>
                                 <form className="newsletter-form">
                                     <input type="text" placeholder="name@al-gurair.com" id="subscribeFormEmail" value={this.state.selectedUserEmail} onKeyPress={(e) => this.validateEmailFormat(e)} onChange={(e) => this.handleEmailChange(e)} />
                                     <p id="emailErrorMsg" className="errorMsgClass" style={{ display: this.state.showErrorEmailMsg ? "block" : "none" }}>Email id is not valid</p>
-                                    <input type='button' className="btn btn-lg btn-gradient" value={'Subscribe'} onClick={(e) => this.handleRegister()} disabled={this.state.showSuccessMsg} />
+                                    <input type='button' className="btn btn-lg btn-gradient" value={'Subscribe'} onClick={() => this.handleRegister()} disabled={this.state.showSuccessMsg} />
                                     {/* <button type="submit" name="" className="btn btn-lg btn-gradient" onClick={(e) => this.handleRegister()}>Subscribe</button> */}
                                 </form>
                             </div>
                             {this.state.showSuccessMsg && <p className="success" style={{ display: "block", color: "green", fontSize: "1rem", marginTop: "10px" }}>{TEXT_REGISTRATION_SUCCESS}</p>}
-                            <div className="subscription-txt subscription-success" style={{ display: this.state.checkSubscription ? 'block' : 'none' ,color: "green", fontSize: "1rem", marginTop: "10px"}}>You have already subscribed to the Newsletter.</div>
-                            
+                            <div className="subscription-txt subscription-success" style={{ display: this.state.checkSubscription ? 'block' : 'none', color: "green", fontSize: "1rem", marginTop: "10px" }}>You have already subscribed to the Newsletter.</div>
+
                         </div>
                     </div>
 
@@ -350,7 +372,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                             </div>
                                         </div>
                                     </div>
-                                    <ul className="list-unstyled collapse" id="Company">
+                                    <ul className={`list-unstyled collapse ${this.state.showMore.company ? 'show-more' : 'show-less'}`} id="Company">
                                         {
                                             companyContentItems.map((comp) => {
                                                 const link = comp.Link && comp.Link.Url ? comp.Link.Url : '';
@@ -362,6 +384,12 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                             })
                                         }
                                     </ul>
+                                    {
+                                        companyContentItems.length > 4 &&
+                                        (this.state.showMore.company
+                                            ? <div className="all" onClick={() => this.showMoreLess('company', false)}>- Show Less</div>
+                                            : <div className="all" onClick={() => this.showMoreLess('company', true)}>+ Show All</div>)
+                                    }
                                 </div>
 
 
@@ -383,57 +411,26 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                             </div>
                                         </div>
                                     </div>
-                                    <ul className="list-unstyled collapse" id="Business">
+                                    <ul className={`list-unstyled collapse ${this.state.showMore.business ? 'show-more' : 'show-less business'}`} id="Business">
                                         {
-                                            businessItems.length > 4 ?
-
-                                                <>
-                                                    {
-                                                        businessItems.map((bus, i) => {
-                                                            const link = `${this.props.siteUrl}/SitePages/Business.aspx?categoryId=${bus.ID}`;
-                                                            return (
-                                                                i < 4 &&
-                                                                <li>
-                                                                    <a href={`${link}&env=WebView`} data-interception="off">- {bus.Title}</a>
-                                                                </li>
-                                                            )
-                                                        })
-                                                    }
-                                                    <li className="all" style={{ display: this.state.showAllBusiness ? 'none' : 'block' }} onClick={() => this.showAllBusiness()}>+ Show All</li>
-                                                    {
-                                                        businessItems.map((bus, i) => {
-                                                            const link = `${this.props.siteUrl}/SitePages/Business.aspx?categoryId=${bus.ID}`;
-                                                            return (
-                                                                i >= 4 &&
-                                                                <li style={{ display: this.state.showAllBusiness ? 'block' : 'none' }}>
-                                                                    <a href={`${link}&env=WebView`} data-interception="off">- {bus.Title}</a>
-                                                                </li>
-                                                            )
-                                                        })
-                                                    }
-                                                    <li className="all" style={{ display: this.state.showAllBusiness ? 'block' : 'none' }} onClick={() => this.showLessBusiness()}>- Show Less</li>
-                                                </>
-
-                                                :
-
-                                                <>
-                                                    {
-                                                        businessItems.map((bus) => {
-                                                            const link = `${this.props.siteUrl}/SitePages/Business.aspx?categoryId=${bus.ID}`;
-                                                            return (
-                                                                <li>
-                                                                    <a href={`${link}&env=WebView`} data-interception="off">- {bus.Title}</a>
-                                                                </li>
-                                                            )
-                                                        })
-                                                    }
-
-                                                </>
-
+                                            businessItems.map((bus) => {
+                                                const link = `${this.props.siteUrl}/SitePages/Business.aspx?categoryId=${bus.ID}`;
+                                                return (
+                                                    <li>
+                                                        <a href={`${link}&env=WebView`} data-interception="off">- {bus.Title}</a>
+                                                    </li>
+                                                )
+                                            })
                                         }
                                     </ul>
+                                    {
+                                        businessItems.length > 4 &&
+                                        (this.state.showMore.business
+                                            ? <div className="all" onClick={() => this.showMoreLess('business', false)}>- Show Less</div>
+                                            : <div className="all" onClick={() => this.showMoreLess('business', true)}>+ Show All</div>)
+                                    }
                                     {/** Functions */}
-                                    <h5 className="my-2 font-weight-bold d-none d-md-block">{TEXT_FUNCTIONS}</h5>
+                                    <h5 className="mt-5 font-weight-bold d-none d-md-block">{TEXT_FUNCTIONS}</h5>
                                     <div className="d-md-none title" data-bs-toggle="collapse" data-bs-target="#Functions">
                                         <div className="mt-3 font-weight-bold title-wrapper">{TEXT_FUNCTIONS}
                                             <div className="float-right navbar-toggler">
@@ -450,55 +447,24 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                             </div>
                                         </div>
                                     </div>
-                                    <ul className="list-unstyled collapse" id="Functions">
+                                    <ul className={`list-unstyled collapse ${this.state.showMore.functions ? 'show-more' : 'show-less functions'}`} id="Functions">
                                         {
-                                            functionItems.length > 4 ?
-
-                                                <>
-                                                    {
-                                                        functionItems.map((func, i) => {
-                                                            const link = `${this.props.siteUrl}/SitePages/Functions.aspx?categoryId=${func.ID}`;
-                                                            return (
-                                                                i < 4 &&
-                                                                <li>
-                                                                    <a href={`${link}&env=WebView`} data-interception="off">- {func.Title}</a>
-                                                                </li>
-                                                            )
-                                                        })
-                                                    }
-                                                    <li className="all" style={{ display: this.state.showAllFunctions ? 'none' : 'block' }} onClick={() => this.showAllFunctions()}>+ Show All</li>
-                                                    {
-                                                        functionItems.map((func, i) => {
-                                                            const link = `${this.props.siteUrl}/SitePages/Functions.aspx?categoryId=${func.ID}`;
-                                                            return (
-                                                                i >= 4 &&
-                                                                <li style={{ display: this.state.showAllFunctions ? 'block' : 'none' }}>
-                                                                    <a href={`${link}&env=WebView`} data-interception="off">- {func.Title}</a>
-                                                                </li>
-                                                            )
-                                                        })
-                                                    }
-                                                    <li className="all" style={{ display: this.state.showAllFunctions ? 'block' : 'none' }} onClick={() => this.showLessFunctions()}>- Show Less</li>
-                                                </>
-
-                                                :
-
-                                                <>
-                                                    {
-                                                        functionItems.map((func) => {
-                                                            const link = `${this.props.siteUrl}/SitePages/Functions.aspx?categoryId=${func.ID}`;
-                                                            return (
-                                                                <li>
-                                                                    <a href={`${link}&env=WebView`} data-interception="off">- {func.Title}</a>
-                                                                </li>
-                                                            )
-                                                        })
-                                                    }
-
-                                                </>
-
+                                            functionItems.map((func) => {
+                                                const link = `${this.props.siteUrl}/SitePages/Functions.aspx?categoryId=${func.ID}`;
+                                                return (
+                                                    <li>
+                                                        <a href={`${link}&env=WebView`} data-interception="off">- {func.Title}</a>
+                                                    </li>
+                                                )
+                                            })
                                         }
                                     </ul>
+                                    {
+                                        functionItems.length > 4 &&
+                                        (this.state.showMore.functions
+                                            ? <div className="all" onClick={() => this.showMoreLess('functions', false)}>- Show Less</div>
+                                            : <div className="all" onClick={() => this.showMoreLess('functions', true)}>+ Show All</div>)
+                                    }
                                 </div>
 
                                 <div className="col-md-2 mx-auto footer-col">
@@ -519,7 +485,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                             </div>
                                         </div>
                                     </div>
-                                    <ul className="list-unstyled collapse" id="NewsMisc">
+                                    <ul className={`list-unstyled collapse ${this.state.showMore.news ? 'show-more' : 'show-less'}`} id="NewsMisc">
                                         {
                                             newsMiscContentItems.map((news) => {
                                                 const link = news.Link && news.Link.Url ? news.Link.Url : '';
@@ -531,8 +497,14 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                             })
                                         }
                                     </ul>
+                                    {
+                                        newsMiscContentItems.length > 4 &&
+                                        (this.state.showMore.news
+                                            ? <div className="all" onClick={() => this.showMoreLess('news', false)}>- Show Less</div>
+                                            : <div className="all" onClick={() => this.showMoreLess('news', true)}>+ Show All</div>)
+                                    }
 
-                                    <h5 className="my-2 font-weight-bold d-none d-md-block">{TEXT_GALLERY}</h5>
+                                    <h5 className="mt-5 font-weight-bold d-none d-md-block">{TEXT_GALLERY}</h5>
                                     <div className="d-md-none title" data-bs-target="#Gallery" data-bs-toggle="collapse">
                                         <div className="mt-3 font-weight-bold title-wrapper">{TEXT_GALLERY}
                                             <div className="float-right navbar-toggler">
@@ -549,7 +521,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                             </div>
                                         </div>
                                     </div>
-                                    <ul className="list-unstyled collapse" id="Gallery">
+                                    <ul className={`list-unstyled collapse ${this.state.showMore.gallery ? 'show-more' : 'show-less'}`} id="Gallery">
                                         {
                                             galleryContentItems.map((gallery) => {
                                                 let link = gallery.Link && gallery.Link.Url ? gallery.Link.Url : '';
@@ -563,6 +535,12 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                             })
                                         }
                                     </ul>
+                                    {
+                                        galleryContentItems.length > 4 &&
+                                        (this.state.showMore.gallery
+                                            ? <div className="all" onClick={() => this.showMoreLess('gallery', false)}>- Show Less</div>
+                                            : <div className="all" onClick={() => this.showMoreLess('gallery', true)}>+ Show All</div>)
+                                    }
                                 </div>
                                 <div className="col-md-2 mx-auto footer-col">
                                     <h5 className="my-2 font-weight-bold d-none d-md-block">{TEXT_OTHER}</h5>
@@ -582,7 +560,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                             </div>
                                         </div>
                                     </div>
-                                    <ul className="list-unstyled collapse" id="Other-Links">
+                                    <ul className={`list-unstyled collapse ${this.state.showMore.otherlinks ? 'show-more' : 'show-less'}`} id="Other-Links">
                                         {
                                             otherContentItems.map((other) => {
                                                 let link = other.Link && other.Link.Url ? other.Link.Url : '';
@@ -595,9 +573,15 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                             })
                                         }
                                     </ul>
+                                    {
+                                        otherContentItems.length > 4 &&
+                                        (this.state.showMore.otherlinks
+                                            ? <div className="all" onClick={() => this.showMoreLess('otherlinks', false)}>- Show Less</div>
+                                            : <div className="all" onClick={() => this.showMoreLess('otherlinks', true)}>+ Show All</div>)
+                                    }
                                 </div>
                                 <div className="col-md-2 mx-auto footer-col social-icon-footer">
-                                    <ul className="list-unstyled ">
+                                    <ul className={`list-unstyled ${this.state.showMore.company ? 'show-more' : 'show-less social'}`} >
                                         {
                                             this.state.socialLinks.map((sl) => {
                                                 const link = sl.Link && sl.Link.Url ? sl.Link.Url : '';
@@ -615,6 +599,12 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                             })
                                         }
                                     </ul>
+                                    {
+                                        this.state.socialLinks.length > 4 &&
+                                        (this.state.showMore.misclinks
+                                            ? <div className="all" onClick={() => this.showMoreLess('misclinks', false)}>- Show Less</div>
+                                            : <div className="all" onClick={() => this.showMoreLess('misclinks', true)}>+ Show All</div>)
+                                    }
                                 </div>
                             </div>
 
