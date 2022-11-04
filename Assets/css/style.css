@@ -1574,6 +1574,7 @@ nav.navbar.topnav-menu {
     padding: 10px;
     opacity: 0;
     transition: 500ms ease-in-out;
+    background: linear-gradient(to top, #000000d9, #0000) no-repeat;
 }
 
 
@@ -1676,13 +1677,13 @@ nav.navbar.topnav-menu {
 }
 
 
-.employee-offer-section .carousel-item:hover .carousel-caption {
+/*.employee-offer-section .carousel-item:hover .carousel-caption {
     opacity: 1;
     display: block;
     position: absolute;
     bottom: -55%;
     top: auto;
-}
+}*/
 
 .employee-offer-section .carousel-caption {
     position: absolute;
@@ -1744,11 +1745,11 @@ nav.navbar.topnav-menu {
     margin: 0 40px; */
 }
 
-.employee-offer-section .button-bottom {
+/*.employee-offer-section .button-bottom {
     position: absolute;
     top: 43%;
     width: 100%;
-}
+}*/
 
 .employee-offer-section .button-bottom .carousel-control-prev {
     left: 0;
@@ -1757,6 +1758,14 @@ nav.navbar.topnav-menu {
 .employee-offer-section .button-bottom .carousel-control-next {
     /* right: -60%;
     left: auto; */
+}
+
+.employee-offer-section .carousel-item:hover .carousel-caption {
+    opacity: 1;
+    display: block;
+    position: absolute;
+    bottom: -55%;
+    top: auto;
 }
 
 /* survey*/
@@ -2045,6 +2054,58 @@ input[type="radio"]:checked+label::after {
 
 .top-footer {
     padding: 60px 0px;
+}
+
+.top-footer .footer-col .all {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .top-footer .footer-col .all {
+        display: block;
+    }
+
+    .top-footer .show-less {
+        height: 10rem;
+        overflow: hidden;
+    }
+
+    .top-footer .show-less-social {
+        height: 15rem;
+        overflow: hidden;
+    }
+
+    .top-footer .show-less.business,
+    .top-footer .show-less.functions {
+        height: 10rem;
+        overflow: hidden;
+    }
+
+    .top-footer .list-unstyled {
+        margin-bottom: 0;
+    }
+
+    .top-footer .all {
+        font: normal normal normal 18px/22px Gill Sans;
+    }
+}
+
+@media (min-width: 768px) and (max-width:1366px) {
+    .top-footer .show-less {
+        height: 10.5rem;
+        overflow: hidden;
+    }
+
+    .top-footer .show-less.social {
+        height: 15.5rem;
+        overflow: hidden;
+    }
+
+    .top-footer .show-less.business,
+    .top-footer .show-less.functions {
+        height: 11.5rem;
+        overflow: hidden;
+    }
 }
 
 .footer-col:last-child {
@@ -2490,6 +2551,7 @@ input[type="radio"]:checked+label::after {
     background: transparent linear-gradient(90deg, #300B55 0%, #9D0E71 100%) 0% 0% no-repeat padding-box;
     border-radius: 5px;
     transition: all 300ms ease-in-out;
+    font-family: 'Gill Sans';
 }
 
 .btn-gradient:hover {
@@ -3879,7 +3941,7 @@ div[data-automationid="ShyHeader"] {
 .contact-section-form .form-control {
     border: none;
     border-bottom: 1px solid #D9D9E4;
-    padding: 0.375rem 15px !important;
+    padding: 0.375rem 15px;
     font: 18px/31px Gill Sans;
     letter-spacing: 0px;
     color: #300B55;
@@ -5704,6 +5766,7 @@ ul.pagination {
 
 .featured-section h5.not-found {
     margin: 0 auto;
+    font-family: 'Gill Sans';
 }
 
 #galleryRoot {

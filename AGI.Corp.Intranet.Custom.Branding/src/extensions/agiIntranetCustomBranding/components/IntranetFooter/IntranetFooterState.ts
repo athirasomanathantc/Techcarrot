@@ -22,4 +22,13 @@ export interface IIntranetFooterState {
     showAllBusiness: boolean;
     showAllFunctions: boolean;
     footerLoaded: boolean;
+    showMore: {
+        company: boolean;
+        business: boolean;
+        functions: boolean;
+        news: boolean;
+        gallery: boolean;
+        otherlinks: boolean;
+        misclinks: boolean;
+    }
 }
