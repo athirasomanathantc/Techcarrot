@@ -8,7 +8,8 @@ export const NULL_CONTENT_ITEM = {
     LinkedInUrl: {Url: ''},
     UserImage: '',
     Business: '',
-    Functions: ''
+    Functions: '',
+    DisplayOrder: ''
 }
 
 //export const TEXT_FDP_CAROUSEL_HOME = 'Home';

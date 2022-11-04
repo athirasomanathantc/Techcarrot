@@ -10,4 +10,5 @@ export interface IContentItem {
     About: string;
     Name: string;
     LeadershipImage: string;
+    DisplayOrder: number
 }
