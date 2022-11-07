@@ -52,7 +52,7 @@ export const EmployeeSurvey = (props: IEmployeeSurveyComponent) => {
                 </div>
                 <div className="collapse dont-collapse-sm" id="survey">
                     <div className="card-body">
-                        <div id="qbox-container">
+                        <div id="qbox-container" className="text-center">
                             <img src={`${props.siteUrl}/assets/images/survey-icon.svg`} />
                             <h5>{surveyItem.Detail}</h5>
                             <a href={surveyItem.Link} className="btn btn-lg btn-gradient">Start Survey</a>
