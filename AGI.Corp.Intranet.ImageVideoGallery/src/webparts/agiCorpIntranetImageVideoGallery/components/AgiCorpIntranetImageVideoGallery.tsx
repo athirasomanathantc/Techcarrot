@@ -553,7 +553,15 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                   return folderPath == path;
                 });
                 const count = _files.length;
-                _folders.push({ ID: folder.ListItemAllFields.ID, Name: folder.Name, Count: count, BusinessId: folder.ListItemAllFields.BusinessId, FunctionsId: folder.ListItemAllFields.FunctionsId, Featured: folder.ListItemAllFields.Featured })
+                _folders.push({
+                  ID: folder.ListItemAllFields.ID,
+                  Name: folder.Name,
+                  Count: count,
+                  BusinessId: folder.ListItemAllFields.BusinessId,
+                  FunctionsId: folder.ListItemAllFields.FunctionsId,
+                  Featured: folder.ListItemAllFields.Featured,
+                  Modified: folder.ListItemAllFields.Modified
+                })
               });
               this.setState({
                 folders: _folders,
@@ -680,7 +688,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
   private async getVideoItems(): Promise<void> {
     return new Promise<void>(async (resolve) => {
       await sp.web.lists.getByTitle(LIBRARY_VIDEO_GALLERY).items
-        .select('*, FileRef, FileLeafRef,Author/Title, Featured')
+        .select('*, FileRef, FileLeafRef,Author/Title, Featured, Modified')
         .expand("Author")
         .filter('FSObjType eq 0')
         .orderBy('DisplayOrder')
