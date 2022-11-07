@@ -756,7 +756,10 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     const prevImage = images[prevIndex];
     this.setState({
       currentIndex: prevImage.ListItemAllFields.ID,
-      currentImageUrl: prevImage.ServerRelativeUrl
+      currentImageUrl: prevImage.ServerRelativeUrl,
+      currentImageTitle: prevImage.Name,
+      currentImageDescription: prevImage.ImageDescription,
+      currentImageAuthorName: prevImage.Author.Title
     });
   }
 
@@ -768,7 +771,10 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     const nextImage = images[nextIndex];
     this.setState({
       currentIndex: nextImage.ListItemAllFields.ID,
-      currentImageUrl: nextImage.ServerRelativeUrl
+      currentImageUrl: nextImage.ServerRelativeUrl,
+      currentImageTitle: nextImage.Name,
+      currentImageDescription: nextImage.ImageDescription,
+      currentImageAuthorName: nextImage.Author.Title
     });
   }
 
