@@ -32,7 +32,9 @@ export default class AgiIntBusFuncTestimonials extends React.Component<IAgiIntBu
   }
 
   private async getTitleConfig(): Promise<void> {
-    sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Testimonials Title'")
+    const categoryId = this.getQueryStringValue('categoryId');
+    sp.web.lists.getByTitle('TitleConfig').items
+      .filter(`(${this.state.lastNavItem}Id eq ${categoryId}) and (Title eq 'Testimonials Title')`)
       .get().then((items: any) => {
         this.setState({
           testimonialsTitle: items[0]?.Header

@@ -4,6 +4,7 @@ import { IConfigItem } from "../../models/IConfigItem";
 import { INavigationItem } from "../../models/INavigationItem";
 import { ISocialLink } from "../../models/ISocialLinkItem";
 import { ISubscribeItem } from "../../models/ISubscribeItem";
+import { ITitleConfig } from "../../models/ITitleConfig";
 
 export interface IIntranetFooterState {
     navigationItems: INavigationItem[];
@@ -22,4 +23,14 @@ export interface IIntranetFooterState {
     showAllBusiness: boolean;
     showAllFunctions: boolean;
     footerLoaded: boolean;
+    showMore: {
+        company: boolean;
+        business: boolean;
+        functions: boolean;
+        news: boolean;
+        gallery: boolean;
+        otherlinks: boolean;
+        misclinks: boolean;
+    },
+    homeTitles: ITitleConfig[];
 }

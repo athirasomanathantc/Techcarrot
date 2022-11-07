@@ -34,7 +34,9 @@ export default class AgiIntBusFuncMedia extends React.Component<IAgiIntBusFuncMe
   }
 
   private async getTitleConfig(): Promise<void> {
-    sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Media Title'")
+    const categoryId = this.getQueryStringValue('categoryId');
+    sp.web.lists.getByTitle('TitleConfig').items
+      .filter(`(${this.state.lastNavItem}Id eq ${categoryId}) and (Title eq 'Media Title')`)
       .get().then((items: any) => {
         this.setState({
           mediaTitle: items[0]?.Header

@@ -34,7 +34,9 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
   }
 
   private async getTitleConfig(): Promise<void> {
-    sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Our Services Title'")
+    const categoryId = this.getQueryStringValue('categoryId');
+    sp.web.lists.getByTitle('TitleConfig').items
+      .filter(`(${this.state.lastNavItem}Id eq ${categoryId}) and (Title eq 'Our Services Title')`)
       .get().then((items: any) => {
         this.setState({
           ourServicesTitle: items[0]?.Header

@@ -35,7 +35,9 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
   }
 
   private async getTitleConfig(): Promise<void> {
-    sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Our Leadership Team Title'")
+    const categoryId = this.getQueryStringValue('categoryId');
+    sp.web.lists.getByTitle('TitleConfig').items
+      .filter(`(${this.state.lastNavItem}Id eq ${categoryId}) and (Title eq 'Our Leadership Team Title')`)
       .get().then((items: any) => {
         this.setState({
           ourLeadershipTeamTitle: items[0]?.Header
@@ -47,7 +49,7 @@ export default class AgiIntBusFuncLeadership extends React.Component<IAgiIntBusF
     const catVal = this.getQueryStringValue('categoryId');
     const tempProgramme = `${this.state.lastNavItem}Id eq ${catVal}`;
     const currentListName = this.props.listName;
-    sp.web.lists.getByTitle(currentListName).items.filter(tempProgramme).get().then((items: IContentItem[]) => {
+    sp.web.lists.getByTitle(currentListName).items.filter(tempProgramme).orderBy('DisplayOrder', true).get().then((items: IContentItem[]) => {
       this.setState({
         contentItems: items,
         programID: catVal

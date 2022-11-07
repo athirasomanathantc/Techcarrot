@@ -6,7 +6,7 @@ export const LIBRARY_VIDEO_GALLERY = "Video Gallery";
 
 export const PATH_PHOTO_GALLERY: string = 'PhotoGallery';
 
-export const PROP_DEFAULT_ORDERBY = 'TimeLastModified';
+export const PROP_DEFAULT_ORDERBY = 'ListItemAllFields/DisplayOrder';
 
 export const NULL_SELECTED_ITEM = { 
     FileLeafRef: '',

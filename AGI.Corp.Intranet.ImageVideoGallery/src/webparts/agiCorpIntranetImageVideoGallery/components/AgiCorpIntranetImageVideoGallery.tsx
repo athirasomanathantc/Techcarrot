@@ -535,7 +535,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       await library.rootFolder.folders
         .filter('ListItemAllFields/Id ne null')
         .expand('ListItemAllFields')
-        .orderBy(orderByField, false)
+        .orderBy(orderByField, true)
         .get()
         .then(async (folders: any) => {
           // get files
@@ -679,15 +679,20 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
 
   private async getVideoItems(): Promise<void> {
     return new Promise<void>(async (resolve) => {
-      await sp.web.lists.getByTitle(LIBRARY_VIDEO_GALLERY).items.select('*, FileRef, FileLeafRef,Author/Title, Featured').expand("Author").filter('FSObjType eq 0').get().then((items: IImageItem[]) => {
-        this.setState({
-          videoItems: items,
-          videoData: items,
-          filterVideoData: items
-        }, () => {
-          this.paging();
+      await sp.web.lists.getByTitle(LIBRARY_VIDEO_GALLERY).items
+        .select('*, FileRef, FileLeafRef,Author/Title, Featured')
+        .expand("Author")
+        .filter('FSObjType eq 0')
+        .orderBy('DisplayOrder')
+        .get().then((items: IImageItem[]) => {
+          this.setState({
+            videoItems: items,
+            videoData: items,
+            filterVideoData: items
+          }, () => {
+            this.paging();
+          });
         });
-      });
       resolve();
     });
   }

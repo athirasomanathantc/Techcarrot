@@ -66,7 +66,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
 
   private async getLeadershipTeamItem(): Promise<void> {
 
-    sp.web.lists.getByTitle(LIST_ABOUT_LEADERSHIPTEAM).items.get().then((items: ILeadershipTeamItem[]) => {
+    sp.web.lists.getByTitle(LIST_ABOUT_LEADERSHIPTEAM).items.orderBy('DisplayOrder', true).get().then((items: ILeadershipTeamItem[]) => {
       this.setState({
         leadershipTeamItems: items
       }, () => {

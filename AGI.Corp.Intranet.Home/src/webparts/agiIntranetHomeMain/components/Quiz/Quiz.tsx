@@ -37,6 +37,9 @@ export const Quiz = (props: IQuizComponent) => {
     const configItem: IConfigItem = props.configItems.filter((configItem) => configItem.Title === 'Employee Quiz Title' && configItem.Section === 'Home')[0];
 
     useEffect(() => {
+        
+        setRetest(true);
+        //onRetest();
         // const func2 = async () => { _spService.checkSubmitted(props.context.pageContext.legacyPageContext.userEmail) };
         // let submit:boolean= await _spService.checkSubmitted(props.context.pageContext.legacyPageContext.userEmail);
         const getQuizDetails = async () => {
@@ -68,6 +71,7 @@ export const Quiz = (props: IQuizComponent) => {
                     submitted: submit
                 }
                 setQuiz(initialQuestion);
+                
 
                 console.log('reset', retest);
             }
