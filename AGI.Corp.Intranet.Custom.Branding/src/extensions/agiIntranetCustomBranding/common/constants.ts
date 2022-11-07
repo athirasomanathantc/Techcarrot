@@ -5,6 +5,7 @@ export const SOCIALLINK_LIST = 'IntranetSocialMediaLinks';
 export const CONFIG_LIST = 'IntranetConfig';
 export const ASSET_LIBRARY = 'Assets';
 export const EMPLOYEE_LAST_LOGIN = 'EmployeeLastLogin';
+export const LIST_FEEDBACK_DETAILS = 'FeedbackDetails';
 
 // export const NULL_CONFIG_LIST = {
 //     ID: 0,
@@ -14,6 +15,12 @@ export const EMPLOYEE_LAST_LOGIN = 'EmployeeLastLogin';
 //     Message: '',
 //     interval: 0
 // }
+
+export const NULL_ITEM_FEEDBACK_DETAILS = {
+    ID: 0,
+    Title: '',
+    Description: ''
+}
 
 export const NULL_EMPLOYEE_LAST_LOGIN = {
     ID: 0,
