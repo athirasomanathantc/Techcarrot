@@ -535,7 +535,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       await library.rootFolder.folders
         .filter('ListItemAllFields/Id ne null')
         .expand('ListItemAllFields')
-        .orderBy(orderByField, false)
+        .orderBy(orderByField, true)
         .get()
         .then(async (folders: any) => {
           // get files
