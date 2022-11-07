@@ -20,7 +20,8 @@ export default class AgiCorpIntranemInterim extends React.Component<IAgiCorpIntr
     this.state = {
       banner: [],
       content: [],
-      moveCarousel: false
+      moveCarousel: false,
+      title:''
     }
 
   }
@@ -36,6 +37,9 @@ export default class AgiCorpIntranemInterim extends React.Component<IAgiCorpIntr
   private async fetchData() {
     debugger;
     const page = this.getQueryStringValue('pageID')
+    this.setState({
+      title:page
+    });
     const bannerList = 'Carousel';
     const contentList = 'InterimContent';
     const filterBanner = `OtherPage eq '${page}'`;
@@ -96,7 +100,8 @@ export default class AgiCorpIntranemInterim extends React.Component<IAgiCorpIntr
             <article className="wrapper">
               <div className="title text-center mb-4">
                 <h2 className="">
-                  {
+                  {this.state.title}
+                  {/* {
                     this.state.banner.map((items, i) => {
                       return (
                         i == 0 ?
@@ -105,7 +110,7 @@ export default class AgiCorpIntranemInterim extends React.Component<IAgiCorpIntr
                           <></>
                       )
                     })
-                  }
+                  } */}
                 </h2>
               </div>
 

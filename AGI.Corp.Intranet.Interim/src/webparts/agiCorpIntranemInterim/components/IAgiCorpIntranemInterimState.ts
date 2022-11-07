@@ -5,4 +5,5 @@ export interface IAgiCorpIntranemInterimState {
   banner:IBanner[];
   content:IContent[],
   moveCarousel:boolean;
+  title:string;
 }
