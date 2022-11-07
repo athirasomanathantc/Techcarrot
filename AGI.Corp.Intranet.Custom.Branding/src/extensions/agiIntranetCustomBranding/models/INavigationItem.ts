@@ -10,4 +10,6 @@ export interface INavigationItem {
     Parent: string;
     AvailableInHeader: boolean;
     AvailableInFooter: boolean;
+    BusinessId: number;
+    FunctionsId: number;
 }
