@@ -7,9 +7,16 @@ require('../css/style.css');
 
 export default class AgiIntranetGalleryLibraryScript extends React.Component<IAgiIntranetGalleryLibraryScriptProps, {}> {
 
-  private backToListing() {
-    location.href = `${this.props.siteUrl}/SitePages/Toolkit.aspx`;
+  private backToListing(page:string) {
+    const url=`${this.props.siteUrl}/SitePages/${page}.aspx?env=WebView`;
+    location.href = url;
   }
+  private getQueryStringValue(param: string): string {
+    const params = new URLSearchParams(window.location.search);
+    let value = params.get(param) || '';
+    return value;
+  }
+
 
   public render(): React.ReactElement<IAgiIntranetGalleryLibraryScriptProps> {
     const {
@@ -19,6 +26,7 @@ export default class AgiIntranetGalleryLibraryScript extends React.Component<IAg
       hasTeamsContext,
       userDisplayName
     } = this.props;
+    const page = this.getQueryStringValue('page');
 
     return (
       <section className={`${styles.agiIntranetGalleryLibraryScript} ${hasTeamsContext ? styles.teams : ''} galleryBackNavigation`}>
@@ -28,7 +36,7 @@ export default class AgiIntranetGalleryLibraryScript extends React.Component<IAg
               <div className="col-md-12">
                 <ul className="nav">
                   <li className="nav-item" role="presentation">
-                    <a href="javascript:void(0)" onClick={(e) => this.backToListing()} className="nav-link">
+                    <a href="javascript:void(0)" onClick={(e) => this.backToListing(page)} className="nav-link">
                       <i>
                         <svg xmlns="http://www.w3.org/2000/svg" width="23.916" height="23.916" viewBox="0 0 23.916 23.916">
                           <g id="Group_8097" data-name="Group 8097" transform="translate(23.916 0) rotate(90)">
