@@ -34,7 +34,7 @@
     "scriptResources": {
       "agi-intranet-snap-and-share-web-part": {
         "type": "path",
-        "path": "agi-intranet-snap-and-share-web-part_557ef71a75a7b302e74c.js"
+        "path": "agi-intranet-snap-and-share-web-part.js"
       },
       "@microsoft/sp-property-pane": {
         "type": "component",
@@ -48,7 +48,7 @@
       },
       "AgiIntranetSnapAndShareWebPartStrings": {
         "type": "path",
-        "path": "AgiIntranetSnapAndShareWebPartStrings_en-us_536e65149b0acf4d52c0043073b9fc59.js"
+        "path": "AgiIntranetSnapAndShareWebPartStrings_en-us.js"
       },
       "@microsoft/sp-core-library": {
         "type": "component",

@@ -374,8 +374,8 @@ export default class AgiIntranetSnapAndShare extends React.Component<IAgiIntrane
               <img src={this.state.selectedImageUrl} />
             </div>
             <div className="imagePreviewCaption">
-              <h2>{this.state.selectedImageTitle}</h2>
-              <p>{this.state.selectedImageDescription}</p>
+             
+              <h2>{this.state.selectedImageDescription}</h2>
               <ul>
                 <li>
                   <i className="icon user-icon"><img src={`${this.props.siteUrl}/Assets/icons/icon-avatar.svg`} /></i>
