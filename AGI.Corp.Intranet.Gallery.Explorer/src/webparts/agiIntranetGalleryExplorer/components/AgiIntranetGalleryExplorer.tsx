@@ -69,7 +69,7 @@ export default class AgiIntranetGalleryExplorer extends React.Component<IAgiIntr
                   return (
                     <div className=" col-md-3">
                       <div className="gallery-item">
-                        <a href={targetUrl} data-interception="off" target="_blank">
+                        <a href={`${targetUrl}?env=WebView&page=Toolkit`}data-interception="off" >
                           <div className="gallery-item--img">
                             <img src={coverImage} alt="" />
                           </div>
