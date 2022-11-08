@@ -69,7 +69,7 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
                   label: "topLatestNews",
                   description: "No of latest news carousel items",
                   value: this.properties.topLatestNews,
-                  maxValue: 50,
+                  maxValue: 5000,
                   minValue: 1,
                   disabled: false
                 }),
@@ -87,7 +87,7 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
                   label: "topSocialMediaPosts",
                   description: "No of social media post items",
                   value: this.properties.topSocialMediaPosts,
-                  maxValue: 50,
+                  maxValue: 5000,
                   minValue: 1,
                   disabled: false
                 }),
@@ -96,7 +96,7 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
                   label: "topSnaps",
                   description: "No of snap items",
                   value: this.properties.topSnaps,
-                  maxValue: 50,
+                  maxValue: 5000,
                   minValue: 1,
                   disabled: false
                 }),
@@ -105,7 +105,7 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
                   label: "topNavigations",
                   description: "No of navigation items",
                   value: this.properties.topNavigations,
-                  maxValue: 50,
+                  maxValue: 5000,
                   minValue: 1,
                   disabled: false
                 }),
@@ -114,7 +114,7 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
                   label: "topMyApps",
                   description: "No of myapps items",
                   value: this.properties.topMyApps,
-                  maxValue: 50,
+                  maxValue: 5000,
                   minValue: 1,
                   disabled: false
                 }),
@@ -123,7 +123,7 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
                   label: "topRewards",
                   description: "No of rewards items",
                   value: this.properties.topRewards,
-                  maxValue: 50,
+                  maxValue: 5000,
                   minValue: 1,
                   disabled: false
                 }),
@@ -132,7 +132,7 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
                   label: "topEvents",
                   description: "No of event items",
                   value: this.properties.topEvents,
-                  maxValue: 50,
+                  maxValue: 5000,
                   minValue: 1,
                   disabled: false
                 }),
@@ -141,7 +141,7 @@ export default class AgiIntranetHomeMainWebPart extends BaseClientSideWebPart<IA
                   label: "topSurveyQuestions",
                   description: "No of survey questions",
                   value: this.properties.topSurveyQuestions,
-                  maxValue: 50,
+                  maxValue: 5000,
                   minValue: 1,
                   disabled: false
                 })

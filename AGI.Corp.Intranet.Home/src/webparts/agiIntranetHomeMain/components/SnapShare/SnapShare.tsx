@@ -122,7 +122,7 @@ export const SnapShare = (props: ISnapShareComponent) => {
                                 data-bs-ride="carousel">
                                 <div className="d-flex align-items-center justify-content-between flex-wrap card-header snap-share-header px-0">
 
-                                    <h4>Snap Share</h4>
+                                    <h4>Snap and Share</h4>
                                     <div className="d-flex align-items-center">
                                         <a href={`${props.siteUrl}/SitePages/Snap and Share.aspx?env=WebView`} className="viewall-link">View All</a>
                                         <div className="p-0 ms-3 position-relative">
