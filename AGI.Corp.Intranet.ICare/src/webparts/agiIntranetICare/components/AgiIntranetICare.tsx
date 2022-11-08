@@ -426,7 +426,25 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
         showErrorMessage: false
       })
     }
-    isValid = isMsgValid;
+    let isPhoneValid: boolean = true;
+    if (!this.state.selectedUserPhone) {
+      errors.push('Phone Number');
+      isPhoneValid = false;
+    }
+    const phoneErrorNew = this.validatePhone(this.state.selectedUserPhone);
+    if (phoneErrorNew.length > 0) {
+      this.setState({
+        showErrorPhoneMsg: true
+      });
+      return;
+    }
+    else {
+      this.setState({
+        showErrorPhoneMsg: false
+      });
+    }
+    
+    isValid = isMsgValid && isPhoneValid;
     if (!isValid) {
       const _error = errors.length > 1 ? 'Mandatory fields' : 'Mandatory field'
       const error = `${_error}: ${errors.join(', ')}`;
