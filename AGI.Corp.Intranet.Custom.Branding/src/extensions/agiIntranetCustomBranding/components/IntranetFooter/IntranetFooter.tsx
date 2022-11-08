@@ -4,14 +4,12 @@ import { IIntranetFooterProps } from "./IntranetFooterProps";
 import { IIntranetFooterState } from "./IntranetFooterState";
 import SPService from "../../services/spservice";
 import { sp } from '@pnp/sp/presets/all';
-import { BUSINESS_LIST, CONFIG_LIST, FUNCTION_LIST, LIST_SUBSCRIBE, NAVIGATION_LIST, NULL_COPYRIGHT_ITEM, NULL_SUBSCRIBE_ITEM, SOCIALLINK_LIST, TEXT_COMPANY, TEXT_GALLERY, TEXT_NEWSMISC, TEXT_OTHER, TEXT_REGISTRATION_SUCCESS } from "../../common/constants";
+import { CONFIG_LIST, LIST_SUBSCRIBE, NAVIGATION_LIST, NULL_COPYRIGHT_ITEM, NULL_SUBSCRIBE_ITEM, SOCIALLINK_LIST, TEXT_BUSINESS, TEXT_COMPANY, TEXT_FUNCTIONS, TEXT_GALLERY, TEXT_NEWSMISC, TEXT_OTHER, TEXT_REGISTRATION_SUCCESS } from "../../common/constants";
 import { IConfigItem } from "../../models/IConfigItem";
 import { INavigationItem } from "../../models/INavigationItem";
 import { ISocialLink } from "../../models/ISocialLinkItem";
 import { ISubscribeItem } from "../../models/ISubscribeItem";
 import IntranetChatbox from "../Chatbox/IntranetChatbox";
-import { IBusinessItem } from "../../models/IBusinessItem";
-import { IFunctionItem } from "../../models";
 import { ITitleConfig } from "../../models/ITitleConfig";
 
 
@@ -53,8 +51,6 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
         Promise.all([
             await this.getUserProfile(),
             await this.getSubscribedItem(),
-            await this.getBusinessItems(),
-            await this.getFunctionItems(),
             await this.getNavigationItems(),
             await this.getSocialLinkItems(),
             await this.getConfigDetailsItems(),
@@ -84,28 +80,6 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
             const navigationItems: INavigationItem[] = data;
             this.setState({
                 navigationItems
-            });
-        })
-    }
-
-    private async getBusinessItems(): Promise<void> {
-        const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${BUSINESS_LIST}')/items`
-        SPService.getItemsByRestApi(url, this.props.spHttpClient).then((data) => {
-            const businessItems: IBusinessItem[] = data;
-            ////const showAllBusiness = businessItems.length > 4;
-            this.setState({
-                businessItems,
-                // showAllBusiness
-            });
-        })
-    }
-
-    private async getFunctionItems(): Promise<void> {
-        const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${FUNCTION_LIST}')/items`
-        SPService.getItemsByRestApi(url, this.props.spHttpClient).then((data) => {
-            const functionItems: IFunctionItem[] = data;
-            this.setState({
-                functionItems,
             });
         })
     }
@@ -340,12 +314,11 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
     private renderFooter(): JSX.Element {
 
         const companyContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_COMPANY);
-        //const businessContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_BUSINESS);
+        const businessItems = this.state.navigationItems.filter(item => item.Parent == TEXT_BUSINESS);
+        const functionItems = this.state.navigationItems.filter(item => item.Parent == TEXT_FUNCTIONS);
         const newsMiscContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_NEWSMISC);
         const galleryContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_GALLERY);
         const otherContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_OTHER);
-
-        const { businessItems, functionItems } = this.state;
 
         const companyTitle = this.getHeader('Company Title');
         const businessTitle = this.getHeader('Business Title');
@@ -437,7 +410,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                     <ul className={`list-unstyled collapse ${this.state.showMore.business ? 'show-more' : 'show-less business'}`} id="Business">
                                         {
                                             businessItems.map((bus) => {
-                                                const link = `${this.props.siteUrl}/SitePages/Business.aspx?categoryId=${bus.ID}`;
+                                                const link = `${this.props.siteUrl}/SitePages/Business.aspx?categoryId=${bus.BusinessId}`;
                                                 return (
                                                     <li>
                                                         <a href={`${link}&env=WebView`} data-interception="off">- {bus.Title}</a>
@@ -473,7 +446,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                                     <ul className={`list-unstyled collapse ${this.state.showMore.functions ? 'show-more' : 'show-less functions'}`} id="Functions">
                                         {
                                             functionItems.map((func) => {
-                                                const link = `${this.props.siteUrl}/SitePages/Functions.aspx?categoryId=${func.ID}`;
+                                                const link = `${this.props.siteUrl}/SitePages/Functions.aspx?categoryId=${func.FunctionsId}`;
                                                 return (
                                                     <li>
                                                         <a href={`${link}&env=WebView`} data-interception="off">- {func.Title}</a>

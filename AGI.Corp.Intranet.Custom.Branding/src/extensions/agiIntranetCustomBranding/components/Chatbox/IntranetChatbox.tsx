@@ -4,9 +4,10 @@ import { IIntranetChatboxProps } from "./IntranetChatboxProps";
 import { IIntranetChatboxState } from "./IntranetChatboxState";
 import { INavigationItem } from "../../models/INavigationItem";
 import SPService from "../../services/spservice";
-import { ASSET_LIBRARY, CONFIG_LIST, NAVIGATION_LIST, SOCIALLINK_LIST, TEXT_BUSINESS, TEXT_COMPANY, TEXT_GALLERY, TEXT_NEWSMISC, TEXT_OTHER } from "../../common/constants";
+import { ASSET_LIBRARY, CONFIG_LIST, LIST_FEEDBACK_DETAILS, NAVIGATION_LIST, NULL_ITEM_FEEDBACK_DETAILS, SOCIALLINK_LIST, TEXT_BUSINESS, TEXT_COMPANY, TEXT_GALLERY, TEXT_NEWSMISC, TEXT_OTHER } from "../../common/constants";
 import { FontIcon, Icon, Modal, IconButton, IIconProps } from 'office-ui-fabric-react';
 import { sp } from '@pnp/sp/presets/all';
+import { IFeedbackDetails } from "../../models/IFeedbackDetails";
 
 
 
@@ -25,17 +26,31 @@ export default class IntranetChatbox extends React.Component<IIntranetChatboxPro
       enable: false,
       showErrorEmailMsg: false,
       showSuccessMsg: false,
-      feedbackError: false
+      feedbackError: false,
+      feedbackDetails: NULL_ITEM_FEEDBACK_DETAILS
 
     }
   }
 
   public async componentDidMount(): Promise<void> {
     this.getUserDetails();
+    this.getFeedbackDetails();
   }
 
-
-
+  private async getFeedbackDetails(): Promise<void> {
+    const listName = LIST_FEEDBACK_DETAILS;
+		sp.web.lists.getByTitle(listName).items.select('ID,Title,Description')
+			.getAll().then((items: IFeedbackDetails[]) => {
+				//const pageCount: number = Math.ceil(resp.length / this.state.pageSize);
+				//console.log(resp.length);
+				const item = items && items.length > 0 ? items[0] : NULL_ITEM_FEEDBACK_DETAILS;
+				this.setState({
+					feedbackDetails: item
+				});
+			}).catch((error: any) => {
+				console.log('error in fetching career items', error);
+			})
+  }
 
 
   private async getUserDetails(): Promise<void> {
@@ -118,8 +133,12 @@ export default class IntranetChatbox extends React.Component<IIntranetChatboxPro
       }).catch((error) => {
         console.log('Feedback Submitted', error);
       });
+
+      
     }
   }
+
+  
 
   public render(): React.ReactElement<IIntranetChatboxProps> {
     return (<>
@@ -132,8 +151,8 @@ export default class IntranetChatbox extends React.Component<IIntranetChatboxPro
             <button type="button" onClick={() => { this.removeClass() }} className="btn btn-primary"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-close.svg`} alt="" /></i></button>
           </div>
           <div className="chatbox-header">
-            <h4>Send us your feedback</h4>
-            <p>Do you have a suggestion or found some bug? let us know in the field below.</p>
+            <h4>{this.state.feedbackDetails.Title}</h4>
+            <p>{this.state.feedbackDetails.Description}</p>
           </div>
           <div className="chatbox-body">
             <form action="">

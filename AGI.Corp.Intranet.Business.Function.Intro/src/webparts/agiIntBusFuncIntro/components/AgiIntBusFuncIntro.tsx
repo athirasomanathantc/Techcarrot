@@ -94,7 +94,7 @@ export default class AgiIntBusFuncIntro extends React.Component<IAgiIntBusFuncIn
           {
             this.state.contentItems.map((items, i) => {
               return(
-                <div className="intro-wrapper text-center">
+                <div className="intro-wrapper text-left">
                   <h2>{items.Title}</h2>
                   <p className="primary-txt" dangerouslySetInnerHTML={{ __html: items.PrimaryDescription }}></p>
                   <p className="secondary-txt" dangerouslySetInnerHTML={{ __html: items.SecondaryDescription }}></p>

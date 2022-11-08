@@ -4,14 +4,12 @@ import { IIntranetHeaderProps } from "./IntranetHeaderProps";
 import { IIntranetHeaderState } from "./IntranetHeaderState";
 import { INavigationItem } from "../../models/INavigationItem";
 import SPService from "../../services/spservice";
-import { ASSET_LIBRARY, BUSINESS_LIST, CONFIG_LIST, FUNCTION_LIST, NAVIGATION_LIST, SOCIALLINK_LIST, TEXT_BUSINESS, TEXT_COMPANY, TEXT_FUNCTIONS, TEXT_GALLERY, TEXT_NEWSMISC, TEXT_OTHER } from "../../common/constants";
-import { FontIcon, Icon, Modal, IconButton, IIconProps } from 'office-ui-fabric-react';
+import { CONFIG_LIST, NAVIGATION_LIST, SOCIALLINK_LIST, TEXT_BUSINESS, TEXT_COMPANY, TEXT_FUNCTIONS, TEXT_GALLERY, TEXT_NEWSMISC } from "../../common/constants";
+import { IIconProps } from 'office-ui-fabric-react';
 import { sp } from '@pnp/sp/presets/all';
 import { IConfigItem } from "../../models/IConfigItem";
 import { ISocialLink } from "../../models/ISocialLinkItem";
 import { OrgModal } from "../OrganizationChart/OrgModal/OrgModal";
-import { IFunctionItem } from "../../models";
-import { IBusinessItem } from "../../models";
 import IntranetLastLogin from "../LastLogin/LastLogin";
 
 const menuIcon: IIconProps = { iconName: 'GlobalNavButton' };
@@ -54,8 +52,6 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
       await this.getUserDetails(),
       await this.getNavigationItems(),
       await this.getSocialLinkItems(),
-      await this.getBusinessItems(),
-      await this.getFunctionItems(),
       await this.getConfigItems()
     ]).then(() => {
       this.setState({
@@ -140,7 +136,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
             profile.PictureURL = profile.UserProfileProperties[i].Value;
           }
         }
-        console.log('profile', profile); 
+        console.log('profile', profile);
         const firstName: string = profile.FirstName ? profile.FirstName.toString() : '';
         const lastName: string = profile.LastName ? profile.LastName.toString() : '';
         f = firstName.substring(0, 1);
@@ -187,26 +183,6 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
 
   }
 
-  private async getBusinessItems(): Promise<void> {
-    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${BUSINESS_LIST}')/items`
-    SPService.getItemsByRestApi(url, this.props.spHttpClient).then((data) => {
-      const businessItems: IBusinessItem[] = data;
-      this.setState({
-        businessItems,
-      });
-    })
-  }
-
-  private async getFunctionItems(): Promise<void> {
-    const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${FUNCTION_LIST}')/items`
-    SPService.getItemsByRestApi(url, this.props.spHttpClient).then((data) => {
-      const functionItems: IFunctionItem[] = data;
-      this.setState({
-        functionItems,
-      });
-    })
-  }
-
   private getImageUrl(imageContent: string) {
     if (!imageContent) {
       return '';
@@ -248,7 +224,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
     window.location.href = `${this.props.siteUrl}${this.state.notificationsURL}?env=WebView`;
   }
 
-  private logoutUser(){
+  private logoutUser() {
     window.location.replace(`/_layouts/15/signout.aspx?post_logout_redirect_uri=${this.props.siteUrl}&client_id=00000003-0000-0ff1-ce00-000000000000`);
     return false;
   }
@@ -266,13 +242,11 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
 
   private renderHeader(): JSX.Element {
 
-    const companyContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_COMPANY);
-    const newsMiscContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_NEWSMISC);
-    const galleryContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_GALLERY);
-    const otherContentItems = this.state.navigationItems.filter(item => item.Parent == TEXT_OTHER);
-
-
-    const { businessItems, functionItems } = this.state;
+    const companyContentItems = this.state.navigationItems.filter(item => item.Parent === TEXT_COMPANY);
+    const newsMiscContentItems = this.state.navigationItems.filter(item => item.Parent === TEXT_NEWSMISC);
+    const galleryContentItems = this.state.navigationItems.filter(item => item.Parent === TEXT_GALLERY);
+    const businessItems = this.state.navigationItems.filter(item => item.Parent === TEXT_BUSINESS);
+    const functionItems = this.state.navigationItems.filter(item => item.Parent === TEXT_FUNCTIONS);
 
     return (
       <>
@@ -414,7 +388,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                       <div className="dropdown-menu">
                         {
                           businessItems.map((bus) => {
-                            const link = `${this.props.siteUrl}/SitePages/Business.aspx?categoryId=${bus.ID}`;
+                            const link = `${this.props.siteUrl}/SitePages/Business.aspx?categoryId=${bus.BusinessId}`;
                             return (
                               <li>
                                 <a className="dropdown-item" href={`${link}&env=WebView`} data-interception="off">{bus.Title}</a>
@@ -429,7 +403,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                       <div className="dropdown-menu">
                         {
                           functionItems.map((func) => {
-                            const link = `${this.props.siteUrl}/SitePages/Functions.aspx?categoryId=${func.ID}`;
+                            const link = `${this.props.siteUrl}/SitePages/Functions.aspx?categoryId=${func.FunctionsId}`;
                             return (
                               <li>
                                 <a className="dropdown-item" href={`${link}&env=WebView`} data-interception="off">{func.Title}</a>
