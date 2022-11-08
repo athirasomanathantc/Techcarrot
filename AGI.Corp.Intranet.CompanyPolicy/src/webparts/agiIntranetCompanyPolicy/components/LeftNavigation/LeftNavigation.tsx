@@ -4,7 +4,10 @@ import { sp } from "@pnp/sp/presets/all";
 import { ILeftNavigation } from '../../models/ILeftNavigation';
 
 interface IPolicyType {
-    Title: string
+    Title: string,
+    URL:{
+        Url:string
+    }
 }
 
 export const LeftNavigation = (props: ILeftNavigation): JSX.Element => {
@@ -18,13 +21,14 @@ export const LeftNavigation = (props: ILeftNavigation): JSX.Element => {
    
     const showPolicies = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, policyType: IPolicyType): void => {
         setPolicyType(policyType.Title)
-        props.showPolicies(e, policyType.Title)
+        console.log('policy types',policyTypes);
+        //props.showPolicies(e, policyType.Title)
     }
 
     useEffect(() => {
         const getPolicyTypes = async (): Promise<void> => {
             const policyTypes = await sp.web.lists.getByTitle('PolicyType').items
-                .select("Id,Title")
+                .select("Id,Title,URL")
                 .top(100)().then((items: [{ Id: number, Title: string }]) => {
                     return items
                 })
@@ -32,10 +36,13 @@ export const LeftNavigation = (props: ILeftNavigation): JSX.Element => {
                     throw new Error(exception);
                 });
             setPolicyTypes(policyTypes);
+            
         }
         getPolicyTypes().catch((error) => {
             setError(error);
         })
+
+        
     }, [])
 
     if (error) {
@@ -54,7 +61,8 @@ export const LeftNavigation = (props: ILeftNavigation): JSX.Element => {
                                 
                                 return (<>
                                     <li className="nav-item" role="presentation" onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => showPolicies(e, policyType)}>
-                                        <button className={`nav-link ${selectedType?'active':''}`} id="general-tab" data-bs-toggle="tab" data-bs-target="#general-tab-content" type="button" role="tab" aria-controls="home" aria-selected="false">{policyType.Title}</button>
+                                        <a href={`${policyType?.URL?.Url}`} className={`nav-link ${selectedType?'active':''}`} id="general-tab">{policyType.Title}</a>
+                                        {/* <button className={`nav-link ${selectedType?'active':''}`} id="general-tab" data-bs-toggle="tab" data-bs-target="#general-tab-content" type="button" role="tab" aria-controls="home" aria-selected="false">{policyType.Title}</button> */}
                                     </li>
                                 </>)
                             })}

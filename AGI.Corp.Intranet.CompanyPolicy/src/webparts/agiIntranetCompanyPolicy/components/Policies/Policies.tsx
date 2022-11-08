@@ -9,15 +9,15 @@ import { IPolicies } from "../../models/IPolicies";
 export const Policies = (props: IPolicies): JSX.Element => {
     const [error, setError] = useState(null);
 
-    const getFilteredPolicies = (keyword: string, policies: IPolicy[]): IPolicy[] => policies.filter(
-        (policy: IPolicy) => {
-            return (
-                policy.Title?.toLowerCase().includes(keyword.trim().toLowerCase()) ||
-                policy.PolicyDescription?.toLowerCase().includes(keyword.trim().toLowerCase()) ||
-                policy.Tags?.toLowerCase().includes(keyword.trim().toLowerCase())
-            );
-        }
-    );
+    // const getFilteredPolicies = (keyword: string, policies: IPolicy[]): IPolicy[] => policies.filter(
+    //     (policy: IPolicy) => {
+    //         return (
+    //             policy.Title?.toLowerCase().includes(keyword.trim().toLowerCase()) ||
+    //             policy.PolicyDescription?.toLowerCase().includes(keyword.trim().toLowerCase()) ||
+    //             policy.Tags?.toLowerCase().includes(keyword.trim().toLowerCase())
+    //         );
+    //     }
+    // );
 
     const goToDetails = (policyId: number): void => {
         window.location.href = `${props.siteUrl}/SitePages/Policies/Policy%20Detail.aspx?policyId=${policyId}`;
@@ -30,16 +30,16 @@ export const Policies = (props: IPolicies): JSX.Element => {
     useEffect(() => {
         const getPolicies = async (policyType: string): Promise<void> => {
             let policies = await sp.web.lists.getByTitle('CompanyPolicies').items
-                .select("Id,Title,AttachmentFiles,Tags,PolicyType/Title,PublishedDate,PolicyDescription")
-                .filter(`PolicyType/Title eq '${policyType}'`)
-                .expand("PolicyType,AttachmentFiles")
+                .select("Id,Title,AttachmentFiles,Tags,PublishedDate,PolicyDescription")
+                // .filter(`PolicyType/Title eq '${policyType}'`)
+                .expand("AttachmentFiles")
                 .top(5000)().then((items: IPolicy[]) => {
                     return items
                 })
                 .catch((exception) => {
                     throw new Error(exception);
                 });
-            policies = getFilteredPolicies(props.keyword, policies)
+           // policies = getFilteredPolicies(props.keyword, policies)
             props.setPolicies(policies);
         }
         getPolicies(props.policyType).catch((error) => {
@@ -66,7 +66,7 @@ export const Policies = (props: IPolicies): JSX.Element => {
                                         <p className="description">{ReactHtmlParser(policy.PolicyDescription)}</p>
                                     </div>
 
-                                    <div className="policy-icon-section col-lg-3 ">
+                                    {/* {<div className="policy-icon-section col-lg-3 ">
                                         <ul>
                                             <li>
                                                 <div onClick={() => goToDetails(policy.Id)}>
@@ -85,7 +85,7 @@ export const Policies = (props: IPolicies): JSX.Element => {
                                                 </div>
                                             </li>}
                                         </ul>
-                                    </div>
+                                    </div>} */}
                                 </div>
                             </div>
                         </>)

@@ -22,7 +22,7 @@ export default class AgiIntranetCompanyPolicy extends React.Component<IAgiIntran
       spfxContext: this.props.context
     });
     this.state = {
-      policyType: 'General Policies',
+      policyType: 'Select Policy',
       policies: [],
       filteredPolicies: [],
       keyword: ''
@@ -40,28 +40,28 @@ export default class AgiIntranetCompanyPolicy extends React.Component<IAgiIntran
     return value;
   }
   public async componentDidMount(): Promise<void> {
-    const policyType = this.getQueryStringValue('Policy');
+  //   const policyType = this.getQueryStringValue('Policy');
     
-    if(policyType==''){
+  //   if(policyType==''){
       
-    }
-    else{
-      this.setState({
-        policyType:policyType,
+  //   }
+  //   else{
+  //     this.setState({
+  //       policyType:policyType,
         
-      },()=>{
-        console.log('policy type',this.state.policyType);
+  //     },()=>{
+  //       console.log('policy type',this.state.policyType);
 
-      });
+  //     });
 
-    }
+  //   }
     
-  }
+  // }
 
-  private showFilteredPolicies(filteredPolicies: IPolicy[]): void {
-    this.setState({
-      filteredPolicies
-    })
+  // private showFilteredPolicies(filteredPolicies: IPolicy[]): void {
+  //   this.setState({
+  //     filteredPolicies
+  //   })
   }
 
   private setPolicies(policies: IPolicy[]): void {
@@ -93,9 +93,9 @@ export default class AgiIntranetCompanyPolicy extends React.Component<IAgiIntran
                     <LeftNavigation policyType={this.state.policyType} showPolicies={(e: React.MouseEvent<HTMLLIElement, MouseEvent>, policyType: string) => this.showPolicies(e, policyType)} />
                   </ErrorBoundary>
                   <div className="content-section col-lg-9">
-                    <ErrorBoundary>
+                    {/* <ErrorBoundary>
                       <SearchBox siteUrl={this.props.context.pageContext.web.absoluteUrl} keyword={this.state.keyword} setKeyword={(keyword: string) => this.setKeyword(keyword)} />
-                    </ErrorBoundary>
+                    </ErrorBoundary> */}
                     <ErrorBoundary>
                       <Policies siteUrl={this.props.context.pageContext.web.absoluteUrl} setPolicies={(policies: []) => this.setPolicies(policies)} policies={this.state.filteredPolicies} policyType={this.state.policyType} keyword={this.state.keyword} />
                     </ErrorBoundary>
