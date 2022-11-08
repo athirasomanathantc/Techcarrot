@@ -46,8 +46,7 @@ export const ImagePreview = (props: IImagePreview) => {
                         <img src={`${imageDetails.File.ServerRelativeUrl}`} />
                     </div>
                     <div className="imagePreviewCaption">
-                        <h2>{imageDetails.File.Name}</h2>
-                        <p>{imageDetails.ImageDescription}</p>
+                        <h2>{imageDetails.ImageDescription}</h2>
                         <ul>
                             <li>
                                 <i className="icon user-icon"><img src={`${props.siteUrl}/Assets/icons/icon-avatar.svg`} /></i>
