@@ -62,7 +62,6 @@ export const Policies = (props: IPolicies): JSX.Element => {
                                 <div className="row">
                                     <div className="policy-content col-lg-9">
                                         <h4 className="title">{policy.Title}</h4>
-                                        <p className="date">Published: {moment(policy.PublishedDate).format("MMMM D, YYYY")}</p>
                                         <p className="description">{ReactHtmlParser(policy.PolicyDescription)}</p>
                                     </div>
 

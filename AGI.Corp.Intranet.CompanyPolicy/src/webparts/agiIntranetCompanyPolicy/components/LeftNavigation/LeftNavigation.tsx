@@ -61,7 +61,7 @@ export const LeftNavigation = (props: ILeftNavigation): JSX.Element => {
                                 
                                 return (<>
                                     <li className="nav-item" role="presentation" onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => showPolicies(e, policyType)}>
-                                        <a href={`${policyType?.URL?.Url}`} className={`nav-link ${selectedType?'active':''}`} id="general-tab">{policyType.Title}</a>
+                                        <a href={`${policyType.URL.Url}?env=WebView&page=Policies`} className={`nav-link ${selectedType?'active':''}`} id="general-tab">{policyType.Title}</a>
                                         {/* <button className={`nav-link ${selectedType?'active':''}`} id="general-tab" data-bs-toggle="tab" data-bs-target="#general-tab-content" type="button" role="tab" aria-controls="home" aria-selected="false">{policyType.Title}</button> */}
                                     </li>
                                 </>)
