@@ -111,7 +111,7 @@ export const OrgModal = (props: IOrgModal) => {
             dragOptions={isDraggable ? dragOptions : undefined}
         >
             <div className={contentStyles.header}>
-                <span id={titleId}>Organizational Chart</span>
+                <span id={titleId}>Organisational Chart</span>
                 <IconButton
                     styles={iconButtonStyles}
                     iconProps={cancelIcon}

@@ -242,7 +242,7 @@ export const OrgChart: React.FunctionComponent<IOrgChartProps> = (
           <Spinner
             styles={{ root: { zIndex: 9999 } }}
             size={SpinnerSize.large}
-            label={"loading Organization Chart..."}
+            label={"loading Organisation Chart..."}
             labelPosition={"bottom"}
           ></Spinner>
         </Stack>
