@@ -34,9 +34,9 @@ const Announcement = (props: IAnnouncement) => {
                     <p className="announcement-date">{moment(props.PublishedDate).format("DD MMMM YYYY")}
                     </p>
                     <p className="announcement-title">{props.Title}</p>
-                    <p className="mb-2 text-break text-wrap announcement-desc d-none d-sm-block ">
+                    {/* <p className="mb-2 text-break text-wrap announcement-desc d-none d-sm-block ">
                         {props.Description}
-                    </p>
+                    </p> */}
                 </div>
             </div>
         </div>
