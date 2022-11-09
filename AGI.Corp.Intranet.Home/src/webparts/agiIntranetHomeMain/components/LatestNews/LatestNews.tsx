@@ -25,7 +25,7 @@ const CarouselItem = (props: ILatestNews) => {
 }
 
 const goToNews = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, props: ILatestNews) => {
-    window.location.href = `${siteUrl}/SitePages//News/News%20Detail.aspx?newsID=${props.Id}`;
+    window.location.href = `${siteUrl}/SitePages//News/News%20Detail.aspx?newsID=${props.Id}?env=WebView`;
 }
 
 let siteUrl: string = '';

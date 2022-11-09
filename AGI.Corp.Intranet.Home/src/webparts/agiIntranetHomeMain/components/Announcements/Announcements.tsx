@@ -16,7 +16,7 @@ const imageStyle = {
 }
 
 const goToAnnouncement = (itemId: number) => {
-    window.location.href = `${siteUrl}/SitePages/News/Announcements/Announcement%20Details.aspx?announcementID=${itemId}`;
+    window.location.href = `${siteUrl}/SitePages/News/Announcements/Announcement%20Details.aspx?announcementID=${itemId}?env=WebView`;
 }
 
 const Announcement = (props: IAnnouncement) => {
