@@ -26,7 +26,7 @@ const MyApp = (props: IMyApp) => {
 
     return (<>
         <div className="col col-lg-6 col-sm-4">
-            <a className="navlink" href={`${url}} target={trgt} data-interception="off">
+            <a className="navlink" href={`${url}`} target={trgt} data-interception="off">
                 <div className="d-flex app-item">
                     <div className="app-item-icon"><img src={imageUrl} /></div>
                     <div className="d-flex flex-column justify-content-around">
