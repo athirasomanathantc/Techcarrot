@@ -20,7 +20,7 @@ export const Policies = (props: IPolicies): JSX.Element => {
     // );
 
     const goToDetails = (policyId: number): void => {
-        window.location.href = `${props.siteUrl}/SitePages/Policies/Policy%20Detail.aspx?policyId=${policyId}`;
+        window.location.href = `${props.siteUrl}/SitePages/Policies/Policy%20Detail.aspx?policyId=${policyId}&env=WebView`;
     }
 
     const downloadAttachment = (policy: IPolicy): void => {
