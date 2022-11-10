@@ -14,7 +14,7 @@ const BlogCard = (props: IBLogCard) => {
     const { siteUrl, imageUrl, item, category, isFeatured } = props;
     return (
         <div className={'card news-card h-100'}>
-            <a href={`${siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'align-self-start'} data-interception="off">
+            <a href={`${siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}&env=WebView`} className={'align-self-start'} data-interception="off">
                 {isFeatured && <div className="badge-label">
                     <span>
                         <i>
@@ -29,7 +29,7 @@ const BlogCard = (props: IBLogCard) => {
                 <div className={'category'}>
                     <span><i><img src={`${siteUrl}/Assets/icons/Tag.svg`} alt="" /></i> {category}</span>
                 </div>
-                <a href={`${siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}`} className={'align-self-start'} data-interception="off">
+                <a href={`${siteUrl}/SitePages/News/Blogs/Blog Details.aspx?blogID=${item.ID}&env=WebView`} className={'align-self-start'} data-interception="off">
                     <div className={'mb-2 mt-2 card-content-header'}>
                         <h5 className={'card-title'}>{item.Title}</h5>
                     </div>
