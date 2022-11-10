@@ -164,7 +164,7 @@ export default class AgiIntranetGalleryListing extends React.Component<IAgiIntra
   }
 
   private openVideo(id) {
-    debugger;
+    //debugger;
     const selectedItem = this.state.videoItems.filter(item => item.ID == id)[0];
     this.setState({
       selectedItem
