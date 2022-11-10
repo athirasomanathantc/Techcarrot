@@ -31,7 +31,7 @@ export default class AgiIntBusFuncBanner extends React.Component<IAgiIntBusFuncB
   }
 
   private async getCarouselItem(): Promise<void> {
-    debugger;
+   
     const catVal = this.getQueryStringValue('categoryId');
     const tempProgramme = `${this.state.lastNavItem}Id eq ${catVal}`;
     const currentListName = this.props.listName;

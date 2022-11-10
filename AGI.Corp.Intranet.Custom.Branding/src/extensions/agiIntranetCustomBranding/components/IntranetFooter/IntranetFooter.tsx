@@ -74,7 +74,7 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
     }
 
     private async getNavigationItems(): Promise<void> {
-        const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${NAVIGATION_LIST}')/items?$filter=(IsActive eq 1 and AvailableInFooter eq 1)`
+        const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${NAVIGATION_LIST}')/items?$filter=(IsActive eq 1 and AvailableInFooter eq 1)&$orderby= NavigationOrder asc`
         await SPService.getItemsByRestApi(url, this.props.spHttpClient).then((data) => {
             //debugger; 
             const navigationItems: INavigationItem[] = data;

@@ -4,6 +4,6 @@ export interface IAgiIntranetGalleryLibraryScriptProps {
   environmentMessage: string;
   hasTeamsContext: boolean;
   userDisplayName: string;
-
+  context:any;
   siteUrl: string;
 }

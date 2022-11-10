@@ -2,19 +2,71 @@ import * as React from 'react';
 import styles from './AgiIntranetGalleryLibraryScript.module.scss';
 import { IAgiIntranetGalleryLibraryScriptProps } from './IAgiIntranetGalleryLibraryScriptProps';
 import { escape } from '@microsoft/sp-lodash-subset';
+import { sp } from '@pnp/sp/presets/all';
+import{IAgiIntranetGalleryLibraryScriptState} from './IAgiIntranetGalleryLibraryScriptState'
 
 require('../css/style.css');
 
-export default class AgiIntranetGalleryLibraryScript extends React.Component<IAgiIntranetGalleryLibraryScriptProps, {}> {
+export default class AgiIntranetGalleryLibraryScript extends React.Component<IAgiIntranetGalleryLibraryScriptProps,IAgiIntranetGalleryLibraryScriptState> {
+  constructor(props:any) {
+    super(props);
+    sp.setup({
+      spfxContext: this.props.context
+    });
+    this.state={
+      page:"",
+      title:"",
+      backTo:'',
+      backUrl:{
+        Url:""
+      }
+      
+    };
+    
+  }
 
-  private backToListing(page:string) {
-    const url=`${this.props.siteUrl}/SitePages/${page}.aspx?env=WebView`;
+  public async componentDidMount(): Promise <void> {
+    await this.getQueryStringValue('page');
+    await this.getText()
+  }
+  private async getText(): Promise <void>{
+    //debugger;
+    console.log("title", this.state.title);
+   //await sp.web.lists.getByTitle('PolicyType').items.get()
+    await sp.web.lists.getByTitle('NavigationConfig').items
+                .select("Id,Title,BackUrl,BackButtonText")
+                .filter(`Title eq '${this.state.title}'`)
+                .get()
+                .then((items:any[]) => {
+                  this.setState({
+                    backTo:items[0].BackButtonText,
+                    backUrl:items[0].BackUrl
+                  }) ; 
+                })
+                .catch((exception:any) => {
+                  console.log("error occured",exception);
+                    throw new Error(exception);
+                });
+
+  }
+
+  private backToListing() {
+    //debugger;
+    const url=`${this.state.backUrl.Url}?env=WebView`;
+    console.log("URL",url);
     location.href = url;
   }
-  private getQueryStringValue(param: string): string {
+  private async getQueryStringValue(param: string):Promise<void> {
+    //debugger;
     const params = new URLSearchParams(window.location.search);
     let value = params.get(param) || '';
-    return value;
+    this.setState({
+      title:value
+    },()=>{
+      console.log("values",this.state.title);
+    });
+
+    return;
   }
 
 
@@ -26,7 +78,7 @@ export default class AgiIntranetGalleryLibraryScript extends React.Component<IAg
       hasTeamsContext,
       userDisplayName
     } = this.props;
-    const page = this.getQueryStringValue('page');
+    //const page = this.getQueryStringValue('page');
 
     return (
       <section className={`${styles.agiIntranetGalleryLibraryScript} ${hasTeamsContext ? styles.teams : ''} galleryBackNavigation`}>
@@ -36,7 +88,7 @@ export default class AgiIntranetGalleryLibraryScript extends React.Component<IAg
               <div className="col-md-12">
                 <ul className="nav">
                   <li className="nav-item" role="presentation">
-                    <a href="javascript:void(0)" onClick={(e) => this.backToListing(page)} className="nav-link">
+                    <a href="javascript:void(0)" onClick={(e) => this.backToListing()} className="nav-link">
                       <i>
                         <svg xmlns="http://www.w3.org/2000/svg" width="23.916" height="23.916" viewBox="0 0 23.916 23.916">
                           <g id="Group_8097" data-name="Group 8097" transform="translate(23.916 0) rotate(90)">
@@ -47,7 +99,7 @@ export default class AgiIntranetGalleryLibraryScript extends React.Component<IAg
                           </g>
                         </svg>
                       </i>
-                      Back
+                      {this.state.backTo}
                     </a>
                   </li>
                 </ul>

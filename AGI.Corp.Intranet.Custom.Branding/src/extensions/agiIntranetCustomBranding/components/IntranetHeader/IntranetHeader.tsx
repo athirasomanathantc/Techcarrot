@@ -270,7 +270,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                 <form action="" className="d-block d-md-flex mt-3 mt-lg-0 order-4 order-md-1 search-bar">
                   <div className="input-group">
                     <input type="text" className="form-control form-control-lg" placeholder="Search Here" id="txtSeachText" onChange={(e) => this.handleSearchChange(e)} />
-                    <a className="input-group-text btn-serach" href={`${this.props.siteUrl}/SitePages/CustomSearch.aspx?q=${this.state.selectedSearchVal}`}><i className="bi bi-search">
+                    <a className="input-group-text btn-serach" href={`${this.props.siteUrl}/SitePages/CustomSearch.aspx?q=${this.state.selectedSearchVal}&env=WebView`}><i className="bi bi-search">
                       <img src={`${this.props.siteUrl}/Assets/images/icon-search.svg`} alt="" /></i></a>
                   </div>
                 </form>

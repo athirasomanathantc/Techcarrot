@@ -35,7 +35,7 @@ export default class AgiCorpIntranemInterim extends React.Component<IAgiCorpIntr
   }
 
   private async fetchData() {
-    debugger;
+   //debugger;
     const page = this.getQueryStringValue('pageID')
     this.setState({
       title:page

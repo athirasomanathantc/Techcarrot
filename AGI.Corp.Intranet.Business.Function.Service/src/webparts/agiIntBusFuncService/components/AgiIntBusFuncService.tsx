@@ -45,7 +45,7 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
   }
 
   private async getCarouselItem(): Promise<void> {
-    debugger;
+    //debugger;
     const catVal = this.getQueryStringValue('categoryId');
     const tempProgramme = `${this.state.lastNavItem}Id eq ${catVal}`;
     const currentListName = this.props.listName;
@@ -60,7 +60,7 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
   }
 
   private fnInitiate() {
-    debugger;
+    //debugger;
     var ourServiceCardCarousel = document.querySelector(
       "#ourServiceCarousel"
     );
@@ -175,7 +175,7 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
 
                     {
                       this.state.contentItems.map((items, i) => {
-                        debugger
+                        //debugger
 
                         const catVal = this.getQueryStringValue('categoryId');
                         let navURL = `${this.props.siteUrl}/SitePages/Articles.aspx?serviceId=${items.ID}&env=WebView`;//items.NavigationUrl.Url;
@@ -198,14 +198,14 @@ export default class AgiIntBusFuncService extends React.Component<IAgiIntBusFunc
 
                           <div className={i == 0 ? "carousel-item active" : "carousel-item"}>
                             <div className="col-md-3 m-2 h-100">
-                              <div className="card  our-services">
-                                <a href={navURL} target={trgt} data-interception="off"  ><img className="w-100 " src={imgVal} /></a>
+                              <div className="card h-100 our-services">
+                                <a href={`${navURL}`} target={trgt} data-interception="off"  ><img className="w-100 " src={imgVal} /></a>
                                 <div className="card-body">
-                                  <a href={navURL} target={trgt} data-interception="off" className='service-link'>
+                                  <a href={`${navURL}`} target={trgt} data-interception="off" className='service-link'>
                                     <h4 className="card-title">{items.Title}</h4>
                                     <p className="card-description mb-4" dangerouslySetInnerHTML={{ __html: items.Description }}></p>
                                   </a>
-                                  <a href={navURL} target={trgt} data-interception="off" className="btn news-read-more mt-auto align-self-end">{items.NavigationText}</a>
+                                  <a href={`${navURL}`} target={trgt} data-interception="off" className="btn news-read-more mt-auto align-self-end">{items.NavigationText}</a>
                                 </div>
                               </div>
                             </div>

@@ -30,7 +30,7 @@ export default class AgiIntranetGalleryLibraryScriptWebPart extends BaseClientSi
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
         userDisplayName: this.context.pageContext.user.displayName,
-
+        context: this.context,
         siteUrl: this.context.pageContext.web.absoluteUrl
       }
     );
