@@ -63,7 +63,7 @@ const EventCard = (props: IEventCard) => {
 
                 </div>
                 <p className={'card-text'}>{item.Description}</p>
-                <a href={`${siteUrl}/SitePages/News/Events/Event Details.aspx?eventID=${item.ID}&tab=${selectedTab}`}
+                <a href={`${siteUrl}/SitePages/News/Events/Event Details.aspx?eventID=${item.ID}&tab=${selectedTab}&env=WebView`}
                     className={'news-read-more mt-auto  align-self-start'} data-interception="off">Read more</a>
             </div>
         </div>
