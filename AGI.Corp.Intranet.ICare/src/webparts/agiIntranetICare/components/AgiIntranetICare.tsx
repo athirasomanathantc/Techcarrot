@@ -311,7 +311,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
     });
   }
   private handleIsAnonymousChange(e: any) {
-    debugger;
+    //debugger;
     const Ia = e.target.checked;
     if (Ia == true) {
       this.setState({
@@ -337,7 +337,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
    
   }
   private checkIsAnonymousChange() {
-    debugger;
+   // debugger;
     const Iac = this.state.iCareIsAnonymous;
     if (Iac == true) {
       
@@ -376,7 +376,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
     });
   }
   private handleRegister() {
-    debugger;
+    //debugger;
 
     const isFormValid = this.validateForm();
     if (!isFormValid) {
@@ -517,7 +517,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
         showErrorPhoneMsg: false
       });
     }
-    debugger
+    //debugger
     isValid = isPhoneValid && isMsgValid && isDeptValid && isJobTitleValid;
     if (!isValid) {
       const _error = errors.length > 1 ? 'Mandatory fields' : 'Mandatory field'
@@ -546,7 +546,7 @@ export default class AgiIntranetICare extends React.Component<IAgiIntranetICareP
   private validatePhone(phone: string) {
     const numbers =  /^\d+$/;
     const errorsNew = [];
-    debugger
+    //debugger
     if (!(numbers.test(phone))) {
        errorsNew.push("Phone Number format is not correct");
      }
