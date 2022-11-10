@@ -45,7 +45,7 @@ export default class AgiIntBusFuncMedia extends React.Component<IAgiIntBusFuncMe
   }
 
   private async getCarouselItem(): Promise<void> {
-    debugger;
+   // debugger;
     const catVal = this.getQueryStringValue('categoryId');
     const tempProgramme = `${this.state.lastNavItem}Id eq ${catVal}`;
     const currentListName = this.props.listName;
@@ -194,7 +194,7 @@ export default class AgiIntBusFuncMedia extends React.Component<IAgiIntBusFuncMe
                   <div className="carousel-inner w-100">
                     {
                       this.state.contentItems.map((items, i) => {
-                        debugger;
+                       // debugger;
                         let tempVal: any = ''; let tempNav;
                         const imgVal = this.getImageUrl(items.MediaIcon);
                         const isGallery = items.SitePages.NavigationComponent.includes("Gallery");
@@ -217,7 +217,7 @@ export default class AgiIntBusFuncMedia extends React.Component<IAgiIntBusFuncMe
                             <div className="card-body  d-flex flex-column">
                               <h4 className="card-title">{items.Title}</h4>
                               <p className="card-description" dangerouslySetInnerHTML={{ __html: items.Description }}></p>
-                              <a href={tempNav} className="btn news-read-more  align-self-center">{items.NavigationText}</a>
+                              <a href={`${tempNav}&env=WebView`} className="btn news-read-more  align-self-center">{items.NavigationText}</a>
                             </div>
                             {/* </div> */}
                           </div>
