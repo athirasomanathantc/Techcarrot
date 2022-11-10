@@ -9,7 +9,7 @@ import { TestConstants } from '../../common/Constants';
 import { ISearchResultsTemplateContext } from '../../models/common/ITemplateContext';
 
 // Need a root class to do not conflict with PnP Modern Search Styles.
-const rootCssClassName = "pnp-modern-search";
+const rootCssClassName = "pnp-modern-search container";
 const TEMPLATE_ID_PREFIX = "pnp-template_";
 
 export class TemplateRenderer extends React.Component<ITemplateRendererProps, ITemplateRendererState> {
