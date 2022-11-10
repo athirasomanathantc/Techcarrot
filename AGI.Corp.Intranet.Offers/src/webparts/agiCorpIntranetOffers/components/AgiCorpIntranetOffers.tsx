@@ -300,22 +300,22 @@ export default class AgiCorpIntranetOffers extends React.Component<IAgiCorpIntra
                         return (
                           <div className={'col-lg-3 mb-4 d-flex align-items-stretch'}>
                             <div className={'card news-card'}>
-                              <a href={`${this.props.siteURL}/SitePages/Rewards/Reward Details.aspx?rewardID=${item.ID}`}>
+                              <a href={`${this.props.siteURL}/SitePages/Rewards/Reward Details.aspx?rewardID=${item.ID}&env=WebView`}>
                                 <img src={imageJSON.serverRelativeUrl} className={'card-img-top'} alt="Card Image" />
                               </a>
 
                               <div className={'card-body d-flex flex-column'}>
                                 <div className={'mb-3 card-content-header'}>
-                                  <a href={`${this.props.siteURL}/SitePages/Rewards/Reward Details.aspx?rewardID=${item.ID}`}>
+                                  <a href={`${this.props.siteURL}/SitePages/Rewards/Reward Details.aspx?rewardID=${item.ID}&env=WebView`}>
                                     <h5 className={'card-title'}>{item.Title}</h5>
                                   </a>
                                 </div>
-                                <a href={`${this.props.siteURL}/SitePages/Rewards/Reward Details.aspx?rewardID=${item.ID}`}>
+                                <a href={`${this.props.siteURL}/SitePages/Rewards/Reward Details.aspx?rewardID=${item.ID}&env=WebView`}>
 
                                   <p className={'card-text'}>{item.Description}</p>
                                 </a>
 
-                                <a href={`${this.props.siteURL}/SitePages/Rewards/Reward Details.aspx?rewardID=${item.ID}`} className={'read-more mt-auto align-self-start'}>Read more</a>
+                                <a href={`${this.props.siteURL}/SitePages/Rewards/Reward Details.aspx?rewardID=${item.ID}&env=WebView`} className={'read-more mt-auto align-self-start'}>Read more</a>
                                 {/* <!--<a href='{'} className={'btn read-more mt-auto align-self-start'}>View Full Article</a>--> */}
                               </div>
                             </div>
