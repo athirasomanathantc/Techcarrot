@@ -58,9 +58,9 @@ export const Policies = (props: IPolicies): JSX.Element => {
                 <div className="tab-pane fade show active" id="general-tab-content" role="tabpanel" aria-labelledby="general-tab">
                     {props.policies.map((policy: IPolicy) => {
                         return (<>
-                            <div className="policy-content-wrapper col-12 mt-3">
+                            <div className="policy-content-wrapper col-12">
                                 <div className="row">
-                                    <div className="policy-content col-lg-9">
+                                    <div className="policy-content col-lg-12">
                                         <h4 className="title">{policy.Title}</h4>
                                         <p className="description">{ReactHtmlParser(policy.PolicyDescription)}</p>
                                     </div>
