@@ -197,6 +197,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
   }
 
   private handleSearchChange(e: any) {
+    e.preventDefault();
     const txtVal = e.target.value;
     this.setState({
       selectedSearchVal: txtVal
@@ -240,6 +241,13 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
     window.location.href = `${this.props.siteUrl}?env=WebView`;
   }
 
+  private handleKeyPress = (event) => {
+    event.preventDefault();
+    if (event.key === 'Enter') {
+      window.location.href = `${this.props.siteUrl}/SitePages/CustomSearch.aspx?q=${this.state.selectedSearchVal}&env=WebView`
+    }
+  }
+
   private renderHeader(): JSX.Element {
 
     const companyContentItems = this.state.navigationItems.filter(item => item.Parent === TEXT_COMPANY);
@@ -269,7 +277,7 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
 
                 <form action="" className="d-block d-md-flex mt-3 mt-lg-0 order-4 order-md-1 search-bar">
                   <div className="input-group">
-                    <input type="text" className="form-control form-control-lg" placeholder="Search Here" id="txtSeachText" onChange={(e) => this.handleSearchChange(e)} />
+                    <input type="text" className="form-control form-control-lg" placeholder="Search Here" id="txtSeachText" onChange={(e) => this.handleSearchChange(e)} onKeyPress={this.handleKeyPress} />
                     <a className="input-group-text btn-serach" href={`${this.props.siteUrl}/SitePages/CustomSearch.aspx?q=${this.state.selectedSearchVal}&env=WebView`}><i className="bi bi-search">
                       <img src={`${this.props.siteUrl}/Assets/images/icon-search.svg`} alt="" /></i></a>
                   </div>
