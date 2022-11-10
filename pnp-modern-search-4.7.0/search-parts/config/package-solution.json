@@ -7,43 +7,6 @@
         "includeClientSideAssets": true,
         "skipFeatureDeployment": true,
         "isDomainIsolated": false,
-        "webApiPermissionRequests": [{
-                "resource": "Microsoft Graph",
-                "scope": "User.Read"
-            },
-            {
-                "resource": "Microsoft Graph",
-                "scope": "Files.Read.All"
-            },
-            {
-                "resource": "Microsoft Graph",
-                "scope": "People.Read"
-            },
-            {
-                "resource": "Microsoft Graph",
-                "scope": "Contacts.Read"
-            },
-            {
-                "resource": "Microsoft Graph",
-                "scope": "User.Read.All"
-            },
-            {
-                "resource": "Microsoft Graph",
-                "scope": "Mail.Read"
-            },
-            {
-                "resource": "Microsoft Graph",
-                "scope": "Calendars.Read"
-            },
-            {
-                "resource": "Microsoft Graph",
-                "scope": "Sites.Read.All"
-            },
-            {
-                "resource": "Microsoft Graph",
-                "scope": "ExternalItem.Read.All"
-            }
-        ],
         "metadata": {
             "shortDescription": {
                 "default": "Modern search web parts"
