@@ -95,7 +95,7 @@ export default class Notification extends React.Component<INotificationProps, IN
                 break;
             default: break;
         }
-        window.location.href = `${this.props.context.pageContext.web.absoluteUrl}/SitePages/News/${detailPath}${notification.Id}`;
+        window.location.href = `${this.props.context.pageContext.web.absoluteUrl}/SitePages/News/${detailPath}${notification.Id}&env=WebView`;
     }
 
     public render(): React.ReactElement<INotificationProps> {

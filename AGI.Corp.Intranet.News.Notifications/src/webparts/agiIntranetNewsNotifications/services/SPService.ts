@@ -1,7 +1,7 @@
 import { sp } from "@pnp/sp";
 import { forEach } from "lodash";
 import * as moment from "moment";
-import { INotificationProps } from "../components/notifications/INotificationProps";
+import { INotificationProps } from '../components/Notifications/INotificationProps';
 import { INotification } from "../models/INotification";
 import { INotificationListItem } from "../models/INotificationListItem";
 import Common from "./Common";

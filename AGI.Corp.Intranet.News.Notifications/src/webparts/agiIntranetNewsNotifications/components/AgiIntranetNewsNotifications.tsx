@@ -3,7 +3,7 @@ import { IAgiIntranetNewsNotificationsProps } from './IAgiIntranetNewsNotificati
 import { IAgiIntranetNewsNotificationsState } from './IAgiIntranetNewsNotificationsState';
 import SPService from '../services/SPService';
 import ErrorBoundary from './exception/ErrorBoundary';
-import Notification from './notifications/Notification';
+import Notification from './Notifications/Notification';
 
 export default class AgiIntranetNewsNotifications extends React.Component<IAgiIntranetNewsNotificationsProps, IAgiIntranetNewsNotificationsState> {
   private _spServices: SPService;
