@@ -370,7 +370,7 @@ export default class AgiIntranetAnnouncementsListing extends React.Component<IAg
                 </section>
               </article>
               <div className="col-12">
-                <div className="d-flex justify-content-center justify-content-md-end">
+                <div className="d-flex justify-content-end">
                   <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
                     <Paging currentPage={this.state.currentPage}
                       totalItems={this.state.filteredAnnouncementData.length}
