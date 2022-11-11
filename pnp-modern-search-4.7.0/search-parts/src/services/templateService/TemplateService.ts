@@ -560,10 +560,10 @@ export class TemplateService implements ITemplateService {
         });
 
         this.Handlebars.registerHelper("getTitle", (title: string, functionID: string, functionTitle: string, businessID: string, businessTitle: string,) => {
-            if (functionID && functionTitle && title.indexOf('DisplayForm.aspx')) {
+            if (functionID && functionTitle && title.indexOf('DispForm.aspx') !== -1) {
                 return new this.Handlebars.SafeString(functionTitle);
             }
-            else if (businessID && businessTitle && title.indexOf('DisplayForm.aspx')) {
+            else if (businessID && businessTitle && title.indexOf('DispForm.aspx') !== -1) {
                 return new this.Handlebars.SafeString(businessTitle);
             }
             else {
