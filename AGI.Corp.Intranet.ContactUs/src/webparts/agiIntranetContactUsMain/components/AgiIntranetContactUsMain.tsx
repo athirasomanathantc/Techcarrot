@@ -314,7 +314,7 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
 
         </div>
         <div className="section map-section">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3608.0795559534245!2d55.31411281499079!3d25.26790908386334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f5cca59d8bc5b%3A0xf1f6b7c9d88f252c!2sAl%20Ghurair%20Investment%20LLC!5e0!3m2!1sen!2sae!4v1659355607157!5m2!1sen!2sae" width="100%" height="650" ></iframe>
+          <iframe src={this.state.contactUsGoogleMapsItem.EmbedUrl} width="100%" height="650" ></iframe>
         </div></div>
     );
   }
