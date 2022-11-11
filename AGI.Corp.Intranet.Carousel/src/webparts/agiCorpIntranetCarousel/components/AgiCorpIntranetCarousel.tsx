@@ -114,7 +114,7 @@ export default class AgiCorpIntranetCarousel extends React.Component<IAgiCorpInt
     return (
       <div className="business-page-header">
         <div className="banner-container">
-          <div id="businessBannerCarousel" className="carousel slide" data-bs-interval ="false">
+          <div id="businessBannerCarousel" className="carousel slide" >
             <div className="carousel-inner">
               {
 
