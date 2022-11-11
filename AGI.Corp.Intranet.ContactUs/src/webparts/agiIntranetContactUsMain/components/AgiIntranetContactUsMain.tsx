@@ -5,7 +5,7 @@ import { sp } from '@pnp/sp/presets/all';
 import { IAgiIntranetContactUsMainState } from './IAgiIntranetContactUsMainState';
 import { IContactUsTalk2UsItem } from '../models/IContactUsTalk2UsItem';
 import { IContactUsGoogleMapsItem } from '../models/IContactUsGoogleMapsItem';
-import { LIST_CONTACTUS_REGISTRATION, LIST_CONTACTUS_TALK2US, NULL_CONTACTUS_TALK2US_ITEM, LIST_CONTACTUS_GOOGLEMAPS, NULL_CONTACTUS_GOOGLEMAPS_ITEM, TEXT_REGISTRATION_SUCCESS, LIST_TALK2US_RIGHT, LIST_TALK2US_LEFT, LIST_CONTACTUS_MAIN, NULL_CONTACTUS_MAIN_ITEM, LIST_CONTACTUS_TITLE } from '../common/constants';
+import { LIST_CONTACTUS_REGISTRATION, LIST_CONTACTUS_TALK2US, NULL_CONTACTUS_TALK2US_ITEM, LIST_CONTACTUS_GOOGLEMAPS, NULL_CONTACTUS_GOOGLEMAPS_ITEM, TEXT_REGISTRATION_SUCCESS, LIST_TALK2US_RIGHT, LIST_TALK2US_LEFT, LIST_CONTACTUS_MAIN, NULL_CONTACTUS_MAIN_ITEM, LIST_CONTACTUS_TITLE, LIST_TALK2US_FOOTER } from '../common/constants';
 import { IContactUsMainItem } from '../models/IContactUsMainItem';
 import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import ReactHtmlParser from 'react-html-parser';
@@ -107,15 +107,15 @@ export default class AgiIntranetContactUsMain extends React.Component<IAgiIntran
           contactUsTitle: items[0]?.Header
         });
       });
-}
-private async getTitleTalkToUs(): Promise<void> {
-  sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Talk To Us Title'")
-    .get().then((items: any) => {
-      this.setState({
-        talkToUsTitle: items[0]?.Header
+  }
+  private async getTitleTalkToUs(): Promise<void> {
+    sp.web.lists.getByTitle('TitleConfig').items.filter("Title eq 'Talk To Us Title'")
+      .get().then((items: any) => {
+        this.setState({
+          talkToUsTitle: items[0]?.Header
+        });
       });
-    });
-}
+  }
 
   private async getTalk2UsItem(): Promise<void> {
     sp.web.lists.getByTitle(LIST_CONTACTUS_TALK2US).items.get().then((items: IContactUsTalk2UsItem[]) => {
@@ -166,6 +166,8 @@ private async getTitleTalkToUs(): Promise<void> {
 
     const headingContent = this.state.contactUsTalk2UsItems.filter(item => item.Category == "Heading");
     const rightContentItems = this.state.contactUsTalk2UsItems.filter(item => item.Category == LIST_TALK2US_RIGHT);
+
+    let footerText: any = this.state.contactUsTalk2UsItems.filter(item => item.Category == LIST_TALK2US_FOOTER);
 
     return (
       <div>
@@ -220,7 +222,7 @@ private async getTitleTalkToUs(): Promise<void> {
                               itemGroup.map((item: IContactUsTalk2UsItem) => {
                                 let icon = JSON.parse(item.Icon);
                                 icon = `${icon?.serverUrl}${icon?.serverRelativeUrl}`;
-                      
+
                                 const tempTitle: any = item.Title;
                                 return (
                                   <div className="col-lg-6 d-flex align-items-center">
@@ -302,7 +304,9 @@ private async getTitleTalkToUs(): Promise<void> {
                   </form>
                 </div>
                 <div className="row">
-                  <p className="text-center">We Are Expanding Our Reach Beyond Our Presence In 20 Countries Across The Middle East, Africa And Asia. But You Can Find Us With Ease.</p>
+                  <p className="text-center">{footerText.map((footerTextItem) => {
+                    return (<>{ReactHtmlParser(footerTextItem.Detail)}</>)
+                  })}</p>
                 </div>
               </div>
             </div>
@@ -310,7 +314,7 @@ private async getTitleTalkToUs(): Promise<void> {
 
         </div>
         <div className="section map-section">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3608.0795559534245!2d55.31411281499079!3d25.26790908386334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f5cca59d8bc5b%3A0xf1f6b7c9d88f252c!2sAl%20Ghurair%20Investment%20LLC!5e0!3m2!1sen!2sae!4v1659355607157!5m2!1sen!2sae" width="100%" height="650" ></iframe>
+          <iframe src={this.state.contactUsGoogleMapsItem.EmbedUrl} width="100%" height="650" ></iframe>
         </div></div>
     );
   }

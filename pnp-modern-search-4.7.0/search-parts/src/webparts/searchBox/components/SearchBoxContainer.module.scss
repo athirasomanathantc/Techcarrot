@@ -1,11 +1,13 @@
 .searchBox {
 
   position: relative;
+  margin-top: 40px;
 
   .searchBoxWrapper {
       display: flex;
       border: 1px solid #c2c2c2;
-
+      padding: 0px;
+      
       &:hover {
         border-color: #272727;
       }

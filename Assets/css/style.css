@@ -884,6 +884,7 @@ nav.navbar.topnav-menu {
 
 .invalidTxt {
     font-family: 'Gill Sans';
+    text-align: center;
 }
 
 .card-body {
@@ -1126,7 +1127,8 @@ nav.navbar.topnav-menu {
 @media (max-width: 767px) {
 
     .home-page .app-item {
-        flex-direction: column;
+        /* flex-direction: column;*/
+        flex-direction: row;
     }
 }
 
@@ -2077,7 +2079,7 @@ input[type="radio"]:checked+label::after {
 
     .top-footer .show-less.business,
     .top-footer .show-less.functions {
-        height: 10rem;
+        height: 11.5rem;
         overflow: hidden;
     }
 
@@ -2092,7 +2094,7 @@ input[type="radio"]:checked+label::after {
 
 @media (min-width: 768px) and (max-width:1366px) {
     .top-footer .show-less {
-        height: 10.5rem;
+        height: 10rem;
         overflow: hidden;
     }
 
@@ -2104,6 +2106,15 @@ input[type="radio"]:checked+label::after {
     .top-footer .show-less.business,
     .top-footer .show-less.functions {
         height: 11.5rem;
+        overflow: hidden;
+    }
+}
+
+@media (min-width: 1600px) {
+
+    .top-footer .show-less.business,
+    .top-footer .show-less.functions {
+        height: 12.5rem;
         overflow: hidden;
     }
 }
@@ -2197,8 +2208,7 @@ input[type="radio"]:checked+label::after {
 
 .resize {
     margin-top: 0.3rem;
-    font-size: 1
-    .25rem;
+    font-size: 1 .25rem;
 }
 
 /*RESIZESCREEN ANIMATION*/
@@ -4415,7 +4425,9 @@ form.newsletter-form #emailErrorMsg {
     margin: 20px 20px;
 }
 
-.contact-section-main p {
+.contact-section-main p,
+.contact-section-main p span,
+.contact-section-main p div {
     font-family: Gill Sans;
     font-size: 20px;
     color: #444444;
@@ -4882,7 +4894,7 @@ ul.pagination {
     background: #FFFFFF 0% 0% no-repeat padding-box;
     box-shadow: 0px 15px 12px #00000029;
     border-radius: 8px;
-    padding: 50px 30px;
+    padding: 40px 20px;
     position: absolute;
     opacity: 0;
     transition: all 300ms ease-in-out;
@@ -5185,7 +5197,7 @@ ul.pagination {
 }
 
 .tab-header .filter-section .form-select select {
-    width: calc(100% - 45px) !important;
+    width: calc(100% - 45px);
 }
 
 .home-page .calendar .eventDetail {
@@ -5486,10 +5498,10 @@ ul.pagination {
         font-size: 14px;
     }
 
-    .home-page .app-item .app-item-icon {
+    /*.home-page .app-item .app-item-icon {
         margin-left: auto;
         margin-right: auto;
-    }
+    }*/
 
     .header-wrapper.slim-header .main-nav {
         height: 0px;
@@ -5684,7 +5696,7 @@ ul.pagination {
     }
 
     .featured-section .title-wrapper {
-        padding: 0px 20px;
+        padding: 0px 0px;
     }
 }
 
@@ -5840,3 +5852,58 @@ ul.pagination {
 }
 
 /*popup custom checkbox style end*/
+
+/*Mobile filter alignment fix*/
+@media (max-width: 767px) {
+    .featured-section h5.not-found {
+        margin: 0 auto;
+        font-family: 'Gill Sans';
+        text-align: center;
+        font-size: 14px;
+        text-transform: uppercase;
+
+
+
+    }
+
+
+
+    .tab-header .filter-section .form-select select {
+        width: 100% !important;
+        background-color: #eee;
+        padding: 10px;
+    }
+
+    .main-header-section .filter-section .form-select select {
+        background-color: #eee;
+    }
+
+    .filter-section .form-select {
+        margin-top: 0px;
+    }
+
+    .mobileTab select#myTab {
+        padding: 15px 0px;
+    }
+
+
+
+}
+
+/*  home page app section fixes*/
+@media (max-width: 991px) {
+    .home-page .app-item .app-item-icon {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .home-page .app-item {
+        flex-direction: column;
+    }
+
+    .my-app .app-wrapper {
+        height: auto;
+    }
+
+
+}

@@ -46,15 +46,15 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
   }
 
   public async componentDidMount(): Promise<void> {
-
-
     Promise.all([
       await this.getUserDetails(),
       await this.getNavigationItems(),
       await this.getSocialLinkItems(),
       await this.getConfigItems()
     ]).then(() => {
+      const query = this.getQueryStringValue('q');
       this.setState({
+        selectedSearchVal: query,
         headerLoaded: true
       })
     })
@@ -75,6 +75,12 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
       });
     }
 
+  }
+
+  private getQueryStringValue(param: string): string {
+    const params = new URLSearchParams(window.location.search);
+    let value = params.get(param) || '';
+    return value;
   }
 
   private async getNavigationItems(): Promise<void> {
@@ -196,12 +202,20 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
     element.remove();
   }
 
-  private handleSearchChange(e: any) {
-    const txtVal = e.target.value;
-    this.setState({
-      selectedSearchVal: txtVal
-    });
+  private handleKeyPress(e: any) {
+    if (e.key === 'Enter') {
+      window.location.href = `${this.props.siteUrl}/SitePages/CustomSearch.aspx?q=${this.state.selectedSearchVal}&env=WebView`;
+    }
   }
+
+  private handleSearchChange(e: any) {
+    this.setState({ selectedSearchVal: e.target.value })
+  }
+
+  private handleSubmit(e) {
+    e.preventDefault();
+  }
+
 
   private handleSearchResults(e: any) {
     try {
@@ -267,9 +281,9 @@ export default class IntranetHeader extends React.Component<IIntranetHeaderProps
                   </a>
                 </div>
 
-                <form action="" className="d-block d-md-flex mt-3 mt-lg-0 order-4 order-md-1 search-bar">
+                <form onSubmit={this.handleSubmit} action="" className="d-block d-md-flex mt-3 mt-lg-0 order-4 order-md-1 search-bar">
                   <div className="input-group">
-                    <input type="text" className="form-control form-control-lg" placeholder="Search Here" id="txtSeachText" onChange={(e) => this.handleSearchChange(e)} />
+                    <input type="text" className="form-control form-control-lg" placeholder="Search Here" id="txtSeachText" onKeyPress={(e) => this.handleKeyPress(e)} onChange={(e) => this.handleSearchChange(e)} value={this.state.selectedSearchVal} />
                     <a className="input-group-text btn-serach" href={`${this.props.siteUrl}/SitePages/CustomSearch.aspx?q=${this.state.selectedSearchVal}&env=WebView`}><i className="bi bi-search">
                       <img src={`${this.props.siteUrl}/Assets/images/icon-search.svg`} alt="" /></i></a>
                   </div>

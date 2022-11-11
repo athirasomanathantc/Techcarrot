@@ -41,7 +41,7 @@ export default class SearchBoxContainer extends React.Component<ISearchBoxContai
         let searchBoxRef = React.createRef<ISearchBox>();
 
         return (
-            <div className={styles.searchBoxWrapper}>
+            <div className={`${styles.searchBoxWrapper} container`}>
                 <SearchBox
                     componentRef={searchBoxRef}
                     placeholder={this.props.placeholderText ? this.props.placeholderText : webPartStrings.SearchBox.DefaultPlaceholder}
