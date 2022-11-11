@@ -42,10 +42,12 @@ export class SPService {
     }
 
     public async getAnnouncements(): Promise<IAnnouncement[]> {
-        return await sp.web.lists.getByTitle('Announcements').items.select("ID,Title,Description,AnnouncementThumbnail,PublishedDate")
+        return await sp.web.lists.getByTitle('Announcements').items.select("ID,Title,Description,AnnouncementThumbnail,PublishedDate,Featured")
             .orderBy('PublishedDate', false)
+            .filter('Featured eq 1')
             .top(this._props.topAnnouncements)()
             .then((items: IAnnouncement[]) => {
+                //console.log("announcements",items);
                 return items;
             })
             .catch((exception) => {
@@ -228,7 +230,7 @@ export class SPService {
     }
 
     private async updateResponses(email: string): Promise<any> {
-        debugger;
+        //debugger;
         const listName = LIST_SURVEY;
         const siteRelativePath = this._props.context.pageContext.web.serverRelativeUrl;
         const listUri = `${siteRelativePath}/Lists/${LIST_PATH_SURVEY}`;
@@ -240,8 +242,8 @@ export class SPService {
             list
                 .items.filter(`FileDirRef eq '${listUri}/${email}'`)
                 .get().then((data) => {
-                    console.log('responses');
-                    console.log(data);
+                    //console.log('responses');
+                    //console.log(data);
                     //batch update
                     let createBatchRequest = sp.web.createBatch();
                     data.forEach((item) => {
@@ -363,7 +365,7 @@ export class SPService {
         // Get list's root folders and their items' props
         return await sp.web.lists.getByTitle(listName).items.filter(`FSObjType eq 0`).orderBy('ID', false).top(length).get()
             .then((folders: IQuizResponse[]) => {
-                console.log("folder items", folders)
+               //console.log("folder items", folders)
                 return folders;
                 //
             })
@@ -383,6 +385,29 @@ export class SPService {
 
         })
         return scores;
+
+    }
+
+    public async getMessage(score: any, type: string): Promise<any> {
+        //debugger;
+        if (type == "score") {
+            return await sp.web.lists.getByTitle('ScoreMessage')
+                .select('Message').items
+                .filter(`MinValue le ${score} and MaxValue ge ${score} and MessageType eq 'Score message'`).get()
+                .then((value) => {
+                    //console.log("message", value[0].Message);
+                    return value[0].Message;
+                })
+        }else if(type=="top"){
+            return await sp.web.lists.getByTitle('ScoreMessage')
+                .select('Message,MessageType').items
+                .filter(`MessageType eq 'Top message' or MessageType eq 'Score text'`).get()
+                .then((value) => {
+                    //console.log("top message",value);
+                     return value;
+                })
+
+        }
 
     }
 

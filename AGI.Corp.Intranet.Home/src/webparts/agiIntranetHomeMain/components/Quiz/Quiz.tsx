@@ -4,13 +4,14 @@ import { IConfigItem } from "../../models/IConfigItem";
 import { IQuizComponent } from "../../models/IQuizComponent";
 import { IQuizOption } from "../../models/IQuizOptions";
 import { IQuizQuestion } from "../../models/IQuizQuestion ";
+import{IQuizMessage} from '../../models/IQuizMessage';
 import SPService from "../../services/SPService";
 
 let siteUrl: string = '';
 let initialQuestion = null;
 
 export const Quiz = (props: IQuizComponent) => {
-    console.log("entered quiz");
+   // console.log("entered quiz");
 
     const [error, setError] = useState(null);
     const [quiz, setQuiz] = useState({
@@ -23,6 +24,9 @@ export const Quiz = (props: IQuizComponent) => {
         responses: [],
         scores: 0,
         submitted: false,
+        topMessage:"",
+        scoreText:"",
+        message:""
     });
     const [showResult, setShowResult] = useState(false);
     const [retest, setRetest] = useState(false);
@@ -48,6 +52,17 @@ export const Quiz = (props: IQuizComponent) => {
             let submit: boolean = await _spService.checkSubmitted(userEmail);
             let questions: IQuizQuestion[] = await _spService.getQuizQuestions();
             let options: IQuizOption[] = await _spService.getQuizOptions();
+            let message:IQuizMessage[]=await _spService.getMessage(0,"top");
+            message.map((message:IQuizMessage)=>{
+                if(message.MessageType=='Top message')
+                {
+                    quiz.topMessage=message.Message;
+                }else{
+                    quiz.scoreText=message.Message;
+
+                }
+            })
+
 
             if (questions.length > 0) {
                 initialQuestion = {
@@ -73,7 +88,7 @@ export const Quiz = (props: IQuizComponent) => {
                 setQuiz(initialQuestion);
                 
 
-                console.log('reset', retest);
+                //console.log('reset', retest);
             }
 
         }
@@ -84,25 +99,30 @@ export const Quiz = (props: IQuizComponent) => {
 
     useEffect(() => {
         const getQuizCalc = async () => {
+            debugger;
             const { options, submitted, } = quiz;
 
             if (submitted) {
 
                 let givenAns = await _spService.getData(userEmail, quiz.questions.length);
-                console.log('Given ans', givenAns);
+                //console.log('Given ans', givenAns);
                 //debugger;
                 let score = await _spService.CalculateScore(givenAns, quiz.options);
 
-                console.log("score after reload", score);
+               let scoremessage= await _spService.getMessage(score,"score");
+               //console.log("scoremessgae",scoremessage);
+
+                //console.log("score after reload", score);
                 setQuiz({
                     ...quiz,
                     scores: score,
-                    submitted: submitted
+                    submitted: submitted,
+                    message: scoremessage
                 });
                 if (!retest && submitted)
                     setShowResult(true);
             }
-            console.log('submitted', quiz.submitted);
+            //console.log('submitted', quiz.submitted);
 
         }
         getQuizCalc().catch((error) => {
@@ -122,7 +142,7 @@ export const Quiz = (props: IQuizComponent) => {
         quiz.responses.map((item) => {
 
             if (item.QuestionId == quiz.questions[index].Id) {
-                console.log('Response', item)
+                //console.log('Response', item)
                 if (item.OptionId != '') {
 
 
@@ -152,7 +172,7 @@ export const Quiz = (props: IQuizComponent) => {
         quiz.responses.map((item) => {
 
             if (item.QuestionId == quiz.questions[index].Id && item.OptionId != '') {
-                console.log('Response', item)
+                //console.log('Response', item)
 
                 setNext(true);
 
@@ -195,7 +215,7 @@ export const Quiz = (props: IQuizComponent) => {
     const onSubmit = async () => {
         // e.preventDefault();
         let score = await _spService.CalculateScore(quiz.responses, quiz.options);
-        // debugger;
+        debugger;
         // quiz.responses.map((response) => {
         //     const ans: IQuizOption[] = quiz.options.filter((option: IQuizOption) => {
         //         if (option.Question.Id === response.QuestionId && option.CorrectOption == true) {
@@ -208,10 +228,13 @@ export const Quiz = (props: IQuizComponent) => {
         //     }
 
         // })
-        setQuiz({
-            ...quiz,
-            scores: score
-        })
+        const scoremessage= await _spService.getMessage(score,"score");
+        //.log("scoremessgae",scoremessage);
+        // setQuiz({
+        //     ...quiz,
+        //     scores: score,
+        //     message: scoremessage
+        // })
         // console.log('score:', quiz.scores);
 
         // console.log('quiz', quiz);
@@ -221,7 +244,8 @@ export const Quiz = (props: IQuizComponent) => {
             setQuiz({
                 ...quiz,
                 submitted: true,
-                scores: score
+                scores: score,
+                message:scoremessage
             });
             setShowResult(true);
             setRetest(false);
@@ -296,8 +320,10 @@ export const Quiz = (props: IQuizComponent) => {
 
                                     {showResult && <div id="success">
                                         <div>
-                                            <h4>You have submitted your response!</h4>
-                                            <h3>Your score is: {quiz.scores}/{quiz.responses.length}</h3>
+                                            <h4>{quiz.topMessage}</h4>
+                                            <h3>{quiz.scoreText} {quiz.scores}/{quiz.responses.length}</h3>
+                                            <h3>{quiz.message}</h3>
+
                                         </div>
                                     </div>}
 

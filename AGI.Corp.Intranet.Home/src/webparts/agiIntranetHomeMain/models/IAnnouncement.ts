@@ -5,4 +5,5 @@ export interface IAnnouncement {
     Description: string;
     AnnouncementThumbnail: string;
     PublishedDate: Date;
+    Featured:boolean;
 }
