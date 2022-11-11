@@ -45,7 +45,7 @@ export const Rewards = (props: IRewardsComponent) => {
     return (<>
         {rewardsCarousel.length > 0 && !configItem?.Hide && <div className="col-xs-12 col-sm-6 col-xl-6   employee-offer-section mb-4 mb-md-0">
 
-            <div className="card h-100">
+            <div className="card">
                 <div data-bs-target="#employeeOffer" data-bs-toggle="collapse">
                     <div className="card-header d-flex align-items-center justify-content-between" >
                         <h4 className="card-title mb-0">{configItem?.Detail}</h4>

@@ -60,7 +60,7 @@ export const SocialMedia = (props: ISocialMediaComponent) => {
 
     return (<>
         {!configItem?.Hide && <div className="col-sm-6 col-xl-6  social-media-section mb-4 mb-md-0">
-            <div className="card h-100">
+            <div className="card">
                 <div data-bs-target="#socialOffer" data-bs-toggle="collapse">
                     <div className="card-header d-flex align-items-center justify-content-between" >
                         <h4 className="card-title mb-0">{configItem?.Detail}</h4>
