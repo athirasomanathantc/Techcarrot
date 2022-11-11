@@ -40,6 +40,7 @@ export const LIST_CONTACTUS_REGISTRATION = 'ContactUs';
 
 export const LIST_TALK2US_LEFT = 'Left';
 export const LIST_TALK2US_RIGHT = 'Right';
+export const LIST_TALK2US_FOOTER = 'Footer';
 
 export const TEXT_IFRAME_URL = "https://maps.google.com/maps?hl=en&amp;q=";
 
