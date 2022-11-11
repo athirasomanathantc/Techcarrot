@@ -1,42 +1,40 @@
 <content id="data-content">
 
     <style>
-
-       /* Insert your CSS overrides here */
-       .example-themePrimary a {
-            color: {{@root.theme.palette.themePrimary}};
+        /* Insert your CSS overrides here */
+        
+        .example-themePrimary a {
+            color: {
+                {
+                    @root.theme.palette.themePrimary
+                }
+            }
+            ;
         }
-
-        .icon {
-            width: 20px;
-            height: 16px;
+        
+        {
+            {
+                #unless @root.properties.layoutProperties.showItemThumbnail
+            }
         }
-
-        ul.template--custom {
-            list-style: none;
-            padding-left: 5px;
+        
+        .template--listItem--result {
+            flex-basis: 100%!important;
         }
-
-        ul.template--custom li {
-            display: flex;
-            padding: 8px;
+        
+        {
+            {
+                /unless
+            }
         }
-
-
     </style>
 
     <div class="template">
 
         {{#if @root.properties.showSelectedFilters}}
-            <pnp-selectedfilters
-                data-filters="{{JSONstringify filters.selectedFilters 2}}"
-                data-filters-configuration="{{JSONstringify filters.filtersConfiguration 2}}"
-                data-instance-id="{{filters.instanceId}}"
-                data-operator="{{filters.filterOperator}}"
-                data-theme-variant="{{JSONstringify @root.theme}}"
-            ></pnp-selectedfilters>
+        <pnp-selectedfilters data-filters="{{JSONstringify filters.selectedFilters 2}}" data-filters-configuration="{{JSONstringify filters.filtersConfiguration 2}}" data-instance-id="{{filters.instanceId}}" data-operator="{{filters.filterOperator}}" data-theme-variant="{{JSONstringify @root.theme}}">
+        </pnp-selectedfilters>
         {{/if}}
-
         <div class="template--header">
             {{#if @root.properties.showResultsCount}}
                 <div class="template--resultCount">
@@ -45,85 +43,140 @@
             {{/if}}
 
             <div class="template--sort">
-                <pnp-sortfield
-                    data-fields="{{JSONstringify @root.properties.dataSourceProperties.sortList}}"
-                    data-default-selected-field="{{sort.selectedSortFieldName}}"
+                <pnp-sortfield 
+                    data-fields="{{JSONstringify @root.properties.dataSourceProperties.sortList}}" 
+                    data-default-selected-field="{{sort.selectedSortFieldName}}" 
                     data-default-direction="{{sort.selectedSortDirection}}"
                     data-theme-variant="{{JSONstringify @root.theme}}">
-                </pnp-sortfield>
+                </pnp-sortfield>    
             </div>
         </div>
-
-        <ul class="template--custom">
+        {{#if @root.data.promotedResults}}
+        <ul class="template--defaultList template--promotedResults">
+            {{#each @root.data.promotedResults as |promotedResult|}}
+            <li>
+                <div>
+                    <pnp-icon data-name="MiniLink" aria-hidden="true"></pnp-icon>
+                </div>
+                <div>
+                    <a href="{{url}}" style="color:{{@root.theme.semanticColors.link}}">{{title}}</a>
+                    <div>{{description}}</div>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+        {{/if}}
+        <ul class="template--defaultList">
             {{#each data.items as |item|}}
-
-                <pnp-select
-                    data-enabled="{{@root.properties.itemSelectionProps.allowItemSelection}}"
-                    data-index="{{@index}}"
+                <pnp-select 
+                    data-enabled="{{@root.properties.itemSelectionProps.allowItemSelection}}" 
+                    data-index="{{@index}}" 
                     data-is-selected="{{isItemSelected @root.selectedKeys @index}}">
 
                     <template id="content">
 
-                        {{#> resultTypes item=item}}
-                            {{!-- The block below will be used as default item template if no result types matched --}}
-                            <li>
-                                <pnp-iconfile class="icon" data-extension="{{slot item @root.slots.FileType}}" data-theme-variant="{{JSONstringify @root.theme}}"></pnp-iconfile>
-                                <span class="example-themePrimary"><a href="{{slot item @root.slots.Path}}">{{slot item @root.slots.Title}}</a></span>
-                            </li>
-                        {{/resultTypes}}
+                        <li class="template--listItem">
+                            {{#> resultTypes item=item}}
+                            <div class="template--listItem--result">
+                                {{#if @root.properties.layoutProperties.showFileIcon}}
+                                {{#contains "['STS_Site','STS_Web']" (slot item @root.slots.contentclass)}}
+                                    <pnp-iconfile class="template--listItem--icon" data-extension="{{slot item @root.slots.FileType}}" data-is-container="{{slot item @root.slots.IsFolder}}" data-image-url="{{item.SiteLogo}}" data-size="32" data-theme-variant="{{JSONstringify @root.theme}}"></pnp-iconfile>    
+                                {{else}}
+                                    <pnp-iconfile class="template--listItem--icon" data-extension="{{slot item @root.slots.FileType}}" data-is-container="{{slot item @root.slots.IsFolder}}" data-size="32" data-theme-variant="{{JSONstringify @root.theme}}"></pnp-iconfile>
+                                {{/contains}}
+                                {{/if}}
+                                <div class="template--listItem--contentContainer">
+                                    <span class="template--listItem--title example-themePrimary">
+                                        <a href="{{getResultUrl (slot item @root.slots.PreviewUrl) (slot item @root.slots.ListItemID) (slot item @root.slots.FunctionID)}}" target="_self" style="color:{{@root.theme.semanticColors.link}}" rel="noopener noreferrer">{{getTitle (slot item @root.slots.Title) (slot item @root.slots.FunctionID) (slot item @root.slots.Functions) (slot item @root.slots.BusinessID) (slot item @root.slots.Business)}}</a>
+                                    </span>
+                                    <span>                            
+                                        <span class="template--listItem--author">
+                                            {{#with (split (slot item @root.slots.Author) '|')}}
+                                                {{[1]}}
+                                            {{/with}}
+                                        </span>
+                                        <span class="template--listItem--date">{{getDate (slot item @root.slots.Date) "LL"}}</span>                            
+                                    </span>                        
+                                    <div>{{getSummary (slot item @root.slots.Summary)}}</div>
+                                    <div class="template--listItem--tags example-themePrimary">
+                                        {{#if (slot item @root.slots.Tags)}}
+                                            <pnp-icon data-name="Tag" aria-hidden="true" data-theme-variant="{{JSONstringify @root.theme}}"></pnp-icon>
+                                            <div>
+                                                {{#each (split (slot item @root.slots.Tags) ",") as |tag| }}
+                                                    <span>{{trim tag}}</span>
+                                                {{/each}}
+                                            </div>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+                            {{#if @root.properties.layoutProperties.showItemThumbnail}}
+                            <div class="template--listItem--thumbnailContainer" data-selection-disabled="true">
+                                <div class="thumbnail--image">
+                                    <pnp-filepreview data-preview-url="{{slot item @root.slots.PreviewUrl}}" data-preview-image-url="{{slot item @root.slots.PreviewImageUrl}}" data-theme-variant="{{JSONstringify @root.theme}}">
+                                        <pnp-img alt='preview-image' width="120" src="{{slot item @root.slots.PreviewImageUrl}}" loading="lazy" data-error-image="{{@root.utils.defaultImage}}" />
+                                    </pnp-filepreview>
+                                    <div class="thumbnail--hover">
+                                        <div>
+                                            <pnp-icon data-name="DocumentSearch" aria-hidden="true"></pnp-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{/if}} {{/resultTypes}}
+                        </li>
                     </template>
 
                 </pnp-select>
-
             {{/each}}
         </ul>
-    </div>
 
-    {{#if @root.properties.paging.showPaging}}
-        <pnp-pagination
-            data-total-items="{{@root.data.totalItemsCount}}"
-            data-hide-first-last-pages="{{@root.properties.paging.hideFirstLastPages}}"
-            data-hide-disabled="{{@root.properties.paging.hideDisabled}}"
-            data-hide-navigation="{{@root.properties.paging.hideNavigation}}"
-            data-range="{{@root.properties.paging.pagingRange}}"
-            data-items-count-per-page="{{@root.properties.paging.itemsCountPerPage}}"
-            data-current-page-number="{{@root.paging.currentPageNumber}}"
-        >
+        {{#if @root.properties.paging.showPaging}} {{#gt @root.data.totalItemsCount @root.properties.paging.itemsCountPerPage}}
+        <pnp-pagination data-total-items="{{@root.data.totalItemsCount}}" data-hide-first-last-pages="{{@root.properties.paging.hideFirstLastPages}}" data-hide-disabled="{{@root.properties.paging.hideDisabled}}" data-hide-navigation="{{@root.properties.paging.hideNavigation}}"
+            data-range="{{@root.properties.paging.pagingRange}}" data-items-count-per-page="{{@root.properties.paging.itemsCountPerPage}}" data-current-page-number="{{@root.paging.currentPageNumber}}"
+            data-theme-variant="{{JSONstringify @root.theme}}">
         </pnp-pagination>
-    {{/if}}
+        {{/gt}} {{/if}}
 
+    </div>
 </content>
 
 <content id="placeholder-content">
-
     <style>
-
-        .placeholder .icon {
-            width: 20px;
-            height: 16px;
-            margin-right: 5px;
-        }
-
-        .placeholder ul {
-            list-style: none;
-        }
-
-        .placeholder ul li {
-            display: flex;
-            align-items: center;
-            padding: 8px;
-        }
-
+        /* Insert your CSS overrides here */
     </style>
 
     <div class="placeholder">
-        <ul>
+        {{#if @root.properties.showResultsCount}}
+        <div class="template--resultCount">
+            <span class="placeholder--shimmer placeholder--line" style="width: 20%"></span>
+        </div>
+        {{/if}}
+        <ul class="template--defaultList">
             {{#times @root.properties.paging.itemsCountPerPage}}
-                <li>
-                    <div class="icon placeholder--shimmer"></div>
-                    <span class="placeholder--shimmer placeholder--line" style="width: 60%"></span>
-                </li>
+            <li class="template--listItem" tabindex="0">
+                <div class="template--listItem--result">
+                    {{#if @root.properties.layoutProperties.showFileIcon}}
+                    <div class="template--listItem--icon placeholder--shimmer "></div>
+                    {{/if}}
+                    <div class="template--listItem--contentContainer">
+                        <span class="placeholder--shimmer placeholder--line" style="width: 60%"></span>
+                        <span class="placeholder--shimmer placeholder--line" style="width: 100%"></span>
+                        <span class="placeholder--shimmer placeholder--line" style="width: 100%"></span>
+                        <span class="placeholder--shimmer placeholder--line" style="width: 35%"></span>
+                        <span class="placeholder--shimmer placeholder--line" style="width: 20%"></span>
+                    </div>
+                </div>
+                {{#if @root.properties.layoutProperties.showItemThumbnail}}
+                <div class="template--listItem--thumbnailContainer">
+                    <div class="thumbnail--image">
+                        <div class="placeholder--shimmer" style="width: 120px;height: 70px;"></div>
+                    </div>
+                </div>
+                {{/if}}
+            </li>
             {{/times}}
         </ul>
     </div>
+
 </content>

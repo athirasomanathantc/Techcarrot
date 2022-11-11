@@ -537,21 +537,38 @@ export class TemplateService implements ITemplateService {
             }
         });
 
-        this.Handlebars.registerHelper("getResultUrl", (PreviewUrl: string, itemId: string) => {
-            let resultUrl = '';
-            if (PreviewUrl.indexOf('/Announcements/') !== -1) {
+        this.Handlebars.registerHelper("getResultUrl", (previewUrl: string, itemId: string, functionID: string) => {
+            let resultUrl = previewUrl;
+            if (previewUrl.indexOf('/Announcements/') !== -1) {
                 resultUrl = `${this.pageContext.web.absoluteUrl}/SitePages/News/Announcements/Announcement%20Details.aspx?announcementID=${itemId}&env=WebView`;
             }
-            if (PreviewUrl.indexOf('/EventDetails/') !== -1) {
+            else if (previewUrl.indexOf('/EventDetails/') !== -1) {
                 resultUrl = `${this.pageContext.web.absoluteUrl}/SitePages/News/Events/Event%20Details.aspx?eventID=${itemId}&env=WebView`;
             }
-            if (PreviewUrl.indexOf('/News/') !== -1) {
+            else if (previewUrl.indexOf('/News/') !== -1) {
                 resultUrl = `${this.pageContext.web.absoluteUrl}/SitePages/News/News%20Detail.aspx?newsID=${itemId}&env=WebView`;
             }
-            if (PreviewUrl.indexOf('/Blogs/') !== -1) {
+            else if (previewUrl.indexOf('/Blogs/') !== -1) {
                 resultUrl = `${this.pageContext.web.absoluteUrl}/SitePages/News/Blogs/Blog%20Details.aspx?blogID=${itemId}&env=WebView`;
             }
+            else if (previewUrl.indexOf('/BusinessFunctionContent/') !== 1) {
+                if (functionID) {
+                    resultUrl = `${this.pageContext.web.absoluteUrl}/SitePages/Functions.aspx?categoryId=${functionID}&env=WebView`;
+                }
+            }
             return new this.Handlebars.SafeString(resultUrl);
+        });
+
+        this.Handlebars.registerHelper("getTitle", (title: string, functionID: string, functionTitle: string, businessID: string, businessTitle: string,) => {
+            if (functionID && functionTitle && title.indexOf('DisplayForm.aspx')) {
+                return new this.Handlebars.SafeString(functionTitle);
+            }
+            else if (businessID && businessTitle && title.indexOf('DisplayForm.aspx')) {
+                return new this.Handlebars.SafeString(businessTitle);
+            }
+            else {
+                return new this.Handlebars.SafeString(title);
+            }
         });
 
         // Return tag name from a tag string
