@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "agi-intranet-publish-client-side-solution",
+    "id": "631e20dd-3c69-4e0f-89ed-7c5f9ef8ef3e",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.15.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "agiIntranetPublish description"
+      },
+      "longDescription": {
+        "default": "agiIntranetPublish description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "agi-intranet-publish Feature",
+        "description": "The feature that activates elements of the agi-intranet-publish solution.",
+        "id": "9ef7238f-7799-4529-9558-489ab9246f2c",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/agi-intranet-publish.sppkg"
+  }
+}

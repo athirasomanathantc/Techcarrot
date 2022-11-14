@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.2",
+    "libraryName": "agi-intranet-publish",
+    "libraryId": "631e20dd-3c69-4e0f-89ed-7c5f9ef8ef3e",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "agiIntranetPublish",
+    "solutionShortDescription": "agiIntranetPublish description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
