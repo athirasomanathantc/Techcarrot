@@ -537,7 +537,7 @@ export class TemplateService implements ITemplateService {
             }
         });
 
-        this.Handlebars.registerHelper("getResultUrl", (previewUrl: string, itemId: string, functionID: string) => {
+        this.Handlebars.registerHelper("getResultUrl", (previewUrl: string, itemId: string, functionID: string, businessID: string) => {
             let resultUrl = previewUrl;
             if (previewUrl.indexOf('/Announcements/') !== -1) {
                 resultUrl = `${this.pageContext.web.absoluteUrl}/SitePages/News/Announcements/Announcement%20Details.aspx?announcementID=${itemId}&env=WebView`;
@@ -551,9 +551,12 @@ export class TemplateService implements ITemplateService {
             else if (previewUrl.indexOf('/Blogs/') !== -1) {
                 resultUrl = `${this.pageContext.web.absoluteUrl}/SitePages/News/Blogs/Blog%20Details.aspx?blogID=${itemId}&env=WebView`;
             }
-            else if (previewUrl.indexOf('/BusinessFunctionContent/') !== 1) {
+            else if (previewUrl.indexOf('/BusinessFunctionContent/') !== 1 || previewUrl.indexOf('/BusinessTestimonials/') !== 1) {
                 if (functionID) {
                     resultUrl = `${this.pageContext.web.absoluteUrl}/SitePages/Functions.aspx?categoryId=${functionID}&env=WebView`;
+                }
+                if (businessID) {
+                    resultUrl = `${this.pageContext.web.absoluteUrl}/SitePages/Business.aspx?categoryId=${businessID}&env=WebView`;
                 }
             }
             return new this.Handlebars.SafeString(resultUrl);
