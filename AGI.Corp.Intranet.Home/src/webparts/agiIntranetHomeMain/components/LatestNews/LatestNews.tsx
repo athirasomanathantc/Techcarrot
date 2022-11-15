@@ -61,13 +61,13 @@ export const LatestNews = (props: ILatestNewsComponent) => {
                 <div className="card-body">
                     <div id="carouselLatestNews" className="carousel slide mb-4" data-bs-ride="carousel">
                         <div className="carousel-indicators">
-                            <button type="button" data-bs-target="#carouselLatestNews"
-                                data-bs-slide-to="0" className="active" aria-current="true"
-                                aria-label="Slide 1"></button>
-                            <button type="button" data-bs-target="#carouselLatestNews"
-                                data-bs-slide-to="1" aria-label="Slide 2"></button>
-                            <button type="button" data-bs-target="#carouselLatestNews"
-                                data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            {
+                                carouselItems.map((carouselItem, index) => {
+                                    return <button type="button" data-bs-target="#carouselLatestNews"
+                                        data-bs-slide-to={index} className={`${!index ? "active" : ""}`} aria-current={`${!index ? 'true' : 'false'}`}
+                                        aria-label={`Slide ${index + 1}`}></button>
+                                })
+                            }
                         </div>
                         <div className="carousel-inner">
                             {carouselItems.map((carouselItem, index) => <CarouselItem
