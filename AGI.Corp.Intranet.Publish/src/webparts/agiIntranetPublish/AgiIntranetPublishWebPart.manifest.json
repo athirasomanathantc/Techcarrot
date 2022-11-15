@@ -23,7 +23,9 @@
     "officeFabricIconFontName": "Page",
     "properties": {
       "description": "AgiIntranetPublish",
-      "groups" : []
+      "groups" : [],
+      "listName": "",
+      "itemId": ""
     }
   }]
 }

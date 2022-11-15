@@ -27,11 +27,11 @@ export default class TargetAudience extends React.Component<ITargetAudienceProps
     }
     public checkUserCanViewWebpart(): void {
         const self = this;
-        let proms: Promise<any>[] = [];
+        const proms: Promise<any>[] = [];
         const errors: any[] = [];
         const _sv = new spservices();
         self.props.groupIds.map((item) => {
-            proms.push(_sv.isMember(item.fullName, self.props.pageContext.legacyPageContext[`userId`], self.props.pageContext.site.absoluteUrl));
+            proms.push(_sv.isMember(item.fullName, self.props.pageContext.legacyPageContext.userId, self.props.pageContext.site.absoluteUrl));
         });
         Promise.race(
             proms.map(p => {

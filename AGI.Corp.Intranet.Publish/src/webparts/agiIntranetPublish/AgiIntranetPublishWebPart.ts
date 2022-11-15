@@ -15,7 +15,8 @@ import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
 
 
 export interface IAgiIntranetPublishWebPartProps {
-  description: string;
+  listName: string;
+  itemId: string;
   groups: IPropertyFieldGroupOrPerson[];
 }
 
@@ -27,7 +28,7 @@ export default class AgiIntranetPublishWebPart extends BaseClientSideWebPart<IAg
   public render(): void {
     if (
       this.displayMode === DisplayMode.Edit &&
-      this.properties.groups.length === 0
+      !(this.properties.groups.length && this.properties.listName.length && this.properties.itemId.length)
     ) {
       const placeHolderElement = React.createElement(Placeholder, {
         iconName: "Edit",
@@ -41,16 +42,18 @@ export default class AgiIntranetPublishWebPart extends BaseClientSideWebPart<IAg
       const element: React.ReactElement<IAgiIntranetPublishProps> = React.createElement(
         AgiIntranetPublish,
         {
+          context: this.context,
           pageContext: this.context.pageContext,
           groupIds: this.properties.groups,
-          description: this.properties.description,
+          listName: this.properties.listName,
+          itemId: this.properties.itemId
         }
       );
       ReactDom.render(element, this.domElement);
     }
   }
 
-  protected _onConfigure = () => {
+  protected _onConfigure = (): void => {
     // Context of the web part
     this.context.propertyPane.open();
   }
@@ -106,8 +109,11 @@ export default class AgiIntranetPublishWebPart extends BaseClientSideWebPart<IAg
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel
+                PropertyPaneTextField('itemId', {
+                  label: strings.ItemIdFieldLabel
+                }),
+                PropertyPaneTextField('listName', {
+                  label: strings.ListNameFieldLabel
                 }),
                 PropertyFieldPeoplePicker('groups', {
                   label: 'Target Audience',
