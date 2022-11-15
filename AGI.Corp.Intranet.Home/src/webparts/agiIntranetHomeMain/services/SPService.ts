@@ -31,6 +31,7 @@ export class SPService {
         return await sp.web.lists.getByTitle('News').items
             .select("Id,Title,Created,Business/Title,Functions/Title,PublishedDate,NewsImage")
             .expand("Business,Functions")
+            .filter('Featured eq 1')
             .orderBy("PublishedDate", false)
             .top(this._props.topLatestNews)()
             .then((items: ILatestNews[]) => {
