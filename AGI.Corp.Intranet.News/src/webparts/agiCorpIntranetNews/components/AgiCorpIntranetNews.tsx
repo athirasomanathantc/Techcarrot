@@ -91,7 +91,7 @@ export default class AgiCorpIntranetNews extends React.Component<IAgiCorpIntrane
     await this.getNewsItems().then(() => {
       this.setDefaultFilter();
     });
-    this.scrollToTop();
+   // this.scrollToTop();
   }
 
   private getConfigItems() {
