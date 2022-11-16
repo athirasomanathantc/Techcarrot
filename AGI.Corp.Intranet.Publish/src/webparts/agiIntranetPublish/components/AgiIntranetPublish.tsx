@@ -31,7 +31,7 @@ export default class AgiIntranetPublish extends React.Component<IAgiIntranetPubl
   private async markFeatured(isFeatured: boolean): Promise<void> {
     const itemId: number = parseInt(_sv.getQueryStringValue(this.props.itemId));
 
-    await _sv.markFeatured(itemId, this.props.listName, isFeatured)
+    await _sv.markFeatured(itemId, this.props.listName, isFeatured, this.props.pageContext.legacyPageContext.userId)
       .then(() => {
         this.setState({
           isFeatured
