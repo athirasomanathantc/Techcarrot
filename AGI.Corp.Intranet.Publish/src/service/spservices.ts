@@ -26,11 +26,12 @@ export default class spservices {
         return p;
     }
 
-    public async markFeatured(itemId: number, listName: string, isFeatured: boolean) {
+    public async markFeatured(itemId: number, listName: string, isFeatured: boolean, reviewerId: number) {
         const list = sp.web.lists.getByTitle(listName);
         return await list.items.getById(itemId)
             .update({
-                'Featured': isFeatured
+                'Featured': isFeatured,
+                'ReviewerId': reviewerId
             });
     }
 
