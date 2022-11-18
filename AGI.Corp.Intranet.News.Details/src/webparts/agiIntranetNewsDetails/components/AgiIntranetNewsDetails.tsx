@@ -111,12 +111,16 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
                   }
                 }
               }
+              else {
+                let _viewJSON = [];
+                _viewJSON.push({ userId: userId, views: 0 });
+                viewJSON = JSON.stringify(_viewJSON);
+              }
             }
             else {
               let _viewJSON = [];
               _viewJSON.push({ userId: userId, views: 0 });
               viewJSON = JSON.stringify(_viewJSON);
-              //console.log('updated view JSON', _viewJSON);
             }
 
             const viewsCount = this.getViewCount(viewJSON);
