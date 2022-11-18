@@ -46,6 +46,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
 
     sp.web.lists.getByTitle(LIST_ABOUT_ABOUTUS).items.get().then((items: IAboutUsItem[]) => {
       const aboutUsItem = items && items.length > 0 ? items[0] : NULL_ABOUT_ABOUTUS_ITEM;
+      console.log("aboutus",aboutUsItem);
       this.setState({
         aboutUsItem
       });
@@ -118,7 +119,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                     const leadershipMessageImg = item.LeadershipImage && item.LeadershipImage ? this.getImageUrl(item.LeadershipImage) : '';
                     return (
                       i == 0 ?
-                      
+
                         <div className="leadership-content">
                           <div className="leadership-image">
                             <img src={leadershipMessageImg} className="w-100" />
@@ -133,34 +134,34 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                             <div className={`more ${this.state.readMore.leadershipContent1 ? 'd-block' : ''}`}>
                               <p dangerouslySetInnerHTML={{ __html: item.MoreDescription }}></p>
                             </div>
-                            {!this.state.readMore.leadershipContent1 && <button className="toggle" onClick={() => { this.showReadMore('leadership1') }}>Read More</button>}
+                            {!this.state.readMore.leadershipContent1 && item.MoreDescription != null && <button className="toggle" onClick={() => { this.showReadMore('leadership1') }}>Read More</button>}
                           </div>
                         </div>
-                        
-                        
+
+
                         :
-          
+
                         i == 1 ?
-                        <>
-                        <hr className="divider-horizontal" />
-                        <div className="leadership-content reverse mt-0 mt-lg-5 mb-0 mb-lg-5">
-                            <div className="leadership-image">
-                            <img src={leadershipMessageImg} className="w-100" />
-                          </div>
-                          <div className="leadership-content-right">
-                            <div className="leadership-content-header">
-                              <h5>{item.Title}</h5>
-                              <h3>{item.Name}</h3>
-                              <h6>{item.Designation}</h6>
+                          <>
+                            <hr className="divider-horizontal" />
+                            <div className="leadership-content reverse mt-0 mt-lg-5 mb-0 mb-lg-5">
+                              <div className="leadership-image">
+                                <img src={leadershipMessageImg} className="w-100" />
+                              </div>
+                              <div className="leadership-content-right">
+                                <div className="leadership-content-header">
+                                  <h5>{item.Title}</h5>
+                                  <h3>{item.Name}</h3>
+                                  <h6>{item.Designation}</h6>
+                                </div>
+                                <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
+                                <div className={`more ${this.state.readMore.leadershipContent2 ? 'd-block' : ''}`}>
+                                  <p dangerouslySetInnerHTML={{ __html: item.MoreDescription }}></p>
+                                </div>
+                                {!this.state.readMore.leadershipContent2 && item.MoreDescription != null && <button className="toggle" onClick={() => { this.showReadMore('leadership2') }}>Read More</button>}
+                              </div>
                             </div>
-                            <p dangerouslySetInnerHTML={{ __html: item.Description }}></p>
-                            <div className={`more ${this.state.readMore.leadershipContent2 ? 'd-block' : ''}`}>
-                              <p dangerouslySetInnerHTML={{ __html: item.MoreDescription }}></p>
-                            </div>
-                            {!this.state.readMore.leadershipContent2 && <button className="toggle" onClick={() => { this.showReadMore('leadership2') }}>Read More</button>}
-                          </div>
-                          </div>
-                        </>                  
+                          </>
                           :
 
                           <></>
@@ -171,15 +172,18 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
 
                   })
                 }
-              <hr className="divider-horizontal" />
+                <hr className="divider-horizontal" />
               </div>
-              
+
               <div className="about-section">
                 <div className="about-content">
                   <h5>{this.state.aboutUsItem.Title}</h5>
                   <h3>{this.state.aboutUsItem.Heading}</h3>
-                  <p className={`${this.state.readMore.aboutContent ? 'show-more' : ''}`} dangerouslySetInnerHTML={{ __html: this.state.aboutUsItem.Description }}></p>
-                  {!this.state.readMore.aboutContent && <button className="toggle1" onClick={() => { this.showReadMore('about') }}>Read More</button>}
+                  <p dangerouslySetInnerHTML={{ __html: this.state.aboutUsItem.Description }}></p>
+                  <div className={`more ${this.state.readMore.aboutContent ? 'd-block' : ''}`}>
+                    <p dangerouslySetInnerHTML={{ __html: this.state.aboutUsItem.MoreDescription }}></p>
+                  </div>
+                  {!this.state.readMore.aboutContent && this.state.aboutUsItem.MoreDescription != null && <button className="toggle1" onClick={() => { this.showReadMore('about') }}>Read More</button>}
                 </div>
               </div>
             </div>
@@ -232,7 +236,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                           <div className="vision-content">
                             <h3>{item.Title}</h3>
                             <p className={`${this.state.readMore.ourCultureContent ? 'show-more' : ''}`} dangerouslySetInnerHTML={{ __html: item.Description }}></p>
-                            
+
                           </div>
                         </div>
                       </a>
@@ -322,7 +326,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
           leadershipContent1: true
         }
       });
-    }else if (type === 'leadership2') {
+    } else if (type === 'leadership2') {
       this.setState({
         readMore: {
           ...this.state.readMore,

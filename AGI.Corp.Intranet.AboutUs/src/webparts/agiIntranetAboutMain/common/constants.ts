@@ -16,7 +16,8 @@ export const NULL_ABOUT_ABOUTUS_ITEM = {
     ID: 0,
     Title: '',
     Heading: '',
-    Description: ''
+    Description: '',
+    MoreDescription:''
 }
 
 export const LIST_ABOUT_PURPOSENCULTURE = 'PurposeNCulture';

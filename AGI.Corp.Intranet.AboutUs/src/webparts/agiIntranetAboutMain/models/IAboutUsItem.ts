@@ -3,4 +3,5 @@ export interface IAboutUsItem {
     Title: string;
     Heading: string;
     Description: string;
+    MoreDescription:string;
 }
