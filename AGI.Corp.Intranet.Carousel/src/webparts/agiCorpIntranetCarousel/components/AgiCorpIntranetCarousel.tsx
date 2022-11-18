@@ -114,7 +114,7 @@ export default class AgiCorpIntranetCarousel extends React.Component<IAgiCorpInt
     return (
       <div className="business-page-header">
         <div className="banner-container">
-          <div id="businessBannerCarousel" className="carousel slide" >
+          <div id="businessBannerCarousel" className="carousel slide" data-bs-ride="carousel" >
             <div className="carousel-inner">
               {
 
@@ -147,14 +147,17 @@ export default class AgiCorpIntranetCarousel extends React.Component<IAgiCorpInt
                 })
               }
             </div>
-            <button className="carousel-control-prev" type="button" data-bs-target="#businessBannerCarousel" data-bs-slide="prev" onClick={() => this.handleCarouselPrev()}>
-              <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span className="visually-hidden">Previous</span>
-            </button>
-            <button className="carousel-control-next" type="button" data-bs-target="#businessBannerCarousel" data-bs-slide="next" onClick={() => this.handleCarouselNext()}>
-              <span className="carousel-control-next-icon" aria-hidden="true"></span>
-              <span className="visually-hidden">Next</span>
-            </button>
+            {this.state.carouselItems.length > 1 && <>
+              <button className="carousel-control-prev" type="button" data-bs-target="#businessBannerCarousel" data-bs-slide="prev" onClick={() => this.handleCarouselPrev()}>
+                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span className="visually-hidden">Previous</span>
+              </button>
+              <button className="carousel-control-next" type="button" data-bs-target="#businessBannerCarousel" data-bs-slide="next" onClick={() => this.handleCarouselNext()}>
+                <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                <span className="visually-hidden">Next</span>
+              </button>
+            </>
+            }
           </div>
         </div>
       </div>
