@@ -5,7 +5,7 @@ import { IAgiIntranetNewsDetailsState } from './IAgiIntranetNewsDetailsState';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { sp } from '@pnp/sp/presets/all';
 import * as moment from 'moment';
-import { LIST_COMMENTS, LIST_INTRANETCONFIG, LIST_NEWS, NEWS_NULL_ITEM, REGEX_SPEC_CHAR, ViewsJSON_NULL } from '../common/constants';
+import { LIST_COMMENTS, LIST_INTRANETCONFIG, LIST_NEWS, LIST_NEWS_TRANSACTION, NEWS_NULL_ITEM, REGEX_SPEC_CHAR, ViewsJSON_NULL } from '../common/constants';
 import { ICommentItem } from '../models/ICommentItem';
 import { INewsItem } from '../models/INewsItem';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -78,7 +78,6 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
   }
 
   private async getNewsItem(newsID: string): Promise<void> {
-    const listName = 'News';
     const userId = this.props.context.pageContext.legacyPageContext.userId;
     if (!newsID)
       return;
@@ -87,45 +86,58 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       newsId: id
     });
 
-    await sp.web.lists.getByTitle(listName).items.getById(id)
+    await sp.web.lists.getByTitle(LIST_NEWS).items.getById(id)
       .select('*,Business/Title,Business/ID,Functions/Title,Functions/ID')
       .expand('Business,Functions')
-      .get().then((item: INewsItem) => {
-        let viewJSON = '';
-        if (item.ViewsJSON) {
-          viewJSON = item.ViewsJSON;
-          let _viewJSON = JSON.parse(viewJSON);
-          if (_viewJSON && _viewJSON.length > 0) {
-            const _records = _viewJSON.filter((o) => o.userId == this.state.userId);
-            if (_records && _records.length == 0) {
+      .get().then(async (item: INewsItem) => {
+        await sp.web.lists.getByTitle(LIST_NEWS_TRANSACTION).items
+          .filter(`NewsId eq ${newsID}`)
+          .select("News/Title,News/Id,NewsLikedBy,ReadBy,ViewsJSON")
+          .expand("News")
+          .get().then((newsTransactionItems) => {
+            let viewJSON = '';
+            let newsTransactionItem;
+
+            if (newsTransactionItems.length) {
+              newsTransactionItem = newsTransactionItems[0];
+              if (newsTransactionItem.ViewsJSON) {
+                viewJSON = newsTransactionItem.ViewsJSON;
+                let _viewJSON = JSON.parse(viewJSON);
+                if (_viewJSON && _viewJSON.length > 0) {
+                  const _records = _viewJSON.filter((o) => o.userId == this.state.userId);
+                  if (_records && _records.length == 0) {
+                    _viewJSON.push({ userId: userId, views: 0 });
+                    viewJSON = JSON.stringify(_viewJSON);
+                  }
+                }
+              }
+            }
+            else {
+              let _viewJSON = [];
               _viewJSON.push({ userId: userId, views: 0 });
               viewJSON = JSON.stringify(_viewJSON);
+              //console.log('updated view JSON', _viewJSON);
             }
-          }
-        }
-        else {
-          let _viewJSON = [];
-          _viewJSON.push({ userId: userId, views: 0 });
-          viewJSON = JSON.stringify(_viewJSON);
-          //console.log('updated view JSON', _viewJSON);
-        }
 
-        const viewsCount = this.getViewCount(viewJSON);
-        // update view
-        let updateViewJSON = JSON.parse(viewJSON);
+            const viewsCount = this.getViewCount(viewJSON);
+            // update view
+            let updateViewJSON = JSON.parse(viewJSON);
 
-        const newViewsCount = viewsCount + 1;
-        const updatedViews = updateViewJSON.map((obj) => {
-          if (obj.userId == userId) {
-            return { ...obj, views: newViewsCount }
-          }
-          return obj;
-        });
-        this.updateViews(parseInt(newsID), JSON.stringify(updatedViews));
-        this.setState({
-          news: item,
-          viewsCount: viewsCount
-        });
+            const newViewsCount = viewsCount + 1;
+            const updatedViews = updateViewJSON.map((obj) => {
+              if (obj.userId == userId) {
+                return { ...obj, views: newViewsCount }
+              }
+              return obj;
+            });
+            this.updateViews(parseInt(newsID), JSON.stringify(updatedViews))
+              .then((response) => {
+                this.setState({
+                  news: item,
+                  viewsCount: viewsCount
+                });
+              });
+          });
       });
 
     await this.getComments(id);
@@ -141,13 +153,19 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       newsId: id
     });
 
-    await sp.web.lists.getByTitle(listName).items.getById(id)
-      .select('*,Business/Title,Business/ID,Functions/Title,Functions/ID')
-      .expand('Business,Functions')
-      .get().then((item: INewsItem) => {
-        this.setState({
-          news: item,
-        });
+    await sp.web.lists.getByTitle(LIST_NEWS_TRANSACTION).items
+      .filter(`NewsId eq ${id}`)
+      .select("News/Title,News/Id,NewsLikedBy,ReadBy,ViewsJSON")
+      .expand("News")
+      .get().then((newsTransactionItems) => {
+        let viewJSON = '';
+        let newsTransactionItem;
+        if (newsTransactionItems.length) {
+          const newsTransactionItem = newsTransactionItems[0];
+          this.setState({
+            news: { ...this.state.news, ...newsTransactionItem },
+          });
+        }
       });
 
   }
@@ -178,16 +196,37 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       })
   }
 
-  private async updateViews(newsID: number, viewsJSON: string): Promise<void> {
-    const listName = LIST_NEWS;
-    const body = {
+  private async updateViews(newsID: number, viewsJSON: string) {
+    const listName = LIST_NEWS_TRANSACTION;
+    const userId: string = this.props.context.pageContext.legacyPageContext.userId;
+
+    let body: any = {
       ViewsJSON: viewsJSON
     };
-    sp.web.lists.getByTitle(listName).items.getById(newsID).update(body).then((data) => {
-      console.log('news views updated successfully');
-    }).catch((error) => {
-      console.log('error in updating news views', error);
-    });
+
+    const items: any[] = await sp.web.lists.getByTitle(listName)
+      .items.top(1).filter(`NewsId eq ${newsID}`)();
+
+    if (items.length > 0) {
+      let readBy = items[0].ReadBy;
+      const userIDColl = readBy ? readBy.split(';') : [];
+      const isIdExists = userIDColl.includes(userId.toString());
+      if (!isIdExists) {
+        readBy = readBy ? `${readBy};${userId}` : userId.toString();
+        body = {
+          ...body,
+          ReadBy: readBy
+        }
+      }
+      return await sp.web.lists.getByTitle(listName).items.getById(items[0].Id).update(body)
+    }
+    else {
+      return await sp.web.lists.getByTitle(listName).items.add({
+        ViewsJSON: viewsJSON,
+        NewsId: newsID,
+        ReadBy: userId.toString()
+      });
+    }
   }
 
   private getViewCount(viewsJSON: string): number {
@@ -258,16 +297,16 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
     const id = e.target.attributes["data-id"].value;
     const replyBoxes: any = document.getElementsByClassName('commentReplyBox');
 
-    for(let i = 0; i < replyBoxes.length; i++) {
+    for (let i = 0; i < replyBoxes.length; i++) {
       replyBoxes[i].style.display = 'none';
     }
-    
+
     const replySectionId = `replySection${id}`;
     document.getElementById(replySectionId).style.display = 'flex';
 
     const textBoxId = `replyTextBox${id}`;
     document.getElementById(textBoxId).focus();
-    
+
   }
 
   private addReply(e: any) {
@@ -346,13 +385,24 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
   }
 
   private async updateNewsItem(body: any, itemId: number): Promise<void> {
-    const listName = LIST_NEWS;
-    sp.web.lists.getByTitle(listName).items.getById(itemId).update(body).then((data) => {
-      this.reloadNewsItem(this.state.newsId.toString());
-    }).catch((error) => {
-      console.log('error in updating news item');
-      console.log(error);
-    })
+    const listName = LIST_NEWS_TRANSACTION;
+    let response;
+
+    sp.web.lists.getByTitle(listName).items.filter(`NewsId eq ${itemId}`).get()
+      .then((newsTransactionitem) => {
+        if (newsTransactionitem.length) {
+          response = sp.web.lists.getByTitle(listName).items.getById(newsTransactionitem[0].Id).update(body);
+        }
+        else {
+          response = sp.web.lists.getByTitle(listName).items.add(body);
+        }
+        response.then(() => {
+          this.reloadNewsItem(this.state.newsId.toString());
+        }).catch((error) => {
+          console.log('error in updating news item');
+          console.log(error);
+        })
+      });
   }
 
   private async updateNewsCommentItem(body: any, itemId: number): Promise<void> {
@@ -597,7 +647,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
 
               }
 
-              
+
 
               {/** reply text box */}
               <div className="col mt-4 align-items-center commentReplyBox" id={`replySection${comment.ID}`} style={{ display: 'none' }}>
@@ -606,12 +656,12 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
                   <div className="d-flex gap-3 align-items-center add-comment">
                     <div>
                       <label className="visually-hidden" >Add Comment</label>
-                      <textarea rows={2} 
-                                className="form-control" 
-                                placeholder="Add a comment." 
-                                value={this.state.reply} onChange={(e) => this.handleReply(e)} 
-                                id={`replyTextBox${comment.ID}`}
-                                />
+                      <textarea rows={2}
+                        className="form-control"
+                        placeholder="Add a comment."
+                        value={this.state.reply} onChange={(e) => this.handleReply(e)}
+                        id={`replyTextBox${comment.ID}`}
+                      />
                       {this.state.inappropriateReply.length > 0 &&
                         <div className='comment-warning'>
                           <span>
