@@ -44,7 +44,7 @@ export default class Notification extends React.Component<INotificationProps, IN
     public async componentDidMount(): Promise<void> {
         try {
             let newsItems: INotification[] = await this._spServices.getNotifications();
-            if (newsItems.length) {
+            if (newsItems?.length) {
                 this.setState({
                     notifications: newsItems
                 });
@@ -81,7 +81,7 @@ export default class Notification extends React.Component<INotificationProps, IN
     private viewDetails(e: React.MouseEvent<HTMLElement>, notification: INotification) {
         let detailPath;
         switch (notification.Type) {
-            case 'News':
+            case 'NewsTransaction':
                 detailPath = 'News%20Detail.aspx?newsID=';
                 break;
             case 'EventDetails':
