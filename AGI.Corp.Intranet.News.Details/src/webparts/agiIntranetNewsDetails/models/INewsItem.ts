@@ -15,4 +15,8 @@ export interface INewsItem {
         Title: string;
         ID: number;
     };
+    News: {
+        Id: number;
+        Title: string;
+    }
 }
