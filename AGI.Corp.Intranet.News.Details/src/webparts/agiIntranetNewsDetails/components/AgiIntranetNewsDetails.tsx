@@ -130,15 +130,15 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
               }
               return obj;
             });
-            this.updateViews(parseInt(newsID), JSON.stringify(updatedViews), newsTransactionItems)
+            this.updateViews(parseInt(newsID), JSON.stringify(updatedViews), newsTransactionItems, item)
               .then((response) => {
                 let newsId;
                 let newsTransactionItem = response.data?.Id ? response.data : newsTransactionItems[0];
 
-                if(response.data.Id){
+                if (response.data.Id) {
                   newsId = newsTransactionItem.NewsId;
                 }
-                else{
+                else {
                   newsId = newsTransactionItem.News.Id
                 }
 
@@ -213,11 +213,12 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       })
   }
 
-  private async updateViews(newsID: number, viewsJSON: string, newsTransactionItems: any) {
+  private async updateViews(newsID: number, viewsJSON: string, newsTransactionItems: any, item: INewsItem) {
     const userId: string = this.props.context.pageContext.legacyPageContext.userId;
 
     let body: any = {
-      ViewsJSON: viewsJSON
+      ViewsJSON: viewsJSON,
+      Title: item.Title
     };
 
     if (newsTransactionItems.length > 0) {
@@ -237,7 +238,8 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       return await sp.web.lists.getByTitle(LIST_NEWS_TRANSACTION).items.add({
         ViewsJSON: viewsJSON,
         NewsId: newsID,
-        ReadBy: userId.toString()
+        ReadBy: userId.toString(),
+        Title: item.Title
       });
     }
   }
