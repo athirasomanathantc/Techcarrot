@@ -1,7 +1,7 @@
 import { sp } from "@pnp/sp";
 import { forEach } from "lodash";
 import * as moment from "moment";
-import { INotificationProps } from '../components/Notifications/INotificationProps';
+import { INotificationProps } from '../components/notifications/INotificationProps';
 import { INotification } from "../models/INotification";
 import { INotificationListItem } from "../models/INotificationListItem";
 import Common from "./Common";
@@ -46,15 +46,30 @@ export class SPService {
         const promises: Promise<INotificationListItem>[] = [];
 
         forEach(this._props.lists, (listName: string) => {
+            const column = this._common.getColumn(listName);
             promise = new Promise((resolve, reject) => {
-                sp.web.lists.getByTitle(listName).items
-                    .select("Id,Title,Created,ReadBy")
-                    .filter(this._common.dateRangeFilter)
-                    .top(this._props.top)().then((items: INotification[]) => {
-                        resolve(this.getFormattedItems(items, 'Created', listName))
-                    }).catch((exception) => {
-                        reject(exception)
-                    });
+                if (listName.indexOf('Transaction') !== -1) {
+                    sp.web.lists.getByTitle(listName).items
+                        .select(`Id,Title,ReadBy,${column}`)
+                        .expand(`${listName.replace('Transaction', '')}`)
+                        .filter(this._common.getDateRangeFilter(listName))
+                        .top(this._props.top)().then((items: INotification[]) => {
+                            resolve(this.getFormattedItems(items, column, listName))
+                        }).catch((exception) => {
+                            reject(exception)
+                        });
+                }
+                else {
+                    sp.web.lists.getByTitle(listName).items
+                        .select(`Id,Title,ReadBy,Created`)
+                        .filter(this._common.getDateRangeFilter(listName))
+                        .top(this._props.top)().then((items: INotification[]) => {
+                            resolve(this.getFormattedItems(items, 'Created', listName))
+                        }).catch((exception) => {
+                            reject(exception)
+                        });
+                }
+
             });
             promises.push(promise);
         })
