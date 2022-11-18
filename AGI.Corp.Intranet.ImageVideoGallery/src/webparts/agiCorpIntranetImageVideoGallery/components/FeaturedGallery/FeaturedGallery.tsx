@@ -129,7 +129,9 @@ const FeaturedGallery = (props: IFeaturedGallery) => {
                                             </div>
                                     }
                                 </div>
-                                <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
+                                {
+                                 pageData.length > 1 && <>
+                                    <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
                                     data-bs-slide="prev">
                                     <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                                     <span className="visually-hidden">Previous</span>
@@ -139,6 +141,10 @@ const FeaturedGallery = (props: IFeaturedGallery) => {
                                     <span className="carousel-control-next-icon" aria-hidden="true"></span>
                                     <span className="visually-hidden">Next</span>
                                 </button>
+                                 </>
+
+                                }
+                                
                             </div>
                         </div>
                         <div id="featured-video-gallery" className={`featured-carousel tab-pane fade ${tab == "video" ? `show active` : ''}`} role="tabpanel" aria-labelledby="featured-video-gallery-tab">
@@ -178,6 +184,8 @@ const FeaturedGallery = (props: IFeaturedGallery) => {
                                             </div>
                                     }
                                 </div>
+                                {
+                                 videoData.length > 1 && <>
                                 <button className="carousel-control-prev" type="button" data-bs-target="#featuredCarouselVideo"
                                     data-bs-slide="prev">
                                     <span className="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -188,6 +196,8 @@ const FeaturedGallery = (props: IFeaturedGallery) => {
                                     <span className="carousel-control-next-icon" aria-hidden="true"></span>
                                     <span className="visually-hidden">Next</span>
                                 </button>
+                                </>
+                            }
                             </div>
                         </div>
                     </div>
