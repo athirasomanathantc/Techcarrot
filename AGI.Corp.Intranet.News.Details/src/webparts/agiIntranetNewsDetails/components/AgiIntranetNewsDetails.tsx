@@ -92,7 +92,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       .get().then(async (item: INewsItem) => {
         await sp.web.lists.getByTitle(LIST_NEWS_TRANSACTION).items
           .filter(`NewsId eq ${newsID}`)
-          .select("News/Title,News/Id,NewsLikedBy,ReadBy,ViewsJSON")
+          .select("Id,News/Title,News/Id,NewsLikedBy,ReadBy,ViewsJSON")
           .expand("News")
           .get().then((newsTransactionItems) => {
             let viewJSON = '';
@@ -130,13 +130,30 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
               }
               return obj;
             });
-            this.updateViews(parseInt(newsID), JSON.stringify(updatedViews))
+            this.updateViews(parseInt(newsID), JSON.stringify(updatedViews), newsTransactionItems)
               .then((response) => {
+                let newsId;
+                let newsTransactionItem = response.data?.Id ? response.data : newsTransactionItems[0];
+
+                if(response.data.Id){
+                  newsId = newsTransactionItem.NewsId;
+                }
+                else{
+                  newsId = newsTransactionItem.News.Id
+                }
+
                 this.setState({
-                  news: item,
+                  news: {
+                    ...item,
+                    NewsLikedBy: newsTransactionItem.NewsLikedBy,
+                    News: {
+                      Id: newsId
+                    }
+                  },
                   viewsCount: viewsCount
                 });
               });
+
           });
       });
 
@@ -155,7 +172,7 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
 
     await sp.web.lists.getByTitle(LIST_NEWS_TRANSACTION).items
       .filter(`NewsId eq ${id}`)
-      .select("News/Title,News/Id,NewsLikedBy,ReadBy,ViewsJSON")
+      .select("Id,News/Title,News/Id,NewsLikedBy,ReadBy,ViewsJSON")
       .expand("News")
       .get().then((newsTransactionItems) => {
         let viewJSON = '';
@@ -196,19 +213,15 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
       })
   }
 
-  private async updateViews(newsID: number, viewsJSON: string) {
-    const listName = LIST_NEWS_TRANSACTION;
+  private async updateViews(newsID: number, viewsJSON: string, newsTransactionItems: any) {
     const userId: string = this.props.context.pageContext.legacyPageContext.userId;
 
     let body: any = {
       ViewsJSON: viewsJSON
     };
 
-    const items: any[] = await sp.web.lists.getByTitle(listName)
-      .items.top(1).filter(`NewsId eq ${newsID}`)();
-
-    if (items.length > 0) {
-      let readBy = items[0].ReadBy;
+    if (newsTransactionItems.length > 0) {
+      let readBy = newsTransactionItems[0].ReadBy;
       const userIDColl = readBy ? readBy.split(';') : [];
       const isIdExists = userIDColl.includes(userId.toString());
       if (!isIdExists) {
@@ -218,10 +231,10 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
           ReadBy: readBy
         }
       }
-      return await sp.web.lists.getByTitle(listName).items.getById(items[0].Id).update(body)
+      return await sp.web.lists.getByTitle(LIST_NEWS_TRANSACTION).items.getById(newsTransactionItems[0].Id).update(body)
     }
     else {
-      return await sp.web.lists.getByTitle(listName).items.add({
+      return await sp.web.lists.getByTitle(LIST_NEWS_TRANSACTION).items.add({
         ViewsJSON: viewsJSON,
         NewsId: newsID,
         ReadBy: userId.toString()
@@ -509,13 +522,13 @@ export default class AgiIntranetNewsDetails extends React.Component<IAgiIntranet
                   {
                     isLikedByCurrentUser ?
                       <a className="nav-link" href="javascript:void(0)" onClick={(e) => this.unlikePost(e)}
-                        data-id={news.ID}>
-                        <i><img src={`${this.props.siteUrl}/Assets/icons/icon-unlike.svg`} alt="" data-id={news.ID} /></i> Unlike
+                        data-id={news.News?.Id}>
+                        <i><img src={`${this.props.siteUrl}/Assets/icons/icon-unlike.svg`} alt="" data-id={news.News?.Id} /></i> Unlike
                       </a>
                       :
                       <a className="nav-link" href="javascript:void(0)" onClick={(e) => this.likePost(e)}
-                        data-id={news.ID}>
-                        <i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" data-id={news.ID} /></i> Like
+                        data-id={news.News?.Id}>
+                        <i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" data-id={news.News?.Id} /></i> Like
                       </a>
                   }
                   {/* <a className="nav-link" href="#"><i><img src={`${this.props.siteUrl}/Assets/icons/icon-like.png`} alt="" /></i>
