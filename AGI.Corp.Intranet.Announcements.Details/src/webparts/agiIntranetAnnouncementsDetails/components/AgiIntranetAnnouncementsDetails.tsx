@@ -53,7 +53,7 @@ export default class AgiIntranetAnnouncementsDetails extends React.Component<IAg
         userId
       });
 
-      let announcementsId = this.getQueryStringValue('announcementsID');
+      let announcementsId = this.getQueryStringValue('announcementID');
 
       await this.getAnnouncementItem(announcementsId);
 
@@ -81,7 +81,6 @@ export default class AgiIntranetAnnouncementsDetails extends React.Component<IAg
   }
 
   private async getAnnouncementItem(announcementsId: string): Promise<void> {
-    debugger;
     const userId = this.props.context.pageContext.legacyPageContext.userId;
     if (!announcementsId)
       return;
@@ -144,10 +143,10 @@ export default class AgiIntranetAnnouncementsDetails extends React.Component<IAg
                 let announcementsTransactionItem = response.data?.Id ? response.data : announcementsTransactionItems[0];
 
                 if (response.data.Id) {
-                  announcementsId = announcementsTransactionItem.announcementsId;
+                  announcementsId = announcementsTransactionItem.AnnouncementsId;
                 }
                 else {
-                  announcementsId = announcementsTransactionItem.announcements.ID;
+                  announcementsId = announcementsTransactionItem.Announcements.ID;
                 }
 
                 this.setState({
@@ -189,7 +188,7 @@ export default class AgiIntranetAnnouncementsDetails extends React.Component<IAg
     else {
       return await sp.web.lists.getByTitle(LIST_ANNOUNCEMENTS_TRANSACTION).items.add({
         ViewsJSON: viewsJSON,
-        announcementsId: announcementsID,
+        AnnouncementsId: announcementsID,
         ReadBy: userId.toString(),
         Title: item.Title
       });
@@ -274,7 +273,7 @@ export default class AgiIntranetAnnouncementsDetails extends React.Component<IAg
   }
 
   public render(): React.ReactElement<IAgiIntranetAnnouncementsDetailsProps> {
-    const announcementsID = this.getQueryStringValue('announcementsID');
+    const announcementsID = this.getQueryStringValue('announcementID');
     return (
       <div className={styles.agiIntranetAnnouncementsDetails}>
         <div className="main-content news-content">
