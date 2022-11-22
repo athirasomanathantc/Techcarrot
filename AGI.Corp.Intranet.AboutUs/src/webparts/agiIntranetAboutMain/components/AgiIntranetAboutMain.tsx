@@ -287,14 +287,14 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                               <div className="team-img" >
                                 <img src={leadershipMessageImgVal} alt="Card Design" className="w-100" />
                               </div>
-                              <div className="team-content mt-3 mb-3">
+                              <div className="team-content mt-3 mb-3 d-flex flex-column">
                                 <h2 className="team-title">{item.Name}</h2>
                                 <h2 className="team-subtitle">{subTitle}</h2>
                                 {/* <button type="button" className="view-profile" data-bs-toggle="modal"
                                 data-bs-target="#viewProfileModal" onClick={() => this.openVideo(item.ID)}>
                                 Read More
                               </button> */}
-                                <input type="button" className="view-profile" onClick={() => this.showLeaderDetail(item.ID)} value='View Profile' />
+                                <input type="button" className="view-profile mt-auto align-self-end" onClick={() => this.showLeaderDetail(item.ID)} value='View Profile' />
 
                                 {/* <a href="javascript:void(0)" className="view-profile" data-bs-toggle="modal" >View
                                   Profile <span><img src={`${this.props.siteUrl}/Assets/images/icon-view-more.svg`} alt="" /></span></a> */}
