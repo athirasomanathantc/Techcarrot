@@ -99,7 +99,7 @@ export const Rewards = (props: IRewardsComponent) => {
 
 
                     </div>
-                    <div className="text-center mt-0 mb-3"><a href={`${props.siteUrl}/SitePages/Rewards.aspx?env=WebView`} className="viewall-link  d-md-none">View All</a></div>
+                    {/* <div className="text-center mt-0 mb-3"><a href={`${props.siteUrl}/SitePages/Rewards.aspx?env=WebView`} className="viewall-link  d-md-none">View All</a></div> */}
                 </div>
             </div>
         </div>}
