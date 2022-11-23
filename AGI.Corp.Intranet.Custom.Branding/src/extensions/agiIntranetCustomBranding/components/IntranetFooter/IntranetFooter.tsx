@@ -4,7 +4,7 @@ import { IIntranetFooterProps } from "./IntranetFooterProps";
 import { IIntranetFooterState } from "./IntranetFooterState";
 import SPService from "../../services/spservice";
 import { sp } from '@pnp/sp/presets/all';
-import { CONFIG_LIST, LIST_SUBSCRIBE, NAVIGATION_LIST, NULL_COPYRIGHT_ITEM, NULL_SUBSCRIBE_ITEM, SOCIALLINK_LIST, TEXT_BUSINESS, TEXT_COMPANY, TEXT_FUNCTIONS, TEXT_GALLERY, TEXT_NEWSMISC, TEXT_OTHER, TEXT_REGISTRATION_SUCCESS } from "../../common/constants";
+import { CONFIG_LIST, LIST_SUBSCRIBE, NAVIGATION_LIST, NULL_CONFIG_LIST, NULL_COPYRIGHT_ITEM, NULL_SUBSCRIBE_ITEM, SOCIALLINK_LIST, TEXT_BUSINESS, TEXT_COMPANY, TEXT_FUNCTIONS, TEXT_GALLERY, TEXT_NEWSMISC, TEXT_OTHER, TEXT_REGISTRATION_SUCCESS } from "../../common/constants";
 import { IConfigItem } from "../../models/IConfigItem";
 import { INavigationItem } from "../../models/INavigationItem";
 import { ISocialLink } from "../../models/ISocialLinkItem";
@@ -43,7 +43,8 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                 otherlinks: false,
                 misclinks: false
             },
-            homeTitles: null
+            homeTitles: null,
+            poweredBy: NULL_CONFIG_LIST
         }
     }
 
@@ -95,15 +96,25 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
     }
 
     private async getConfigDetailsItems(): Promise<void> {
-        const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${CONFIG_LIST}')/items`
+        const url = `${this.props.siteUrl}/_api/web/lists/getbytitle('${CONFIG_LIST}')/items`;
+
         await SPService.getItemsByRestApi(url, this.props.spHttpClient).then((data) => {
             const _contactDetails: IConfigItem[] = data;
             const _copyright = _contactDetails.filter((c) => c.Title == 'Copyright');
-            const copyright = _copyright && _copyright.length > 0 ? _copyright[0] : { Title: '', Detail: '' }
+            const copyright = _copyright && _copyright.length > 0 ? _copyright[0] : { Title: '', Detail: '' };
+
             this.setState({
-                copyright
+                copyright: copyright,
             });
-        })
+        });
+
+        await sp.web.lists.getByTitle(CONFIG_LIST).items
+            .filter(`Title eq 'Powered By'`)
+            .get().then((items: any) => {
+                this.setState({
+                    poweredBy: items[0]
+                });
+            });
     }
 
     private async getSubscribedItem(): Promise<void> {//debugger;
@@ -326,7 +337,8 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
         const newsTitle = this.getHeader('News Title')
         const galleryTitle = this.getHeader('Gallery Title')
         const otherLinksTitle = this.getHeader('Other Links Title')
-
+        const poweredByLink = this.state.poweredBy.Link;
+        const poweredByImage = this.getImageUrl(this.state.poweredBy.Image);
         return (
             <>
                 {this.state.footerLoaded && <footer className="">
@@ -606,6 +618,12 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
 
                             <div className="row text-center p-4 footer-bottom-copyright">
                                 <div className="copyright"> {this.state.copyright.Title} {this.state.copyright.Detail}</div>
+                                <div className="poweredBy d-flex">
+                                    <p className="col powered-by-text">Powered By:</p>
+                                    <a className="a-powered-by" href={poweredByImage} target="_blank" data-interception="off">
+                                        <img className="img-powered-by col" src={poweredByImage} />
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>

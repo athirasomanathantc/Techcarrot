@@ -479,7 +479,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         const skipItems: number = this.state.pageVideoSize * (page - 1);
         const takeItems: number = skipItems + this.state.pageVideoSize;
         const roundupPage = Math.ceil(page);
-        const videoData = this.state.filterData.slice(skipItems, takeItems)
+        const videoData = this.state.filterVideoData.slice(skipItems, takeItems)
         this.setState({
           videoData,
           currentPageVideo: page
