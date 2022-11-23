@@ -36,7 +36,8 @@ export interface IAgiCorpIntranetImageVideoGalleryState {
     ID: number,
     Title: string
   }[];
-  currentPage: number;
+  currentPageImage: number;
+  currentPageVideo: number;
   totalPages: number;
   pageData: IFolderItem[];
   videoData: IImageItem[];

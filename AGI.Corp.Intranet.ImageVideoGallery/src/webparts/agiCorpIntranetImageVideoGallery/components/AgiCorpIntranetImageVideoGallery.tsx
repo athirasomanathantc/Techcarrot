@@ -51,7 +51,8 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       pageData: [],
       videoData: [],
       totalPages: 0,
-      currentPage: 1,
+      currentPageImage: 1,
+      currentPageVideo: 1,
       pageSize: 0,
       totalPage: 1,
       pageVideoSize: 0,
@@ -179,12 +180,14 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       })
     if (window.innerWidth <= 767) {
       this.setState({
-        pageSize: 6
+        pageSize: 6,
+        pageVideoSize: 6
       });
 
     } else {
       this.setState({
-        pageSize: 12
+        pageSize: 12,
+        pageVideoSize: 12
       });
 
     }
@@ -273,6 +276,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           const itemId = this.state.showBusinessData ? obj.BusinessId : obj.FunctionsId;
           return itemId !== null;
         });
+        console.log('result', result);
         this.setState({
           filterVideoData: result
         }, () => {
@@ -373,7 +377,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         },
         totalPages: pageCount,
         totalPage: pageCount,
-        currentPage: 1
+        currentPageImage: 1
       }, () => {
         //console.log("imagedata", this.state.pageData);
       });
@@ -381,17 +385,18 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
     else if (this.state.currentTabName == "video") {
       const pageCount: number = Math.ceil(this.state.filterVideoData.length / this.state.pageSize);
       const totalPages = (this.state.filterVideoData.length / this.state.pageSize) - 1;
+      console.log("video pagecount", pageCount);
       this.setState({
         videoData: this.state.filterVideoData.slice(0, this.state.pageSize),
         totalPages: pageCount,
         totalPage: pageCount,
-        currentPage: 1,
+        currentPageVideo: 1,
         featured: {
           ...this.state.featured,
           videoData: this.getFeaturedData(this.state.videoItems),
         },
       }, () => {
-        //console.log("videodata", this.state.videoData);
+        console.log("videodata", this.state.videoData);
       });
     }
     else {
@@ -407,7 +412,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           },
           totalPages: pageCount,
           totalPage: pageCount,
-          currentPage: 1
+          currentPageImage: 1
         });
       }
       else if (tab == "video") {
@@ -417,7 +422,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           videoData: this.state.filterVideoData.slice(0, this.state.pageSize),
           totalPages: pageCount,
           totalPage: pageCount,
-          currentPage: 1,
+          currentPageVideo: 1,
           featured: {
             ...this.state.featured,
             videoData: this.getFeaturedData(this.state.videoItems),
@@ -436,7 +441,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       const pageData = this.state.filterData.slice(skipItems, takeItems)
       this.setState({
         pageData,
-        currentPage: page
+        currentPageImage: page
       }, () => {
         this.scrollToTop(false);
 
@@ -446,10 +451,10 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
       const skipItems: number = this.state.pageVideoSize * (page - 1);
       const takeItems: number = skipItems + this.state.pageVideoSize;
       const roundupPage = Math.ceil(page);
-      const videoData = this.state.filterData.slice(skipItems, takeItems)
+      const videoData = this.state.filterVideoData.slice(skipItems, takeItems)
       this.setState({
         videoData,
-        currentPage: page
+        currentPageVideo: page
       }, () => {
         this.scrollToTop(false);
 
@@ -464,9 +469,9 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         const pageData = this.state.filterData.slice(skipItems, takeItems)
         this.setState({
           pageData,
-          currentPage: page
+          currentPageImage: page
         }, () => {
-          this.scrollToTop(false);
+          this.scrollToTop(this.state.isFeatured);
 
         });
       }
@@ -477,7 +482,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
         const videoData = this.state.filterData.slice(skipItems, takeItems)
         this.setState({
           videoData,
-          currentPage: page
+          currentPageVideo: page
         }, () => {
           this.scrollToTop(false);
 
@@ -500,6 +505,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
           imagesCurrentPage: page
         }
       }, () => {
+        //console.log('currentpage',this.state.currentPage);
         this.scrollToTop(isFeatured);
 
       });
@@ -698,6 +704,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
             videoData: items,
             filterVideoData: items
           }, () => {
+            //',this.state.filterVideoData);
             this.paging();
           });
         });
@@ -893,7 +900,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
               imagesCurrentPage={featured.imagesCurrentPage}
               totalImages={featured.totalImages}
               imagesPerPage={featured.imagesPerPage}
-              onPageUpdateImages={(page) => this._getPage(page)}
+              onPageUpdateImages={(page) => this.onPageUpdateImages(page, this.state.featured)}
               fnCurTab={(tabName) => this.fnCurTab(tabName)}
               videoData={featured.videoData}
               getImageUrl={(imageContent) => this.getImageUrl(imageContent)}
@@ -993,7 +1000,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                                 return (
                                   <div className=" col-md-3">
                                     <div className="gallery-item">
-                                      <a href="javascript:void(0)" onClick={(e) => this.getImageGalleryItems(folder.Name, false)}>
+                                      <a href="javascript:void(0)" onClick={(e) => this.getImageGalleryItems(folder.Name, this.state.isFeatured)}>
                                         <div className="gallery-item--img">
                                           <img src={coverImage} alt="" />
                                         </div>
@@ -1012,7 +1019,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                           }
                         </div>
                         <div className={'pagination-wrapper'} style={{ display: this.state.totalPage > 0 ? 'block' : 'none' }} >
-                          <Paging currentPage={this.state.currentPage}
+                          <Paging currentPage={this.state.currentPageImage}
                             totalItems={this.state.filterData.length}
                             itemsCountPerPage={this.state.pageSize}
                             onPageUpdate={(page) => this._getPage(page)}
@@ -1059,7 +1066,7 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                               limiter={5}
                               //hideFirstPageJump={false}
                             /> */}
-                          <Paging currentPage={this.state.currentPage}
+                          <Paging currentPage={this.state.currentPageVideo}
                             totalItems={this.state.filterVideoData.length}
                             itemsCountPerPage={this.state.pageVideoSize}
                             onPageUpdate={(page) => this._getPage(page)}
@@ -1126,9 +1133,9 @@ export default class AgiCorpIntranetImageVideoGallery extends React.Component<IA
                     })
                   }
                 </div>
-                <div className={'pagination-wrapper'} style={{ display: this.state.imageItems.length > 0 ? 'block' : 'none' }} >
+                <div className={'pagination-wrapper'} style={{ display: this.state.filterVideoData.length > 0 ? 'block' : 'none' }} >
                   <Paging currentPage={this.state.imagesCurrentPage}
-                    totalItems={this.state.totalImages}
+                    totalItems={this.state.imageItems.length}
                     itemsCountPerPage={this.state.imagesPerPage}
                     onPageUpdate={(page) => this.onPageUpdateImages(page, false)}
                   />
