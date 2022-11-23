@@ -33,4 +33,5 @@ export interface IIntranetFooterState {
         misclinks: boolean;
     },
     homeTitles: ITitleConfig[];
+    poweredBy: IConfigItem;
 }

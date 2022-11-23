@@ -1,8 +1,9 @@
 export interface IConfigItem {
     ID?: number;
-    Title: string;
+    Title?: string;
     Image?: string;
-    Detail: string;
+    Detail?: string;
     Message?: string;
     Interval?: number;
+    Link?: string;
 }

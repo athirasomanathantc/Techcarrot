@@ -7,14 +7,15 @@ export const ASSET_LIBRARY = 'Assets';
 export const EMPLOYEE_LAST_LOGIN = 'EmployeeLastLogin';
 export const LIST_FEEDBACK_DETAILS = 'FeedbackDetails';
 
-// export const NULL_CONFIG_LIST = {
-//     ID: 0,
-//     Title: '',
-//     Image: '',
-//     Detail: '',
-//     Message: '',
-//     interval: 0
-// }
+export const NULL_CONFIG_LIST = {
+    ID: 0,
+    Title: '',
+    Image: '',
+    Detail: '',
+    Message: '',
+    interval: 0,
+    Link: ''
+}
 
 export const NULL_ITEM_FEEDBACK_DETAILS = {
     ID: 0,
