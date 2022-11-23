@@ -617,13 +617,13 @@ export default class IntranetFooter extends React.Component<IIntranetFooterProps
                             </div>
 
                             <div className="row text-center p-4 footer-bottom-copyright">
-                                <div className="copyright"> {this.state.copyright.Title} {this.state.copyright.Detail}</div>
                                 <div className="poweredBy d-flex">
                                     <p className="col powered-by-text">Powered By:</p>
                                     <a className="a-powered-by" href={poweredByImage} target="_blank" data-interception="off">
                                         <img className="img-powered-by col" src={poweredByImage} />
                                     </a>
                                 </div>
+                                <div className="copyright"> {this.state.copyright.Title} {this.state.copyright.Detail}</div>
                             </div>
                         </div>
                     </div>
