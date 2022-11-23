@@ -272,7 +272,7 @@ export default class AgiIntranetAboutMain extends React.Component<IAgiIntranetAb
                 </div>
               </div>
               <div id="leadershipCarousel" className="carousel js-carousel slide leadership-carousel"
-                data-bs-ride="carousel">
+                data-bs-ride="carousel" data-bs-interval="false">
                 <div className="carousel-inner" role="listbox">
                   {
                     leadershipTeamItems.map((item, i) => {
