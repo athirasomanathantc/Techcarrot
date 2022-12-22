@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { INotificationProps } from './INotificationProps';
-import { INotificationState } from './INotificationState';
+import { INotificationState } from '../Notifications/INotificationState';
 import { sp } from "@pnp/sp/presets/all";
 import { INotification } from '../../models/INotification';
 import SPService from '../../services/SPService';
@@ -44,6 +44,7 @@ export default class Notification extends React.Component<INotificationProps, IN
     public async componentDidMount(): Promise<void> {
         try {
             let newsItems: INotification[] = await this._spServices.getNotifications();
+            console.log("items:",newsItems);
             if (newsItems?.length) {
                 this.setState({
                     notifications: newsItems
@@ -87,7 +88,7 @@ export default class Notification extends React.Component<INotificationProps, IN
             case 'EventDetails':
                 detailPath = 'Events/Event%20Details.aspx?eventID=';
                 break;
-            case 'Announcements':
+            case 'AnnouncementsTransaction':
                 detailPath = 'Announcements/Announcement%20Details.aspx?announcementID=';
                 break;
             case 'Blogs':
